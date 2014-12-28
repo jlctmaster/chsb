@@ -1,0 +1,99 @@
+<?php
+   require_once("fpdf.php");
+   require_once("Query.php");
+
+      session_start();
+
+	class clsFpdf extends FPDF {
+	        // $id="02";
+	 //Cabecera de página
+		public function Header()
+		{
+			    //Logo
+    $this->Image("../Img/logos.jpg" , 10 ,8, 150 , 12, "JPG" ,"http://www.iutep.tec.ve");
+    //Arial bold 15
+    $this->SetFont('Arial','B',5);
+    //Movernos a la derecha
+    $this->Cell(10);
+    //Título
+			$this->Cell(200,5,"FECHA: ".date("d/m/Y"),0,1,"C");    //Salto de línea
+         $this->Ln(7);
+                  if(isset($_GET['pro'])){$pro=$_GET['pro'];}else {$pro=null;}
+			$this->Cell(100,7,"LISTADO DE LOS DOCENTES CON PROFESION DE:".$pro,0,1,"C");
+        // $this->Ln(2);			
+			
+		}
+
+		//Pie de página
+		public function Footer()
+		{
+			//Posición: a 2 cm del final
+			$this->SetY(-20);
+			//Arial italic 8
+			$this->SetFont("Arial","I",5);
+			//Dirección
+			$this->Cell(0,5,utf8_decode("."),0,1,"C");
+			//Número de página
+			$this->Cell(0,5,utf8_decode("Pagina ").$this->PageNo()."/{nb}",0,1,"C");
+			//Fecha
+			$lcFecha=date("d/m/Y  h:m a");
+			$this->Cell(0,3,$lcFecha,0,0,"C");
+		}
+		
+  public function fListar()
+		   {
+		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("IUTEP", $con);
+			$M=array();
+			$I=0;
+         if(isset($_GET['id'])){$id=$_GET['id'];}else {$id=null;}
+			$data=mysql_query(Query(1,$id,null),$con);
+			while($d=mysql_fetch_array($data)){
+			   $M["cedula"][$I]=$d["cedula"];
+				$M["nombre"][$I]=ucwords($d["nombre"]);
+				$M["pnf"][$I]=$d["pnf"];	
+				$M["telefono"][$I]=$d["telefono"];	
+				$M["dedicacion"][$I]=$d["dedicacion"];	
+				$M["total"][$I]=$d["total"];		
+                $I++;				
+			}
+			         @mysql_close($con);
+			return $M;
+		}
+
+}
+   setlocale(LC_ALL,"es_VE.UTF8");
+   $lobjPdf=new clsFpdf();
+   $lobjPdf->AliasNbPages();
+   //$lobjPdf->AddPage('P',array(330,183));
+   $lobjPdf->AddPage('P',array(170,183));
+   $lobjPdf->SetFont("arial","B",7);
+   $M=$lobjPdf->fListar();
+   $lobjPdf->SetFont("arial","B",7);
+      $lobjPdf->Cell(160,4,"LISTADO DE LOS DOCENTES POR PROFESION.",0,0,"C");
+      $lobjPdf->Ln(5);
+   $lobjPdf->SetFillColor(203,203,203);
+   $lobjPdf->Cell(6,4,utf8_decode("Nr"),1,0,"C",true);
+   $lobjPdf->Cell(40,4,utf8_decode("Nombre y Apellido"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("CEDULA"),1,0,"C",true);
+   $lobjPdf->Cell(12,4,utf8_decode("PNF"),1,0,"C",true);
+   $lobjPdf->Cell(23,4,utf8_decode("TELEFONO"),1,0,"C",true);
+   $lobjPdf->Cell(33,4,utf8_decode("DEDICACION"),1,0,"C",true);
+   $lobjPdf->Cell(15,4,utf8_decode("TOTAL/HR"),1,1,"C",true);
+   $I=0;
+   $lobjPdf->SetFont("arial","",7);
+   $lobjPdf->SetFillColor(255,0,0);
+
+   while (count($M["cedula"])!=$I)
+   {
+	  $lobjPdf->Cell(6,4,utf8_decode($I+1),1,0,"L");
+      $lobjPdf->Cell(40,4,utf8_decode($M["nombre"][$I]),1,0,"L");
+      $lobjPdf->Cell(20,4,utf8_decode($M["cedula"][$I]),1,0,"L");
+      $lobjPdf->Cell(12,4,utf8_decode($M["pnf"][$I]),1,0,"L");
+      $lobjPdf->Cell(23,4,utf8_decode($M["telefono"][$I]),1,0,"L");
+      $lobjPdf->Cell(33,4,utf8_decode($M["dedicacion"][$I]),1,0,"L");
+      $lobjPdf->Cell(15,4,utf8_decode($M["total"][$I]),1,1,"L");
+	  $I++;
+   }
+   $lobjPdf->Output();
+  ?>

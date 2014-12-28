@@ -1,0 +1,41 @@
+<?php
+    include('fpdfs.php');
+    $pdf=new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont("arial","",7);
+    $pdf->Cell(20,4,"holaholaholahola,PHP_EOL holaholaholahola",1,0,'C');
+/*$pdf->setX(20); // establece la posición actual x
+$pdf->setY(100); // establece la posición actual y*/
+//$pdf->setXY(20,100); // establece las posición actual x e y
+$pdf->SetTextColor(0,0,200); // establece el color del texto
+$pdf->SetFont('Arial','I',6); // establece la fuente, le tipo ( 'B' para negrita, 'I' para itálica, '' para normal,...)
+$k=4;
+/*for($i=0;$i<6;$i++) {
+	$k=$k+4;
+$pdf->setY($k); // establece la posición actual y
+$pdf->MultiCell(20, 4, '07:00:00-08:00:00', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(30,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Lunes', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(55,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Martes', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(80,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, "Miercoles\n gggggggggg", 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(105,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Jueves', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(130,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Viernes', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(155,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Sabado', 1, 'L'); // imprime 'My text' con salto de línea
+
+$pdf->setXY(180,$k); // establece las posición actual x e y
+$pdf->MultiCell(25, 4, 'Domingo', 1, 'L'); // imprime 'My text' con salto de línea
+}*/
+    $pdf->Output();
+?>
+

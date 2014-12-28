@@ -1,0 +1,43 @@
+<?
+/*header('Content-type: application/vnd.ms-word');
+header("Content-Disposition: attachment; filename=archivo.doc");*/
+header('Content-type: application/vnd.ms-excel');
+header("Content-Disposition: attachment; filename=archivo.xlsx");
+header("Pragma: no-cache");
+header("Expires: 0");
+?>
+<html>
+<head>
+<title></title>
+</head>
+<body>
+
+<table summary="" border="2" >
+<tr><td><IMG type="image" name="imageField5" src="../Img/logo.png" alt="" ></td></tr>
+</table>
+<table border="1">
+<? for($i=0;$i<6;$i++) {
+echo'<tr style="background-color:blue;">';
+for($j=0;$j<7;$j++) {
+echo"<td width='200'>".$i." ".$j."</td>";
+}
+echo'</tr>';
+}
+?>
+</table>
+</body>
+</html>
+<!--
+// Funciona solo en Windows
+else if (strpos($_SERVER['HTTP_USER_AGENT'],"Windows") !== FALSE)
+{
+header("Pragma: public");
+header("Expires: 0");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Content-Type: application/force-download");
+header("Content-Type: application/octet-stream");
+header("Content-Type: application/download");
+header("Content-Disposition: attachment;filename=nombre_archivo.xls");
+header("Content-Transfer-Encoding: binary ");
+}
+-->

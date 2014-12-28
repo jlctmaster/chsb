@@ -1,0 +1,127 @@
+<?php
+   require_once("fpdf.php");
+   require_once("Query.php");
+
+      session_start();
+
+	class clsFpdf extends FPDF {
+	   
+	 //Cabecera de página
+		public function Header()
+		{
+			    //Logo
+    $this->Image("ministerio1.jpg" , 10 ,8, 50 , 16, "JPG" ,"http://www.mipagina.com");
+    //Arial bold 15
+    $this->SetFont('Arial','B',13);
+    //Movernos a la derecha
+    $this->Cell(80);
+    //Título
+    		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("Liceos", $con);
+			$data=mysql_query("select per.cedula,concat(per.nombres,'  ',per.apellidos) as nombre,idTipoPersonal as personal
+              from personal as per
+              left join detallepersonal as det on per.cedula=det.cedula
+              where det.idTipoPersonal='1'",$con);
+         $M=array();
+			$I=0;
+			while($d=mysql_fetch_array($data)){
+				$M["cedula"][$I]=$d['cedula'];
+				$M["nombre"][$I]=$d['nombre'];
+				}
+			$this->Cell(180,7,"SISTEMA DE ASESORAMIENTO INTEGRAR",0,1,"C");
+			$this->Cell(350,7,"CARACTERIZION DE LAS INSTITUCIONES EDUCATIVAS PERSONAL DIRECTIVOS",0,1,"C");
+			$this->Cell(330,7,"PERSONAL DIRECTIVOS",0,1,"C");    //Salto de línea
+			$this->SetFont('Arial','UB',10);
+			$this->Cell(150,7,"INSTITUCION EDUCATIVA: "."LICEO BOLIVARIANO 5 DE DICIEMBRE",0,1,"C");    //Salto de línea
+			$this->Cell(114.5,7,"DIRECTOR(A): ".$M["nombre"][$I],0,0,"C");    //Salto de línea
+			$this->Cell(50,7,"CI: "."V-".$M["cedula"][$I],0,0,"C");    //Salto de línea
+			$this->Cell(50,7,"TELEFONO: "."0416/7582429",0,1,"C");    //Salto de línea
+			$this->Cell(70,7,"FECHA: ".date("d/m/Y"),0,1,"C");    //Salto de línea
+    $this->Ln(20);			
+			
+		}
+
+		//Pie de página
+		public function Footer()
+		{
+			//Posición: a 2 cm del final
+			$this->SetY(-20);
+			//Arial italic 8
+			$this->SetFont("Arial","I",8);
+			//Dirección
+			$this->Cell(0,5,utf8_decode("Liceo Bolivariano “5 de diciembre” se encuentra ubicado en Acarigua Estado Portuguesa Municipio Páez sector Negro Primero calle 31."),0,1,"C");
+			//Número de página
+			$this->Cell(0,5,utf8_decode("Pagina ").$this->PageNo()."/{nb}",0,1,"C");
+			//Fecha
+			$lcFecha=date("d/m/Y  h:m a");
+			$this->Cell(0,3,$lcFecha,0,0,"C");
+		}
+		
+  public function fListar()
+		   {
+		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("Liceos", $con);
+			$M=array();
+			$I=0;
+
+			$data=mysql_query(Query(2,null),$con);
+			while($d=mysql_fetch_array($data)){
+			    $M["cedula"][$I]=$d["ci"];
+				$M["nombre"][$I]=$d["nb"];
+				$M["apellido"][$I]=$d["ap"];	
+				$M["telefono"][$I]=$d["tel"];	
+				$M["direccion"][$I]=$d["dir"];	
+				$M["cargo"][$I]=$d["cargo"];	
+				$M["titulo"][$I]=$d["titulo"];	
+				$M["func"][$I]=$d["funct"];	
+				$M["modalidad"][$I]=$d["modalidad"];	
+				$M["dependencia"][$I]=$d["dependencia"];	
+				$M["anoser"][$I]=$d["anoservicio"];	
+                $I++;				
+			}
+			         @mysql_close($con);
+			return $M;
+		}
+
+}
+   setlocale(LC_ALL,"es_VE.UTF8");
+   $lobjPdf=new clsFpdf();
+   $lobjPdf->AliasNbPages();
+   $lobjPdf->AddPage('P',array(330,183));
+   $lobjPdf->SetFont("arial","B",9);
+   $M=$lobjPdf->fListar();
+   $lobjPdf->SetFillColor(203,203,203);
+   $lobjPdf->Cell(6,6,utf8_decode("N°"),1,0,"C",true);
+   $lobjPdf->Cell(22,6,utf8_decode("Cedula"),1,0,"C",true);
+   $lobjPdf->Cell(35,6,utf8_decode("Nombre y Apellido"),1,0,"C",true);
+   $lobjPdf->Cell(25,6,utf8_decode("Telefono"),1,0,"C",true);
+   $lobjPdf->Cell(55,6,utf8_decode("Direccion"),1,0,"C",true);
+   $lobjPdf->Cell(25,6,utf8_decode("Cargo Actual"),1,0,"C",true);
+   $lobjPdf->Cell(24,6,utf8_decode("Funccion Act"),1,0,"C",true);
+   $lobjPdf->Cell(30,6,utf8_decode("Titulo Obtenido"),1,0,"C",true);
+   $lobjPdf->Cell(25,6,utf8_decode("Condicion lab."),1,0,"C",true);
+   $lobjPdf->Cell(23,6,utf8_decode("Ano de Serv."),1,0,"C",true);
+   $lobjPdf->Cell(25,6,utf8_decode("Dependencia"),1,0,"C",true);
+   $lobjPdf->Cell(25,6,utf8_decode("Modalidad"),1,1,"C",true);
+   $I=0;
+   $lobjPdf->SetFont("arial","",9);
+   $lobjPdf->SetFillColor(255,0,0);
+
+   while (count($M["cedula"])!=$I)
+   {
+	  $lobjPdf->Cell(6,6,utf8_decode($I+1),1,0,"L");
+	  $lobjPdf->Cell(22,6,utf8_decode($M["cedula"][$I]),1,0,"L");
+      $lobjPdf->Cell(35,6,utf8_decode($M["nombre"][$I]." ".$M["apellido"][$I]),1,0,"L");
+      $lobjPdf->Cell(20,6,utf8_decode($M["telefono"][$I]),1,0,"L");
+      $lobjPdf->Cell(55,6,utf8_decode($M["direccion"][$I]),1,0,"L");
+      $lobjPdf->Cell(25,6,utf8_decode($M["cargo"][$I]),1,0,"L");
+      $lobjPdf->Cell(24,6,utf8_decode($M["func"][$I]),1,0,"L");
+      $lobjPdf->Cell(30,6,utf8_decode($M["titulo"][$I]),1,0,"L");
+      $lobjPdf->Cell(25,6,utf8_decode($M["modalidad"][$I]),1,0,"L");
+      $lobjPdf->Cell(23,6,utf8_decode($M["anoser"][$I]),1,0,"L");
+      $lobjPdf->Cell(25,6,utf8_decode($M["dependencia"][$I]),1,0,"L");
+      $lobjPdf->Cell(25,6,utf8_decode($M["modalidad"][$I]),1,1,"L");
+	  $I++;
+   }
+   $lobjPdf->Output();
+  ?>

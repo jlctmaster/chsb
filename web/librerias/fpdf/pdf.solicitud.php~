@@ -1,0 +1,96 @@
+<?php
+   require_once("fpdf.php");
+   require_once("Query.php");
+
+      session_start();
+
+	class clsFpdf extends FPDF {
+	   
+	 //Cabecera de página
+		public function Header()
+		{
+			    
+		$this->SetY(20);		//Logo
+    $this->Image("ministerio1.jpg" , 10 ,18, 50 , 16, "JPG" ,"http://www.mipagina.com");
+    //Arial bold 15
+    $this->SetFont('Arial','B',10);
+    //Movernos a la derecha
+    $this->Cell(40);
+    //Título
+			$this->Cell(180,7,"ACARIGUA-PORTUGUESA",0,1,"C");
+			    $this->SetFont('Arial','B',15);
+
+			$this->Cell(260,7,"SOLICITUD DE PERMISO",0,1,"C");
+			
+    $this->Ln(20);			
+			
+		}
+
+		//Pie de página
+		public function Footer()
+		{
+			//Posición: a 2 cm del final
+			$this->SetY(-20);
+			//Arial italic 8
+			$this->SetFont("Arial","I",8);
+			//Dirección
+			$this->Cell(0,5,utf8_decode("Liceo Bolivariano “5 de diciembre” se encuentra ubicado en Acarigua Estado Portuguesa Municipio Páez sector Negro Primero calle 31."),0,1,"C");
+			//Número de página
+			$this->Cell(0,5,utf8_decode("Pagina ").$this->PageNo()."/{nb}",0,1,"C");
+			//Fecha
+			$lcFecha=date("d/m/Y  h:m a");
+			$this->Cell(0,3,$lcFecha,0,0,"C");
+		}
+		
+  public function fListar()
+		   {
+		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("Liceos", $con);
+			$M=array();
+			$I=0;
+         
+			$data=mysql_query(Query(3,$_GET['valor']),$con);
+			$M=mysql_fetch_array($data);
+			         @mysql_close($con);
+			return $M;
+		}
+   public function Genera_Permiso($M){
+   $this->Cell(150);
+   $this->SetFont("arial","",10);
+   $mes=Array('ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE');
+   $this->MultiCell(100,7,"ACARIGUA ".date('d')." DE ".$mes[date('n')-1]." DEL ".date('Y'),0);
+   $this->Cell(40);
+   $this->Cell(100,7,"PERMISO Nº ".$M['numero'],0,1);
+   $this->Cell(40);
+   $M['justificado']=="SI"? $yes="X" :  $yes=" ";
+   $M['justificado']=="NO"? $no="X" :  $no=" ";
+   if($M['permiso']=="DILIGENCIA PERSONAL"){
+
+   $M['recuperativo']=="SI"? $yesr="X" :  $yesr="";
+   $M['recuperativo']=="NO"? $nor="X" :  $nor=" ";
+   }
+   
+   $mes=Array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+   $this->MultiCell(210,7,"NOMBRES Y APELLIDOS ".$M['nombre']." ".$M['apellido']." C.I Nº ".$M['cedula']." ,".$M['dia']." DIAS SOLICITADOS "" DESDE ".$M['desde']." HASTA ".$M['hasta']." TURNO ".$M['turno']." SI ES DOCENTE ANO(S) ".$M['ano']." SECCION ".$M['seccion']." Nº HORAS ".$M['hora']." MOTIVO DEL PERMISO DE ".$M['permiso']." ANEXADA JUSTIFICATIVO SI (".($M['justificado']=="SI"? "X" :  " ").") NO (".($M['justificado']=="NO"? "X" : " ").") EN CASO DE DILIGENCIA PERSONAL SERA RECUPERADA SI (".($M['recuperativo']=="SI"? $yesr="X" :  $yesr="").") NO (".($M['recuperativo']=="NO"? $nor="X" :  $nor=" ").").\n OBSERVACION ".$M['observacion']."_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________.",0);
+   $this->Ln(8);
+   $this->Cell(70);
+   $this->Cell(55,7," ________________________ ",0,0,"C");
+   $this->Cell(55,7," ________________________ ",0,0,"C");
+   $this->Cell(55,7," ________________________ ",0,1,"C");
+   $this->Cell(70);
+   $this->Cell(55,7," FIRMA SOLICITANTE",0,0,"C");
+   $this->Cell(55,7," DIRECTOR (A) ",0,0,"C");
+   $this->Cell(55,7," SUB DIRECTOR (A)",0,1,"C");
+}
+
+}
+
+   setlocale(LC_ALL,"es_VE.UTF8");
+   $lobjPdf=new clsFpdf();
+   $lobjPdf->AliasNbPages();
+   $lobjPdf->AddPage("L");
+   $lobjPdf->SetFont("arial","B",9);
+   $M=$lobjPdf->fListar();
+   $lobjPdf->Genera_Permiso($M);
+   $lobjPdf->Output();
+  ?>

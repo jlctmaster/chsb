@@ -1,0 +1,215 @@
+<?php 
+require('fpdf.php');
+require('Query.php');
+
+class PDF extends FPDF
+{
+//Cabecera de página
+   function Header()
+   {
+    //Logo
+    //$this->Image("ministerio.jpg" , 10 ,8, 35 , 38 , "JPG" ,"http://www.mipagina.com");
+	$this->SetFont('Arial','B',8);
+	$this->SetY(5); 
+    $this->SetX(8); 
+    $this->MultiCell(80,5,'REPUBLICA BOLIVARIANA DE VENEZUELA MINISTAERIO DE EDUCACION U.E.N "5 DE DICIEMBRE" ACARIGUA-PORTUGUESA',0); 
+    $this->SetY(5);
+	$this->Cell(140);	
+    $this->Cell(30,30,"FOTO",1,0,'C');
+    //Arial bold 15
+    $this->SetFont('Arial','B',15);
+    //Movernos a la derecha
+    $this->Cell(-190);
+    //Título
+    $this->Cell(0,80,'HISTORIAL DEL PERSONAL DOCENTE',0,0,'C');
+    //Salto de línea
+    $this->Ln(20);
+      
+   }
+   
+   //Pie de página
+   function Footer()
+   {
+   //Posición: a 2 cm del final
+			$this->SetY(-20);
+			//Arial italic 8
+			$this->SetFont("Arial","I",8);
+			//Dirección
+			$this->Cell(0,5,utf8_decode("Liceo Bolivariano “5 de diciembre” se encuentra ubicado en Acarigua Estado Portuguesa Municipio Páez sector Negro Primero calle 31."),0,1,"C");
+			//Número de página
+			//$this->Cell(0,5,utf8_decode("Pagina ").$this->PageNo()."/{nb}",0,1,"C");
+			//Fecha
+			$lcFecha=date("d/m/Y  h:m a");
+			$this->Cell(0,3,$lcFecha,0,0,"C");
+ }
+   //Tabla simple
+   function DatosPersonales($header,$M)
+   {
+    //Cabecera
+	    $this->Cell(10);
+    $this->SetFont('Arial','B',10);
+    foreach($header as $col=>$x)
+    $this->Cell(170,7,$x,1,1,'C');
+    //$this->Ln();
+//DATOS PERSONALES		   
+		   $this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(65,4,"Apellidos",1,0,'C');
+    $this->Cell(55,4,"Nombres",1,0,'C');
+    $this->Cell(40,4,"Cédula",1,0,'C');
+    $this->Cell(5,4,"V",1,0,'C');
+    $this->Cell(5,4,"E",1,1,'C');
+			    $this->Cell(10);
+
+	 $this->Cell(65,7,$M['apellido'],1,0,'C');
+    $this->Cell(55,7,$M['nombre'],1,0,'C');
+    $this->Cell(40,7,$M['cedula'],1,0,'C');
+    $this->Cell(5,7,$M['nacionalidad']=='V'? 'X': '',1,0,'C');
+    $this->Cell(5,7,$M['nacionalidad']=='V'? '': 'X',1,1,'C');
+	
+	 $this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(85,4,"Lugar y Fecha Nacimiento",1,0,'C');
+    $this->Cell(15,4,"Edad",1,0,'C');
+    $this->Cell(30,4,"Estado Civil",1,0,'C');
+    $this->Cell(30,4,"Sexo",1,0,'C');
+    $this->Cell(5,4,"M",1,0,'C');
+    $this->Cell(5,4,"F",1,1,'C');
+			    $this->Cell(10);
+
+	 $this->Cell(85,7,$M['lugar'],1,0,'C');
+    $this->Cell(15,7,$M['edad'],1,0,'C');
+    $this->Cell(30,7,$M['estado_civil'],1,0,'C');
+    $this->Cell(30,7,$M['sexo']=='F'? 'Féminino': 'Masculino',1,0,'C');
+    $this->Cell(5,7,$M['sexo']=='F'? '': 'X',1,0,'C');
+    $this->Cell(5,7,$M['sexo']=='F'? 'X': '',1,1,'C');
+	
+	$this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(170,4,"Dirección",1,1,'C');
+	$this->Cell(10);
+    $this->Cell(170,8,$M['direccion'],1,1,'C');
+		$this->Cell(10);
+
+    $this->Cell(55,5,"Ciudad",1,0,'C');
+    $this->Cell(55,5,"Estado",1,0,'C');
+    $this->Cell(60,5,"Telefono",1,1,'C');
+			$this->Cell(10);
+
+	$this->Cell(55,8,$M['ciudad'],1,0,'C');
+    $this->Cell(55,8,$M['estado'],1,0,'C');
+    $this->Cell(60,8,$M['movil'],1,1,'C');
+	$this->Ln();
+   }
+   function DatosProfesionales($header,$M){
+   //Cabecera
+       $this->SetFont('Arial','B',10);
+	    $this->Cell(10);
+    foreach($header as $col=>$x)
+    $this->Cell(170,7,$x,1,1,'C');
+    //$this->Ln();
+//DATOS PERSONALES		   
+		   $this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(140,4,"Institución donde cursa estudio superiores",1,0,'C');
+    $this->Cell(30,4,"Año de egreso",1,1,'C');
+     $this->Cell(10);
+    $this->Cell(140,7,$M['instituto'],1,0,'C');
+    $this->Cell(30,7,$M['anoegreso'],1,1,'C');
+    
+	$this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(110,4,"Titulo obtenido",1,0,'C');
+    $this->Cell(60,4,"Especialidad",1,1,'C');
+	$this->Cell(10);
+    $this->Cell(110,8,$M['titulo'],1,0,'C');
+    $this->Cell(60,8,$M['especialidad'],1,1,'C');
+		$this->Cell(10);
+
+ $this->SetFont('Arial','I',8);
+    $this->Cell(70,4,"Mención",1,0,'C');
+    $this->Cell(100,4,"Otros estudios realizados",1,1,'C');
+	 $this->Cell(10);
+    $this->Cell(70,8,null,1,0,'C');
+    $this->Cell(100,8,$M['estudios'],1,1,'C');
+  	 $this->Ln();
+	
+   
+   }
+   
+     function DatosTrabajo($header,$M){
+
+	 
+	  //Cabecera
+       $this->SetFont('Arial','B',10);
+	    $this->Cell(10);
+    foreach($header as $col=>$x)
+    $this->Cell(170,7,$x,1,1,'C');
+    //$this->Ln();
+//DATOS PERSONALES		   
+		   $this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(130,4,"Nombre (s) de la (s) instituciones donde trabaja",1,0,'C');
+    $this->Cell(40,4,"Telefono",1,1,'C');
+    $this->Cell(10);
+    $this->Cell(130,4.5,$M['trabajo'],1,0,'C');
+    $this->Cell(40,4.5,$M['telefono_trabajo'],1,1,'C');
+	 $this->Cell(10);
+    $this->Cell(130,4.5,null,1,0,'C');
+    $this->Cell(40,4.5,null,1,1,'C');
+	 $this->Cell(10);
+    $this->Cell(130,4.5,null,1,0,'C');
+    $this->Cell(40,4.5,null,1,1,'C');
+    
+	 $this->Cell(10);
+    $this->SetFont('Arial','I',8);
+    $this->Cell(110,4,"Dirección",1,0,'C');
+    $this->Cell(60,4,"Cargo",1,1,'C');
+	 $this->Cell(10);
+    $this->Cell(110,8,$M['direccion_trabajo'],1,0,'C');
+    $this->Cell(60,8,$M['cargo_trabajo'],1,1,'C');
+	 $this->Cell(10);
+
+    $this->SetFont('Arial','I',8);
+    $this->Cell(50,4,"Carga horaria",1,0,'C');
+    $this->Cell(50,4,"Fecha de ingreso al M.E.",1,0,'C');
+    $this->Cell(70,4,"Fecha de ingreso a la U.E.N '5 de diciembre'",1,1,'C');
+	 $this->Cell(10);
+    $this->Cell(50,8,$M['carga'],1,0,'C');
+    $this->Cell(50,8,$M['fechaM'],1,0,'C');
+    $this->Cell(70,8,$M['fechaD'],1,1,'C');
+	 }
+   
+   
+    public function fListar()
+		   {
+		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("Liceos", $con);
+			$Ma=array();
+			$I=0;
+
+			$data=mysql_query(Query(1,$_GET['valor']),$con);
+			$d=mysql_fetch_array($data);
+	
+			         @mysql_close($con);
+			return $d;
+		}
+
+
+}
+
+$pdf=new PDF();
+$M=$pdf->fListar();
+//Títulos de las columnas
+$header_1=array('DATOS PERSONALES');
+$header_2=array('DATOS PROFESONALES');
+$header_3=array('DATOS SOBRE SU TRABAJO');
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->SetY(65);
+$pdf->DatosPersonales($header_1,$M);
+$pdf->DatosProfesionales($header_2,$M);
+$pdf->DatosTrabajo($header_3,$M);
+
+$pdf->Output();
+?>

@@ -1,0 +1,165 @@
+.html_horario{
+background:#eee url(../imagenes/png/fondo.png) !important; 
+}
+
+
+tr:nth-child(n+3) > td{
+width: 20px;
+height: 20px;
+border: 1px #ccc dotted;
+}
+tr:nth-child(n+3) > td:nth-child(n+2){
+cursor: pointer;
+word-wrap:break-word;
+resize: none;
+}
+.h_academica{
+cursor:default !important;
+color: #FFF;
+background: #8B0000;
+}
+.h_academica:before{
+  content:'No Disponible'
+}
+.seleccionado{
+color: #8b0000;
+background-color: yellow;
+}
+.seleccionado:before{
+  content:'Seleccionado!'
+}
+.weekend_noche{
+color:#8b0000;
+background-color: #eee;
+font-size:9pt !important;
+cursor:default !important;
+}
+.asignado{
+color: #ffffff;
+font-size: 10pt;
+background-color: green;
+}
+
+
+h2
+{
+font-family: arial;
+}
+header img{
+width:100%;
+height: 50px;
+}
+#tb_horario{
+width: 90%;
+margin-left:5%;
+border: 1px #ccc dotted;
+}
+
+#tb_horario tr td[rowspan]{
+width: 10%;
+}
+#tb_horario tr{
+border-bottom: 1px #ccc dotted;
+}
+#tb_horario tr:nth-child(2){
+color: #fff;
+background-color:#165287;
+border: 0px !important;
+font-weight: bold;
+}
+#tb_horario tr:nth-child(1){
+color: #000;
+background: url(../images/bg.jpg);
+border: 0px !important;
+font-weight: bold;
+}
+#tb_horario tr:last-of-type  td{
+background: #165287;
+color: #fff;
+font-weight: bold;
+-webkit-border-bottom-right-radius: 20px;
+-webkit-border-bottom-left-radius: 20px;
+-moz-border-radius-bottomright: 20px;
+-moz-border-radius-bottomleft: 20px;
+border-bottom-right-radius: 20px;
+border-bottom-left-radius: 20px;
+}
+#filtro_tabla_horario{
+margin : 0px auto;  
+}
+
+#filtro_tabla_horario tr td{
+text-align:left;  
+}
+caption{
+background: #165287;
+color: #fff;
+font-weight: bold;
+-webkit-border-top-right-radius: 20px;
+-webkit-border-top-left-radius: 20px;
+-moz-border-radius-topright: 20px;
+-moz-border-radius-topleft: 20px;
+border-top-right-radius: 20px;
+border-top-left-radius: 20px;
+}
+
+a.myButton{
+padding-top:2px  !important;
+padding-bottom:2px  !important;
+cursor: pointer;
+}
+a.salir{
+color: #fff;
+float: right;
+padding-right: 30px;
+font: bold 12pt #ffffff;
+cursor: url(../Imagenes/pst-proyecto.jpg);
+}
+
+#tt,#tn{
+display: none;
+}
+
+#tablaR{
+position: fixed;
+background: #cccccc;
+color: #8b0000;
+top: 0px;
+left:0px;
+width: 250px;
+border: 3px solid green;
+}
+#tablaR table{
+background: #cccccc;
+border: 3px solid green;
+}
+
+footer{
+	clear:both;
+	margin-bottom:-160px;
+	background-color:#0000ff; 
+	text-align:center;
+	color:#bbb;	
+	font-size:15px;
+	text-shadow:1px 1px 0 white;
+	border-top:1px solid #ebebeb;
+	/* CSS3 gradient layer (http://gradients.glrzad.com/)*/
+	background-image: -webkit-gradient(
+	linear,
+    left bottom,
+    left top,
+    color-stop(0.10, #E7E7E7),
+    color-stop(0.90, #F7F6F6)
+	);
+	background-image: -moz-linear-gradient(
+    center bottom,
+    #E7E7E7 10%,
+    #F7F6F6 90%
+    );
+	background-image: -o-linear-gradient(
+    bottom,
+    #E7E7E7 10%,
+    #F7F6F6 90%
+    );
+
+}

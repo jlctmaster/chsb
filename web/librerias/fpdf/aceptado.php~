@@ -1,0 +1,59 @@
+<?php 
+include("../clases/class.config.php");
+require('fpdf.php'); 
+class PDF extends FPDF  
+{ 
+function Header()  
+{  
+    $this->SetFont('Arial','',10);  
+    $this->Text(90,14,'Solicitudes aceptados',0,'C', 0);  
+    $this->Ln(30);  
+}
+ function Footer()
+{
+//Pie de página
+$this->SetY(-15);
+$this->SetFont('arial','I',10);
+$this->SetTextColor(128);
+$this->Cell(0,10,'Pagina '.$this->PageNo().' de {nb}',0,0,'C'); // el parametro {nb} es generado por una funcion llamada AliasNbPages
+}
+}
+$objeto=new config();
+$pdf = new PDF();
+$pdf->AliasNbPages(); //funcion que calcula el numero de paginas
+//****************************************
+//Creación del objeto de la clase heredada
+//****************************************
+$pdf->AddPage(); //crear documento
+//$pdf->Cell();
+$pdf->SetFont('arial','I',9);
+$pdf->Cell(10,5,'No',1,0,'C');
+ $pdf->Cell(20,5,'F.envio',1,0,'C');
+ $pdf->Cell(50,5,'Nombre',1,0,'C');
+ $pdf->Cell(20,5,'F.inicio',1,0,'C');
+  $pdf->Cell(20,5,'F.fin',1,0,'C');
+ $pdf->Cell(25,5,'turno',1,0,'C');
+ $pdf->Cell(10,5,'Horas',1,0,'C');
+  $pdf->Cell(10,5,'Rep',1,0,'C');
+ $pdf->Cell(20,5,'Permiso',1,1,'L');
+ $num=0;
+	$query="SELECT * FROM 
+Personal as per
+left join solicitudpermiso as sol on per.cedula=sol.Personal_cedula
+left join tipopermiso as tip on sol.idTipoPermiso=tip.idTipoPermiso
+WHERE sol.permiso='aceptado'";
+	$resultado=$objeto->ejecutar($query);
+		while($fila=$objeto->filtro($resultado)) {
+			$num++;
+			$pdf->Cell(10,5,$num,1,0,'L');
+ $pdf->Cell(20,5,$fila['fecha_envio'],1,0,'L');
+ $pdf->Cell(50,5,$fila['nombres']."  ".$fila['apellidos'],1,0,'L');
+ $pdf->Cell(20,5,$fila['fecha_inicio'],1,0,'L');
+  $pdf->Cell(20,5,$fila['fecha_fin'],1,0,'L');
+ $pdf->Cell(25,5,$fila['turno'],1,0,'L');
+ $pdf->Cell(10,5,$fila['numero_hora'],1,0,'L');
+  $pdf->Cell(10,5,$fila['recuperativo'],1,0,'L');
+ $pdf->Cell(20,5,$fila['permiso'],1,1,'L');
+			}
+$pdf->Output(); //el resto es historia 
+?>

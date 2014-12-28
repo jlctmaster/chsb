@@ -1,0 +1,162 @@
+<?php
+   require_once("fpdf.php");
+   require_once("Query.php");
+
+      session_start();
+
+	class clsFpdf extends FPDF {
+	        // $id="02";
+	 //Cabecera de página
+		public function Header()
+		{
+			    //Logo
+    $this->Image("../Img/logos.jpg" , 10 ,8, 150 , 12, "JPG" ,"http://www.iutep.tec.ve");
+    //Arial bold 15
+    $this->SetFont('Arial','B',5);
+    //Movernos a la derecha
+    $this->Cell(10);
+    //Título
+			$this->Cell(200,5,"FECHA: ".date("d/m/Y"),0,1,"C");    //Salto de línea
+         $this->Ln(7);
+			$this->Cell(100,7,"",0,1,"C");
+        // $this->Ln(2);			
+			
+		}
+
+		//Pie de página
+		public function Footer()
+		{
+			//Posición: a 2 cm del final
+			$this->SetY(-20);
+			//Arial italic 8
+			$this->SetFont("Arial","I",5);
+			//Dirección
+			$this->Cell(0,5,utf8_decode("."),0,1,"C");
+			//Número de página
+			$this->Cell(0,5,utf8_decode("Pagina ").$this->PageNo()."/{nb}",0,1,"C");
+			//Fecha
+			$lcFecha=date("d/m/Y  h:m a");
+			$this->Cell(0,3,$lcFecha,0,0,"C");
+		}
+		
+  public function fListar()
+		   {
+		    $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+            mysql_select_db("IUTEP", $con);
+			$M=array();
+			$I=0;
+         if(isset($_GET['id'])){$id=$_GET['id'];}else {$id=null;}
+			$data=mysql_query(Query(4,$id,null),$con);
+			while($d=mysql_fetch_array($data)){
+			   $M["cedula"][$I]=$d["cedula"];
+				$M["nombre"][$I]=ucwords($d["nombres"]);
+				$M["asignatura"][$I]=$d["asignatura"];	
+				$M["ambiente"][$I]=$d["ambiente"];	
+				$M["dia"][$I]=$d["dia"];	
+				$M["hora"][$I]=$d["cod_Horas"];		
+				$M["seccion"][$I]=$d["seccion"];		
+				$M["turno"][$I]=$d["turno"];		
+				$M["trayecto"][$I]=$d["trayecto"];		
+				$M["pnf"][$I]=$d["pnf"];		
+				$M["cod"][$I]=$d["cod"];		
+                $I++;				
+			}
+			         @mysql_close($con);
+			return $M;
+		}
+		
+		  public function Horas()
+		   {
+			$H=array();
+			$I=0;
+		  $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+           mysql_select_db("IUTEP", $con);
+			$data=mysql_query(Query(5,null,null),$con);
+			while($d=mysql_fetch_array($data)){
+			   $H["blockhora"][$I]=$d["blockhora"];	
+                $I++;				
+			}
+			         @mysql_close($con);
+			return $H;
+		}
+		  public function Dedicacion()
+		   {
+			$D=array();
+			$I=0;
+		  $con = mysql_connect("localhost", "root", "iutep") or die('No se pudo establecer una conexion al servidor de datos!.');
+           mysql_select_db("IUTEP", $con);
+         if(isset($_GET['id'])){$id=$_GET['id'];}else {$id=null;}
+			$data=mysql_query(Query(6,$id,null),$con);
+			while($d=mysql_fetch_array($data)){
+			   $D["pnf"][$I]=$d["pnf"];	
+			   $D["dedicacion"][$I]=$d["dedicacion"];	
+			   $D["Hac"][$I]=$d["Hac"];	
+			   $D["Had"][$I]=$d["Had"];	
+			   $D["total"][$I]=$d["total"];	
+                $I++;				
+			}
+			         @mysql_close($con);
+			return $D;
+		}		
+}
+/*
+SetFillColor(62,102,60); // fondo de celda
+$this->SetTextColor(255); // color del texto
+$this->SetDrawColor(0,0,0); // color de linea 
+*/
+   setlocale(LC_ALL,"es_VE.UTF8");
+   $lobjPdf=new clsFpdf();
+   $lobjPdf->AliasNbPages();
+   //$lobjPdf->AddPage('P',array(330,183));
+   $lobjPdf->AddPage('P',array(190,183));
+   $lobjPdf->SetFont("arial","",7);
+   $M=$lobjPdf->fListar();
+   $H=$lobjPdf->Horas(); 
+   $D=$lobjPdf->Dedicacion(); 
+   $lobjPdf->SetTextColor(000);
+   $lobjPdf->SetFont("arial","B",7);
+   $turno=null;
+   if($M["turno"][0]==0){$turno="Mañana";}
+   if($M["turno"][0]==1){$turno="Tarde";}
+   if($M["turno"][0]==2){$turno="Noche";}
+   $lobjPdf->Cell(160,4,"LISTADO HORARIO POR DOCENTES.",0,1,"C");
+   $lobjPdf->Cell(160,4,"DOCENTE: ".strtoupper($M["nombre"][0])."  PNF:".$D["pnf"][0]."  DEDICACION: ".$D['dedicacion'][0]."  H/ACADEM.: ".$D["Hac"][0]."  H/ADMI.: ".$D["Had"][0]."  TOTAL/HRAS.:".$D["total"][0],0,0,"C");
+   $lobjPdf->Ln(5);
+   $lobjPdf->SetTextColor(255);
+   $lobjPdf->SetFillColor(63,63,63);
+      $lobjPdf->SetFont("arial","B",9);
+   $lobjPdf->Cell(30,4,utf8_decode("Horas"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Lunes"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Martes"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Miercoles"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Jueves"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Viernes"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Sabado"),1,0,"C",true);
+   $lobjPdf->Cell(20,4,utf8_decode("Domingo"),1,1,"C",true);
+   $K=0;
+   $j=-1;
+   $lobjPdf->SetFont("arial","",7);
+      $lobjPdf->SetTextColor(000);
+   $lobjPdf->SetFillColor(237,237,237);
+           for($i=0;$i<18;$i++) {
+  	       $y=array_search($i."1",$M["cod"]);
+  	       $y2=array_search($i."2",$M["cod"]);
+  	       $y3=array_search($i."3",$M["cod"]);
+  	       $y4=array_search($i."4",$M["cod"]);
+  	       $y5=array_search($i."5",$M["cod"]);
+  	       $y6=array_search($i."6",$M["cod"]);
+  	       $y7=array_search($i."7",$M["cod"]);
+  	    		$lobjPdf->Cell(30,6,$H['blockhora'][$i],1,0,"C",true);		
+  		      $lobjPdf->Cell(20,6,((in_array($i."1",$M['cod'],true)? substr($M["asignatura"][$y],0,3)."/".$M["seccion"][$y]."/".substr($M["ambiente"][$y],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."2",$M['cod'],true)? substr($M["asignatura"][$y2],0,3)."/".$M["seccion"][$y2]."/".substr($M["ambiente"][$y2],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."3",$M['cod'],true)? substr($M["asignatura"][$y3],0,3)."/".$M["seccion"][$y3]."/".substr($M["ambiente"][$y3],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."4",$M['cod'],true)? substr($M["asignatura"][$y4],0,3)."/".$M["seccion"][$y4]."/".substr($M["ambiente"][$y4],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."5",$M['cod'],true)? substr($M["asignatura"][$y5],0,3)."/".$M["seccion"][$y5]."/".substr($M["ambiente"][$y5],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."6",$M['cod'],true)? substr($M["asignatura"][$y6],0,3)."/".$M["seccion"][$y6]."/".substr($M["ambiente"][$y6],0,5):'')),1,0,"C",true);//L
+  		      $lobjPdf->Cell(20,6,((in_array($i."7",$M['cod'],true)? substr($M["asignatura"][$y7],0,3)."/".$M["seccion"][$y7]."/".substr($M["ambiente"][$y7],0,5):'')),1,1,"C",true);//L
+	
+         	 }
+  	        	 
+   $lobjPdf->Output();
+
+  ?>

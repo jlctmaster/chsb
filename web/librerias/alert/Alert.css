@@ -1,0 +1,76 @@
+.dgcAlert {
+  word-wrap:break-word; 
+  top: 0;
+  padding-top: 0 !important;
+  position: absolute;
+  width: 100%;
+  display: block;
+  height: 0px;
+  background: url(fondoAlert.png) repeat;
+  opacity:0; 
+  display:none;
+  z-index:999999999999999;
+}
+
+.dgcAlert .dgcVentana{
+  width: 20%;
+   background: #FFF;
+   position: fixed;
+   margin: 15% 0 0 47%;
+   color: black;
+   padding: 10px;
+   border-radius: 10px; 
+  top:2em !important;
+}
+.dgcAlert .dgcVentana .dgcCerrar {
+  height: 25px;
+  width: 25px;
+  float: right;
+  cursor:pointer;
+   background: url(cerrarAlert.jpg) no-repeat center center;
+ }
+.dgcAlert .dgcVentana .dgcMensaje 
+{ 
+  margin: 0 auto; 
+  padding-top: 10px; 
+  text-align: center;
+  width: 100%;
+  font-size: 12pt;
+}
+.dgcAlert .dgcVentana .dgcMensaje table tr td {  
+     width: 30px;
+     height: 30px;
+}
+.dgcAlert .dgcVentana .dgcAceptar{
+  background:#09C;
+   bottom:20px; 
+   display: inline-block; 
+   font-size: 12px; 
+   font-weight: bold; 
+   height: 24px; 
+   line-height: 24px; 
+   padding-left: 5px; padding-right: 5px;text-align: center; text-transform: uppercase;
+    width: 75px;
+    cursor: pointer; color:#FFF; margin-top:50px;
+    }
+.dgcAlert .dgcVentana .dgcCancelar{
+  background:#AD0000; 
+  bottom:20px;
+   display: inline-block; 
+   font-size: 12px; 
+   font-weight: bold;
+    height: 24px;
+     line-height: 24px; 
+     padding-left: 5px;
+      padding-right: 5px;
+      text-align: center; 
+      text-transform: uppercase;
+       width: 75px;
+       cursor: pointer; 
+       color:#FFF; margin-top:50px;
+}
+
+.dgcAlert .dgcVentana .dgcMensaje a 
+{
+  width: 45%;
+}

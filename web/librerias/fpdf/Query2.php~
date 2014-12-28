@@ -1,0 +1,124 @@
+<?php
+function Query($caso,$id){
+ $sql=null;
+ switch($caso){
+    case 1:{
+	$sql="SELECT per.cedula as cedula, concat(left(ucase(per.nombres),1),substr(lcase(per.nombres),2)) AS nombre,
+	concat(left(ucase(per.apellidos),1),substr(lcase(per.apellidos),2)) as apellido, 
+	concat(left(ucase(per.estado_civil),1),substr(lcase(per.estado_civil),2)) as estado_civil,
+	(
+year( curdate( ) ) - year( per.fecha_naci )
+) - ( right(curdate( ) , 5 ) < right( per.fecha_naci, 5 ) ) AS edad,per.telefono_cel as movil,
+	per.fecha_naci,per.nacionalidad,per.sexo,
+	concat(left(ucase( per.direccion_naci),1),substr(lcase( per.direccion_naci),2)) as lugar /* Lugar de nacimiento*/,year(datPro.ano_egreso) as anoegreso,
+viv.direccion,cd.descripcion as ciudad,est.descripcion as estado,ins.descripcion as instituto,tit.descripcion as titulo,
+concat(left(ucase(Esp.descripcion),1),substr(lcase( Esp.descripcion),2)) as especialidad,
+concat(left(ucase(Estu.descripcion),1),substr(lcase(Estu.descripcion),2)) as estudios,
+concat(left(ucase(datL.nombre_instituto),1),substr(lcase(datL.nombre_instituto),2)) as trabajo,
+concat(left(ucase(datL.direccion ),1),substr(lcase(datL.direccion ),2))as direccion_trabajo 
+/* direccion del trabajo*/,
+datL.telefono as telefono_trabajo /* telefono del trabajo*/,carL.descripcion as cargo_trabajo /* cargo del trabajo*/,
+DATE_FORMAT(datA.fechaIngresoMinisterio,'%d/%m/%Y') as fechaM /* ingreso al ministerio*/,
+DATE_FORMAT(datA.fechaIngreso5Dicienbre,'%d/%m/%Y') AS fechaD/* 5 de diciembre*/,
+datA.cargaHoraria as carga /* carga horario*/
+ FROM 
+personal as per
+left join vivienda as viv on per.cedula=viv.Personal_cedula
+left join ciudad as cd on viv.idCiudad=cd.idCiudad
+left join estado as est on cd.Estado_idEstado=est.idEstado 
+
+left join datosprofesional as datPro on per.cedula=datPro.Personal_cedula
+left join instituto as ins on datPro.idInstituto=ins.idInstituto
+left join titulo as tit on datPro.idTitulo=tit.idTitulo 
+
+left join detalleespecialidad as detE on per.cedula=detE.cedula 
+left join especialidad as Esp on detE.idEspecialidad=Esp.idEspecialidad
+
+left join detalleestudios as detEs on per.cedula=detEs.Personal_cedula 
+left join estudios as Estu on detEs.idEstudios=Estu.idEstudios
+
+left join expediente as Exped on per.cedula=Exped.Personal_cedula
+left join cargolaboral as carL on Exped.idCargoLaboral=carL.idCargoLaboral 
+left join datoslaboral as datL on Exped.idDatosLaboral=datL.idDatosLaboral
+
+left join datosacademica as datA on per.cedula=datA.Personal_cedula
+WHERE per.cedula='$id'";
+	
+	
+	}break;
+	case 2:{
+$sql="SELECT  concat(left(ucase(p.nombres),1),substr(lcase(p.nombres),2)) as nb, 
+	concat(left(ucase(p.funcion),1),substr(lcase(p.funcion),2)) as funct, 
+p.cedula AS ci,concat(left(ucase(p.modalidad),1),substr(lcase(p.modalidad),2)) as modalidad, 
+concat(left(ucase(p.apellidos),1),substr(lcase(p.apellidos),2)) as ap, 
+(
+year( curdate( ) ) - year( da.fechaIngreso5Dicienbre )
+) - ( right(curdate( ) , 5 ) < right( da.fechaIngreso5Dicienbre, 5 ) ) AS anoservicio,
+p.telefono_cel AS tel,concat(left(ucase(v.direccion),1),substr(lcase(v.direccion),2)) AS dir,
+concat(left(ucase(t.descripcion ),1),substr(lcase(t.descripcion),2)) AS titulo, 
+concat(left(ucase(d.descripcion ),1),substr(lcase(d.descripcion),2)) AS dependencia,
+concat(left(ucase(c.descripcion ),1),substr(lcase(c.descripcion),2)) AS cargo
+FROM personal AS p
+JOIN vivienda AS v ON p.cedula = v.personal_cedula
+JOIN expediente AS e ON e.personal_cedula = p.cedula
+JOIN cargo AS c ON c.idCargo = e.idCargoLaboral
+JOIN datosprofesional AS dp ON dp.personal_cedula = p.cedula
+JOIN datosacademica AS da ON da.personal_cedula = p.cedula
+JOIN titulo AS t ON t.idTitulo = dp.idTitulo
+JOIN dependencia as d ON d.idDependencia=p.idDependencia
+ORDER BY p.cedula";
+	
+	
+	}break;
+case 3: {
+  $sql="SELECT ucase(sol.seccion) as seccion, ucase(sol.IdSolicitudPermiso) as numero,
+  ucase(sol.numero_hora) as hora,ucase(sol.ano) as ano,ucase(tp.descripcion) as permiso, ucase(sol.justificado) as justificado,
+  ucase(sol.recuperativo) as recuperativo,
+  ucase(per.nombres) AS nombre, ucase(per.turno) as turno, ucase(per.apellidos) AS apellido,
+  ucase(per.cedula) AS cedula, ucase(sol.dia) as dia, DATE_FORMAT( sol.fecha_inicio,  '%d/%m/%Y' ) AS desde, 
+  DATE_FORMAT( sol.fecha_fin, '%d/%m/%Y' ) AS hasta
+FROM personal AS per
+JOIN solicitudpermiso AS sol ON per.cedula = sol.personal_cedula
+JOIN tipopermiso as tp on tp.IdTipoPermiso=sol.IdTipoPermiso
+WHERE per.cedula =  '$id'
+  ";
+break;
+}
+case 4:{
+$sql="SELECT es.descripcion AS especialidad
+FROM especialidad AS es
+JOIN detalleespecialidad AS des ON es.IdEspecialidad = des.IdEspecialidad
+JOIN personal AS p ON p.cedula = des.cedula
+WHERE p.cedula =  '$id'";
+break;
+}
+case 5:{
+$sql="SELECT t.descripcion AS titulo
+FROM titulo AS t
+JOIN datosprofesional AS dp ON t.IdTitulo = dp.idTitulo
+JOIN personal AS p ON p.cedula = dp.Personal_cedula
+WHERE p.cedula =  '$id'";
+break;
+}
+case 6:{
+$sql="SELECT es.descripcion AS estudios
+FROM estudios AS es
+JOIN detalleestudios AS des ON es.IdEstudios = des.IdEstudios
+JOIN personal AS p ON p.cedula = des.Personal_cedula
+WHERE p.cedula =  '$id'";
+break;
+}
+
+case 7:{
+$sql="SELECT lb.nombre_instituto AS trabajo, lb.telefono AS telefono,lb.direccion
+FROM datoslaboral AS lb
+JOIN expediente AS ex ON ex.IdDatosLaboral = lb.IdDatosLaboral
+JOIN personal AS p ON p.cedula = ex.Personal_cedula
+WHERE p.cedula='$id'";
+break;
+}
+	}
+  return $sql;
+}
+
+?>

@@ -1,0 +1,40 @@
+/*********************************************************************************/
+/* Hide Elements Innecess                                                        */
+/*********************************************************************************/
+body{
+	width: 100%;
+	font-family: sans-serif;
+}
+body #header,body img, button, a button, #footer{
+	visibility: hidden;
+	overflow: hidden;
+	width: 0px;
+	height: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+@media print {
+	a:link, a:visited {
+		text-decoration: none;
+		color: black;
+	}
+	#main{
+		margin: 0px;
+	}
+	#printer{
+		width: 100%;
+	}
+	.printer table{ 
+		background-color: #ffffff; 
+		width: 100%; 
+		border: 2px solid #cccccc; 
+		font-size:10pt; 
+	}
+	.printer table tr, .printer table td{ 
+		background-color: #ffffff; 
+		width: auto; 
+		border: 2px solid #cccccc; 
+		font-size:10pt; 
+	}
+}

@@ -1,0 +1,101 @@
+<?php
+function Query($caso,$id,$ids){
+ $sql=null;
+ switch($caso){
+    case 1:{
+	$sql="select distinct Ded.descripcion as dedicacion,Ded.hora_academica as Hac,Ded.hora_administrativa as Had ,
+		(Ded.hora_administrativa+Ded.hora_academica)as total,Pnf.nombre_corto as pnf,Pro.descripcion as profesion,
+		concat(Per.nombres,'  ',Per.apellidos) as nombre,Per.tlf_movil as telefono,Per.cedula 
+		from Personal as Pers
+		left join Dedicacion as Ded on Pers.cod_Dedicacion=Ded.cod_Dedicacion 
+		left join Pnf on Pers.cod_Pnf=Pnf.cod_Pnf
+		left join Persona as Per on Pers.cedula=Per.cedula
+		left join Detalle_profesion as DetP on Pers.cedula=DetP.cedula
+		left join Profesion as Pro on DetP.cod_Profesion=Pro.cod_Profesion
+		where Pro.cod_Profesion='$id'";
+		}break;
+	case 2:{
+     $sql="select distinct Det.cedula,Det.cod_Unidad_curricular,Det.cod_detalle_horario,
+			Uni.descripcion as asignatura,Sec.cod_Seccion,Sec.nombre_seccion as seccion,Sec.turno,
+			Amb.descripcion as ambiente,Hor.dia,concat(Per.nombres,'  ',Per.apellidos) as nombres,
+			Hora.hora_inicio,Hora.hora_fin,Hor.cod_Horas,Pnf.nombre_corto as pnf,Tra.descripcion as trayecto,
+			concat(Hor.cod_Horas,'',Hor.dia)as cod
+			from Detalle_docente_horario as Det
+			left join Unidad_curricular as Uni on Det.cod_Unidad_curricular=Uni.cod_Unidad_curricular
+			left join Horario as Hor on Det.cod_detalle_horario=Hor.cod_detalle_horario
+			left join Horas as Hora on Hor.cod_Horas=Hora.cod_Horas
+			left join Seccion as Sec on Det.cod_Seccion=Sec.cod_Seccion
+			left join Trayecto as Tra on Sec.cod_Trayecto=Tra.cod_Trayecto
+			left join Pnf  on Sec.cod_Pnf=Pnf.cod_Pnf
+			left join Ambiente as Amb on Hor.cod_Ambiente=Amb.cod_Ambiente
+			left join Personal as Pers on Det.cedula=Pers.cedula
+			left join Persona as Per on Pers.cedula=Per.cedula
+			where Sec.nombre_seccion='$id'";
+			}break;
+	case 3: {
+	$sql="select distinct concat(hora_inicio,' - ',hora_fin) as blockhora,cod_Horas as codigo 
+          from Horas where fecha_desactivacion is null and turno='$id'";
+        }break;
+    case 4: {
+	$sql="select distinct Det.cedula,Det.cod_Unidad_curricular,Det.cod_detalle_horario,
+			Uni.descripcion as asignatura,Sec.cod_Seccion,Sec.nombre_seccion as seccion,Sec.turno,
+			Amb.descripcion as ambiente,Hor.dia,concat(Per.nombres,'  ',Per.apellidos) as nombres,
+			Hora.hora_inicio,Hora.hora_fin,Hor.cod_Horas,Pnf.nombre_corto as pnf,Tra.descripcion as trayecto,
+			concat(Hor.cod_Horas,'',Hor.dia)as cod
+			from Detalle_docente_horario as Det
+			left join Unidad_curricular as Uni on Det.cod_Unidad_curricular=Uni.cod_Unidad_curricular
+			left join Horario as Hor on Det.cod_detalle_horario=Hor.cod_detalle_horario
+			left join Horas as Hora on Hor.cod_Horas=Hora.cod_Horas
+			left join Seccion as Sec on Det.cod_Seccion=Sec.cod_Seccion
+			left join Trayecto as Tra on Sec.cod_Trayecto=Tra.cod_Trayecto
+			left join Pnf  on Sec.cod_Pnf=Pnf.cod_Pnf
+			left join Ambiente as Amb on Hor.cod_Ambiente=Amb.cod_Ambiente
+			left join Personal as Pers on Det.cedula=Pers.cedula
+			left join Persona as Per on Pers.cedula=Per.cedula
+			where Sec.fecha_desactivacion is null and Det.cedula='$id'";
+        }break;
+	case 5: {
+	$sql="select distinct concat(hora_inicio,' - ',hora_fin) as blockhora,cod_Horas as codigo 
+          from Horas where fecha_desactivacion is null";
+        }break; 
+    case 6: {
+    $sql="select distinct Ded.descripcion as dedicacion,Ded.hora_academica as Hac,Ded.hora_administrativa as Had ,
+         (Ded.hora_administrativa+Ded.hora_academica)as total,Pnf.nombre_corto as pnf
+			from Personal as Pers
+			left join Dedicacion as Ded on Pers.cod_Dedicacion=Ded.cod_Dedicacion 
+			left join Pnf on Pers.cod_Pnf=Pnf.cod_Pnf				
+			where Pers.cedula='$id' and Pers.fecha_desactivacion is null";
+    	  } break;   
+    case 7: {
+    $sql="select distinct Det.cedula,Det.cod_Unidad_curricular,Det.cod_detalle_horario,
+			Uni.descripcion as asignatura,Sec.cod_Seccion,Sec.nombre_seccion as seccion,Sec.turno,
+			Amb.descripcion as ambiente,Hor.dia,concat(Per.nombres,'  ',Per.apellidos) as nombres,
+			Hora.hora_inicio,Hora.hora_fin,Hor.cod_Horas,Pnf.nombre_corto as pnf,Tra.descripcion as trayecto,
+			concat(Hor.cod_Horas,'',Hor.dia)as cod,Lap.cod_Lapso_academica as lapso
+			from Detalle_docente_horario as Det
+			left join Unidad_curricular as Uni on Det.cod_Unidad_curricular=Uni.cod_Unidad_curricular
+			left join Horario as Hor on Det.cod_detalle_horario=Hor.cod_detalle_horario
+			left join Horas as Hora on Hor.cod_Horas=Hora.cod_Horas
+			left join Seccion as Sec on Det.cod_Seccion=Sec.cod_Seccion
+			left join Lapso_academica as Lap on Sec.cod_Lapso_academica=Lap.cod_Lapso_academica			
+			left join Trayecto as Tra on Sec.cod_Trayecto=Tra.cod_Trayecto
+			left join Pnf  on Sec.cod_Pnf=Pnf.cod_Pnf
+			left join Ambiente as Amb on Hor.cod_Ambiente=Amb.cod_Ambiente
+			left join Personal as Pers on Det.cedula=Pers.cedula
+			left join Persona as Per on Pers.cedula=Per.cedula
+			where Sec.fecha_desactivacion is null and Lap.cod_Lapso_academica='$id' and Amb.cod_Ambiente='$ids' and Amb.disponible='1'";						
+       	} break;
+     case 8: {
+     	$sql="select distinct Amb.descripcion as ambiente,concat(SUBSTRING(Lap.cod_Lapso_academica,1,4),'-',SUBSTRING(Lap.cod_Lapso_academica,5,7)) as lapso
+			from Detalle_docente_horario as Det
+			left join Horario as Hor on Det.cod_detalle_horario=Hor.cod_detalle_horario
+			left join Seccion as Sec on Det.cod_Seccion=Sec.cod_Seccion
+			left join Lapso_academica as Lap on Sec.cod_Lapso_academica=Lap.cod_Lapso_academica			
+			left join Ambiente as Amb on Hor.cod_Ambiente=Amb.cod_Ambiente
+			where Sec.fecha_desactivacion is null and Lap.cod_Lapso_academica='$id' and Amb.cod_Ambiente='$ids' and Amb.disponible='1'";
+     	} break;   
+	}
+  return $sql;
+}
+
+?>

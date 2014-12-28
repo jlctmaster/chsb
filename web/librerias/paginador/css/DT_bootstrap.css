@@ -1,0 +1,34 @@
+div.dataTables_length label {
+	width: auto;
+	float: left;
+	text-align: left;
+}
+
+div.dataTables_length select {
+	width: 55px;
+}
+
+div.dataTables_filter label {
+	float: right;
+	width: auto;
+}
+
+div.dataTables_info {
+	padding-top: 30px;
+	width: auto;
+	float: right;
+}
+
+div.dataTables_paginate {
+	float: right;
+	margin: 0;
+}
+
+table {
+	margin: 1em 0;
+	clear: both;
+}
+
+table.dataTable th:active {
+	outline: none;
+}
