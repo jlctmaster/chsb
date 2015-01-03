@@ -208,7 +208,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	<fieldset>
 		<legend><center>Vista: ESTADO</center></legend>
 		<div id="paginador" class="enjoy-css">			
-			<div class="printer">
+			<div class="container">
 				<table class="bordered-table zebra-striped" >
 					<tr>
 						<td>

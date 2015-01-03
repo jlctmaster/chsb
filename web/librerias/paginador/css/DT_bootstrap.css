@@ -13,6 +13,14 @@ div.dataTables_filter label {
 	width: auto;
 }
 
+@media only screen and (max-width:1024px) {
+	div.dataTables_filter {
+		float: right;
+		width: auto;
+		margin-right: -15%;
+	}
+}
+
 div.dataTables_info {
 	padding-top: 30px;
 	width: auto;

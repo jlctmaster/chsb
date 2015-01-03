@@ -107,7 +107,9 @@ img {
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
 	box-sizing: content-box;
-	width: auto;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
 	height: auto;
 	border: none;
 	-webkit-border-radius: 10px;
@@ -131,14 +133,63 @@ img {
 	box-shadow: 3px 3px 18px 3px rgba(112,119,124,0.91) ;
 }
 
+@media only screen and (max-width:1024px) {
+	.enjoy-css {
+		-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	width: 90%;
+	margin-left: 3%;
+	height: auto;
+	border: none;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	font-size: 15px;
+	color: #000;
+	text-align: center;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	background: -webkit-linear-gradient(-90deg, #ededed 0, #ededed 100%);
+	background: -moz-linear-gradient(180deg, #ededed 0, #ededed 100%);
+	background: linear-gradient(180deg, #ededed 0, #ededed 100%);
+	background-position: 50% 50%;
+	-webkit-background-origin: padding-box;
+	background-origin: padding-box;
+	-webkit-background-clip: border-box;
+	background-clip: border-box;
+	-webkit-background-size: auto auto;
+	background-size: auto auto;
+	-webkit-box-shadow: 3px 3px 18px 3px rgba(112,119,124,0.91) ;
+	box-shadow: 3px 3px 18px 3px rgba(112,119,124,0.91) ;
+	}
+}
+
 #paginador{
-	padding: 20px;
+	padding: 2%;
+}
+
+.container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 95%;
 }
 
 fieldset {
+	width: 95%;
 	border: 1px solid #cccccc;
 	min-height: 200px;
 	padding: 5px 5px 30px;
+	margin-left: auto;
+}
+
+@media only screen and (max-width:1024px) {
+	fieldset {
+		width: 95%;
+	border: 1px solid #cccccc;
+	min-height: 200px;
+	padding: 5px 5px 30px;
+	margin-right: 20%;
+	}
 }
 
 fieldset legend {
@@ -846,7 +897,7 @@ table.default tfoot{
 .form-horizontal .control-label {
 	width: 262px;
 	padding-top: 5px;
-	text-align: left;
+	text-align: right;
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -872,7 +923,8 @@ table.default tfoot{
 }
 
 #registro_wrapper .row {
-	margin-left: -13.5%;
+	margin-left: -16.5%;
+	margin-bottom: 5%;
 	position: static;
 }
 
