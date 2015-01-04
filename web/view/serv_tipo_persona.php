@@ -90,12 +90,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<input class="input-xlarge" title="Ingrese el nombre del tipo persona" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
 					</div>  
 				</div>   
-
 				<div class="control-group">  
 					<label class="control-label" for="es_usuariosistema">¿Es Usuario del Sistema? </label>  
 					<div class="controls">  
 						<div class="radios">
-							<input type="checkbox" title="Si el Check está marcado puede ser usuario del sistema" name="es_usuariosistema" id="es_usuariosistema" value="N" required />
+							<input type="checkbox" title="Si el Check está marcado puede ser usuario del sistema" name="es_usuariosistema" id="es_usuariosistema" required />
 						</div>
 					</div>
 				</div> 
@@ -139,7 +138,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="es_usuariosistema"> ¿Es Usuario del Sistema? </label>  
 					<div class="controls">  
 						<div class="radios">
-							<input type="checkbox" title="Si el Check está marcado puede ser usuario del sistema" name="es_usuariosistema" id="es_usuariosistema" <? if($row['es_usuariosistema']=="Y"){echo "checked='checked'";}?>/>
+							<input type="checkbox" title="Si el Check está marcado puede ser usuario del sistema" name="es_usuariosistema" id="es_usuariosistema" <?php if($row['es_usuariosistema']=="Y"){echo "checked='checked'";}?>/>
 						</div>
 					</div>
 				</div> 

@@ -1,4 +1,4 @@
-f-- Trigger for the auditories
+-- Trigger for the auditories
 
 CREATE OR REPLACE FUNCTION auditoria_general()
 RETURNS trigger AS
@@ -337,16 +337,18 @@ CREATE SEQUENCE inventario.seq_ubicacion;
 
 CREATE TABLE inventario.tubicacion
 (
-  codigo_ubicacion numeric not null default nextval('inventario.seq_ubicacion'),
-  descripcion varchar(40) not null,
-  codigo_ambiente numeric not null,
-  estatus char(1) not null default '1',
+	codigo_ubicacion numeric not null default nextval('inventario.seq_ubicacion'),
+	descripcion varchar(40) not null,
+	codigo_ambiente numeric not null,
+	itemsdefectuoso char(1) not null default 'N',
+	ubicacionprincipal char(1) not null default 'N',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_ubicacion primary key(codigo_ubicacion),
-  constraint fk_ubicacion_ambiente foreign key(codigo_ambiente) references general.tambiente(codigo_ambiente) on delete restrict on update cascade
+	constraint pk_ubicacion primary key(codigo_ubicacion),
+	constraint fk_ubicacion_ambiente foreign key(codigo_ambiente) references general.tambiente(codigo_ambiente) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -360,19 +362,19 @@ CREATE SEQUENCE inventario.seq_adquisicion;
 
 CREATE TABLE inventario.tadquisicion
 (
-  codigo_adquisicion numeric not null default nextval('inventario.seq_adquisicion'),
-  fecha_adquisicion date not null,
-  tipo_adquisicion char(1) not null,
-  rif_organizacion char(10) not null,
-  cedula_persona char(10) not null,
-  sonlibros char(1) not null default 'N',
-  estatus char(1) not null default '1',
+	codigo_adquisicion numeric not null default nextval('inventario.seq_adquisicion'),
+	fecha_adquisicion date not null,
+	tipo_adquisicion char(1) not null,
+	rif_organizacion char(10) not null,
+	cedula_persona char(10) not null,
+	sonlibros char(1) not null default 'N',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_adquisicion primary key(codigo_adquisicion),
-  constraint fk_adquisicion_organizacion foreign key(rif_organizacion) references general.torganizacion(rif_organizacion) on delete restrict on update cascade
+	constraint pk_adquisicion primary key(codigo_adquisicion),
+	constraint fk_adquisicion_organizacion foreign key(rif_organizacion) references general.torganizacion(rif_organizacion) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -385,19 +387,19 @@ CREATE SEQUENCE inventario.seq_det_adquisicion;
 
 CREATE TABLE inventario.tdetalle_adquisicion
 (
-  codigo_detalle_adquisicion numeric not null default nextval('inventario.seq_det_adquisicion'),
-  codigo_adquisicion numeric not null,
-  codigo_item numeric not null,
-  cantidad numeric not null,
-  codigo_ubicacion numeric not null,
-  estatus char(1) not null default '1',
+	codigo_detalle_adquisicion numeric not null default nextval('inventario.seq_det_adquisicion'),
+	codigo_adquisicion numeric not null,
+	codigo_item numeric not null,
+	cantidad numeric not null,
+	codigo_ubicacion numeric not null,
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_det_adq primary key(codigo_detalle_adquisicion),
-  constraint fk_det_adq_adquisicion foreign key(codigo_adquisicion) references inventario.tadquisicion(codigo_adquisicion) on delete restrict on update cascade,
-  constraint fk_det_adq_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade
+	constraint pk_det_adq primary key(codigo_detalle_adquisicion),
+	constraint fk_det_adq_adquisicion foreign key(codigo_adquisicion) references inventario.tadquisicion(codigo_adquisicion) on delete restrict on update cascade,
+	constraint fk_det_adq_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -412,17 +414,17 @@ CREATE SEQUENCE inventario.seq_movimiento;
 
 CREATE TABLE inventario.tmovimiento
 (
-  codigo_movimiento numeric not null default nextval('inventario.seq_movimiento'),
-  fecha_movimiento numeric not null,
-  tipo_movimiento char(1) not null default 'E',
-  numero_documento numeric not null,
-  tipo_transaccion char(2) not null default 'IA',
-  estatus char(1) not null default '1',
+	codigo_movimiento numeric not null default nextval('inventario.seq_movimiento'),
+	fecha_movimiento numeric not null,
+	tipo_movimiento char(1) not null default 'E',
+	numero_documento numeric not null,
+	tipo_transaccion char(2) not null default 'IA',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_movimiento primary key(codigo_movimiento)
+	constraint pk_movimiento primary key(codigo_movimiento)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -437,21 +439,22 @@ CREATE SEQUENCE inventario.seq_det_movimiento;
 
 CREATE TABLE inventario.tdetalle_movimiento
 (
-  codigo_detalle_movimiento numeric not null default nextval('inventario.seq_det_movimiento'),
-  codigo_movimiento numeric not null,
-  codigo_item numeric not null,
-  codigo_ubicacion numeric not null,
-  cantidad_movimiento numeric not null,
-  valor_anterior numeric not null,
-  valor_actual numeric not null,
-  estatus char(1) not null default '1',
+	codigo_detalle_movimiento numeric not null default nextval('inventario.seq_det_movimiento'),
+	codigo_movimiento numeric not null,
+	codigo_item numeric not null,
+	codigo_ubicacion numeric not null,
+	cantidad_movimiento numeric not null,
+	valor_anterior numeric not null,
+	valor_actual numeric not null,
+	sonlibros char(1) not null default 'N',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_det_mov primary key(codigo_detalle_movimiento),
-  constraint fk_det_mov_movimiento foreign key(codigo_movimiento) references inventario.tmovimiento(codigo_movimiento) on delete restrict on update cascade,
-  constraint fk_det_mov_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade
+	constraint pk_det_mov primary key(codigo_detalle_movimiento),
+	constraint fk_det_mov_movimiento foreign key(codigo_movimiento) references inventario.tmovimiento(codigo_movimiento) on delete restrict on update cascade,
+	constraint fk_det_mov_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -465,7 +468,7 @@ CREATE INDEX tdetalle_movimiento_idx_1 ON inventario.tdetalle_movimiento(codigo_
 -- View Movimiento Inventario
 CREATE OR REPLACE VIEW inventario.vw_movimiento_inventario AS 
 -- Movimiento de Inventario por Adquisiciones de Materiales
-SELECT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
+SELECT DISTINCT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
 dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
@@ -479,7 +482,7 @@ LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar AND a.son
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 UNION ALL 
 -- Movimiento de Inventario por Asignaciones de Materiales
-SELECT m.codigo_movimiento, 'Asignación No '||a.codigo_asignacion AS nro_documento, m.fecha_movimiento, 
+SELECT DISTINCT m.codigo_movimiento, 'Asignación No '||a.codigo_asignacion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
 FROM inventario.tmovimiento m 
@@ -490,7 +493,7 @@ INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
 LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien 
 UNION ALL 
 -- Movimiento de Inventario por Recuperación de Materiales
-SELECT m.codigo_movimiento, 'Recuperación No '||r.codigo_recuperacion AS nro_documento, m.fecha_movimiento, 
+SELECT DISTINCT m.codigo_movimiento, 'Recuperación No '||r.codigo_recuperacion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
 FROM inventario.tmovimiento m 
@@ -501,7 +504,7 @@ INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
 INNER JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien 
 UNION ALL 
 -- Movimiento de Inventario por Prestamos de Libros
-SELECT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
+SELECT DISTINCT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
 FROM inventario.tmovimiento m 
@@ -513,7 +516,7 @@ LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 UNION ALL 
 -- Movimiento de Inventario por Entregas de Libros
-SELECT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
+SELECT DISTINCT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
 FROM inventario.tmovimiento m 
@@ -526,24 +529,26 @@ LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro
 
 -- View Inventario
 CREATE OR REPLACE VIEW inventario.vw_inventario AS 
-SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion, 
-dm.codigo_item, CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre 
-WHEN 'Y' THEN e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo 
-ELSE (CASE WHEN b.codigo_bien IS NOT NULL THEN b.nro_serial||' '||b.nombre 
-ELSE e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo END) END AS item, 
+SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
+b.nro_serial||' '||b.nombre AS item,dm.sonlibros,
 LAST(dm.valor_actual) AS existencia 
 FROM inventario.tmovimiento m 
 INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
 INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN inventario.tadquisicion a ON m.numero_documento = a.codigo_adquisicion 
-LEFT JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien AND m.tipo_transaccion IN ('IA','BR','BA')
-LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE') 
+LEFT JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien AND m.tipo_transaccion IN ('IA','BR','BA') 
+WHERE dm.sonlibros='N'
+GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,b.nro_serial,b.nombre,dm.sonlibros 
+UNION ALL 
+SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
+e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo AS item,dm.sonlibros,
+LAST(dm.valor_actual) AS existencia 
+FROM inventario.tmovimiento m 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE')
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-GROUP BY dm.codigo_ubicacion,u.descripcion, 
-dm.codigo_item, CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre 
-WHEN 'Y' THEN e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo 
-ELSE (CASE WHEN b.codigo_bien IS NOT NULL THEN b.nro_serial||' '||b.nombre 
-ELSE e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo END) END
+WHERE dm.sonlibros='Y'
+GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_isbn_libro,e.numero_edicion,l.titulo
 
 -- Fin Inventario
 
@@ -983,6 +988,7 @@ CREATE TABLE bienes_nacionales.trecuperacion
 	codigo_bien numeric not null,
 	codigo_ubicacion numeric not null,
 	cantidad numeric not null,
+	esrecuperacion char(1) not null default 'Y',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1004,11 +1010,11 @@ CREATE SEQUENCE bienes_nacionales.seq_det_recuperacion;
 
 CREATE TABLE bienes_nacionales.tdetalle_recuperacion
 (
-	codigo_detalle_recuperacion numeric,
-	codigo_recuperacion numeric,
-	codigo_ubicacion numeric,
-	codigo_item numeric,
-	cantidad numeric,
+	codigo_detalle_recuperacion numeric not null default nextval('bienes_nacionales.seq_det_recuperacion'),
+	codigo_recuperacion numeric not null,
+	codigo_ubicacion numeric not null,
+	codigo_item numeric not null,
+	cantidad numeric not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1256,6 +1262,7 @@ CREATE TABLE biblioteca.tdetalle_entrega
 (
 	codigo_detalle_entrega numeric not null default nextval('biblioteca.seq_det_entrega'),
 	codigo_entrega numeric not null,
+	codigo_ubicacion numeric not null,
 	codigo_ejemplar numeric not null,
 	cantidad numeric not null,
 	estatus char(1) not null default '1',
@@ -1265,8 +1272,8 @@ CREATE TABLE biblioteca.tdetalle_entrega
 	fecha_modificacion timestamp default current_timestamp,
 	constraint pk_det_ent primary key(codigo_detalle_entrega),
 	constraint fk_det_ent_entrega foreign key(codigo_entrega) references biblioteca.tentrega(codigo_entrega) on delete restrict on update cascade,
-	constraint fk_det_ent_ejemplar foreign key(codigo_ejemplar) references biblioteca.tejemplar(codigo_ejemplar) on delete restrict on update cascade
-
+	constraint fk_det_ent_ejemplar foreign key(codigo_ejemplar) references biblioteca.tejemplar(codigo_ejemplar) on delete restrict on update cascade,
+	constraint fk_det_ent_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros

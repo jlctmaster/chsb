@@ -165,6 +165,7 @@ if(isset($_SESSION['user_estado'])){
         	else if(isset($_GET['bien'])) include("serv_bien.php");
         	else if(isset($_GET['asignacion'])) include("serv_asignacion.php");
           else if(isset($_GET['recuperacion'])) include("serv_recuperacion.php");
+          else if(isset($_GET['reconstruccion'])) include("serv_reconstruccion.php");
           //biblioteca
           else if(isset($_GET['clasificacion'])) include("serv_clasificacion.php");
           else if(isset($_GET['tema'])) include("serv_tema.php");

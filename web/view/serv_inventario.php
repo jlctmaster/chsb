@@ -13,8 +13,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 			<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 				<thead>
 					<tr>
-						<th>Item:</th>
 						<th>Ubicación:</th>
+						<th>Item:</th>
 						<th>Existencia:</th>
 					</tr>
 				</thead>
@@ -23,8 +23,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					while ($filas = $pgsql->Respuesta($consulta))
 					{
 						echo '<tr>';
-						echo '<td>'.$filas['item'].'</td>';
 						echo '<td>'.$filas['ubicacion'].'</td>';
+						echo '<td>'.$filas['item'].'</td>';
 						echo '<td>'.$filas['existencia'].'</td>';
 						echo "</tr>";
 					}

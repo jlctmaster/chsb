@@ -11,7 +11,7 @@ function init(){
 	})
 
 	function imprimirRegistros(){
-		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?ambiente');
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?ubicacion');
 			//Función que procede a cambiar el estatus del Documento a Anular.
 			$('#BtnAnular').click(function(){
 				$('.dgcAlert').animate({opacity:0},50);
