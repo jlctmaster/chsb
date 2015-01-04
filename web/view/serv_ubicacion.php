@@ -8,7 +8,9 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT u.codigo_ubicacion, u.descripcion, a.descripcion AS ambiente 
+	$sql = "SELECT u.codigo_ubicacion, u.descripcion, a.descripcion AS ambiente,
+	CASE u.ubicacionprincipal WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS ubicacionprincipal,
+	CASE u.itemsdefectuoso WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS itemsdefectuoso 
 	FROM inventario.tubicacion u 
 	INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente";
 	$consulta = $pgsql->Ejecutar($sql);
@@ -21,8 +23,10 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Ubicacion</th>
+							<th>Ubicación</th>
 							<th>Ambiente</th>
+							<th>¿Es la Ub. Principal?</th>
+							<th>¿Es para Items Defect.?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -39,6 +43,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['codigo_ubicacion'].'</td>';
 							echo '<td>'.$filas['descripcion'].'</td>';
 							echo '<td>'.$filas['ambiente'].'</td>';
+							echo '<td>'.$filas['ubicacionprincipal'].'</td>';
+							echo '<td>'.$filas['itemsdefectuoso'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?ubicacion&Opt=3&codigo_ubicacion='.$filas['codigo_ubicacion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -109,6 +115,22 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
+					<label class="control-label" for="ubicacionprincipal">¿Es la Ubicación Principal? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que este registro es la ubicación principal" name="ubicacionprincipal" id="ubicacionprincipal" required />
+						</div>
+					</div>
+				</div> 
+				<div class="control-group">  
+					<label class="control-label" for="itemsdefectuoso">¿Es para Items Defectuosos? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que es para almacenar solo los items defectuosos" name="itemsdefectuoso" id="itemsdefectuoso" required />
+						</div>
+					</div>
+				</div> 
+				<div class="control-group">  
 					<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
 				</div>  
 				<div class="form-actions">
@@ -165,6 +187,22 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>
 				<div class="control-group">  
+					<label class="control-label" for="ubicacionprincipal">¿Es la Ubicación Principal? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que este registro es la ubicación principal" name="ubicacionprincipal" id="ubicacionprincipal" <?php if($row['ubicacionprincipal']=="Y"){echo "checked='checked'";}?> required />
+						</div>
+					</div>
+				</div> 
+				<div class="control-group">  
+					<label class="control-label" for="itemsdefectuoso">¿Es para Items Defectuosos? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que es para almacenar solo los items defectuosos" name="itemsdefectuoso" id="itemsdefectuoso" <?php if($row['itemsdefectuoso']=="Y"){echo "checked='checked'";}?> required />
+						</div>
+					</div>
+				</div> 
+				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>  
 				<div class="control-group">  
@@ -197,9 +235,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_ubicacion, a.descripcion, d.descripcion AS Ambiente 
-	FROM inventario.tubicacion a INNER JOIN general.tambiente d ON a.codigo_ambiente = d.codigo_ambiente 
-	WHERE a.codigo_ubicacion =".$pgsql->comillas_inteligentes($_GET['codigo_ubicacion']);
+	$sql = "SELECT u.codigo_ubicacion, u.descripcion, a.descripcion AS Ambiente, 
+	CASE u.ubicacionprincipal WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS ubicacionprincipal,
+	CASE u.itemsdefectuoso WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS itemsdefectuoso 
+	FROM inventario.tubicacion u 
+	INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+	WHERE u.codigo_ubicacion =".$pgsql->comillas_inteligentes($_GET['codigo_ubicacion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -231,6 +272,22 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row['ambiente']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>¿Es la Ubicación Principal?</label>
+						</td>
+						<td>
+							<label><?=$row['ubicacionprincipal']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>¿Son para Items Defectuosos?</label>
+						</td>
+						<td>
+							<label><?=$row['itemsdefectuoso']?></label>
 						</td>
 					</tr>
 				</table>

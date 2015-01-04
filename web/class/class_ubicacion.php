@@ -4,6 +4,8 @@ class ubicacion {
 	private $codigo_ubicacion; 
 	private $descripcion;
 	private $codigo_ambiente; 
+	private $ubicacionprincipal;
+	private $itemsdefectuoso;
 	private $estatus; 
 	private $pgsql; 
 	 
@@ -11,6 +13,8 @@ class ubicacion {
 		$this->codigo_ubicacion=null;
 		$this->descripcion=null;
 		$this->codigo_ambiente=null;
+		$this->ubicacionprincipal=null;
+		$this->itemsdefectuoso=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -49,6 +53,24 @@ class ubicacion {
 		}
     }
 
+    public function ubicacionprincipal(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->ubicacionprincipal;
+
+		if($Num_Parametro>0){
+			$this->ubicacionprincipal=func_get_arg(0);
+		}
+    }
+
+    public function itemsdefectuoso(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->itemsdefectuoso;
+
+		if($Num_Parametro>0){
+			$this->itemsdefectuoso=func_get_arg(0);
+		}
+    }
+
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -59,8 +81,8 @@ class ubicacion {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO inventario.tubicacion (descripcion,codigo_ambiente,creado_por,fecha_creacion) VALUES 
-	    ('$this->descripcion',$this->codigo_ambiente,'$user',NOW());";
+	    $sql="INSERT INTO inventario.tubicacion (descripcion,codigo_ambiente,ubicacionprincipal,itemsdefectuoso,creado_por,fecha_creacion) VALUES 
+	    ('$this->descripcion',$this->codigo_ambiente,'$this->ubicacionprincipal','$this->itemsdefectuoso','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -78,6 +100,11 @@ class ubicacion {
     public function Desactivar($user){
     	$sqlx="SELECT * FROM inventario.tubicacion u WHERE u.codigo_ubicacion = $this->codigo_ubicacion 
     	AND (EXISTS (SELECT 1 FROM inventario.tdetalle_adquisicion da WHERE u.codigo_ubicacion = da.codigo_ubicacion) OR 
+    	EXISTS (SELECT 1 FROM bienes_nacionales.tdetalle_asignacion das WHERE u.codigo_ubicacion = das.codigo_ubicacion) OR 
+    	EXISTS (SELECT 1 FROM bienes_nacionales.trecuperacion r WHERE u.codigo_ubicacion = r.codigo_ubicacion) OR 
+    	EXISTS (SELECT 1 FROM bienes_nacionales.tdetalle_recuperacion dr WHERE u.codigo_ubicacion = dr.codigo_ubicacion) OR 
+    	EXISTS (SELECT 1 FROM biblioteca.tdetalle_prestamo dp WHERE u.codigo_ubicacion = dp.codigo_ubicacion) OR 
+    	EXISTS (SELECT 1 FROM biblioteca.tdetalle_prestamo de WHERE u.codigo_ubicacion = de.codigo_ubicacion) OR 
     	EXISTS (SELECT 1 FROM inventario.tdetalle_movimiento dm WHERE u.codigo_ubicacion = dm.codigo_ubicacion))";
 		$query=$this->pgsql->Ejecutar($sqlx);
 	    if($this->pgsql->Total_Filas($query)==0){
@@ -93,7 +120,8 @@ class ubicacion {
    
     public function Actualizar($user){
 	    $sql="UPDATE inventario.tubicacion SET descripcion='$this->descripcion',codigo_ambiente=$this->codigo_ambiente,
-	    modificado_por='$user', fecha_modificacion=NOW() 
+	    ubicacionprincipal='$this->ubicacionprincipal',itemsdefectuoso='$this->itemsdefectuoso',modificado_por='$user',
+	    fecha_modificacion=NOW() 
 	    WHERE codigo_ubicacion='$this->codigo_ubicacion'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
@@ -109,6 +137,8 @@ class ubicacion {
 			$this->codigo_ubicacion($tubicacion['codigo_ubicacion']);
 			$this->descripcion($tubicacion['descripcion']);
 			$this->codigo_ambiente($tubicacion['codigo_ambiente']);
+			$this->ubicacionprincipal($tubicacion['ubicacionprincipal']);
+			$this->itemsdefectuoso($tubicacion['itemsdefectuoso']);
 			$this->estatus($tubicacion['estatus']);
 			return true;
 		}

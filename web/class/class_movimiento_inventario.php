@@ -299,5 +299,94 @@ class movimiento_inventario {
         }
         return $json;
     }
+
+    public function BuscarItems($ubicacion){
+        $sql="SELECT * FROM inventario.vw_inventario WHERE codigo_ubicacion = '$ubicacion'";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
+
+    public function BuscarItemsConfigurables($ubicacion){
+        $sql="SELECT i.codigo_ubicacion,i.ubicacion,i.codigo_item,i.item,i.sonlibros,i.existencia 
+        FROM inventario.vw_inventario i 
+        INNER JOIN bienes_nacionales.tbien b ON i.codigo_item = b.codigo_bien 
+        WHERE i.codigo_ubicacion = '$ubicacion' AND i.sonlibros = 'N' AND b.esconfigurable='Y'";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
+
+    public function BuscarConfiguracion($item,$cantidad){
+        $sql="SELECT i.codigo_item,i.item,cb.codigo_item AS codigo_item_recuperado,
+        b.nro_serial||' '||b.nombre AS item_recuperado,b.esconfigurable,
+        u.codigo_ubicacion,u.descripcion AS ubicacion,
+        MAX($cantidad) AS cantidad_a_recuperar,MAX($cantidad*cb.cantidad) AS cantidad_recuperada
+        FROM inventario.vw_inventario i 
+        INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON i.codigo_item = cb.codigo_bien 
+        INNER JOIN bienes_nacionales.tbien b ON cb.codigo_item = b.codigo_bien,
+        inventario.tubicacion u 
+        WHERE i.codigo_item = $item AND i.sonlibros='N' AND u.ubicacionprincipal = 'Y'
+        GROUP BY i.codigo_item,i.item,cb.codigo_item,b.nro_serial,b.nombre,b.esconfigurable,cb.item_base,
+        u.codigo_ubicacion,u.descripcion 
+        ORDER BY cb.item_base DESC";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
+
+    public function BuscarDisponibilidad($item){
+        $sql="SELECT i.codigo_item,i.item,cb.codigo_item AS codigo_item_recuperado,
+        b.nro_serial||' '||b.nombre AS item_recuperado,b.esconfigurable,
+        u.codigo_ubicacion,u.descripcion AS ubicacion,
+        MAX($cantidad) AS cantidad_a_recuperar,MAX($cantidad*cb.cantidad) AS cantidad_recuperada
+        FROM inventario.vw_inventario i 
+        INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON i.codigo_item = cb.codigo_bien 
+        INNER JOIN bienes_nacionales.tbien b ON cb.codigo_item = b.codigo_bien,
+        inventario.tubicacion u 
+        WHERE i.codigo_item = $item AND i.sonlibros='N' AND u.ubicacionprincipal = 'Y'
+        GROUP BY i.codigo_item,i.item,cb.codigo_item,b.nro_serial,b.nombre,b.esconfigurable,cb.item_base,
+        u.codigo_ubicacion,u.descripcion 
+        ORDER BY cb.item_base DESC";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
 }
 ?>

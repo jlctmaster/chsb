@@ -95,6 +95,15 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
+    //Agregar Objeto Calendario al input fecha.
+    $('#fecha').datepicker({
+        minDate: '-15d',
+        maxDate: '0d',
+        showOn: 'both',
+        numberOfMonths: 1,
+        buttonImage: '../images/calendario.png',
+        buttonImageOnly: true
+    });
     //Agregar Objeto Calendario al input fecha_adquisicion.
     $('#fecha_adquisicion').datepicker({
         minDate: '-1m',
@@ -104,8 +113,7 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
-
-        //Agregar Objeto Calendario al input fecha_aasignacion.
+    //Agregar Objeto Calendario al input fecha_asignacion.
     $('#fecha_asignacion').datepicker({
         minDate: '-1m',
         maxDate: '0d',
@@ -114,7 +122,6 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
-
     //Agregar Objeto Calendario al input fecha_edicion.
     $('#fecha_edicion').datepicker({
         showOn: 'both',

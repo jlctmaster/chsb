@@ -13,12 +13,28 @@ if(isset($_POST['descripcion']))
 if(isset($_POST['codigo_ambiente']))
   $codigo_ambiente=trim($_POST['codigo_ambiente']);
 
+if(isset($_POST['ubicacionprincipal']))
+  $ubicacionprincipal=trim($_POST['ubicacionprincipal']);
+
+if(isset($_POST['itemsdefectuoso']))
+  $itemsdefectuoso=trim($_POST['itemsdefectuoso']);
+
+function comprobarCheckBox($value){
+  if($value == "on")
+    $chk = "Y";
+  else
+    $chk = "N";
+  return $chk;
+}
+
 include_once("../class/class_ubicacion.php");
 $ubicacion=new ubicacion();
 if($lOpt=='Registrar'){
   $ubicacion->codigo_ubicacion($codigo_ubicacion);
   $ubicacion->descripcion($descripcion);
   $ubicacion->codigo_ambiente($codigo_ambiente);
+  $tipo_persona->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
+  $tipo_persona->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
   if(!$ubicacion->Comprobar()){
     if($ubicacion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -45,6 +61,8 @@ if($lOpt=='Modificar'){
   $ubicacion->codigo_ubicacion($codigo_ubicacion);
   $ubicacion->descripcion($descripcion);
   $ubicacion->codigo_ambiente($codigo_ambiente);
+  $tipo_persona->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
+  $tipo_persona->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
   if($ubicacion->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

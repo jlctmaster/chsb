@@ -33,6 +33,7 @@ function comprobarCheckBox($value){
 include_once("../class/class_adquisicion.php");
 include_once("../class/class_movimiento_inventario.php");
 $adquisicion=new adquisicion();
+$mov_inventario = new movimiento_inventario();
 if($lOpt=='Registrar'){
   $adquisicion->codigo_adquisicion($codigo_adquisicion);
   $adquisicion->fecha_adquisicion($fecha_adquisicion);
@@ -47,7 +48,6 @@ if($lOpt=='Registrar'){
       if($adquisicion->EliminarAdquisiciones()){
         if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
           if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
-            $mov_inventario = new movimiento_inventario();
             $mov_inventario->fecha_movimiento($fecha_adquisicion);
             $mov_inventario->tipo_movimiento('E');
             $mov_inventario->numero_documento($adquisicion->codigo_adquisicion());
@@ -91,7 +91,6 @@ if($lOpt=='Registrar'){
         if($adquisicion->EliminarAdquisiciones()){
           if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
             if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
-              $mov_inventario = new movimiento_inventario();
               $mov_inventario->fecha_movimiento($fecha_adquisicion);
               $mov_inventario->tipo_movimiento('E');
               $mov_inventario->numero_documento($adquisicion->codigo_adquisicion());
@@ -152,7 +151,6 @@ if($lOpt=='Modificar'){
     if($adquisicion->EliminarAdquisiciones()){
       if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
         if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
-          $mov_inventario = new movimiento_inventario();
           $mov_inventario->fecha_movimiento($fecha_adquisicion);
           $mov_inventario->tipo_movimiento('E');
           $mov_inventario->numero_documento($codigo_adquisicion);
