@@ -2,23 +2,25 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>:..Universidad Deportiva del Sur</title>
+    <link rel="stylesheet" href="css/style.css" />
+
+	<title>CHSB</title>
 
 </head>
-<body bgcolor="#0B3F80">
+<body>
 <header>
 <div class="front-signin" style="background:none; margin:0 auto;">
 <center>  
 
-    <img src="/udesur/images/404.png" alt="" ><br>
-    <img src="/udesur/images/home.png" alt="" style="width:80px; height:80px;cursor:pointer" onclick="location.href='/udesur/'">   
+    <img src="images/error404.png" style="width:800px; height: 400px;" ><br>
+    <img src="images/home.png" alt="" style="width:80px; height:80px;cursor:pointer" onclick="location.href='/CHSB/'">   
       <br>
 </center>
 </div>
 </header>
 <center>
-	<footer style="background:lightblue">
-		<p>&copy Universidad Deportiva del Sur 2014</p>
+	<footer>
+		<p>&copy; 2014 CHSB. Todos los derechos reservados.</p>
 	</footer>
 </center>
 </body>

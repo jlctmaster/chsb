@@ -212,26 +212,26 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 				<table class="bordered-table zebra-striped" >
 					<tr>
 						<td>
-							<label>Código:</label>
+							<label class="control-label">Código:</label>
 						</td>
 						<td>
-							<label><?=$row['codigo_estado']?></label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>Estado:</label>
-						</td>
-						<td>
-							<label><?=$row['descripcion']?></label>
+							<label class="control-label"><?=$row['codigo_estado']?></label>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<label>País:</label>
+							<label class="control-label">Estado:</label>
 						</td>
 						<td>
-							<label><?=$row['pais']?></label>
+							<label class="control-label"><?=$row['descripcion']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="control-label">País:</label>
+						</td>
+						<td>
+							<label class="control-label"><?=$row['pais']?></label>
 						</td>
 					</tr>
 				</table>

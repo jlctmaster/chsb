@@ -406,6 +406,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				</div>  
 				<div class="form-action">
 					<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+							
 					<?php
 						for($x=0;$x<count($a);$x++)
 							if($a[$x]['orden']=='3'){
@@ -421,6 +422,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 									echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
 							}
 					?>
+					<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Formato de Impresión</button>';
+
 					<a href="?adquisicion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>  
 			</div>  

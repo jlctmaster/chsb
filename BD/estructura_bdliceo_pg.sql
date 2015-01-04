@@ -1,4 +1,4 @@
-f-- Trigger for the auditories
+-- Trigger for the auditories
 
 CREATE OR REPLACE FUNCTION auditoria_general()
 RETURNS trigger AS

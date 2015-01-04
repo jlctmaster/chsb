@@ -1,10 +1,30 @@
 $(document).ready(init);
 function init(){
+		$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_formato_adquisicion.php?p1="+$('#codigo_adquisicion').val();
+		window.open(url, '_blank');
+	})
+
 	$('#btnPrint').click(function(){
 		window.print();
 	});
 
 	$('#btnGuardar').click(ValidarCampos);
+
+	$('#btnImprimirTodos').click(function(){
+		imprimirRegistros();
+	})
+
+	function imprimirRegistros(){
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?adquisicion');
+			//Función que procede a cambiar el estatus del Documento a Anular.
+			$('#BtnAnular').click(function(){
+				$('.dgcAlert').animate({opacity:0},50);
+			    $('.dgcAlert').css('display','none');
+				document.getElementById('Anular').innerHTML="";
+			})
+	}
+
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),
