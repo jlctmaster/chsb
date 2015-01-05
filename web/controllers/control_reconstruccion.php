@@ -212,13 +212,13 @@ if($lOpt=='Activar'){
   }
 }
 
-if($lOpt=='BuscarCantidadDisponible'){
-  echo $mov_inventario->BuscarCantidadDisponible($_POST['codigo_bien'],$_POST['codigo_ubicacion']);
+if($lOpt=='BuscarDisponibilidad'){
+  echo $mov_inventario->BuscarDisponibilidad($_POST['codigo_bien']);
   unset($mov_inventario);
 }
 
-if($lOpt=='BuscarDisponibilidad'){
-  echo $mov_inventario->BuscarDisponibilidad($_POST['codigo_bien']);
+if($lOpt=='BuscarUbicacionFuente'){
+  echo $mov_inventario->BuscarUbicacionFuente($_POST['codigo_item'],$_POST['cantidad']);
   unset($mov_inventario);
 }
 ?>

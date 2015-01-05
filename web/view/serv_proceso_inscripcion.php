@@ -133,7 +133,7 @@
 							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 required /> 
 							            </div>
 							            <div class="span6">
-							            	<label class="control-label">Prof. Responsable</label>
+							            	<label class="control-label">Docente Responsable</label>
 							            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
 												<option value=0>Seleccione un Docente</option>
 												<?php
@@ -893,10 +893,10 @@
 													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" required /> Electricidad
 													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" required /> Albañilería <br>
 													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" required /> Peluquería 
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="2" required /> Ambientación <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" required /> Manualidades
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" required /> Bisutería <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" required /> Otros
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="6" required /> Ambientación <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="7" required /> Manualidades
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="8" required /> Bisutería <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="9" required /> Otros
 												</div>
 								            </div>
 								            <div class="span6">
@@ -1039,7 +1039,7 @@
 					                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_persona']?>" required /> 
 					            </div>
 					            <div class="span6">
-					            	<label class="control-label">Prof. Responsable</label>
+					            	<label class="control-label">Docente Responsable</label>
 					            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
 										<option value=0>Seleccione un Docente</option>
 										<?php

@@ -559,16 +559,16 @@ CREATE SCHEMA educacion;
 CREATE SEQUENCE educacion.seq_bloque_hora;
 
 CREATE TABLE educacion.tbloque_hora (
-  codigo_bloque_hora numeric not null default nextval('educacion.seq_bloque_hora'),
-  hora_inicio time not null,
-  hora_fin time not null,
-  turno char(1) not null default 'M',
-  estatus char(1) not null default '1',
+	codigo_bloque_hora numeric not null default nextval('educacion.seq_bloque_hora'),
+	hora_inicio time not null,
+	hora_fin time not null,
+	turno char(1) not null default 'M',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_bloque_hora primary key(codigo_bloque_hora)
+	constraint pk_bloque_hora primary key(codigo_bloque_hora)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -580,14 +580,14 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE SEQUENCE educacion.seq_ano_academico;
 
 CREATE TABLE educacion.tano_academico (
-  codigo_ano_academico numeric not null default nextval('educacion.seq_ano_academico'),
-  ano char(8) not null,
-  estatus char(1) not null default '1',
+	codigo_ano_academico numeric not null default nextval('educacion.seq_ano_academico'),
+	ano char(8) not null,
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_ano_academico primary key(codigo_ano_academico)
+	constraint pk_ano_academico primary key(codigo_ano_academico)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -599,16 +599,16 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE SEQUENCE educacion.seq_lapso;
 
 CREATE TABLE educacion.tlapso (
-  codigo_lapso numeric not null default nextval('educacion.seq_lapso'),
-  lapso char(3) not null,
-  codigo_ano_academico numeric not null,
-  estatus char(1) not null default '1',
+	codigo_lapso numeric not null default nextval('educacion.seq_lapso'),
+	lapso char(3) not null,
+	codigo_ano_academico numeric not null,
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_lapso primary key(codigo_lapso),
-  constraint fk_lapso_ano_academico foreign key(codigo_ano_academico) references educacion.tano_academico(codigo_ano_academico) on delete restrict on update cascade
+	constraint pk_lapso primary key(codigo_lapso),
+	constraint fk_lapso_ano_academico foreign key(codigo_ano_academico) references educacion.tano_academico(codigo_ano_academico) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -618,16 +618,16 @@ FOR EACH ROW
 EXECUTE PROCEDURE auditoria_general();
 
 CREATE TABLE educacion.tmateria (
-  codigo_materia char(7) not null,
-  nombre_materia varchar(200) not null,
-  unidad_credito numeric not null,
-  tipo_materia char(1) not null default '0',
-  estatus char(1) not null default '1',
+	codigo_materia char(7) not null,
+	nombre_materia varchar(200) not null,
+	unidad_credito numeric not null,
+	tipo_materia char(1) not null default '0',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_materia primary key(codigo_materia)
+	constraint pk_materia primary key(codigo_materia)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -639,20 +639,20 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE SEQUENCE educacion.seq_periodo;
 
 CREATE TABLE educacion.tperiodo (
-  codigo_periodo numeric not null default nextval('educacion.seq_periodo'),
-  descripcion varchar(45) not null,
-  fecha_inicio date not null,
-  fecha_fin date not null,
-  codigo_lapso numeric not null,
-  esinscripcion char(1) not null default '0',
-  actual char(1) not null default '0',
-  estatus char(1) not null default '1',
+	codigo_periodo numeric not null default nextval('educacion.seq_periodo'),
+	descripcion varchar(45) not null,
+	fecha_inicio date not null,
+	fecha_fin date not null,
+	codigo_lapso numeric not null,
+	esinscripcion char(1) not null default '0',
+	actual char(1) not null default '0',
+	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-  constraint pk_periodo primary key(codigo_periodo),
-  constraint fk_periodo_lapso foreign key(codigo_lapso) references educacion.tlapso(codigo_lapso) on delete restrict on update cascade
+	constraint pk_periodo primary key(codigo_periodo),
+	constraint fk_periodo_lapso foreign key(codigo_lapso) references educacion.tlapso(codigo_lapso) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -805,7 +805,9 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	codigo_ano_academico numeric not null,
  	cedula_responsable char(10) not null,
  	cedula_persona char(10) not null,
- 	estado_salud char(1) not null default '0',
+	anio_a_cursar char(1) NOT NULL DEFAULT '1',
+	coordinacion_pedagogica char(1) NOT NULL DEFAULT '1',
+ 	estado_salud char(1) not null default '1',
  	alergico char(1) not null default 'N',
  	impedimento_deporte char(1) not null default 'N',
  	especifique_deporte varchar(40) default null,
@@ -813,6 +815,7 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	cual_deporte varchar(40) default null,
  	tiene_beca char(1) not null default 'N',
  	organismo varchar(60) default null,
+	tiene_hermanos char(1) NOT NULL DEFAULT 'N',
  	numero_hermanos numeric not null default 0,
  	cuantos_varones numeric not null default 0,
  	cuantas_hembras numeric not null default 0,
@@ -827,11 +830,12 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	cedula_madre char(10) default null,
  	cedula_representante char(10) not null,
  	codigo_parentesco numeric not null,
- 	integracion_escuela_comunidad char(1) not null default '0',
+ 	integracion_escuela_comunidad char(1) not null default '9',
  	especifique_integracion varchar(60) default null,
  	seccion char(5) not null,
  	observacion varchar(255) default null,
  	estatus char(1) not null default '1',
+	procesado char(1) NOT NULL DEFAULT 'N',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),

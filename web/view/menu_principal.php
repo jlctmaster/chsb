@@ -175,6 +175,9 @@ if(isset($_SESSION['user_estado'])){
           else if(isset($_GET['ejemplar'])) include("serv_ejemplar.php");
           else if(isset($_GET['prestamo'])) include("serv_prestamo.php");
           else if(isset($_GET['entrega'])) include("serv_entrega.php");
+          //reportes
+          else if(isset($_GET['horario_clases'])) include("rep_horario_clases.php");
+          else if(isset($_GET['horario_profesor'])) include("rep_horario_profesor.php");
   				//principal
         	else include("serv_inicio.php");                                                                                                                                                                                                                                                                                                                                            
         }else{

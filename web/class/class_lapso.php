@@ -31,7 +31,6 @@ class tlapso {
 		}
     }
 
-   
     public function lapso(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->lapso;
@@ -78,7 +77,7 @@ class tlapso {
 
     public function Desactivar($user){
     	$sqlx="SELECT * FROM educacion.tlapso l WHERE l.codigo_lapso = $this->codigo_lapso 
-    	AND (EXISTS (SELECT 1 FROM educacion.tano_academico a WHERE a.codigo_ano_academico = l.codigo_ano_academico))";
+    	AND (EXISTS (SELECT 1 FROM educacion.tperiodo p WHERE p.codigo_lapso = l.codigo_lapso))";
 		$query=$this->pgsql->Ejecutar($sqlx);
 	    if($this->pgsql->Total_Filas($query)==0){
 	    	$sql="UPDATE educacion.tlapso SET estatus = '0',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_lapso=$this->codigo_lapso";
@@ -101,7 +100,7 @@ class tlapso {
    	}
 
    	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tlapso WHERE lapso='$this->lapso'";
+	    $sql="SELECT * FROM educacion.tlapso WHERE lapso='$this->lapso' AND codigo_ano_academico = '$this->codigo_ano_academico'";
 		$query=$this->pgsql->Ejecutar($sql);
 	    if($this->pgsql->Total_Filas($query)!=0){
 			$lapso=$this->pgsql->Respuesta($query);

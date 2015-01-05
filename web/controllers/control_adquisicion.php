@@ -129,6 +129,8 @@ if($lOpt=='Registrar'){
   }
   if($confirmacion==1){
     $adquisicion->Transaccion('finalizado');
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_adquisicion']=$adquisicion->codigo_adquisicion();
     $_SESSION['datos']['mensaje']="¡La Adquisición ha sido registrada con éxito!";
     header("Location: ../view/menu_principal.php?adquisicion&Opt=2");
   }else{

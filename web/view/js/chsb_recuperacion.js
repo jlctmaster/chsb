@@ -162,6 +162,25 @@ function init(){
 		window.print();
 	});
 
+	$('#btnImprimirTodos').click(function(){
+		imprimirRegistros();
+	})
+
+	function imprimirRegistros(){
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?recuperacion');
+			//Función que procede a cambiar el estatus del Documento a Anular.
+			$('#BtnAnular').click(function(){
+				$('.dgcAlert').animate({opacity:0},50);
+			    $('.dgcAlert').css('display','none');
+				document.getElementById('Anular').innerHTML="";
+			})
+	}
+	//	Muestra la Ficha de Inscripción en una pestaña nueva.
+	$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_formato_recuperacion.php?p1="+$('#codigo_recuperacion').val();
+		window.open(url, '_blank');
+	})
+
 	$('#btnGuardar').click(ValidarCampos);
 	$('#btnDesactivar').click(function(){
 		noty({
@@ -193,6 +212,7 @@ function init(){
 	        ]
 	    });
 	});
+
 	$('#btnActivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere activar este registro?"),

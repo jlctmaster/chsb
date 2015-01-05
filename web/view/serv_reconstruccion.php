@@ -136,10 +136,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="codigo_bien">Bien Nacional a Reconstruir</label>  
+					<label class="control-label" for="codigo_bien">Bien Nacional a Recuperar</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione un Item a Reconstruir" name='codigo_bien' id='codigo_bien' required >
-							<option value=0>Seleccione un Bien a Reconstruir</option>
+						<select class="bootstrap-select form-control" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
+							<option value=0>Seleccione un Bien a Recuperar</option>
 							<?php
 								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
@@ -158,14 +158,14 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cantidad">Cantidad a Reconstruir</label>  
+					<label class="control-label" for="cantidad">Cantidad a Recuperar</label>  
 					<div class="controls"> 
 						<input type="hidden" name="cantidad_max" id="cantidad_max" >
 						<input class="input-xlarge" type="text" title="Cantidad disponible a recuperar" name="cantidad_a_recuperar" id="cantidad" required >
 					</div>  
 				</div>
 				<div class="table-responsive">
-					<table id='tablaDetRecuperacion' class="table-bordered zebra-striped">
+					<table id='tablaDetReconstruccion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Ubicación</label></td>
 							<td><label class="control-label" >Item</label></td>
@@ -184,6 +184,38 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		</fieldset>  
 	</form>
 	<?php
+	if(isset($_SESSION['datos']['procesado']) && $_SESSION['datos']['procesado']=="Y"){
+		echo '<script language="javascript">
+		setTimeout(function(){
+			noty({
+		        text: stringUnicode("¿Desea ver el Formato de Impresión?"),
+		        layout: "center",
+		        type: "confirm",
+		        dismissQueue: true,
+		        animateOpen: {"height": "toggle"},
+		        animateClose: {"height": "toggle"},
+		        theme: "defaultTheme",
+		        closeButton: false,
+		        closeOnSelfClick: true,
+		        closeOnSelfOver: false,
+		        buttons: [
+		        {
+		            addClass: "btn btn-primary", text: "Sí", onClick: function($noty){
+		                $noty.close();
+						url = "../pdf/pdf_formato_reconstruccion.php?p1='.$_SESSION['datos']['codigo_reconstruccion'].'";
+						window.open(url, "_blank");
+		            }
+		        },
+		        {
+		            addClass: "btn btn-danger", text: "No", onClick: function($noty){
+		                $noty.close();
+		            }
+		        }
+		        ]
+		    });
+		},1000);
+			</script>';
+	}
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
@@ -300,7 +332,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>
 				<div class="table-responsive">
-					<table id='tablaDetRecuperacion' class="table-bordered zebra-striped">
+					<table id='tablaDetReconstruccion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Ubicación</label></td>
 							<td><label class="control-label" >Item</label></td>
@@ -365,6 +397,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 									echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
 							}
 					?>
+					<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Formato de Impresión</button>
 					<a href="?reconstruccion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>  
 			</div>  
@@ -446,6 +479,8 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label><?=$row[0]['cantidad_a_recuperar']?></label>
 						</td>
 					</tr>
+				</table>
+				<table class="bordered-table zebra-striped" >
 					<tr>
 						<td>
 							<label>Item:</label>

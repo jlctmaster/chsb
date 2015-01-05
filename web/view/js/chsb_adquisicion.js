@@ -14,7 +14,7 @@ function init(){
 	$('#btnImprimirTodos').click(function(){
 		imprimirRegistros();
 	})
-
+	
 	function imprimirRegistros(){
 		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?adquisicion');
 			//Función que procede a cambiar el estatus del Documento a Anular.
@@ -24,6 +24,11 @@ function init(){
 				document.getElementById('Anular').innerHTML="";
 			})
 	}
+	//	Muestra la Ficha de Inscripción en una pestaña nueva.
+	$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_formato_adquisicion.php?p1="+$('#codigo_adquisicion').val();
+		window.open(url, '_blank');
+	})
 
 	$('#btnDesactivar').click(function(){
 		noty({
@@ -55,6 +60,7 @@ function init(){
 	        ]
 	    });
 	});
+
 	$('#btnActivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere activar este registro?"),

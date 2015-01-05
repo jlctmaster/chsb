@@ -61,9 +61,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<div id="Imprimir" style="display:none;">
 						<span>Descargar Como:</span>
 						<br/><br/>
-						<a href="<?php echo  '../pdf/pdf_lapso.php';?>" target="_blank"><img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"></a>
-						&nbsp;&nbsp;						
 						<a href="../excel/excel_lapso.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
+						&nbsp;&nbsp;
+						<a href="<?php echo  '../pdf/pdf_lapso.php';?>" target="_blank"><img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"></a>
 					</div>
 				</div>
 			</div>
@@ -103,7 +103,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tano_academico ORDER BY ano ASC";
+							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus = '1' ORDER BY ano ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_ano_academico'].">".$row['ano']."</option>";
@@ -147,9 +147,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
 							<option value=0>Seleccione un Lapso </option>
-							<option value="1er" <? if($row['lapso']=="1er") {echo "selected";} ?> >I Lapso</option>
-							<option value="2do" <? if($row['lapso']=="2do") {echo "selected";} ?> >II Lapso</option>
-							<option value="3er" <? if($row['lapso']=="3er") {echo "selected";} ?> >III Lapso</option>		
+							<option value="1er" <?php if($row['lapso']=="1er") {echo "selected";} ?> >I Lapso</option>
+							<option value="2do" <?php if($row['lapso']=="2do") {echo "selected";} ?> >II Lapso</option>
+							<option value="3er" <?php if($row['lapso']=="3er") {echo "selected";} ?> >III Lapso</option>		
 						</select>
 					</div>
 				</div>   
@@ -161,7 +161,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tano_academico ORDER BY ano ASC";
+							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus='1' ORDER BY ano ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_ano_academico']==$row['codigo_ano_academico'])

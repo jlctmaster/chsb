@@ -86,14 +86,31 @@ function init(){
         showOn: 'both',
         numberOfMonths: 1,
         buttonImage: '../images/calendario.png',
-        buttonImageOnly: true
+        buttonImageOnly: true,
+        onClose: function (selectedDate) {
+            $("#fecha_fin").datepicker("option", "minDate", selectedDate)
+        }
     });
     //Agregar Objeto Calendario al input fecha_fin.
     $('#fecha_fin').datepicker({
         showOn: 'both',
         numberOfMonths: 1,
         buttonImage: '../images/calendario.png',
-        buttonImageOnly: true
+        buttonImageOnly: true,
+        onClose: function (selectedDate) {
+            $("#fecha_inicio").datepicker("option", "maxDate", selectedDate)
+            $("#fecha_cierre").datepicker("option", "minDate", selectedDate)
+        }
+    });
+    //Agregar Objeto Calendario al input fecha_fin.
+    $('#fecha_cierre').datepicker({
+        showOn: 'both',
+        numberOfMonths: 1,
+        buttonImage: '../images/calendario.png',
+        buttonImageOnly: true,
+        onClose: function (selectedDate) {
+            $("#fecha_fin").datepicker("option", "maxDate", selectedDate)
+        }
     });
     //Agregar Objeto Calendario al input fecha.
     $('#fecha').datepicker({
@@ -221,26 +238,11 @@ noty({"text": stringUnicode(message),
  "closeOnSelfOver":false});
 }
 
-function habilitarElementos(){
-    $('#form').find('input[type=text],input[type=radio],input[type=checkbox],input[type=hidden],textarea,select').removeAttr("disabled");
-    $('#form1').find('input[type=text],input[type=radio],input[type=checkbox],input[type=hidden],textarea,select').removeAttr("disabled");
-    $('#form2').find('input[type=text],input[type=radio],input[type=checkbox],input[type=hidden],textarea,select').removeAttr("disabled");
-}
-
 //Función para escribir solo números.
 function isNumberKey(evt)
   {
      var charCode = (evt.which) ? evt.which : event.keyCode
      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
-        return false;
-     return true;
-  }
-
-//Función para escribir solo números de documentos.
-function isNumberDocKey(evt)
-  {
-     var charCode = (evt.which) ? evt.which : event.keyCode
-     if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46 && charCode != 94)
         return false;
      return true;
   }

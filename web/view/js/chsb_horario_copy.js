@@ -4,6 +4,18 @@ var HoraLibre=0;
 var indice=0;
 var indice_asignado=0;
 
+$('#btnGuardar').click(function(){
+	var send = true;
+	var contenido = document.getElementsByName('contenidos[]');
+	if(contenido.length==0){
+		alert('Debe seleccionar al menos un bloque de hora');
+		send=false;
+	}
+
+	if(send==true)
+		$('#form1').submit();
+});
+
 $(document).on("ready",Principal);
 
 function cargar_datos(){
@@ -120,19 +132,6 @@ function Principal(){
 			$("#cedula_persona").prop("disabled","disabled");
 		}
 	});			  	
-
-	$('#btnGuardar').on("click",function(){
-		var send = true;
-		var contenido = document.getElementsByName('contenidos[]');
-		if(contenido.length==0){
-			alert('Debe seleccionar al menos un bloque de hora');
-			send=false;
-		}
-
-		if(send==true){
-			$('#form1').submit();
-		}
-	});
 
 }
 

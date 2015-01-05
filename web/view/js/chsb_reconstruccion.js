@@ -1,8 +1,10 @@
 $(document).ready(init);
 function init(){
+	//	variable global para determinar si ha ocurrido un error o no
+	var ocurrioerror=false;
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
 	$('#codigo_bien').change(function(){
-		var Datos = {"lOpt":"BuscarCantidadDisponible","codigo_bien":$('#codigo_bien').val(),"codigo_ubicacion":$('#codigo_ubicacion').val()};
+		var Datos = {"lOpt":"BuscarDisponibilidad","codigo_bien":$('#codigo_bien').val()};
 		obtenerCantidadDisponible(Datos);
 	})
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
@@ -11,10 +13,10 @@ function init(){
 			alert("¡Debe ingresar una cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
 		}else{
 	    	var arrayRegistros = new Array();
-	    	//	Eliminamos el detalle del elemento tablaDetRecuperacion para reescribir los valores.
-	    	$('#tablaDetRecuperacion tr[id]').remove();
+	    	//	Eliminamos el detalle del elemento tablaDetReconstruccion para reescribir los valores.
+	    	$('#tablaDetReconstruccion tr[id]').remove();
 	        var objRecord =	BuscarConfiguracion($('#codigo_bien').val(),$('#cantidad').val(),arrayRegistros);
-	        //	Recorremos el objeto para dibujar las tuplas en la tabla tablaDetRecuperacion.
+	        //	Recorremos el objeto para dibujar las tuplas en la tabla tablaDetReconstruccion.
 	        for(var contador=0;contador<objRecord.length;contador++){
 	        	var go = true;
 	        	//	Solo mostramos los items del ultimo nivel de configuración.
@@ -29,7 +31,7 @@ function init(){
 	        			}
 	        		}
 	        		if(go==true){
-		        		$("#tablaDetRecuperacion").append("<tr id='"+contador+"'>"+
+		        		$("#tablaDetReconstruccion").append("<tr id='"+contador+"'>"+
 						"<td>"+
 						"<input type='hidden' name='ubicacion[]' id='ubicacion_"+contador+"' value='"+objRecord[contador].codigo_ubicacion+"' >"+
 						"<input class='input-xlarge' type='text' name='name_ubicacion[]' id='name_ubicacion_"+contador+"' title='Ubicación donde se va a almacenar' value='"+objRecord[contador].ubicacion+"' readonly >"+
@@ -59,45 +61,44 @@ function init(){
 	        data: value,
 	        dataType: "json",
 	        success: function(resp){
-	        	$('#cantidad').val(resp[0].existencia);
-	        	$('#cantidad_max').val(resp[0].existencia);
-	        	var arrayRegistros = new Array();
-	        	//	Eliminamos el detalle del elemento tablaDetRecuperacion para reescribir los valores.
-	        	$('#tablaDetRecuperacion tr[id]').remove();
-		        var objRecord =	BuscarConfiguracion(resp[0].codigo_item,resp[0].existencia,arrayRegistros);
-		        //	Recorremos el objeto para dibujar las tuplas en la tabla tablaDetRecuperacion.
-		        for(var contador=0;contador<objRecord.length;contador++){
-		        	var go = true;
-		        	//	Solo mostramos los items del ultimo nivel de configuración.
-		        	if(objRecord[contador].esconfigurable=="N"){
-		        		var item = document.getElementsByName('items[]');
-		        		//	Sumamos las cantidades de los items repetidos
-		        		for(var i=0; i<item.length;i++){
-		        			if($('#items_'+i).val()==objRecord[contador].codigo_item_recuperado){
-		        				$('#cantidad_max_'+i).val(parseInt($('#cantidad_max_'+i).val())+parseInt(objRecord[contador].cantidad_recuperada));
-		        				$('#cantidad_'+i).val(parseInt($('#cantidad_'+i).val())+parseInt(objRecord[contador].cantidad_recuperada));
-		        				go=false;
-		        			}
-		        		}
-		        		if(go==true){
-			        		$("#tablaDetRecuperacion").append("<tr id='"+contador+"'>"+
-							"<td>"+
-							"<input type='hidden' name='ubicacion[]' id='ubicacion_"+contador+"' value='"+objRecord[contador].codigo_ubicacion+"' >"+
-							"<input class='input-xlarge' type='text' name='name_ubicacion[]' id='name_ubicacion_"+contador+"' title='Ubicación donde se va a almacenar' value='"+objRecord[contador].ubicacion+"' readonly >"+
-							"</td>"+
-			    			"<td>"+
-							"<input type='hidden' name='items[]' id='items_"+contador+"' value='"+objRecord[contador].codigo_item_recuperado+"' >"+
-							"<input class='input-xlarge' type='text' name='name_items[]' id='name_items_"+contador+"' title='Componente a recuperar' value='"+objRecord[contador].item_recuperado+"' readonly >"+
-							"</td>"+
-							"<td>"+
-							"<input type='hidden' name='cantidad_max[]' id='cantidad_max_"+contador+"' value='"+objRecord[contador].cantidad_recuperada+"'>"+
-							"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' title='Cantidad a recuperar' value='"+objRecord[contador].cantidad_recuperada+"'>"+
-							"</td>"+
-			                "</tr>");
-			                //	Modificamos el width de la cantidad para este elemento
-			                $('#cantidad_'+contador).css("width","80px");
-		        		}
-		        	}
+	        	try{
+			        if(resp[0].msj==undefined){
+			        	$('#cantidad').val(resp[0].cant_disponible_a_recuperar);
+			        	$('#cantidad_max').val(resp[0].cant_disponible_a_recuperar);
+			        	//	Guardamos resultado en arreglo para luego buscar las ubicaciones fuentes.
+			        	var arrayRegistros = new Array();
+			        	for(var pos=0;pos<resp.length;pos++){
+			        		arrayRegistros.push(resp[pos]);
+			        	}
+			        	//	Eliminamos el detalle del elemento tablaDetReconstruccion para reescribir los valores.
+			        	$('#tablaDetReconstruccion tr[id]').remove();
+				        var objRecord =	BuscarUbicacionFuente(arrayRegistros);
+				        if(ocurrioerror==false){
+					        //	Recorremos el objeto para dibujar las tuplas en la tabla tablaDetReconstruccion.
+					        for(var contador=0;contador<objRecord.length;contador++){
+				        		$("#tablaDetReconstruccion").append("<tr id='"+contador+"'>"+
+								"<td>"+
+								"<input type='hidden' name='ubicacion[]' id='ubicacion_"+contador+"' value='"+objRecord[contador].codigo_ubicacion+"' >"+
+								"<input class='input-xlarge' type='text' name='name_ubicacion[]' id='name_ubicacion_"+contador+"' title='Ubicación donde se va a almacenar' value='"+objRecord[contador].ubicacion+"' readonly >"+
+								"</td>"+
+				    			"<td>"+
+								"<input type='hidden' name='items[]' id='items_"+contador+"' value='"+objRecord[contador].codigo_item+"' >"+
+								"<input class='input-xlarge' type='text' name='name_items[]' id='name_items_"+contador+"' title='Componente a recuperar' value='"+objRecord[contador].item_a_usar+"' readonly >"+
+								"</td>"+
+								"<td>"+
+								"<input type='hidden' name='cantidad_max[]' id='cantidad_max_"+contador+"' value='"+objRecord[contador].total_a_usar+"'>"+
+								"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' title='Cantidad a recuperar' value='"+objRecord[contador].total_a_usar+"'>"+
+								"</td>"+
+				                "</tr>");
+				                //	Modificamos el width de la cantidad para este elemento
+				                $('#cantidad_'+contador).css("width","80px");
+				        	}
+				        }
+			        }
+			        else
+			        	alert(resp[0].msj);
+	        	}catch(e){
+	        		alert(e.message);
 	        	}
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){
@@ -105,9 +106,52 @@ function init(){
 	        }
         });
 	}
-	//	Esta función busca la configuración del item y lo carga en la tabla de detalle.
-	function BuscarConfiguracion(item,cantidad,records){
-		var value={"lOpt":"BuscarConfiguracion","codigo_bien":item,"cantidad":cantidad};
+	//	Esta función busca la ubicación fuente de donde extraer los componentes a usar.
+	function BuscarUbicacionFuente(records){
+		var arreglo = new Array();
+		for(var i=0;i<records.length;i++){
+			var total_a_usar=records[i].total_a_usar;
+			var codigo_item=records[i].codigo_item;
+			var item_a_usar=records[i].item_a_usar;
+			var value={"lOpt":"BuscarUbicacionFuente","codigo_item":records[i].codigo_item,"cantidad":records[i].total_a_usar};
+			$.ajax({
+		        url: '../controllers/control_reconstruccion.php',
+		        type: 'POST',
+		        async: false,
+		        data: value,
+		        dataType: "json",
+		        success: function(resp){
+		        	try{
+		        		if(resp[0].msj==undefined){
+		        			total_a_usar=parseInt(total_a_usar)-parseInt(resp[0].existencia);
+			        		while(parseInt(total_a_usar)>parseInt(0)){
+			        			var Datos={"lOpt":"BuscarUbicacionFuente","codigo_item":records[i].codigo_item,"cantidad":total_a_usar}
+			        			var newubicacion = ubicacionFuente(Datos);
+			        			arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":newubicacion[0].existencia,"codigo_ubicacion":newubicacion[0].codigo_ubicacion,"ubicacion":newubicacion[0].ubicacion});
+			        			total_a_usar=parseInt(total_a_usar)-parseInt(newubicacion[0].existencia);
+			        		}
+			        		arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":resp[0].existencia,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
+							//	Si todo ok reseteamos el valor de la variable global por si se ejecuto una transaccion que haya fallado..
+							ocurrioerror=false;
+		        		}
+		        		else{
+				        	throw new Error(resp[0].msj+" "+item_a_usar+"!");
+		        		}
+		        	}catch(e){
+		        		alert(e.message);
+				        ocurrioerror=true;
+		        	}
+		        },
+		        error: function(jqXHR, textStatus, errorThrown){
+		        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
+		        }
+	        });
+		}
+		return arreglo;
+	}
+
+	function ubicacionFuente(value){
+		var ubicacion = new Array();
 		$.ajax({
 	        url: '../controllers/control_reconstruccion.php',
 	        type: 'POST',
@@ -115,18 +159,37 @@ function init(){
 	        data: value,
 	        dataType: "json",
 	        success: function(resp){
-	        	for(var pos=0;pos<resp.length;pos++){
-	        		records.push(resp[pos]);
-	        		if(resp[pos].esconfigurable=='Y')
-	        			BuscarConfiguracion(resp[pos].codigo_item_recuperado,resp[pos].cantidad_recuperada,records);
-	        	}
+        		ubicacion.push(resp[0]);
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){
 	        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
 	        }
         });
-		return records;
+        return ubicacion;
 	}
+
+	$('#btnPrint').click(function(){
+		window.print();
+	});
+
+	$('#btnImprimirTodos').click(function(){
+		imprimirRegistros();
+	})
+
+	function imprimirRegistros(){
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?reconstruccion');
+			//Función que procede a cambiar el estatus del Documento a Anular.
+			$('#BtnAnular').click(function(){
+				$('.dgcAlert').animate({opacity:0},50);
+			    $('.dgcAlert').css('display','none');
+				document.getElementById('Anular').innerHTML="";
+			})
+	}
+	//	Muestra la Ficha de Inscripción en una pestaña nueva.
+	$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_formato_reconstruccion.php?p1="+$('#codigo_reconstruccion').val();
+		window.open(url, '_blank');
+	})
 
 	$('#btnPrint').click(function(){
 		window.print();
@@ -163,6 +226,7 @@ function init(){
 	        ]
 	    });
 	});
+
 	$('#btnActivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere activar este registro?"),
@@ -258,3 +322,13 @@ function init(){
 		$('#form1').submit();
 	}
 }
+
+/*
+
+function IllegalArgumentException(sMessage) {
+    this.name = "IllegalArgumentException";
+    this.message = sMessage;
+    this.stack = (new Error()).stack;
+}
+IllegalArgumentException.prototype = Object.create(Error.prototype);
+IllegalArgumentException.prototype.constructor = IllegalArgumentException; */

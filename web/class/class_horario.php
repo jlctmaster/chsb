@@ -120,7 +120,9 @@
 			if($x=="tarde-noche"){
 				$condicion="turno='T' or turno='N'";
 			}
-			$sql="SELECT * FROM educacion.tbloque_hora
+			$sql="SELECT codigo_bloque_hora,TO_CHAR(hora_inicio,'HH24:MM') AS hora_inicio,
+			TO_CHAR(hora_fin,'HH24:MM') AS hora_fin,turno 
+			FROM educacion.tbloque_hora
 			ORDER BY turno,hora_inicio,hora_fin";
 			$query=$this->objBD->Ejecutar($sql);
 			$R['hora']=Array();
@@ -301,25 +303,29 @@
 		}
 
 		public function Consultar(){
-			$sql="SELECT * FROM educacion.vhorario
+			$sql="SELECT dia,hora,celda,codigo_bloque_hora,codigo_ano_academico,cedula,INITCAP(nombre) AS nombre,INITCAP(apellido) AS apellido,
+			codigo_ambiente,INITCAP(nombre_ambiente) AS nombre_ambiente,materia,INITCAP(nombre_materia) AS nombre_materia,seccion,INITCAP(nombre_seccion) AS nombre_seccion 
+			FROM educacion.vhorario
 			WHERE (codigo_ano_academico='$this->codigo_ano_academico' AND cedula='$this->cedula_persona')";
 			$R['hora']=Array();
 			$i=-1;
 			$query=$this->objBD->Ejecutar($sql);
 			while($hora=$this->objBD->Respuesta($query)) {
 				$i++;
-				$R['hora']['dia'][$i]=$hora['dia'];               
-				$R['hora']['hora'][$i]=$hora['codigo_bloque_hora'];               
-				$R['hora']['cedula'][$i]=$hora['cedula'];               
-				$R['hora']['codigo_ano_academico'][$i]=$hora['codigo_ano_academico'];               
-				$R['hora']['codigo_ambiente'][$i]=$hora['codigo_ambiente'];               
-				$R['hora']['descripcion'][$i]=$hora['descripcion'];               
-				$R['hora']['codigo_materia'][$i]=$hora['codigo_materia'];               
-				$R['hora']['celda'][$i]=$hora['celda'];               
-				$R['hora']['descripcion'][$i]=$hora['descripcion'];               
-				$R['hora']['seccion'][$i]=$hora['seccion'];               
-				$R['hora']['primer_nombre'][$i]=$hora['primer_nombre'];
-				$R['hora']['primer_apellido'][$i]=$hora['primer_apellido'];  
+				$R['hora']['dia'][$i]=$hora['dia'];
+				$R['hora']['hora'][$i]=$hora['hora'];
+				$R['hora']['celda'][$i]=$hora['celda'];
+				$R['hora']['codigo_bloque_hora'][$i]=$hora['codigo_bloque_hora'];
+				$R['hora']['codigo_ano_academico'][$i]=$hora['codigo_ano_academico'];
+				$R['hora']['cedula'][$i]=$hora['cedula'];
+				$R['hora']['nombre'][$i]=$hora['nombre'];
+				$R['hora']['apellido'][$i]=$hora['apellido'];
+				$R['hora']['codigo_ambiente'][$i]=$hora['codigo_ambiente'];
+				$R['hora']['nombre_ambiente'][$i]=$hora['nombre_ambiente'];
+				$R['hora']['materia'][$i]=$hora['materia'];
+				$R['hora']['nombre_materia'][$i]=$hora['nombre_materia'];
+				$R['hora']['seccion'][$i]=$hora['seccion'];
+				$R['hora']['nombre_seccion'][$i]=$hora['nombre_seccion'];
 			}
 			return $R['hora'];
 		}
@@ -327,25 +333,31 @@
 
 
 		public function Consultar_H_SECCION(){
-			$sql="SELECT * from educacion.vhorario
-			WHERE (codigo_ano_academico='$this->codigo_lapso' AND seccion='$this->seccion')";
+			$sql="SELECT dia,hora,celda,codigo_bloque_hora,codigo_ano_academico,cedula,INITCAP(nombre) AS nombre,INITCAP(apellido) AS apellido,
+			codigo_ambiente,INITCAP(nombre_ambiente) AS nombre_ambiente,materia,INITCAP(nombre_materia) AS nombre_materia,seccion,INITCAP(nombre_seccion) AS nombre_seccion,
+			UPPER(nombre_seccion) AS name_seccion 
+			FROM educacion.vhorario
+			WHERE (codigo_ano_academico='$this->codigo_ano_academico' AND seccion='$this->seccion')";
 			$R['hora']=Array();
 			$i=-1;
 			$query=$this->objBD->Ejecutar($sql);
 			while($hora=$this->objBD->Respuesta($query)) {
 				$i++;
-				$R['hora']['dia'][$i]=$hora['dia'];               
-				$R['hora']['hora'][$i]=$hora['codigo_bloque_hora'];               
-				$R['hora']['cedula'][$i]=$hora['cedula'];               
-				$R['hora']['codigo_ano_academico'][$i]=$hora['codigo_ano_academico'];               
-				$R['hora']['codigo_ambiente'][$i]=$hora['codigo_ambiente'];               
-				$R['hora']['descripcion'][$i]=$hora['descripcion'];               
-				$R['hora']['codigo_materia'][$i]=$hora['codigo_materia'];               
-				$R['hora']['celda'][$i]=$hora['celda'];               
-				$R['hora']['descripcion'][$i]=$hora['descripcion'];               
-				$R['hora']['seccion'][$i]=$hora['seccion'];               
-				$R['hora']['primer_nombre'][$i]=$hora['primer_nombre'];
-				$R['hora']['primer_apellido'][$i]=$hora['primer_apellido'];  
+				$R['hora']['dia'][$i]=$hora['dia'];
+				$R['hora']['hora'][$i]=$hora['hora'];
+				$R['hora']['celda'][$i]=$hora['celda'];
+				$R['hora']['codigo_bloque_hora'][$i]=$hora['codigo_bloque_hora'];
+				$R['hora']['codigo_ano_academico'][$i]=$hora['codigo_ano_academico'];
+				$R['hora']['cedula'][$i]=$hora['cedula'];
+				$R['hora']['nombre'][$i]=$hora['nombre'];
+				$R['hora']['apellido'][$i]=$hora['apellido'];
+				$R['hora']['codigo_ambiente'][$i]=$hora['codigo_ambiente'];
+				$R['hora']['nombre_ambiente'][$i]=$hora['nombre_ambiente'];
+				$R['hora']['materia'][$i]=$hora['materia'];
+				$R['hora']['nombre_materia'][$i]=$hora['nombre_materia'];
+				$R['hora']['seccion'][$i]=$hora['seccion'];
+				$R['hora']['nombre_seccion'][$i]=$hora['nombre_seccion']; 
+				$R['hora']['name_seccion'][$i]=$hora['name_seccion']; 
 			}
 			return $R['hora'];
 		}
@@ -490,7 +502,7 @@
 		Método público que devuelve la fecha del sistema, para los reportes
 		*/
 		public function FECHA_SISTEMA(){
-			$sql="SELECT TO_CHAR(now(),'DD/MM/YYYY') AS fecha, TO_CHAR(now(),'HH24:MI') AS hora";
+			$sql="SELECT TO_CHAR(NOW(),'DD/MM/YYYY') AS fecha, TO_CHAR(NOW(),'HH24:MI') AS hora";
 			$query=$this->objBD->Ejecutar($sql);
 			$C=$this->objBD->Respuesta($query);
 			$fecha_hora= $C['fecha']."   ".$C['hora'];

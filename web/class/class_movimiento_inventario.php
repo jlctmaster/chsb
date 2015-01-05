@@ -363,18 +363,17 @@ class movimiento_inventario {
     }
 
     public function BuscarDisponibilidad($item){
-        $sql="SELECT i.codigo_item,i.item,cb.codigo_item AS codigo_item_recuperado,
-        b.nro_serial||' '||b.nombre AS item_recuperado,b.esconfigurable,
-        u.codigo_ubicacion,u.descripcion AS ubicacion,
-        MAX($cantidad) AS cantidad_a_recuperar,MAX($cantidad*cb.cantidad) AS cantidad_recuperada
-        FROM inventario.vw_inventario i 
-        INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON i.codigo_item = cb.codigo_bien 
-        INNER JOIN bienes_nacionales.tbien b ON cb.codigo_item = b.codigo_bien,
-        inventario.tubicacion u 
-        WHERE i.codigo_item = $item AND i.sonlibros='N' AND u.ubicacionprincipal = 'Y'
-        GROUP BY i.codigo_item,i.item,cb.codigo_item,b.nro_serial,b.nombre,b.esconfigurable,cb.item_base,
-        u.codigo_ubicacion,u.descripcion 
-        ORDER BY cb.item_base DESC";
+        $sql="SELECT pd.codigo_item_a_producir,cb.codigo_item,bu.nro_serial||' '||bu.nombre AS item_a_usar,
+        SUM(pd.cant_disponible_a_recuperar) AS cant_disponible_a_recuperar,SUM(i.existencia) AS existencia,
+        ROUND(SUM(pd.cant_disponible_a_recuperar)*MAX(cb.cantidad),0) AS total_a_usar
+        FROM inventario.vw_inventario_de_items_disponibles pd 
+        INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON pd.codigo_item_a_producir = cb.codigo_bien 
+        INNER JOIN inventario.vw_inventario i ON i.codigo_item = cb.codigo_item AND pd.codigo_ubicacion_fuente = i.codigo_ubicacion 
+        INNER JOIN bienes_nacionales.tbien bu ON bu.codigo_bien = cb.codigo_item 
+        INNER JOIN inventario.tubicacion u ON pd.codigo_ubicacion_fuente = u.codigo_ubicacion 
+        WHERE pd.codigo_item_a_producir = $item 
+        GROUP BY pd.codigo_item_a_producir,cb.codigo_item,cb.item_base,bu.nro_serial,bu.nombre
+        ORDER BY cb.codigo_item ASC";
         $query = $this->pgsql->Ejecutar($sql);
         while($Obj=$this->pgsql->Respuesta_assoc($query)){
             $rows[]=array_map("html_entity_decode",$Obj);
@@ -383,7 +382,28 @@ class movimiento_inventario {
             $json = json_encode($rows);
         }
         else{
-            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $rows[] = array("msj" => "¡Error no hay componentes para recuperar el item!");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
+
+    public function BuscarUbicacionFuente($item,$cantidad){
+        $sql="SELECT i.codigo_ubicacion,i.ubicacion,i.existencia 
+        FROM inventario.vw_inventario i 
+        INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
+        WHERE u.itemsdefectuoso = 'N' AND i.sonlibros = 'N' AND codigo_item = $item AND existencia <= $cantidad 
+        ORDER BY existencia DESC 
+        LIMIT 1";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "¡Error no hay disponibilidad del componente");
             $json = json_encode($rows);
         }
         return $json;

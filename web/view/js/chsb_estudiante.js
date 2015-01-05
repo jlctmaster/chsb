@@ -4,6 +4,7 @@ function init(){
 	$('#btnPrint').click(function(){
 		window.print();
 	});
+
 	$('#btnGuardar').click(ValidarCampos);
 
 	$('#btnImprimirTodos').click(function(){
@@ -19,6 +20,40 @@ function init(){
 				document.getElementById('Anular').innerHTML="";
 			})
 	}
+	//	Muestra la Ficha de Inscripción en una pestaña nueva.
+	$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_ficha_inscripcion.php?p1="+$('#codigo_proceso_inscripcion').val();
+		window.open(url, '_blank');
+	})
+
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_representante').autocomplete({
+		source:'../autocomplete/representante.php', 
+		minLength:1,
+		select: function (event, ui){
+			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
+			BuscarDatosRepresentante(Datos);
+		}
+	});
+
+    //Busca los Datos del Representante seleccionado.
+    function BuscarDatosRepresentante(value){
+        $.ajax({
+        url: '../controllers/control_persona.php',
+        type: 'POST',
+        async: true,
+        data: value,
+        dataType: "json",
+        success: function(resp){
+        	if(resp[0].codigo_parentesco!=0)
+        		$('#codigo_parentesco').val(resp[0].codigo_parentesco);
+        	$('#representante').val(resp[0].primer_nombre+' '+resp[0].primer_apellido);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
+        }
+        });
+    }
 
 	$('#btnDesactivar').click(function(){
 		noty({
@@ -50,6 +85,7 @@ function init(){
 	        ]
 	    });
 	});
+
 	$('#btnActivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere activar este registro?"),
@@ -80,39 +116,48 @@ function init(){
 	        ]
 	    });
 	});
+
 	function ValidarCampos(){
 		var send = true;
 
-		if($('#cedula_persona').val()==""){
-			alert("¡Debe ingresar la cédula de la persona!");
+		if($('#fecha_inscripcion').val()==""){
+			alert("¡Debe ingresar la fecha de inscripción del estudiante!");
+			send = false;
+		}
+		else if($('#cedula_responsable').val()==""){
+			alert("¡Debe seleccionar al docente responsable!");
+			send = false;
+		}
+		else if($('#cedula_persona').val()==""){
+			alert("¡Debe ingresar la cédula del estudiante!");
 			send = false;
 		}
 		else if($('#primer_nombre').val()==""){
-			alert("¡Debe ingresar el primer nombre de la persona!");
+			alert("¡Debe ingresar el primer nombre del estudiante!");
 			send = false;
 		}
 		else if($('#primer_apellido').val()==""){
-			alert("¡Debe ingresar el primer apellido de la persona!");
+			alert("¡Debe ingresar el primer apellido del estudiante!");
 			send = false;
 		}
 		else if($('#sexo').val()==""){
-			alert("¡Debe ingresar el sexo de la persona!");
+			alert("¡Debe ingresar el sexo del estudiante!");
 			send = false;
 		}
 		else if($('#fecha_nacimiento').val()==""){
-			alert("¡Debe ingresar la fecha de nacimiento de la persona!");
+			alert("¡Debe ingresar la fecha de nacimiento del estudiante!");
 			send = false;
 		}
 		else if($('#lugar-nacimiento').val()==0){
-			alert("¡Debe seleccionar el lugar de nacimiento de la persona!");
+			alert("¡Debe seleccionar el lugar de nacimiento del estudiante!");
 			send = false;
 		}
 		else if($('#direccion').val()==""){
-			alert("¡Debe ingresar la direccion de la persona!");
+			alert("¡Debe ingresar la direccion del estudiante!");
 			send = false;
 		}
 		else if($('#telefono_local').val()==""){
-			alert("¡Debe ingresar el teléfono local de la persona!");
+			alert("¡Debe ingresar el teléfono local del estudiante!");
 			send = false;
 		}
 

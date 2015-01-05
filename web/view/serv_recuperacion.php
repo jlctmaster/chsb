@@ -170,6 +170,38 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		</fieldset>  
 	</form>
 	<?php
+	if(isset($_SESSION['datos']['procesado']) && $_SESSION['datos']['procesado']=="Y"){
+		echo '<script language="javascript">
+		setTimeout(function(){
+			noty({
+		        text: stringUnicode("¿Desea ver el Formato de Impresión?"),
+		        layout: "center",
+		        type: "confirm",
+		        dismissQueue: true,
+		        animateOpen: {"height": "toggle"},
+		        animateClose: {"height": "toggle"},
+		        theme: "defaultTheme",
+		        closeButton: false,
+		        closeOnSelfClick: true,
+		        closeOnSelfOver: false,
+		        buttons: [
+		        {
+		            addClass: "btn btn-primary", text: "Sí", onClick: function($noty){
+		                $noty.close();
+						url = "../pdf/pdf_formato_recuperacion.php?p1='.$_SESSION['datos']['codigo_recuperacion'].'";
+						window.open(url, "_blank");
+		            }
+		        },
+		        {
+		            addClass: "btn btn-danger", text: "No", onClick: function($noty){
+		                $noty.close();
+		            }
+		        }
+		        ]
+		    });
+		},1000);
+			</script>';
+	}
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
@@ -351,6 +383,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 									echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
 							}
 					?>
+					<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Formato de Impresión</button>
 					<a href="?recuperacion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>  
 			</div>  
@@ -382,7 +415,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	<fieldset>
 		<legend><center>Vista: RECUPERACIÓN</center></legend>		
 		<div id="paginador" class="enjoy-css">
-			<div class="container">
+			<div class="printer">
 				<table class="bordered-table zebra-striped" >
 					<tr>
 						<td>
@@ -432,6 +465,8 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label><?=$row[0]['cantidad_a_recuperar']?></label>
 						</td>
 					</tr>
+				</table>
+				<table class="bordered-table zebra-striped" >
 					<tr>
 						<td>
 							<label>Item:</label>
