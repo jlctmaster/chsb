@@ -57,9 +57,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<div id="Imprimir" style="display:none;">
 						<span>Descargar Como:</span>
 						<br/><br/>
-						<a href="../excel/excel_materia.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
-						&nbsp;&nbsp;
 						<a href="<?php echo  '../pdf/pdf_materia.php';?>" target="_blank"><img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"></a>
+						&nbsp;&nbsp;						
+						<a href="../excel/excel_materia.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
 					</div>
 				</div>
 			</div>
@@ -190,7 +190,10 @@ else if($_GET['Opt']=="3"){
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql ="SELECT * FROM educacion.tmateria WHERE codigo_materia =".$pgsql->comillas_inteligentes($_GET['codigo_materia']);
+	$sql ="	SELECT * ,
+			CASE tipo_materia WHEN 'N' THEN 'NORMAL' WHEN 'E' THEN 'ELECTIVA' END AS tipo
+			FROM educacion.tmateria 
+			WHERE codigo_materia =".$pgsql->comillas_inteligentes($_GET['codigo_materia']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -229,7 +232,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label>Tipo Materia:</label>
 						</td>
 						<td>
-							<label><?=$row['tipo_materia']?></label>
+							<label><?=$row['tipo']?></label>
 						</td>
 					</tr>
 

@@ -1,9 +1,9 @@
 <?php
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
-	$sql = "SELECT e.codigo_estado, e.descripcion AS estado, p.descripcion AS pais, (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
-			FROM general.testado AS e
-			INNER JOIN general.tpais AS p ON e.codigo_pais = p.codigo_pais ORDER BY e.codigo_estado ASC";
+	$sql = "SELECT l.codigo_lapso,l.lapso, a.ano, 
+			(CASE l.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM educacion.tlapso l
+			INNER JOIN educacion.tano_academico AS a ON l.codigo_ano_academico = a.codigo_ano_academico";
 	$query = $mysql->Ejecutar($sql);
 
 	date_default_timezone_set('America/Caracas');
@@ -23,8 +23,8 @@
 						 ->setKeywords("reporte alumnos carreras")
 						 ->setCategory("Reporte excel");*/
 
-	$tituloReporte = "Listado de los estados";
-	$titulosColumnas = array('Código Estado', 'Estado', 'País', 'Estatus');
+	$tituloReporte = "Listado de los Lapso";
+	$titulosColumnas = array('Código', 'Lapso', 'Año', 'Estatus');
 	
 	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:D1')->mergeCells('A2:D2');
 					
@@ -40,9 +40,9 @@
 	$i = 5;
 	while ($row = $mysql->Respuesta($query)){
 		$objPHPExcel->setActiveSheetIndex(0)
-		->setCellValue('A'.$i, $row['codigo_estado'])
-		->setCellValue('B'.$i, $row['estado'])
-		->setCellValue('C'.$i, $row['pais'])
+		->setCellValue('A'.$i, $row['codigo_lapso'])
+		->setCellValue('B'.$i, $row['lapso'])
+		->setCellValue('C'.$i, $row['ano'])
 		->setCellValue('D'.$i, $row['estatus']);
 		$i++;
 	}
@@ -146,7 +146,7 @@
 	}
 	
 	// Se asigna el nombre a la hoja
-	$objPHPExcel->getActiveSheet()->setTitle('Estado');
+	$objPHPExcel->getActiveSheet()->setTitle('Lapso');
 
 	// Se activa la hoja para que sea la que se muestre cuando el archivo se abre
 	$objPHPExcel->setActiveSheetIndex(0);
@@ -156,7 +156,7 @@
 
 	// Se manda el archivo al navegador web, con el nombre que se indica (Excel2007)
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-	header('Content-Disposition: attachment;filename="Listado Estado.xlsx"');
+	header('Content-Disposition: attachment;filename="Listado Lapso.xlsx"');
 	header('Cache-Control: max-age=0');
 
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

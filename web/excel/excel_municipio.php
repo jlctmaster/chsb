@@ -8,7 +8,7 @@
 			ORDER BY m.codigo_municipio ASC";
 	$query = $mysql->Ejecutar($sql);
 
-	date_default_timezone_set('America/Mexico_City');
+	date_default_timezone_set('America/Caracas');
 
 	/** Se agrega la libreria PHPExcel */
 	require_once '../librerias/PHPExcel/PHPExcel.php';
@@ -39,7 +39,7 @@
 				->setCellValue('D3', $titulosColumnas[3])
 				->setCellValue('E3', $titulosColumnas[4]);
 	
-	//Se agregan los datos de los alumnos
+	//Se agregan los datos
 	$i = 4;
 	while ($row = $mysql->Respuesta($query)){
 		$objPHPExcel->setActiveSheetIndex(0)
@@ -143,6 +143,8 @@
 	$objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($estiloTituloReporte);
 	$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($estiloTituloColumnas);		
 	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:E".($i-1));
+	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+
 			
 	for($i = 'A'; $i <= 'E'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);

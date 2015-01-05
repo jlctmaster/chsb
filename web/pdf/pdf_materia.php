@@ -17,18 +17,18 @@
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=70;
+         $avnzar=65;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
          $this->Cell($avnzar);
-      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*2+6,$altura,'MATERIA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'U. CRÉDITO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*3,$altura,'TIPO MATERIA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*5,$altura,'MATERIA',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'U. CRÉDITO',1,0,'C',$color_fondo);
+      $this->Cell($anchura*3,$altura,'TIPO MATERIA',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -182,16 +182,18 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,26,26,30,26));
+      $lobjPdf->SetWidths(array(20,50,26,30,26));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT *, 
-(CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus, (CASE tipo_materia WHEN 'N' THEN 'NORMAL' ELSE 'ELECTIVA' END) AS tipo_materia FROM educacion.tmateria ";
+          (CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus,
+          (CASE tipo_materia WHEN 'N' THEN 'NORMAL' ELSE 'ELECTIVA' END) AS tipo_materia 
+          FROM educacion.tmateria ";
    $i=-1;
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=70;
+         $avnzar=65;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -204,7 +206,7 @@ function NbLines($w,$txt)
          while($tperfil=$pgsql->Respuesta($data)){
     $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
-         ucwords($tperfil['codigo_estado']),
+         ucwords($tperfil['codigo_materia']),
          ucwords($tperfil['nombre_materia']),
          ucwords($tperfil['unidad_credito']),
          ucwords($tperfil['tipo_materia']),

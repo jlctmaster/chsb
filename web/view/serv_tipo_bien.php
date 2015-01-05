@@ -154,33 +154,35 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$row=$pgsql->Respuesta($query);
 	?>
 	<link rel="STYLESHEET" type="text/css" href="css/print.css" media="print" />
-	<H3 align="center">TIPO DE BIEN NACIONAL</H3>
-	<div class="printer">
-		<table class="bordered-table zebra-striped" >
-			<tr>
-				<td>
-					<label>Código:</label>
-				</td>
-				<td>
-					<label><?=$row['codigo_tipo_bien']?></label>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label>Tipo de Bien Nacional:</label>
-				</td>
-				<td>
-					<label><?=$row['descripcion']?></label>
-				</td>
-			</tr>
+<fieldset>
+	<legend><center>TIPO DE BIEN NACIONAL</center></legend>
+	<div id="paginador" class="enjoy-css">
+		<div class="printer">
+			<table class="bordered-table zebra-striped" >
+				<tr>
+					<td>
+						<label>Código:</label>
+					</td>
+					<td>
+						<label><?=$row['codigo_tipo_bien']?></label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Tipo de Bien Nacional:</label>
+					</td>
+					<td>
+						<label><?=$row['descripcion']?></label>
+					</td>
+				</tr>
 
-		</table>
-		<center>
-			<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>
-			<a href="?tipo_bien"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-		</center>
+			</table>
+			<center>
+				<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>
+				<a href="?tipo_bien"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+			</center>
+		</div>
 	</div>
-</div>
 </fieldset>
 <?php
 } // Fin Ventana de Impresiones

@@ -11,7 +11,7 @@ function init(){
 	})
 
 	function imprimirRegistros(){
-		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?estado');
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?parroquia');
 			//Función que procede a cambiar el estatus del Documento a Anular.
 			$('#BtnAnular').click(function(){
 				$('.dgcAlert').animate({opacity:0},50);

@@ -24,10 +24,10 @@
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar);
-      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*5,$altura,'AMBIENTE',1,0,'L',$color_fondo);
-      $this->Cell($anchura*4,$altura,'TIPO DE AMBIENTE',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*5,$altura,'AMBIENTE',1,0,'C',$color_fondo);
+      $this->Cell($anchura*4,$altura,'TIPO DE AMBIENTE',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -184,8 +184,8 @@ function NbLines($w,$txt)
       $lobjPdf->SetWidths(array(17,50,40,25));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
-    $sql="SELECT codigo_ambiente, descripcion, estatus, 
-          case tipo_ambiente when 'A' then 'AULA DE CLASES' when 'C' then 'CANCHA' when 'D' then 'DEPOSITO' when 'L' then 'LABORATORIO' end as ambiente,
+    $sql="SELECT codigo_ambiente, descripcion, 
+          case tipo_ambiente when '4' then 'AULA DE CLASES' when '2' then 'CANCHA' when '3' then 'DEPOSITO' when '1' then 'LABORATORIO' end as ambiente,
           case estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
           FROM 
           general.tambiente";

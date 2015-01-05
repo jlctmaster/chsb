@@ -292,8 +292,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM biblioteca.tlibro 
-	WHERE codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);
+	$sql = "SELECT l.codigo_isbn_libro, l.titulo, l.codigo_autor, a.nombre AS autor, l.codigo_editorial, e.nombre, l.codigo_tema, t.descripcion, l.numero_paginas, 
+			TO_CHAR (l.fecha_edicion, 'DD/MM/YYYY') AS fecha
+			FROM biblioteca.tlibro AS l
+			INNER JOIN biblioteca.tautor AS a ON l.codigo_autor = a.codigo_autor
+			INNER JOIN biblioteca.teditorial AS e ON l.codigo_editorial = e.codigo_editorial
+			INNER JOIN biblioteca.ttema AS t ON l.codigo_tema = t.codigo_tema
+			WHERE codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -311,7 +316,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label><?=$row['codigo_isbn_libro']?></label>
 					</td>
 				</tr>
-						<tr>
+				<tr>
 					<td>
 						<label>Título:</label>
 					</td>
@@ -324,21 +329,23 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>Editorial:</label>
 					</td>
 					<td>
-						<label><?=$row['codigo_editorial']?></label>
+						<label><?=$row['nombre']?></label>
 					</td>
 				</tr>
-					<tr>
+				<tr>
 					<td>
 						<label>Autor:</label>
 					</td>
 					<td>
-						<label><?=$row['codigo_autor']?></label>
+						<label><?=$row['autor']?></label>
 					</td>
 				</tr>
+				<tr>
+					<td>
 						<label>Tema:</label>
 					</td>
 					<td>
-						<label><?=$row['codigo_tema']?></label>
+						<label><?=$row['descripcion']?></label>
 					</td>
 				</tr>
 				<tr>
@@ -354,7 +361,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>Fecha de Edición:</label>
 					</td>
 					<td>
-						<label><?=$row['fecha_edicion']?></label>
+						<label><?=$row['fecha']?></label>
 					</td>
 				</tr>
 

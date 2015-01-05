@@ -17,18 +17,18 @@
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=60;
+         $avnzar=55;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
          $this->Cell($avnzar);
-      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3,$altura,'CLASIFICACIÓN',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+7,$altura,'NÚMERO DE EDICIÓN',1,0,'L',$color_fondo);
-	  $this->Cell($anchura*4+2,$altura,'ISBN DEL LIBRO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*3+5,$altura,'CLASIFICACIÓN',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+7,$altura,'N° DE EDICIÓN',1,0,'C',$color_fondo);
+	  $this->Cell($anchura*7,$altura,'ISBN DEL LIBRO - TITULO',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -182,10 +182,10 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,30,27,42,26));
+      $lobjPdf->SetWidths(array(20,35,27,70,26));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
-    $sql="SELECT *, c.codigo_clasificacion||' '||c.descripcion AS clasificacion, l.codigo_isbn_libro||' '||l.titulo AS libro, 
+    $sql="SELECT *, c.descripcion AS clasificacion, l.codigo_isbn_libro||' - '||l.titulo AS libro, 
     (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus
   FROM biblioteca.tejemplar e
   INNER JOIN biblioteca.tclasificacion c ON e.codigo_clasificacion = c.codigo_clasificacion
@@ -196,7 +196,7 @@ function NbLines($w,$txt)
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=60;
+         $avnzar=55;
          $altura=7;
          $anchura=10;
          $color_fondo=false;

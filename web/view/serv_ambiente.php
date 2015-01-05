@@ -8,7 +8,9 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM general.tambiente";
+	$sql = "SELECT codigo_ambiente, descripcion,
+			CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA' END  AS ambiente
+			FROM general.tambiente";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>
@@ -36,7 +38,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<tr>';
 							echo '<td>'.$filas['codigo_ambiente'].'</td>';
 							echo '<td>'.$filas['descripcion'].'</td>';
-							echo '<td>'.$filas['tipo_ambiente'].'</td>';
+							echo '<td>'.$filas['ambiente'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?ambiente&Opt=3&codigo_ambiente='.$filas['codigo_ambiente'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -184,8 +186,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM general.tambiente	
-	WHERE codigo_ambiente =".$pgsql->comillas_inteligentes($_GET['codigo_ambiente']);
+	$sql = "SELECT codigo_ambiente, descripcion,
+          	case tipo_ambiente when '4' then 'AULA DE CLASES' when '2' then 'CANCHA' when '3' then 'DEPOSITO' when '1' then 'LABORATORIO' end as ambiente
+			FROM general.tambiente	
+			WHERE codigo_ambiente =".$pgsql->comillas_inteligentes($_GET['codigo_ambiente']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -217,7 +221,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label>Tipo ambiente:</label>
 						</td>
 						<td>
-							<label><?=$row['tipo_ambiente']?></label>
+							<label><?=$row['ambiente']?></label>
 						</td>
 					</tr>
 				</table>

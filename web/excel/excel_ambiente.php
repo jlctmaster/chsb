@@ -2,7 +2,7 @@
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
 	$sql = "SELECT codigo_ambiente, descripcion, estatus, 
-          			case tipo_ambiente when 'A' then 'AULA DE CLASES' when 'C' then 'CANCHA' when 'D' then 'DEPOSITO' when 'L' then 'LABORATORIO' end as ambiente,
+          			case tipo_ambiente when '4' then 'AULA DE CLASES' when '2' then 'CANCHA' when '3' then 'DEPOSITO' when '1' then 'LABORATORIO' end as ambiente,
           			case estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
           	FROM general.tambiente";
 	$query = $mysql->Ejecutar($sql);

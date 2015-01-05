@@ -24,9 +24,9 @@
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar);
-      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*4,$altura,'DEPARTAMENTO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*4,$altura,'DEPARTAMENTO',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }

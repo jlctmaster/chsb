@@ -17,21 +17,21 @@ $servicio=$_GET['serv'];
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=45;
+         $avnzar=12;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar);
-      $this->Cell($anchura*2,$altura,'CÓDIGO ISBN',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*5,$altura,'TÍTULO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3+5,$altura,'EDITORIAL',1,0,'L',$color_fondo);
-      $this->Cell($anchura*3+5,$altura,'AUTOR',1,0,'L',$color_fondo);
-      $this->Cell($anchura*5,$altura,'TEMA',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3+5,$altura,'Nº PÁGINAS',1,0,'L',$color_fondo);
-      $this->Cell($anchura*4,$altura,'FECHA EDICIÓN',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2+5,$altura,'CÓDIGO ISBN',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*5,$altura,'TÍTULO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*3+5,$altura,'EDITORIAL',1,0,'C',$color_fondo);
+      $this->Cell($anchura*3+5,$altura,'AUTOR',1,0,'C',$color_fondo);
+      $this->Cell($anchura*3,$altura,'TEMA',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*2+5,$altura,'Nº PÁGINAS',1,0,'C',$color_fondo);
+      $this->Cell($anchura*3,$altura,'FECHA EDICIÓN',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -185,11 +185,11 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,50,35,35,50,35,40,26));
+      $lobjPdf->SetWidths(array(25,50,35,35,30,25,30,26));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
-    $sql="SELECT *, e.codigo_editorial||'-'||e.nombre AS editorial,  a.codigo_autor||'-'||a.nombre AS autor,
-    t.codigo_tema||'-'||t.descripcion AS tema,(CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
+    $sql="SELECT *, TO_CHAR(fecha_edicion, 'DD-MM-YYYY') AS fecha, e.nombre AS editorial, a.nombre AS autor, t.descripcion AS tema, 
+    (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
     FROM biblioteca.tlibro l
     INNER JOIN biblioteca.teditorial e ON l.codigo_editorial=e.codigo_editorial
     INNER JOIN biblioteca.tautor a ON l.codigo_autor=a.codigo_autor
@@ -199,7 +199,7 @@ function NbLines($w,$txt)
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=45;
+         $avnzar=12;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -218,7 +218,7 @@ function NbLines($w,$txt)
          ucwords($tperfil['autor']),
          ucwords($tperfil['tema']),
          ucwords($tperfil['numero_paginas']),
-         ucwords($tperfil['fecha_edicion']),
+         ucwords($tperfil['fecha']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

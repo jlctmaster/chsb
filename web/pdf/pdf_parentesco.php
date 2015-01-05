@@ -17,16 +17,16 @@
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=100;
+         $avnzar=102;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar);
-      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3+5,$altura,'PARENTESCO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura+7,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*3,$altura,'PARENTESCO',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -180,7 +180,7 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(17,35,25));
+      $lobjPdf->SetWidths(array(17,30,25));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT codigo_parentesco, descripcion, estatus, case estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
@@ -191,7 +191,7 @@ FROM
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=100;
+         $avnzar=102;
          $altura=7;
          $anchura=10;
          $color_fondo=false;

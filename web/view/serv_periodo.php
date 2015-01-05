@@ -182,7 +182,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								if($rows['codigo_lapso']==$row['codigo_lapso'])
 									echo "<option value=".$rows['codigo_lapso']." selected >".$rows['lapso']."</option>";
 								else
-									echo "<option value=".$row['codigo_lapso'].">".$row['lapso']."</option>";
+									echo "<option value=".$rows['codigo_lapso'].">".$rows['lapso']."</option>";
 							}
 							?>
 						</select>

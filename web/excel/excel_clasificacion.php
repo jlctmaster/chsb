@@ -1,9 +1,7 @@
 <?php
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
-	$sql = "SELECT e.codigo_estado, e.descripcion AS estado, p.descripcion AS pais, (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
-			FROM general.testado AS e
-			INNER JOIN general.tpais AS p ON e.codigo_pais = p.codigo_pais ORDER BY e.codigo_estado ASC";
+	$sql = "SELECT codigo_clasificacion, descripcion, (CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM biblioteca.tclasificacion ORDER BY codigo_clasificacion ASC";
 	$query = $mysql->Ejecutar($sql);
 
 	date_default_timezone_set('America/Caracas');
@@ -23,27 +21,25 @@
 						 ->setKeywords("reporte alumnos carreras")
 						 ->setCategory("Reporte excel");*/
 
-	$tituloReporte = "Listado de los estados";
-	$titulosColumnas = array('Código Estado', 'Estado', 'País', 'Estatus');
+	$tituloReporte = "Clasificación de libros";
+	$titulosColumnas = array('Código', 'Clasificación', 'Estatus');
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:D1')->mergeCells('A2:D2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:C1')->mergeCells('A2:C2');
 					
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A1', $tituloReporte)
 				->setCellValue('A3', $titulosColumnas[0])
 				->setCellValue('B3', $titulosColumnas[1])
-				->setCellValue('C3', $titulosColumnas[2])
-				->setCellValue('D3', $titulosColumnas[3]);
+				->setCellValue('C3', $titulosColumnas[2]);
 	
-	//Se agregan los datos
+	//Se agregan los datos de los alumnos
 	$i = 5;
 	while ($row = $mysql->Respuesta($query)){
 		$objPHPExcel->setActiveSheetIndex(0)
-		->setCellValue('A'.$i, $row['codigo_estado'])
-		->setCellValue('B'.$i, $row['estado'])
-		->setCellValue('C'.$i, $row['pais'])
-		->setCellValue('D'.$i, $row['estatus']);
+		->setCellValue('A'.$i, $row['codigo_clasificacion'])
+		->setCellValue('B'.$i, $row['descripcion'])
+		->setCellValue('C'.$i, $row['estatus']);
 		$i++;
 	}
 	
@@ -135,18 +131,18 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:D".($i-1));
-	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+	$objPHPExcel->getActiveSheet()->getStyle('A1:C1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A3:C3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:C".($i-1));
+	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			
-	for($i = 'A'; $i <= 'D'; $i++){
+	for($i = 'A'; $i <= 'C'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
 	}
 	
 	// Se asigna el nombre a la hoja
-	$objPHPExcel->getActiveSheet()->setTitle('Estado');
+	$objPHPExcel->getActiveSheet()->setTitle('Clasificaciones');
 
 	// Se activa la hoja para que sea la que se muestre cuando el archivo se abre
 	$objPHPExcel->setActiveSheetIndex(0);
@@ -156,7 +152,7 @@
 
 	// Se manda el archivo al navegador web, con el nombre que se indica (Excel2007)
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-	header('Content-Disposition: attachment;filename="Listado Estado.xlsx"');
+	header('Content-Disposition: attachment;filename="Clasificaciones.xlsx"');
 	header('Cache-Control: max-age=0');
 
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

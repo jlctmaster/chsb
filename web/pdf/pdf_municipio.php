@@ -24,10 +24,10 @@
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
          $this->Cell($avnzar);
-      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*2+3,$altura,'MUNICIPIO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'ESTADO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*3+5,$altura,'MUNICIPIO',1,0,'C',$color_fondo);
+      $this->Cell($anchura*3+5,$altura,'ESTADO',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -181,10 +181,10 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,23,26,26));
+      $lobjPdf->SetWidths(array(20,35,35,26));
   require_once("../class/class_bd.php");
   $pgsql=new Conexion();
-    $sql="SELECT m.codigo_municipio,m.descripcion, e.codigo_estado||' '||e.descripcion AS estado, 
+    $sql="SELECT m.codigo_municipio codigo,m.descripcion, e.codigo_estado||' '||e.descripcion AS estado, 
 (CASE m.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM general.tmunicipio m
 INNER JOIN general.testado AS e ON m.codigo_estado = e.codigo_estado";
 
