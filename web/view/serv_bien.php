@@ -58,7 +58,15 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					if($a[$x]['orden']=='1')
 						echo '<a href="?bien&Opt=2"><button type="button" class="btn btn-large btn-primary"><i class='.$a[$x]['icono'].'></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button></a>';
 				?>
+				<button type="button" id="btnImprimirTodos" class="btn btn-large btn-primary"><i class="icon-download-alt"></i>&nbsp;Descargar Archivo</button>				
 			</center>
+			<div id="Imprimir" style="display:none;">
+				<span>Descargar Como:</span>
+				<br/><br/>
+				<a href="<?php echo  '../pdf/pdf_bien.php';?>" target="_blank"> <img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"> </a>
+				&nbsp;&nbsp;
+				<a href="../excel/excel_bien.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
+    		</div>
 		</div>
 	</div>
 </fieldset>
