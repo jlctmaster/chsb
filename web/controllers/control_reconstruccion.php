@@ -217,6 +217,11 @@ if($lOpt=='BuscarDisponibilidad'){
   unset($mov_inventario);
 }
 
+if($lOpt=='BuscarDisponibilidadPorCant'){
+  echo $mov_inventario->BuscarDisponibilidadPorCant($_POST['codigo_bien'],$_POST['cantidad']);
+  unset($mov_inventario);
+}
+
 if($lOpt=='BuscarUbicacionFuente'){
   echo $mov_inventario->BuscarUbicacionFuente($_POST['codigo_item'],$_POST['cantidad']);
   unset($mov_inventario);

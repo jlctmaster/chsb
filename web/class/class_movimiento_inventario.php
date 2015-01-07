@@ -388,11 +388,37 @@ class movimiento_inventario {
         return $json;
     }
 
+    public function BuscarDisponibilidadPorCant($item,$cantidad){
+        $sql="SELECT pd.codigo_item_a_producir,cb.codigo_item,bu.nro_serial||' '||bu.nombre AS item_a_usar,
+        MAX($cantidad) AS cant_disponible_a_recuperar,SUM(i.existencia) AS existencia,
+        ROUND(MAX($cantidad)*MAX(cb.cantidad),0) AS total_a_usar
+        FROM inventario.vw_inventario_de_items_disponibles pd 
+        INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON pd.codigo_item_a_producir = cb.codigo_bien 
+        INNER JOIN inventario.vw_inventario i ON i.codigo_item = cb.codigo_item AND pd.codigo_ubicacion_fuente = i.codigo_ubicacion 
+        INNER JOIN bienes_nacionales.tbien bu ON bu.codigo_bien = cb.codigo_item 
+        INNER JOIN inventario.tubicacion u ON pd.codigo_ubicacion_fuente = u.codigo_ubicacion 
+        WHERE pd.codigo_item_a_producir = $item 
+        GROUP BY pd.codigo_item_a_producir,cb.codigo_item,cb.item_base,bu.nro_serial,bu.nombre
+        ORDER BY cb.codigo_item ASC";
+        $query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "¡Error no hay componentes para recuperar el item!");
+            $json = json_encode($rows);
+        }
+        return $json;
+    }
+
     public function BuscarUbicacionFuente($item,$cantidad){
         $sql="SELECT i.codigo_ubicacion,i.ubicacion,i.existencia 
         FROM inventario.vw_inventario i 
         INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
-        WHERE u.itemsdefectuoso = 'N' AND i.sonlibros = 'N' AND codigo_item = $item AND existencia <= $cantidad 
+        WHERE u.itemsdefectuoso = 'N' AND i.sonlibros = 'N' AND codigo_item = $item AND $cantidad <= existencia 
         ORDER BY existencia DESC 
         LIMIT 1";
         $query = $this->pgsql->Ejecutar($sql);

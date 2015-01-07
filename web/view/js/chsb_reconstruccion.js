@@ -12,44 +12,8 @@ function init(){
 		if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val())){
 			alert("¡Debe ingresar una cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
 		}else{
-	    	var arrayRegistros = new Array();
-	    	//	Eliminamos el detalle del elemento tablaDetReconstruccion para reescribir los valores.
-	    	$('#tablaDetReconstruccion tr[id]').remove();
-	        var objRecord =	BuscarConfiguracion($('#codigo_bien').val(),$('#cantidad').val(),arrayRegistros);
-	        //	Recorremos el objeto para dibujar las tuplas en la tabla tablaDetReconstruccion.
-	        for(var contador=0;contador<objRecord.length;contador++){
-	        	var go = true;
-	        	//	Solo mostramos los items del ultimo nivel de configuración.
-	        	if(objRecord[contador].esconfigurable=="N"){
-	        		var item = document.getElementsByName('items[]');
-	        		//	Sumamos las cantidades de los items repetidos
-	        		for(var i=0; i<item.length;i++){
-	        			if($('#items_'+i).val()==objRecord[contador].codigo_item_recuperado){
-	        				$('#cantidad_max_'+i).val(parseInt($('#cantidad_max_'+i).val())+parseInt(objRecord[contador].cantidad_recuperada));
-	        				$('#cantidad_'+i).val(parseInt($('#cantidad_'+i).val())+parseInt(objRecord[contador].cantidad_recuperada));
-	        				go=false;
-	        			}
-	        		}
-	        		if(go==true){
-		        		$("#tablaDetReconstruccion").append("<tr id='"+contador+"'>"+
-						"<td>"+
-						"<input type='hidden' name='ubicacion[]' id='ubicacion_"+contador+"' value='"+objRecord[contador].codigo_ubicacion+"' >"+
-						"<input class='input-xlarge' type='text' name='name_ubicacion[]' id='name_ubicacion_"+contador+"' title='Ubicación donde se va a almacenar' value='"+objRecord[contador].ubicacion+"' readonly >"+
-						"</td>"+
-		    			"<td>"+
-						"<input type='hidden' name='items[]' id='items_"+contador+"' value='"+objRecord[contador].codigo_item_recuperado+"' >"+
-						"<input class='input-xlarge' type='text' name='name_items[]' id='name_items_"+contador+"' title='Componente a recuperar' value='"+objRecord[contador].item_recuperado+"' readonly >"+
-						"</td>"+
-						"<td>"+
-						"<input type='hidden' name='cantidad_max[]' id='cantidad_max_"+contador+"' value='"+objRecord[contador].cantidad_recuperada+"'>"+
-						"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' title='Cantidad a recuperar' value='"+objRecord[contador].cantidad_recuperada+"'>"+
-						"</td>"+
-		                "</tr>");
-		                //	Modificamos el width de la cantidad para este elemento
-		                $('#cantidad_'+contador).css("width","80px");
-	        		}
-	        	}
-	    	}
+			var Datos = {"lOpt":"BuscarDisponibilidadPorCant","codigo_bien":$('#codigo_bien').val(),"cantidad":$('#cantidad').val()};
+			obtenerCantidadDisponible(Datos);
 		}
 	})
 	//	Esta función busca la cantidad disponible del item seleccionado.
@@ -123,14 +87,16 @@ function init(){
 		        success: function(resp){
 		        	try{
 		        		if(resp[0].msj==undefined){
-		        			total_a_usar=parseInt(total_a_usar)-parseInt(resp[0].existencia);
-			        		while(parseInt(total_a_usar)>parseInt(0)){
+		        			total_a_usar=parseInt(resp[0].existencia)-parseInt(total_a_usar);
+		        			console.log(records[i].item_a_usar+": "+total_a_usar+" => "+records[i].total_a_usar)
+			        		while(parseInt(total_a_usar)<parseInt(0)){
 			        			var Datos={"lOpt":"BuscarUbicacionFuente","codigo_item":records[i].codigo_item,"cantidad":total_a_usar}
 			        			var newubicacion = ubicacionFuente(Datos);
+			        			total_a_usar=parseInt(newubicacion[0].existencia)-parseInt(total_a_usar);
+			        			console.log(records[i].item_a_usar+": "+total_a_usar+" => "+records[i].total_a_usar)
 			        			arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":newubicacion[0].existencia,"codigo_ubicacion":newubicacion[0].codigo_ubicacion,"ubicacion":newubicacion[0].ubicacion});
-			        			total_a_usar=parseInt(total_a_usar)-parseInt(newubicacion[0].existencia);
 			        		}
-			        		arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":resp[0].existencia,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
+			        		arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":total_a_usar,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
 							//	Si todo ok reseteamos el valor de la variable global por si se ejecuto una transaccion que haya fallado..
 							ocurrioerror=false;
 		        		}
