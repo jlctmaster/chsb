@@ -1,7 +1,7 @@
 <?php
   
 require_once("../librerias/fpdf/fpdf.php");
-$servicio=$_GET['serv'];
+  require_once("../class/class_bd.php");
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -10,7 +10,7 @@ $servicio=$_GET['serv'];
     public function Header()
     {
   
-   $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   $this->Ln(55);  
+   $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   $this->Ln(55);  
    $this->SetFont('Arial','B',12);
    $this->Cell(0,6,'LISTADO DE LOS LIBROS',0,1,"C");
    $this->Ln(8);
@@ -186,7 +186,6 @@ function NbLines($w,$txt)
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
       $lobjPdf->SetWidths(array(25,50,35,35,30,25,30,26));
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT *, TO_CHAR(fecha_edicion, 'DD-MM-YYYY') AS fecha, e.nombre AS editorial, a.nombre AS autor, t.descripcion AS tema, 
     (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
@@ -204,13 +203,11 @@ function NbLines($w,$txt)
          $anchura=10;
          $color_fondo=false;
          $lobjPdf->SetFont('Arial','B',10);
-         //$lobjPdf->Row(array("N°","Codigo","Perfil","Estatus"));
          $lobjPdf->SetTextColor(0,0,0);
          $lobjPdf->SetFont('Arial','',8);
          $lobjPdf->SetTextColor(0,0,0); 
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
-      $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_isbn_libro']),
          ucwords($tperfil['titulo']),

@@ -1,7 +1,7 @@
 <?php
   
       require_once("../librerias/fpdf/fpdf.php");
-      $servicio=$_GET['serv'];
+  require_once("../class/class_bd.php");
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -182,7 +182,6 @@ function NbLines($w,$txt)
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
       $lobjPdf->SetWidths(array(20,20,20,26));
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT l.codigo_lapso,l.lapso, a.ano, 
 (CASE l.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM educacion.tlapso l
@@ -196,13 +195,11 @@ INNER JOIN educacion.tano_academico AS a ON l.codigo_ano_academico = a.codigo_an
          $anchura=10;
          $color_fondo=false;
          $lobjPdf->SetFont('Arial','B',10);
-         //$lobjPdf->Row(array("N°","Codigo","Perfil","Estatus"));
          $lobjPdf->SetTextColor(0,0,0);
          $lobjPdf->SetFont('Arial','',8);
          $lobjPdf->SetTextColor(0,0,0); 
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
-    $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_lapso']),
          ucwords($tperfil['lapso']),
