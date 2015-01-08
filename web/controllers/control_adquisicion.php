@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+include_once("../class/class_adquisicion.php");
+include_once("../class/class_movimiento_inventario.php");
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -30,8 +33,6 @@ function comprobarCheckBox($value){
   return $chk;
 }
 
-include_once("../class/class_adquisicion.php");
-include_once("../class/class_movimiento_inventario.php");
 $adquisicion=new adquisicion();
 $mov_inventario = new movimiento_inventario();
 if($lOpt=='Registrar'){

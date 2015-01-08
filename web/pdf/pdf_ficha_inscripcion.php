@@ -1,13 +1,13 @@
 <?php
-
 require_once("../librerias/fpdf/fpdf.php");
+require_once("../class/class_bd.php");
 session_start();
 class clsFpdf extends FPDF {
   var $widths;
   var $aligns;
   //Cabecera de página
   public function Header(){
-    $this->Image("../images/banner.jpg" , 25 ,15, 160 , 20, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   
+    $this->Image("../images/banner.jpg" , 25 ,15, 160 , 20, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   
     $this->Ln(25);  
   }
 
@@ -144,7 +144,6 @@ class clsFpdf extends FPDF {
   $lobjPdf=new clsFpdf();
   // 1era Página
   $lobjPdf->AddPage("P","Legal");
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
   $sql="SELECT TO_CHAR(ps.fecha_inscripcion,'DD/MM/YYYY') AS fecha_inscripcion, aa.ano AS ano_academico, 
   CASE WHEN rp.segundo_nombre IS NOT NULL AND rp.segundo_apellido  IS NOT NULL THEN rp.primer_nombre||' '||rp.segundo_nombre||' '||rp.primer_apellido||' '||rp.segundo_apellido 

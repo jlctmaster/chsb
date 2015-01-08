@@ -1,11 +1,14 @@
 <?php
 session_start();
 
+include_once("../class/class_reconstruccion.php");
+include_once("../class/class_movimiento_inventario.php");
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
-if(isset($_POST['codigo_recuperacion']))
-  $codigo_recuperacion=trim($_POST['codigo_recuperacion']);
+if(isset($_POST['codigo_reconstruccion']))
+  $codigo_reconstruccion=trim($_POST['codigo_reconstruccion']);
 
 if(isset($_POST['fecha']))
   $fecha=trim($_POST['fecha']);
@@ -22,27 +25,25 @@ if(isset($_POST['codigo_bien']))
 if(isset($_POST['cantidad_a_recuperar']))
   $cantidad=trim($_POST['cantidad_a_recuperar']);
 
-include_once("../class/class_recuperacion.php");
-include_once("../class/class_movimiento_inventario.php");
-$recuperacion=new recuperacion();
+$reconstruccion=new reconstruccion();
 $mov_inventario = new movimiento_inventario();
 if($lOpt=='Registrar'){
-  $recuperacion->fecha($fecha);
-  $recuperacion->cedula_persona($cedula_persona);
-  $recuperacion->codigo_ubicacion($codigo_ubicacion);
-  $recuperacion->codigo_bien($codigo_bien);
-  $recuperacion->cantidad($cantidad);
+  $reconstruccion->fecha($fecha);
+  $reconstruccion->cedula_persona($cedula_persona);
+  $reconstruccion->codigo_ubicacion($codigo_ubicacion);
+  $reconstruccion->codigo_bien($codigo_bien);
+  $reconstruccion->cantidad($cantidad);
   $confirmacion=false;
-  $recuperacion->Transaccion('iniciando');
-  if($recuperacion->Registrar($_SESSION['user_name'])){
-    if($recuperacion->EliminarRecuperaciones()){
+  $reconstruccion->Transaccion('iniciando');
+  if($reconstruccion->Registrar($_SESSION['user_name'])){
+    if($reconstruccion->EliminarRecuperaciones()){
       if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
-        if($recuperacion->InsertarRecuperaciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
+        if($reconstruccion->InsertarRecuperaciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
           //  Registrar Salidas
           $mov_inventario->fecha_movimiento($fecha);
-          $mov_inventario->tipo_movimiento('S');
-          $mov_inventario->numero_documento($recuperacion->codigo_recuperacion());
-          $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
+          $mov_inventario->tipo_movimiento('E');
+          $mov_inventario->numero_documento($reconstruccion->codigo_reconstruccion());
+          $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Reconstrucción (BR)
           if($mov_inventario->RegistrarMovimiento($_SESSION['user_name'])){
             $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
             $mov_inventario->codigo_item($codigo_bien);
@@ -53,9 +54,9 @@ if($lOpt=='Registrar'){
             if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name'])){
               //  Registrar Entradas
               $mov_inventario->fecha_movimiento($fecha);
-              $mov_inventario->tipo_movimiento('E');
-              $mov_inventario->numero_documento($recuperacion->codigo_recuperacion());
-              $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
+              $mov_inventario->tipo_movimiento('S');
+              $mov_inventario->numero_documento($reconstruccion->codigo_reconstruccion());
+              $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Reconstrucción (BR)
               if($mov_inventario->RegistrarMovimiento($_SESSION['user_name'])){
                 $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
                 $con=0;
@@ -92,34 +93,36 @@ if($lOpt=='Registrar'){
       $confirmacion=0;
   }
   if($confirmacion==1){
-    $recuperacion->Transaccion('finalizado');
-    $_SESSION['datos']['mensaje']="¡La Recuperación ha sido registrada con éxito!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=2");
+    $reconstruccion->Transaccion('finalizado');
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_reconstruccion']=$reconstruccion->codigo_reconstruccion();
+    $_SESSION['datos']['mensaje']="¡La Reconstrucción ha sido registrada con éxito!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=2");
   }else{
-    $recuperacion->Transaccion('cancelado');
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la Recuperación!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=2");
+    $reconstruccion->Transaccion('cancelado');
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la Reconstrucción!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=2");
   }
 }
 
 if($lOpt=='Modificar'){
-  $recuperacion->codigo_recuperacion($codigo_recuperacion);
-  $recuperacion->fecha($fecha);
-  $recuperacion->cedula_persona($cedula_persona);
-  $recuperacion->codigo_ubicacion($codigo_ubicacion);
-  $recuperacion->codigo_bien($codigo_bien);
-  $recuperacion->cantidad($cantidad);
+  $reconstruccion->codigo_reconstruccion($codigo_reconstruccion);
+  $reconstruccion->fecha($fecha);
+  $reconstruccion->cedula_persona($cedula_persona);
+  $reconstruccion->codigo_ubicacion($codigo_ubicacion);
+  $reconstruccion->codigo_bien($codigo_bien);
+  $reconstruccion->cantidad($cantidad);
   $confirmacion=false;
-  $recuperacion->Transaccion('iniciando');
-  if($recuperacion->Actualizar($_SESSION['user_name'])){
-    if($recuperacion->EliminarRecuperaciones()){
+  $reconstruccion->Transaccion('iniciando');
+  if($reconstruccion->Actualizar($_SESSION['user_name'])){
+    if($reconstruccion->EliminarRecuperaciones()){
       if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
-        if($recuperacion->InsertarRecuperaciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
+        if($reconstruccion->InsertarRecuperaciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
           //  Modificar Salidas
           $mov_inventario->fecha_movimiento($fecha);
-          $mov_inventario->tipo_movimiento('S');
-          $mov_inventario->numero_documento($codigo_recuperacion);
-          $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
+          $mov_inventario->tipo_movimiento('E');
+          $mov_inventario->numero_documento($codigo_reconstruccion);
+          $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Reconstrucción (BR)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
             $mov_inventario->codigo_item($codigo_bien);
@@ -130,9 +133,9 @@ if($lOpt=='Modificar'){
             if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name'])){
               //  Modificar Entradas
               $mov_inventario->fecha_movimiento($fecha);
-              $mov_inventario->tipo_movimiento('E');
-              $mov_inventario->numero_documento($codigo_recuperacion);
-              $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
+              $mov_inventario->tipo_movimiento('S');
+              $mov_inventario->numero_documento($codigo_reconstruccion);
+              $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Reconstrucción (BR)
               $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
               if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
                 $con=0;
@@ -171,44 +174,44 @@ if($lOpt=='Modificar'){
   else
     $confirmacion=-1;
   if($confirmacion==1){
-    $recuperacion->Transaccion('finalizado');
-    $_SESSION['datos']['mensaje']="¡La Recuperación ha sido modificada con éxito!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $reconstruccion->Transaccion('finalizado');
+    $_SESSION['datos']['mensaje']="¡La Reconstrucción ha sido modificada con éxito!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }else{
-    $recuperacion->Transaccion('cancelado');
-    $recuperacion->error()." => ".$mov_inventario->error(); die();
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Recuperación!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $reconstruccion->Transaccion('cancelado');
+    $reconstruccion->error()." => ".$mov_inventario->error(); die();
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Reconstrucción!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }
 }
 
 if($lOpt=='Desactivar'){
-  $recuperacion->codigo_recuperacion($codigo_recuperacion);
-  if($recuperacion->Desactivar($_SESSION['user_name']))
+  $reconstruccion->codigo_reconstruccion($codigo_reconstruccion);
+  if($reconstruccion->Desactivar($_SESSION['user_name']))
     $confirmacion=1;
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡La Recuperación ha sido desactivada con éxito!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $_SESSION['datos']['mensaje']="¡La Reconstrucción ha sido desactivada con éxito!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar la Recuperación!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar la Reconstrucción!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }
 }
 
 if($lOpt=='Activar'){
-  $recuperacion->codigo_recuperacion($codigo_recuperacion);
-  if($recuperacion->Activar($_SESSION['user_name']))
+  $reconstruccion->codigo_reconstruccion($codigo_reconstruccion);
+  if($reconstruccion->Activar($_SESSION['user_name']))
     $confirmacion=1;
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡La Recuperación ha sido activado con éxito!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $_SESSION['datos']['mensaje']="¡La Reconstrucción ha sido activado con éxito!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar la Recuperación!";
-    header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar la Reconstrucción!";
+    header("Location: ../view/menu_principal.php?reconstruccion&Opt=3&codigo_reconstruccion=".$reconstruccion->codigo_reconstruccion());
   }
 }
 

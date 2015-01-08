@@ -363,9 +363,9 @@ class movimiento_inventario {
     }
 
     public function BuscarDisponibilidad($item){
-        $sql="SELECT pd.codigo_item_a_producir,cb.codigo_item,bu.nro_serial||' '||bu.nombre AS item_a_usar,
-        SUM(pd.cant_disponible_a_recuperar) AS cant_disponible_a_recuperar,SUM(i.existencia) AS existencia,
-        ROUND(SUM(pd.cant_disponible_a_recuperar)*MAX(cb.cantidad),0) AS total_a_usar
+        $sql="SELECT pd.codigo_item_a_producir,cb.codigo_item,bu.nro_serial||' '||bu.nombre AS item_a_usar, 
+        SUM(pd.cant_disponible) AS cant_disponible,SUM(pd.cant_disponible_a_recuperar) AS cant_disponible_a_recuperar,
+        SUM(i.existencia) AS existencia,ROUND(SUM(pd.cant_disponible_a_recuperar)*MAX(cb.cantidad),0) AS total_a_usar 
         FROM inventario.vw_inventario_de_items_disponibles pd 
         INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON pd.codigo_item_a_producir = cb.codigo_bien 
         INNER JOIN inventario.vw_inventario i ON i.codigo_item = cb.codigo_item AND pd.codigo_ubicacion_fuente = i.codigo_ubicacion 
@@ -373,6 +373,7 @@ class movimiento_inventario {
         INNER JOIN inventario.tubicacion u ON pd.codigo_ubicacion_fuente = u.codigo_ubicacion 
         WHERE pd.codigo_item_a_producir = $item 
         GROUP BY pd.codigo_item_a_producir,cb.codigo_item,cb.item_base,bu.nro_serial,bu.nombre
+        HAVING SUM(pd.cant_disponible_a_recuperar) > 0
         ORDER BY cb.codigo_item ASC";
         $query = $this->pgsql->Ejecutar($sql);
         while($Obj=$this->pgsql->Respuesta_assoc($query)){
@@ -390,15 +391,16 @@ class movimiento_inventario {
 
     public function BuscarDisponibilidadPorCant($item,$cantidad){
         $sql="SELECT pd.codigo_item_a_producir,cb.codigo_item,bu.nro_serial||' '||bu.nombre AS item_a_usar,
-        MAX($cantidad) AS cant_disponible_a_recuperar,SUM(i.existencia) AS existencia,
-        ROUND(MAX($cantidad)*MAX(cb.cantidad),0) AS total_a_usar
+        SUM(pd.cant_disponible) AS cant_disponible,MAX($cantidad) AS cant_disponible_a_recuperar,
+        SUM(i.existencia) AS existencia,ROUND(MAX($cantidad)*MAX(cb.cantidad),0) AS total_a_usar 
         FROM inventario.vw_inventario_de_items_disponibles pd 
         INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON pd.codigo_item_a_producir = cb.codigo_bien 
         INNER JOIN inventario.vw_inventario i ON i.codigo_item = cb.codigo_item AND pd.codigo_ubicacion_fuente = i.codigo_ubicacion 
         INNER JOIN bienes_nacionales.tbien bu ON bu.codigo_bien = cb.codigo_item 
         INNER JOIN inventario.tubicacion u ON pd.codigo_ubicacion_fuente = u.codigo_ubicacion 
         WHERE pd.codigo_item_a_producir = $item 
-        GROUP BY pd.codigo_item_a_producir,cb.codigo_item,cb.item_base,bu.nro_serial,bu.nombre
+        GROUP BY pd.codigo_item_a_producir,cb.codigo_item,cb.item_base,bu.nro_serial,bu.nombre 
+        HAVING MAX($cantidad) > 0 
         ORDER BY cb.codigo_item ASC";
         $query = $this->pgsql->Ejecutar($sql);
         while($Obj=$this->pgsql->Respuesta_assoc($query)){

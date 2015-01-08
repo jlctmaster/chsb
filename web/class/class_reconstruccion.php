@@ -1,7 +1,7 @@
 <?php
 require_once("class_bd.php");
-class recuperacion {
-	private $codigo_recuperacion; 
+class reconstruccion {
+	private $codigo_reconstruccion; 
 	private $fecha;
 	private $cedula_persona;
 	private $codigo_ubicacion;
@@ -12,7 +12,7 @@ class recuperacion {
 	private $pgsql; 
 	 
 	public function __construct(){
-		$this->codigo_recuperacion=null;
+		$this->codigo_reconstruccion=null;
 		$this->fecha=null;
 		$this->cedula_persona=null;
 		$this->codigo_ubicacion=null;
@@ -29,12 +29,12 @@ class recuperacion {
 		if($value=='finalizado') return $this->pgsql->Finalizar_Transaccion();
 	}
 
-    public function codigo_recuperacion(){
+    public function codigo_reconstruccion(){
 		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->codigo_recuperacion;
+		if($Num_Parametro==0) return $this->codigo_reconstruccion;
 
 		if($Num_Parametro>0){
-			$this->codigo_recuperacion=func_get_arg(0);
+			$this->codigo_reconstruccion=func_get_arg(0);
 		}
     }
 
@@ -102,7 +102,7 @@ class recuperacion {
     }
 
 	public function EliminarRecuperaciones(){
-		$sql="DELETE FROM bienes_nacionales.tdetalle_recuperacion WHERE codigo_recuperacion='$this->codigo_recuperacion'";
+		$sql="DELETE FROM bienes_nacionales.tdetalle_recuperacion WHERE codigo_recuperacion='$this->codigo_reconstruccion'";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else{
@@ -114,7 +114,7 @@ class recuperacion {
 	public function InsertarRecuperaciones($user,$items,$cantidad,$ubicacion){
 	    $sql="INSERT INTO bienes_nacionales.tdetalle_recuperacion(codigo_recuperacion,codigo_item,cantidad,codigo_ubicacion,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($items); $i++){
-	    	$sql.="('$this->codigo_recuperacion','".$items[$i]."','".$cantidad[$i]."','".$ubicacion[$i]."','$user',NOW()),";
+	    	$sql.="('$this->codigo_reconstruccion','".$items[$i]."','".$cantidad[$i]."','".$ubicacion[$i]."','$user',NOW()),";
 	    }
 	    $sql=substr($sql,0,-1);
 	    $sql=$sql.";";
@@ -135,8 +135,8 @@ class recuperacion {
 	    	AND cedula_persona = '$this->cedula_persona' AND codigo_bien = '$this->codigo_bien' AND cantidad = '$this->cantidad'";
 	    	$query=$this->pgsql->Ejecutar($sqlx);
 	    	if($this->pgsql->Total_Filas($query)!=0){
-				$trecuperacion=$this->pgsql->Respuesta($query);
-				$this->codigo_recuperacion($trecuperacion['codigo_recuperacion']);
+				$treconstruccion=$this->pgsql->Respuesta($query);
+				$this->codigo_reconstruccion($treconstruccion['codigo_recuperacion']);
 	    		return true;
 			}
 		    else{
@@ -152,7 +152,7 @@ class recuperacion {
    
     public function Activar($user){
 	    $sql="UPDATE bienes_nacionales.trecuperacion SET estatus = '1', modificado_por='$user', fecha_modificacion=NOW() 
-	    WHERE codigo_recuperacion='$this->codigo_recuperacion'";
+	    WHERE codigo_recuperacion='$this->codigo_reconstruccion'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{
@@ -162,12 +162,12 @@ class recuperacion {
    	}
 
     public function Desactivar($user){
-    	$sqlx="SELECT * FROM bienes_nacionales.trecuperacion r WHERE r.codigo_recuperacion = '$this->codigo_recuperacion' 
+    	$sqlx="SELECT * FROM bienes_nacionales.trecuperacion r WHERE r.codigo_recuperacion = '$this->codigo_reconstruccion' 
     	AND (EXISTS (SELECT 1 FROM bienes_nacionales.tdetalle_recuperacion dr WHERE r.codigo_recuperacion = dr.codigo_recuperacion) 
     	OR (EXISTS (SELECT 1 FROM inventario.tmovimiento m WHERE r.codigo_recuperacion = m.numero_documento AND tipo_transaccion = 'BR')))";
 		$query=$this->pgsql->Ejecutar($sqlx);
 	    if($this->pgsql->Total_Filas($query)==0){
-	    	$sql="UPDATE bienes_nacionales.trecuperacion SET estatus = '0', modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_recuperacion=$this->codigo_recuperacion";
+	    	$sql="UPDATE bienes_nacionales.trecuperacion SET estatus = '0', modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_recuperacion=$this->codigo_reconstruccion";
 		    if($this->pgsql->Ejecutar($sql)!=null)
 				return true;
 		    else{
@@ -184,7 +184,7 @@ class recuperacion {
     public function Actualizar($user){
 	    $sql="UPDATE bienes_nacionales.trecuperacion SET fecha='$this->fecha',codigo_bien='$this->codigo_bien',
 	    codigo_ubicacion='$this->codigo_ubicacion',cedula_persona='$this->cedula_persona',cantidad='$this->cantidad',
-	    modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_recuperacion='$this->codigo_recuperacion'";
+	    modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_recuperacion='$this->codigo_reconstruccion'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{

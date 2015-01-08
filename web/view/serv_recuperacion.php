@@ -1,12 +1,12 @@
 <script type="text/javascript" src="js/chsb_recuperacion.js"></script>
 <?php
 require_once("../class/class_perfil.php");
+require_once('../class/class_bd.php'); 
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('recuperacion');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT r.codigo_recuperacion,TO_CHAR(fecha,'DD/MM/YYYY') AS fecha,
 	p.primer_nombre||' '||p.primer_apellido AS responsable,b.nro_serial||' '||b.nombre AS item 
@@ -104,7 +104,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione un tipo de adquisición" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -124,7 +123,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="selectpicker" data-live-search="true" title="Seleccione una ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'Y' ORDER BY codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
@@ -147,7 +145,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="cantidad">Cantidad a Recuperar</label>  
 					<div class="controls"> 
 						<input type="hidden" name="cantidad_max" id="cantidad_max" >
-						<input class="input-xlarge" type="text" title="Cantidad disponible a recuperar" name="cantidad_a_recuperar" id="cantidad" required >
+						<input class="input-xlarge" type="text" title="Cantidad disponible a recuperar" onKeyPress="return isNumberKey(event)" name="cantidad_a_recuperar" id="cantidad" required >
 					</div>  
 				</div>
 				<div class="table-responsive">
@@ -204,7 +202,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	}
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT *,TO_CHAR(fecha,'DD/MM/YYYY') as fecha 
 	FROM bienes_nacionales.trecuperacion 
@@ -235,7 +232,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la recuperación" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -258,7 +254,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'Y' ORDER BY codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
@@ -278,7 +273,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
 								LEFT JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item 
@@ -299,7 +293,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="cantidad">Cantidad a Recuperar</label>  
 					<div class="controls">
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT LAST(dm.valor_actual) AS existencia 
 							FROM inventario.tmovimiento m 
@@ -390,9 +383,40 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		</fieldset>  
 	</form>
 	<?php
+	if(isset($_SESSION['datos']['procesado']) && $_SESSION['datos']['procesado']=="Y"){
+		echo '<script language="javascript">
+		setTimeout(function(){
+			noty({
+		        text: stringUnicode("¿Desea ver el Formato de Impresión?"),
+		        layout: "center",
+		        type: "confirm",
+		        dismissQueue: true,
+		        animateOpen: {"height": "toggle"},
+		        animateClose: {"height": "toggle"},
+		        theme: "defaultTheme",
+		        closeButton: false,
+		        closeOnSelfClick: true,
+		        closeOnSelfOver: false,
+		        buttons: [
+		        {
+		            addClass: "btn btn-primary", text: "Sí", onClick: function($noty){
+		                $noty.close();
+						url = "../pdf/pdf_formato_recuperacion.php?p1='.$_SESSION['datos']['codigo_recuperacion'].'";
+						window.open(url, "_blank");
+		            }
+		        },
+		        {
+		            addClass: "btn btn-danger", text: "No", onClick: function($noty){
+		                $noty.close();
+		            }
+		        }
+		        ]
+		    });
+		},1000);
+			</script>';
+	}
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT r.codigo_recuperacion,TO_CHAR(r.fecha,'DD/MM/YYYY') AS fecha,
 	p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,

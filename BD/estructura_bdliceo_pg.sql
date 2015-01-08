@@ -550,6 +550,23 @@ LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro
 WHERE dm.sonlibros='Y'
 GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_isbn_libro,e.numero_edicion,l.titulo
 
+-- View Inventario Items Disponibles
+CREATE OR REPLACE VIEW inventario.vw_inventario_de_items_disponibles AS 
+SELECT cb.codigo_bien AS codigo_item_a_producir,
+ins.codigo_item AS codigo_item_a_usar,
+ins.codigo_ubicacion AS codigo_ubicacion_fuente,
+cb.item_base,
+sum(ins.existencia) AS cant_insumo_disponible,
+max(cb.cantidad) AS cant_necesaria,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_a_usar,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible_a_recuperar
+FROM inventario.vw_inventario ins
+JOIN bienes_nacionales.tconfiguracion_bien cb ON ins.codigo_item = cb.codigo_item
+JOIN inventario.tubicacion u ON ins.codigo_ubicacion = u.codigo_ubicacion
+WHERE ins.sonlibros = 'N'::bpchar AND u.itemsdefectuoso = 'N'::bpchar AND cb.item_base = 'Y'::bpchar
+GROUP BY cb.codigo_bien, ins.codigo_item, ins.codigo_ubicacion, cb.item_base;
+
 -- Fin Inventario
 
 -- Educacion

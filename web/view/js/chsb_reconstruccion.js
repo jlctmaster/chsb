@@ -9,9 +9,9 @@ function init(){
 	})
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
 	$('#cantidad').change(function(){
-		if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val())){
-			alert("¡Debe ingresar una cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
-		}else{
+		if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val()) && $('#codigo_bien').val()!="0"){
+			alert("¡La cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
+		}else if($('#codigo_bien').val()!="0"){
 			var Datos = {"lOpt":"BuscarDisponibilidadPorCant","codigo_bien":$('#codigo_bien').val(),"cantidad":$('#cantidad').val()};
 			obtenerCantidadDisponible(Datos);
 		}
@@ -28,7 +28,7 @@ function init(){
 	        	try{
 			        if(resp[0].msj==undefined){
 			        	$('#cantidad').val(resp[0].cant_disponible_a_recuperar);
-			        	$('#cantidad_max').val(resp[0].cant_disponible_a_recuperar);
+			        	$('#cantidad_max').val(resp[0].cant_disponible);
 			        	//	Guardamos resultado en arreglo para luego buscar las ubicaciones fuentes.
 			        	var arrayRegistros = new Array();
 			        	for(var pos=0;pos<resp.length;pos++){
@@ -88,15 +88,19 @@ function init(){
 		        	try{
 		        		if(resp[0].msj==undefined){
 		        			total_a_usar=parseInt(resp[0].existencia)-parseInt(total_a_usar);
-		        			console.log(records[i].item_a_usar+": "+total_a_usar+" => "+records[i].total_a_usar)
 			        		while(parseInt(total_a_usar)<parseInt(0)){
 			        			var Datos={"lOpt":"BuscarUbicacionFuente","codigo_item":records[i].codigo_item,"cantidad":total_a_usar}
 			        			var newubicacion = ubicacionFuente(Datos);
 			        			total_a_usar=parseInt(newubicacion[0].existencia)-parseInt(total_a_usar);
-			        			console.log(records[i].item_a_usar+": "+total_a_usar+" => "+records[i].total_a_usar)
-			        			arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":newubicacion[0].existencia,"codigo_ubicacion":newubicacion[0].codigo_ubicacion,"ubicacion":newubicacion[0].ubicacion});
+			        			if(parseInt(total_a_usar)==parseInt(0))
+			        				arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":newubicacion[0].existencia,"codigo_ubicacion":newubicacion[0].codigo_ubicacion,"ubicacion":newubicacion[0].ubicacion});
+			        			else
+			        				arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":total_a_usar,"codigo_ubicacion":newubicacion[0].codigo_ubicacion,"ubicacion":newubicacion[0].ubicacion});
 			        		}
-			        		arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":total_a_usar,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
+			        		if(parseInt(total_a_usar)==parseInt(0))
+			        			arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":resp[0].existencia,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
+			        		else if(parseInt(total_a_usar)>parseInt(0))
+			        			arreglo.push({"codigo_item":codigo_item,"item_a_usar":item_a_usar,"total_a_usar":records[i].total_a_usar,"codigo_ubicacion":resp[0].codigo_ubicacion,"ubicacion":resp[0].ubicacion});
 							//	Si todo ok reseteamos el valor de la variable global por si se ejecuto una transaccion que haya fallado..
 							ocurrioerror=false;
 		        		}
@@ -262,7 +266,7 @@ function init(){
 			send = false;
 		}
 		else if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val())){
-			alert("¡Debe ingresar una cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
+			alert("¡La cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
 			send = false;
 		}
 		else if(items && cantidad && cantidad_max && ubicacion){

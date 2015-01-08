@@ -1,7 +1,7 @@
 <?php
   
-      require_once("../librerias/fpdf/fpdf.php");
-      $servicio=$_GET['serv'];
+require_once("../librerias/fpdf/fpdf.php");
+  require_once("../class/class_bd.php");
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -182,7 +182,6 @@ function NbLines($w,$txt)
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
       $lobjPdf->SetWidths(array(17,30,40,25));
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT a.codigo_area, a.descripcion as area, d.descripcion as departamento, 
           (case a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end) as estatus
@@ -190,7 +189,6 @@ function NbLines($w,$txt)
           general.tarea as a
           INNER JOIN general.tdepartamento as d on d.codigo_departamento = a.codigo_area";
    $i=-1;
-   //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
@@ -205,7 +203,6 @@ function NbLines($w,$txt)
          $lobjPdf->SetTextColor(0,0,0); 
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
-    $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_area']),
          ucwords($tperfil['area']),

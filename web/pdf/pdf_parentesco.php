@@ -1,7 +1,8 @@
 <?php
-  
-      require_once("../librerias/fpdf/fpdf.php");
-      $servicio=$_GET['serv'];
+
+require_once("../librerias/fpdf/fpdf.php");
+  require_once("../class/class_bd.php");
+
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -181,7 +182,6 @@ function NbLines($w,$txt)
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
       $lobjPdf->SetWidths(array(17,30,25));
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT codigo_parentesco, descripcion, estatus, case estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
 FROM 
@@ -202,7 +202,6 @@ FROM
          $lobjPdf->SetTextColor(0,0,0); 
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
-    $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_parentesco']),
          ucwords($tperfil['descripcion']),

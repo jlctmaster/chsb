@@ -1,12 +1,12 @@
 <script type="text/javascript" src="js/chsb_asignacion.js"></script>
 <?php
 require_once("../class/class_perfil.php");
+require_once('../class/class_bd.php');
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('asignacion');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_asignacion,a.fecha_asignacion,p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable 
 	FROM bienes_nacionales.tasignacion a 
@@ -99,7 +99,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_persona' id='cedula_persona' required >
 							<option value=0>Seleccione un Responsable</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -145,7 +144,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nombre AS nombre_item 
 			FROM bienes_nacionales.tbien b 
@@ -164,7 +162,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación Origen'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
@@ -180,7 +177,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion_hasta[]' id='ubicacion_hasta_"+contador+"' title='Seleccione una Ubicación Destino'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT * FROM inventario.tubicacion WHERE estatus = '1'";
 			$query = $pgsql->Ejecutar($sql);
@@ -249,7 +245,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	}
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT *,TO_CHAR(fecha_asignacion,'DD/MM/YYYY') as fecha_asignacion 
 	FROM bienes_nacionales.tasignacion 
@@ -280,7 +275,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_persona' id='cedula_persona' required >
 							<option value=0>Seleccione un Responsable</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -413,7 +407,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nombre AS nombre_item 
 			FROM bienes_nacionales.tbien b 
@@ -432,7 +425,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación Origen'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
@@ -448,7 +440,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion_hasta[]' id='ubicacion_hasta_"+contador+"' title='Seleccione una Ubicación Destino'>"+
 			<?php
-			require_once("../class/class_bd.php");
 			$pgsql=new Conexion();
 			$sql = "SELECT * FROM inventario.tubicacion WHERE estatus = '1'";
 			$query = $pgsql->Ejecutar($sql);
@@ -485,7 +476,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_asignacion,TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion,
 	p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,

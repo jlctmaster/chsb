@@ -3,18 +3,16 @@ require_once("../librerias/fpdf/fpdf.php");
 require_once("../class/class_bd.php");
 session_start();
 class clsFpdf extends FPDF {
-  var $widths;
-  var $aligns;
-  //Cabecera de página
-public function Header(){
-    $this->Image("../images/cintillo.jpg" , 25 ,10, 170 , 25, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");
-    $this->Image("../images/logo.jpg" ,75,85,75,90, "JPG");
-
- 
-    		$this->Ln(25);
-    	$pgsql=new Conexion();
-    	$sql="SELECT DISTINCT TO_CHAR(a.fecha_adquisicion,'DD/MM/YYYY') as fecha,codigo_adquisicion,
-    	CASE a.tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion
+	var $widths;
+	var $aligns;
+	//Cabecera de página
+	public function Header(){
+		$this->Image("../images/cintillo.jpg" , 25 ,10, 170 , 25, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");
+		$this->Image("../images/logo.jpg" ,75,85,75,90, "JPG");
+		$this->Ln(25);
+		$pgsql=new Conexion();
+		$sql="SELECT DISTINCT TO_CHAR(a.fecha_adquisicion,'DD/MM/YYYY') as fecha,codigo_adquisicion,
+		CASE a.tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion
 		FROM inventario.tadquisicion a
 		WHERE a.codigo_adquisicion =".$pgsql->comillas_inteligentes($_GET['p1'])."";	
 		$data=$pgsql->Ejecutar($sql);
@@ -72,11 +70,12 @@ public function Header(){
 		$this->SetTextColor(0,0,0);
 		$this->Cell($anchura*2,$altura,$fila['codigo_adquisicion'][0],0,1,'L',$color_fondo);
 	}
-  //Pie de página
+
+	//Pie de página
 	public function Footer(){
 		$pgsql=new Conexion();
-    	$sql="SELECT e.primer_nombre||' '||e.primer_apellido AS elaborado_por,
-    	r.primer_nombre||' '||r.primer_apellido AS recibido_por
+		$sql="SELECT e.primer_nombre||' '||e.primer_apellido AS elaborado_por,
+		r.primer_nombre||' '||r.primer_apellido AS recibido_por
 		FROM inventario.tadquisicion a 
 		INNER JOIN seguridad.tusuario u ON a.creado_por = u.nombre_usuario 
 		INNER JOIN general.tpersona e ON u.cedula_persona = e.cedula_persona 
@@ -111,25 +110,23 @@ public function Header(){
 		$this->SetTextColor(0,0,0);     
 		$this->Cell(170);
 		$this->Cell(25,8,'Página '.$this->PageNo()."/{nb}",0,1,'C',true);
-	
-    //Fecha
+		//Fecha
+		//setlocale(LC_ALL,"es_VE.UTF8");
+		$this->Ln(-9);
+		$this->SetFont("Arial","I",6);
+		$avanzar=30;
+		$this->Cell($avanzar);
+		$empresa="Liceo Bolivariano Bicentenario de la Independencia de Venezuela";
+		$dir="Dirección: Complejo Habitacional Simon Bolivar, 3302 Acarigua";
+		$tel="Teléfono: 04168110432";
+		$empresa1="Todos los Derechos Reservados\"© 2014 FUNDABIT-DTIC.\"";
+		$this->Cell(130,4,$empresa,0,1,"C");
+		$this->Cell($avanzar);  
+		$this->Cell(130,4,$dir,0,1,"C");
+		$this->Cell($avanzar);  
+		$this->Cell(130,4,$tel,0,1,"C");
+	}
 
-    //setlocale(LC_ALL,"es_VE.UTF8");
-    $this->Ln(-9);
-    $this->SetFont("Arial","I",6);
-    $avanzar=30;
-    $this->Cell($avanzar);
-    $empresa="Liceo Bolivariano Bicentenario de la Independencia de Venezuela";
-    $dir="Dirección: Complejo Habitacional Simon Bolivar, 3302 Acarigua";
-    $tel="Teléfono: 04168110432";
-    $empresa1="Todos los Derechos Reservados\"© 2014 FUNDABIT-DTIC.\"";
-    $this->Cell(130,4,$empresa,0,1,"C");
-    $this->Cell($avanzar);  
-    $this->Cell(130,4,$dir,0,1,"C");
-    $this->Cell($avanzar);  
-    $this->Cell(130,4,$tel,0,1,"C");
-  }
-    
 	function SetWidths($w){
 		//Set the array of column widths
 		$this->widths=$w;
@@ -139,8 +136,7 @@ public function Header(){
 		//Set the array of column alignments
 		$this->aligns=$a;
 	}
- 
-	
+
 	function Row($data,$color){
 		//Calculate the height of the row
 		$nb=0;
@@ -158,7 +154,6 @@ public function Header(){
 			$y=$this->GetY();
 			//Draw the border
 			$this->Rect($x,$y,$w,$h);
-
 			//Print the text
 			if((count($data)-1)==$i && (strtolower($data[count($data)-1])=='desactivado'))        
 				$this->SetTextColor(255, 0, 0);
@@ -175,7 +170,7 @@ public function Header(){
 	function CheckPageBreak($h){
 		//If the height h would cause an overflow, add a new page immediately
 		if($this->GetY()+$h>$this->PageBreakTrigger)
-			$this->AddPage($this->CurOrientation);
+		$this->AddPage($this->CurOrientation);
 	}
 
 	function NbLines($w,$txt){
@@ -209,7 +204,7 @@ public function Header(){
 			if($l>$wmax){
 				if($sep==-1){
 					if($i==$j)
-					$i++;
+						$i++;
 				}
 				else
 					$i=$sep+1;
@@ -219,13 +214,12 @@ public function Header(){
 				$nl++;
 			}
 			else
-				$i++;
+			$i++;
 		}
 		return $nl;
 	}
 
-	public function RoundedRect($x, $y, $w, $h, $r, $style = '')
-	{
+	public function RoundedRect($x, $y, $w, $h, $r, $style = ''){
 		$k = $this->k;
 		$hp = $this->h;
 		if($style=='F')
@@ -239,7 +233,6 @@ public function Header(){
 		$xc = $x+$w-$r ;
 		$yc = $y+$r;
 		$this->_out(sprintf('%.2F %.2F l', $xc*$k,($hp-$y)*$k ));
-
 		$this->_Arc($xc + $r*$MyArc, $yc - $r, $xc + $r, $yc - $r*$MyArc, $xc + $r, $yc);
 		$xc = $x+$w-$r ;
 		$yc = $y+$h-$r;
@@ -263,108 +256,107 @@ public function Header(){
 	}
 }
 
-	//generar el listado 
-	setlocale(LC_ALL,"es_VE.UTF8");
-	$lobjPdf=new clsFpdf();
-	$lobjPdf->AddPage("P");
-	$lobjPdf->AliasNbPages();
-	$lobjPdf->Ln(15);
-	//Table with 20 rows and 5 columns
-	$lobjPdf->SetWidths(array(80,50,20));
-	$pgsql=new Conexion();
-	$sql="SELECT a.codigo_adquisicion,TO_CHAR(a.fecha_adquisicion,'DD/MM/YYYY') AS fecha_adquisicion,
-	CASE a.tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion, 
-	o.rif_organizacion||' - '||o.nombre AS organizacion, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
-	CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
-	da.cantidad,u.descripcion AS ubicacion,o.nombre,o.rif_organizacion,o.direccion,o.telefono
-	FROM inventario.tadquisicion a 
-	INNER JOIN general.torganizacion o ON a.rif_organizacion = o.rif_organizacion 
-	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
-	INNER JOIN inventario.tdetalle_adquisicion da ON a.codigo_adquisicion = da.codigo_adquisicion 
-	INNER JOIN inventario.tubicacion u ON da.codigo_ubicacion = u.codigo_ubicacion 
-	LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien AND a.sonlibros ='N' 
-	LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar AND a.sonlibros = 'Y' 
-	LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-	WHERE a.codigo_adquisicion =".$pgsql->comillas_inteligentes($_GET['p1']);
-	$i=-1;
-	$data=$pgsql->Ejecutar($sql);
-	if($pgsql->Total_Filas($data)!=0){
-		$filas=array();
-		while($rows=$pgsql->Respuesta($data)){
-			$filas['codigo_adquisicion'][]=$rows['codigo_adquisicion'];
-			$filas['fecha_adquisicion'][]=$rows['fecha_adquisicion'];
-			$filas['tipo_adquisicion'][]=$rows['tipo_adquisicion'];
-			$filas['organizacion'][]=$rows['organizacion'];
-			$filas['responsable'][]=$rows['responsable'];
-			$filas['item'][]=$rows['item'];
-			$filas['rif_organizacion'][]=$rows['rif_organizacion'];
-			$filas['nombre'][]=$rows['nombre'];
-			//$filas['almacen'][]=$rows['almacen'];
-			$filas['direccion'][]=$rows['direccion'];
-			$filas['telefono'][]=$rows['telefono'];
-			$filas['cantidad'][]=$rows['cantidad'];
-			$filas['ubicacion'][]=$rows['ubicacion'];
-		}
-		$lobjPdf->SetFillColor(0,0,140); 
-		$avnzar=18;
-		$altura=4;
-		$anchura=10;
-		$color_fondo=false;
-		$lobjPdf->Cell($avnzar*1.95);
-		$lobjPdf->SetFont('Arial','B',10);
-		$lobjPdf->SetTextColor(0,0,0);
-		$lobjPdf->Cell($anchura*2,$altura,'Razón Social: ',0,0,'R',$color_fondo);
-		$lobjPdf->SetFont('Arial','',9);
-		$lobjPdf->SetTextColor(0,0,0); 
-		$lobjPdf->Cell($anchura*2,$altura,$filas['nombre'][0],0,1,'L',$color_fondo);
-		$lobjPdf->Cell($avnzar*1.61);
-		$lobjPdf->SetFont('Arial','B',10);
-		$lobjPdf->SetTextColor(0,0,0);
-		$lobjPdf->Cell($anchura*2,$altura,'RIF: ',0,0,'L',$color_fondo);
-		$lobjPdf->SetFont('Arial','',9);
-		$lobjPdf->SetTextColor(0,0,0); 
-		$lobjPdf->Cell($avnzar-11);
-		$lobjPdf->Cell($anchura*2,$altura,$filas['rif_organizacion'][0],0,0,'L',$color_fondo);
-		$lobjPdf->Cell($avnzar+15);
-		$lobjPdf->SetFont('Arial','B',10);
-		$lobjPdf->SetTextColor(0,0,0);
-		$lobjPdf->Cell($anchura*2,$altura,'Telf: ',0,0,'L',$color_fondo);
-		$lobjPdf->SetFont('Arial','',9);
-		$lobjPdf->SetTextColor(0,0,0); 
-		$lobjPdf->Cell($avnzar-25);
-		$lobjPdf->Cell($anchura*1,$altura,$filas['telefono'][0],0,1,'L',$color_fondo);
-		$lobjPdf->Cell($avnzar*1.61);
-		$lobjPdf->SetFont('Arial','B',10);
-		$lobjPdf->SetTextColor(0,0,0);
-		$lobjPdf->Cell($anchura*2,$altura,'Dirección: ',0,0,'L',$color_fondo);
-		$lobjPdf->SetFont('Arial','',9);
-		$lobjPdf->SetTextColor(0,0,0); 
-		$lobjPdf->Cell($avnzar-11);
-		$lobjPdf->Cell($anchura*8,$altura,$filas['direccion'][0],0,1,'L',$color_fondo);
-		$lobjPdf->Ln(20);
-		$lobjPdf->Cell($avnzar);
-		$lobjPdf->SetFont("arial","B",10);
-		$lobjPdf->Row(array('Ubicación','Item','Cantidad'),false);
-		$lobjPdf->SetFont("arial","",10);
-		$lobjPdf->Cell($avnzar);
-		$lobjPdf->aligns[2]='R';
-		$total=0;
-		for($i=0;$i<count($filas['codigo_adquisicion']);$i++){
-			$total+=$filas['cantidad'][$i];
-			$lobjPdf->Row(array(
-			$filas['ubicacion'][$i],
-			$filas['item'][$i],
-			$filas['cantidad'][$i]),false);
-			$lobjPdf->Cell($avnzar);
-      
-		}
-		$lobjPdf->SetWidths(array(130,20));
-		$lobjPdf->SetFont("arial","B",10 ,'R');
-		$lobjPdf->Cell($avnzar*7.22,$altura,'TOTAL:',1,0,'R',$color_fondo);
-		$lobjPdf->Cell($avnzar*1.12,$altura,$total,1,1,'R',$color_fondo);
-		$lobjPdf->ln(10);
-		$lobjPdf->Output('documento',"I");
-	}else{
-		echo "ERROR AL GENERAR ESTE REPORTE!";          
+//generar el listado 
+setlocale(LC_ALL,"es_VE.UTF8");
+$lobjPdf=new clsFpdf();
+$lobjPdf->AddPage("P");
+$lobjPdf->AliasNbPages();
+$lobjPdf->Ln(15);
+//Table with 20 rows and 5 columns
+$lobjPdf->SetWidths(array(80,50,20));
+$pgsql=new Conexion();
+$sql="SELECT a.codigo_adquisicion,TO_CHAR(a.fecha_adquisicion,'DD/MM/YYYY') AS fecha_adquisicion,
+CASE a.tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion, 
+o.rif_organizacion||' - '||o.nombre AS organizacion, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
+CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
+da.cantidad,u.descripcion AS ubicacion,o.nombre,o.rif_organizacion,o.direccion,o.telefono
+FROM inventario.tadquisicion a 
+INNER JOIN general.torganizacion o ON a.rif_organizacion = o.rif_organizacion 
+INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
+INNER JOIN inventario.tdetalle_adquisicion da ON a.codigo_adquisicion = da.codigo_adquisicion 
+INNER JOIN inventario.tubicacion u ON da.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien AND a.sonlibros ='N' 
+LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar AND a.sonlibros = 'Y' 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+WHERE a.codigo_adquisicion =".$pgsql->comillas_inteligentes($_GET['p1']);
+$i=-1;
+$data=$pgsql->Ejecutar($sql);
+if($pgsql->Total_Filas($data)!=0){
+	$filas=array();
+	while($rows=$pgsql->Respuesta($data)){
+		$filas['codigo_adquisicion'][]=$rows['codigo_adquisicion'];
+		$filas['fecha_adquisicion'][]=$rows['fecha_adquisicion'];
+		$filas['tipo_adquisicion'][]=$rows['tipo_adquisicion'];
+		$filas['organizacion'][]=$rows['organizacion'];
+		$filas['responsable'][]=$rows['responsable'];
+		$filas['item'][]=$rows['item'];
+		$filas['rif_organizacion'][]=$rows['rif_organizacion'];
+		$filas['nombre'][]=$rows['nombre'];
+		//$filas['almacen'][]=$rows['almacen'];
+		$filas['direccion'][]=$rows['direccion'];
+		$filas['telefono'][]=$rows['telefono'];
+		$filas['cantidad'][]=$rows['cantidad'];
+		$filas['ubicacion'][]=$rows['ubicacion'];
 	}
+	$lobjPdf->SetFillColor(0,0,140); 
+	$avnzar=18;
+	$altura=4;
+	$anchura=10;
+	$color_fondo=false;
+	$lobjPdf->Cell($avnzar*1.95);
+	$lobjPdf->SetFont('Arial','B',10);
+	$lobjPdf->SetTextColor(0,0,0);
+	$lobjPdf->Cell($anchura*2,$altura,'Razón Social: ',0,0,'R',$color_fondo);
+	$lobjPdf->SetFont('Arial','',9);
+	$lobjPdf->SetTextColor(0,0,0); 
+	$lobjPdf->Cell($anchura*2,$altura,$filas['nombre'][0],0,1,'L',$color_fondo);
+	$lobjPdf->Cell($avnzar*1.61);
+	$lobjPdf->SetFont('Arial','B',10);
+	$lobjPdf->SetTextColor(0,0,0);
+	$lobjPdf->Cell($anchura*2,$altura,'RIF: ',0,0,'L',$color_fondo);
+	$lobjPdf->SetFont('Arial','',9);
+	$lobjPdf->SetTextColor(0,0,0); 
+	$lobjPdf->Cell($avnzar-11);
+	$lobjPdf->Cell($anchura*2,$altura,$filas['rif_organizacion'][0],0,0,'L',$color_fondo);
+	$lobjPdf->Cell($avnzar+15);
+	$lobjPdf->SetFont('Arial','B',10);
+	$lobjPdf->SetTextColor(0,0,0);
+	$lobjPdf->Cell($anchura*2,$altura,'Telf: ',0,0,'L',$color_fondo);
+	$lobjPdf->SetFont('Arial','',9);
+	$lobjPdf->SetTextColor(0,0,0); 
+	$lobjPdf->Cell($avnzar-25);
+	$lobjPdf->Cell($anchura*1,$altura,$filas['telefono'][0],0,1,'L',$color_fondo);
+	$lobjPdf->Cell($avnzar*1.61);
+	$lobjPdf->SetFont('Arial','B',10);
+	$lobjPdf->SetTextColor(0,0,0);
+	$lobjPdf->Cell($anchura*2,$altura,'Dirección: ',0,0,'L',$color_fondo);
+	$lobjPdf->SetFont('Arial','',9);
+	$lobjPdf->SetTextColor(0,0,0); 
+	$lobjPdf->Cell($avnzar-11);
+	$lobjPdf->Cell($anchura*8,$altura,$filas['direccion'][0],0,1,'L',$color_fondo);
+	$lobjPdf->Ln(20);
+	$lobjPdf->Cell($avnzar);
+	$lobjPdf->SetFont("arial","B",10);
+	$lobjPdf->Row(array('Ubicación','Item','Cantidad'),false);
+	$lobjPdf->SetFont("arial","",10);
+	$lobjPdf->Cell($avnzar);
+	$lobjPdf->aligns[2]='R';
+	$total=0;
+	for($i=0;$i<count($filas['codigo_adquisicion']);$i++){
+		$total+=$filas['cantidad'][$i];
+		$lobjPdf->Row(array(
+		$filas['ubicacion'][$i],
+		$filas['item'][$i],
+		$filas['cantidad'][$i]),false);
+		$lobjPdf->Cell($avnzar);
+	}
+	$lobjPdf->SetWidths(array(130,20));
+	$lobjPdf->SetFont("arial","B",10 ,'R');
+	$lobjPdf->Cell($avnzar*7.22,$altura,'TOTAL:',1,0,'R',$color_fondo);
+	$lobjPdf->Cell($avnzar*1.12,$altura,$total,1,1,'R',$color_fondo);
+	$lobjPdf->ln(10);
+	$lobjPdf->Output('documento',"I");
+}else{
+	echo "ERROR AL GENERAR ESTE REPORTE!";          
+}
 ?>

@@ -89,6 +89,8 @@ if($lOpt=='Registrar'){
 
   if($confirmacion==1){
     $asignacion->Transaccion('finalizado');
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_asignacion']=$asignacion->codigo_asignacion();
     $_SESSION['datos']['mensaje']="¡La Asignación ha sido registrada con éxito!";
     header("Location: ../view/menu_principal.php?asignacion&Opt=2");
   }else{

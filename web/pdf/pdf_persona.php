@@ -1,7 +1,8 @@
 <?php
-  
-      require_once("../librerias/fpdf/fpdf.php");
-      $servicio=$_GET['serv'];
+
+require_once("../librerias/fpdf/fpdf.php");
+  require_once("../class/class_bd.php");
+
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -188,7 +189,6 @@ function NbLines($w,$txt)
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
       $lobjPdf->SetWidths(array(20,45,15,26,26,40,26,26,30,20));
-  require_once("../class/class_bd.php");
   $pgsql=new Conexion();
     $sql="SELECT p.cedula_persona, p.primer_nombre, p.segundo_nombre, p.primer_apellido, p.segundo_apellido, p.sexo, p.fecha_nacimiento, l.descripcion as lugar_nacimiento, p.direccion, p.telefono_local, 
                  p.telefono_movil, p.estatus, t.descripcion as tipo_persona, 
@@ -217,7 +217,6 @@ function NbLines($w,$txt)
          $lobjPdf->SetTextColor(0,0,0); 
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
-    $prueba[] = $tperfil['estado'];
          $lobjPdf->Row(array(
          ucwords($tperfil['cedula_persona']),
          ucwords($tperfil['fullname']),

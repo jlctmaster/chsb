@@ -1,12 +1,12 @@
 <script type="text/javascript" src="js/chsb_reconstruccion.js"></script>
 <?php
 require_once("../class/class_perfil.php");
+require_once('../class/class_bd.php');
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('reconstruccion');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT r.codigo_recuperacion,TO_CHAR(fecha,'DD/MM/YYYY') AS fecha,
 	p.primer_nombre||' '||p.primer_apellido AS responsable,b.nro_serial||' '||b.nombre AS item 
@@ -46,9 +46,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['item'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
-						echo '<td><a href="?reconstruccion&Opt=3&codigo_recuperacion='.$filas['codigo_recuperacion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+						echo '<td><a href="?reconstruccion&Opt=3&codigo_reconstruccion='.$filas['codigo_recuperacion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
 						else if($a[$x]['orden']=='5') //Imprimir o Ver el Registro
-						echo '<td><a href="?reconstruccion&Opt=4&codigo_recuperacion='.$filas['codigo_recuperacion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+						echo '<td><a href="?reconstruccion&Opt=4&codigo_reconstruccion='.$filas['codigo_recuperacion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
 					}
 					echo "</tr>";
 				}
@@ -86,10 +86,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<legend><center>Vista: RECONSTRUCCIÓN</center></legend>		
 			<div id="paginador" class="enjoy-css">
 				<div class="control-group">  
-					<label class="control-label" for="codigo_recuperacion">Código</label>  
+					<label class="control-label" for="codigo_reconstruccion">Código</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input class="input-xlarge" title="el Código del reconstruccion es generado por el sistema" name="codigo_recuperacion" id="codigo_recuperacion" type="text" readonly /> 
+						<input class="input-xlarge" title="el Código del reconstruccion es generado por el sistema" name="codigo_reconstruccion" id="codigo_reconstruccion" type="text" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
@@ -104,7 +104,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -124,7 +123,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="bootstrap-select form-control" title="Seleccione una ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'N' ORDER BY codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
@@ -141,7 +139,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="bootstrap-select form-control" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT i.codigo_item,i.item 
 								FROM inventario.vw_inventario i 
@@ -161,7 +158,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="cantidad">Cantidad a Recuperar</label>  
 					<div class="controls"> 
 						<input type="hidden" name="cantidad_max" id="cantidad_max" >
-						<input class="input-xlarge" type="text" title="Cantidad disponible a recuperar" name="cantidad_a_recuperar" id="cantidad" required >
+						<input class="input-xlarge" type="text" title="Cantidad disponible a recuperar" onKeyPress="return isNumberKey(event)" name="cantidad_a_recuperar" id="cantidad" required >
 					</div>  
 				</div>
 				<div class="table-responsive">
@@ -218,11 +215,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	}
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT *,TO_CHAR(fecha,'DD/MM/YYYY') as fecha 
 	FROM bienes_nacionales.trecuperacion 
-	WHERE esrecuperacion='N' AND codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_recuperacion']);
+	WHERE esrecuperacion='N' AND codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_reconstruccion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -231,10 +227,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<legend><center>Vista: RECONSTRUCCIÓN</center></legend>		
 			<div id="paginador" class="enjoy-css">
 				<div class="control-group">  
-					<label class="control-label" for="codigo_recuperacion">Código</label>  
+					<label class="control-label" for="codigo_reconstruccion">Código</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-						<input class="input-xlarge" title="el Código del reconstrucción es generado por el sistema" name="codigo_recuperacion" id="codigo_recuperacion" type="text" value="<?=$row['codigo_recuperacion']?>" readonly /> 
+						<input class="input-xlarge" title="el Código del reconstrucción es generado por el sistema" name="codigo_reconstruccion" id="codigo_reconstruccion" type="text" value="<?=$row['codigo_recuperacion']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -249,7 +245,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
@@ -272,9 +267,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
-								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'Y' ORDER BY codigo_ubicacion ASC";
+								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'N' ORDER BY codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($row['codigo_ubicacion']==$rows['codigo_ubicacion'])
@@ -292,7 +286,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Reconstruir" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Reconstruir</option>
 							<?php
-								require_once('../class/class_bd.php');
 								$pgsql = new Conexion();
 								$sql = "SELECT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
 								LEFT JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item 
@@ -313,7 +306,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="cantidad">Cantidad a Reconstruir</label>  
 					<div class="controls">
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT LAST(dm.valor_actual) AS existencia 
 							FROM inventario.tmovimiento m 
@@ -342,11 +334,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							$pgsql=new Conexion();
 							$sql = "SELECT dr.codigo_item, dr.cantidad, dr.codigo_ubicacion,
 							b.nro_serial||' '||b.nombre AS item,u.descripcion AS ubicacion 
-							FROM bienes_nacionales.tdetalle_reconstruccion dr 
+							FROM bienes_nacionales.tdetalle_recuperacion dr 
 							INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien 
 							INNER JOIN inventario.tubicacion u ON dr.codigo_ubicacion = u.codigo_ubicacion 
-							WHERE dr.codigo_recuperacion = '".$pgsql->comillas_inteligentes($_GET['codigo_recuperacion'])."' 
-							ORDER BY dr.codigo_detalle_reconstruccion ASC";
+							WHERE dr.codigo_recuperacion = '".$pgsql->comillas_inteligentes($_GET['codigo_reconstruccion'])."' 
+							ORDER BY dr.codigo_detalle_recuperacion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							$con=0;
 							while ($tupla = $pgsql->Respuesta($query)){
@@ -406,7 +398,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT r.codigo_recuperacion,TO_CHAR(r.fecha,'DD/MM/YYYY') AS fecha,
 	p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
@@ -414,12 +405,12 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item,dr.cantidad 
 	FROM bienes_nacionales.trecuperacion r 
 	INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
-	INNER JOIN bienes_nacionales.tdetalle_reconstruccion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
+	INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
 	INNER JOIN inventario.tubicacion uo ON r.codigo_ubicacion = uo.codigo_ubicacion 
 	INNER JOIN inventario.tubicacion u ON dr.codigo_ubicacion = u.codigo_ubicacion 
 	INNER JOIN bienes_nacionales.tbien br ON r.codigo_bien = br.codigo_bien 
 	INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien 
-	WHERE r.esrecuperacion='N' AND r.codigo_recuperacion =".$pgsql->comillas_inteligentes($_GET['codigo_recuperacion']);
+	WHERE r.esrecuperacion='N' AND r.codigo_recuperacion =".$pgsql->comillas_inteligentes($_GET['codigo_reconstruccion']);
 	$query = $pgsql->Ejecutar($sql);
 	while($obj=$pgsql->Respuesta($query)){
 		$row[]=$obj;
