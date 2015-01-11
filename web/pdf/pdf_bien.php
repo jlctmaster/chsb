@@ -1,8 +1,7 @@
 <?php
 
 require_once("../librerias/fpdf/fpdf.php");
-  require_once("../class/class_bd.php");
-
+require_once("../class/class_bd.php");
    session_start();
   class clsFpdf extends FPDF {
      var $widths;
@@ -13,28 +12,23 @@ require_once("../librerias/fpdf/fpdf.php");
   
    $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   $this->Ln(55);  
    $this->SetFont('Arial','B',12);
-   $this->Cell(0,6,'LISTADO DE LAS PERSONAS',0,1,"C");
+   $this->Cell(0,6,'LISTADO DE LOS BIENES NACIONALES',0,1,"C");
    $this->Ln(8);
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=2;
+         $avnzar=40;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
-                $this->Cell($avnzar); 
-      $this->Cell($anchura*2,$altura,'CÉDULA',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*4+5,$altura,'NOMBRES Y APELLIDOS',1,0,'L',$color_fondo);  
-      $this->Cell($anchura*1+5,$altura,'SEXO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'FECHA NAC.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'LUGAR NAC.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*4,$altura,'DIRECCION',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'TELF. LOCAL',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'TELF MOVIL',1,0,'L',$color_fondo);
-      $this->Cell($anchura*3,$altura,'TIPO PERSONA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+         $this->Cell($avnzar);
+      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*5,$altura,'BIEN',1,0,'C',$color_fondo);
+      $this->Cell($anchura*4,$altura,'Nº SERIAL',1,0,'C',$color_fondo);
+      $this->Cell($anchura*4,$altura,'TIPO BIEN',1,0,'C',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -188,25 +182,17 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,45,15,26,26,40,26,26,30,20));
+      $lobjPdf->SetWidths(array(20,50,40,40,26));
   $pgsql=new Conexion();
-    $sql="SELECT e.cedula_persona, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.sexo, e.fecha_nacimiento, l.descripcion as lugar_nacimiento, e.direccion, e.telefono_local, 
-                 e.telefono_movil, e.estatus, t.descripcion as tipo_persona, 
-                case 
-                when segundo_nombre is not null and segundo_apellido is not null then INITCAP(primer_nombre||' '||segundo_nombre||' '||primer_apellido||' '||segundo_apellido) 
-                when segundo_nombre is not null and segundo_apellido is null then INITCAP(primer_nombre||' '||segundo_nombre||' '||primer_apellido) 
-                when segundo_nombre is null and segundo_apellido is not null then INITCAP(primer_nombre||' '||primer_apellido||' '||segundo_apellido)
-                else INITCAP(primer_nombre||' '||primer_apellido) end as fullname, 
-                CASE e.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
-          FROM general.tpersona e
-          INNER JOIN general.ttipo_persona as t on t.codigo_tipopersona = e.codigo_tipopersona 
-          INNER JOIN general.tparroquia as l on l.codigo_parroquia = e.lugar_nacimiento";
+    $sql="SELECT b.codigo_bien,b.nombre,b.nro_serial,t.descripcion AS tipo_bien, 
+(CASE b.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus
+ FROM bienes_nacionales.tbien b
+INNER JOIN bienes_nacionales.ttipo_bien AS t ON b.codigo_tipo_bien = t.codigo_tipo_bien";
    $i=-1;
-   //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=2;
+         $avnzar=40;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -218,15 +204,10 @@ function NbLines($w,$txt)
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
          $lobjPdf->Row(array(
-         ucwords($tperfil['cedula_persona']),
-         ucwords($tperfil['fullname']),
-         ucwords($tperfil['sexo']),
-         ucwords($tperfil['fecha_nacimiento']),
-         ucwords($tperfil['lugar_nacimiento']),
-         ucwords($tperfil['direccion']),
-         ucwords($tperfil['telefono_local']),
-         ucwords($tperfil['telefono_movil']),
-         ucwords($tperfil['tipo_persona']),
+         ucwords($tperfil['codigo_bien']),
+         ucwords($tperfil['nombre']),
+         ucwords($tperfil['nro_serial']),
+         ucwords($tperfil['tipo_bien']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

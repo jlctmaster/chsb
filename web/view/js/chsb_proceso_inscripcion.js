@@ -1,6 +1,19 @@
 $(document).ready(init);
 function init(){
 
+	$('#btnImprimirTodos').click(function(){
+		imprimirRegistros();
+	})
+
+	function imprimirRegistros(){
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?proceso_inscripcion');
+			//Función que procede a cambiar el estatus del Documento a Anular.
+			$('#BtnAnular').click(function(){
+				$('.dgcAlert').animate({opacity:0},50);
+			    $('.dgcAlert').css('display','none');
+				document.getElementById('Anular').innerHTML="";
+			})
+	}
 	//$('#rootwizard').bootstrap({'tabClass': 'nav nav-tabs'});
 
 	$('#tab2').click(function(){

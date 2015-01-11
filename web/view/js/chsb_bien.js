@@ -1,5 +1,6 @@
 $(document).ready(init);
 function init(){
+
 	$('#esconfigurable').click(function(){
 		if($('#esconfigurable').is(':checked'))
 			$('#tablaBienes').show();
@@ -13,6 +14,19 @@ function init(){
 
 	$('#btnGuardar').click(ValidarCampos);
 
+	$('#btnImprimirTodos').click(function(){
+		imprimirRegistros();
+	})
+
+	function imprimirRegistros(){
+		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?bien');
+			//Función que procede a cambiar el estatus del Documento a Anular.
+			$('#BtnAnular').click(function(){
+				$('.dgcAlert').animate({opacity:0},50);
+			    $('.dgcAlert').css('display','none');
+				document.getElementById('Anular').innerHTML="";
+			})
+	}
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),

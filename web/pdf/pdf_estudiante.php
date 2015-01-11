@@ -13,7 +13,7 @@ require_once("../librerias/fpdf/fpdf.php");
   
    $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   $this->Ln(55);  
    $this->SetFont('Arial','B',12);
-   $this->Cell(0,6,'LISTADO DE LAS PERSONAS',0,1,"C");
+   $this->Cell(0,6,'LISTADO DE LOS ESTUDIANTES',0,1,"C");
    $this->Ln(8);
     
     
@@ -33,8 +33,7 @@ require_once("../librerias/fpdf/fpdf.php");
       $this->Cell($anchura*4,$altura,'DIRECCION',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'TELF. LOCAL',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'TELF MOVIL',1,0,'L',$color_fondo);
-      $this->Cell($anchura*3,$altura,'TIPO PERSONA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -188,19 +187,15 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,45,15,26,26,40,26,26,30,20));
+      $lobjPdf->SetWidths(array(20,45,15,26,26,40,26,26,26));
   $pgsql=new Conexion();
-    $sql="SELECT e.cedula_persona, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.sexo, e.fecha_nacimiento, l.descripcion as lugar_nacimiento, e.direccion, e.telefono_local, 
-                 e.telefono_movil, e.estatus, t.descripcion as tipo_persona, 
-                case 
-                when segundo_nombre is not null and segundo_apellido is not null then INITCAP(primer_nombre||' '||segundo_nombre||' '||primer_apellido||' '||segundo_apellido) 
-                when segundo_nombre is not null and segundo_apellido is null then INITCAP(primer_nombre||' '||segundo_nombre||' '||primer_apellido) 
-                when segundo_nombre is null and segundo_apellido is not null then INITCAP(primer_nombre||' '||primer_apellido||' '||segundo_apellido)
-                else INITCAP(primer_nombre||' '||primer_apellido) end as fullname, 
-                CASE e.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
-          FROM general.tpersona e
-          INNER JOIN general.ttipo_persona as t on t.codigo_tipopersona = e.codigo_tipopersona 
-          INNER JOIN general.tparroquia as l on l.codigo_parroquia = e.lugar_nacimiento";
+    $sql="SELECT p.cedula_persona,p.primer_nombre||' '||p.segundo_nombre||' '||p.primer_apellido||' '||p.segundo_apellido AS fullname, p.sexo, p.fecha_nacimiento, 
+    l.descripcion as lugar_nacimiento, p.direccion, p.telefono_local, 
+                 p.telefono_movil,
+                CASE p.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus 
+  FROM general.tpersona p 
+  INNER JOIN general.tparroquia as l on l.codigo_parroquia = p.lugar_nacimiento
+  INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona=tp.codigo_tipopersona WHERE tp.descripcion ='ESTUDIANTE'";
    $i=-1;
    //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);
@@ -226,7 +221,6 @@ function NbLines($w,$txt)
          ucwords($tperfil['direccion']),
          ucwords($tperfil['telefono_local']),
          ucwords($tperfil['telefono_movil']),
-         ucwords($tperfil['tipo_persona']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

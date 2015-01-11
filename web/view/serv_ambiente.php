@@ -146,10 +146,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo_ambiente" required > 
 							<option value=0>Seleccione Tipo de Ambiente </option>
-							<option value="1" <? if($row['tipo_ambiente']=="1") {echo "selected";} ?> >LABORATORIO</option>
-							<option value="2" <? if($row['tipo_ambiente']=="2") {echo "selected";} ?> >CANCHA</option>
-							<option value="3" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> >DEPÓSITO</option>
-							<option value="4" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> >AULA DE CLASES</option>		
+							<option value="1" <? if($row['tipo_ambiente']=="1") {echo "selected";} ?> LABORATORIO</option>
+							<option value="2" <? if($row['tipo_ambiente']=="2") {echo "selected";} ?> CANCHA</option>
+							<option value="3" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> DEPÓSITO</option>
+							<option value="4" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> AULA DE CLASES</option>		
 						</select>
 					</div>
 				</div> 

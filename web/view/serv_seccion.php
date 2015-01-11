@@ -61,7 +61,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						<br/><br/>
 						<a href="../excel/excel_seccion.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
 						&nbsp;&nbsp;
-						<a href="<?php echo  '../pdf/pdf_seccion';?>" target="_blank"><img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"></a>
+						<a href="<?php echo  '../pdf/pdf_seccion.php';?>" target="_blank"><img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"></a>
 					</div>
 				</div>
 			</div>
