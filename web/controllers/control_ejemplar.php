@@ -12,12 +12,13 @@ if(isset($_POST['codigo_clasificacion']))
 
 if(isset($_POST['numero_edicion']))
   $numero_edicion=trim($_POST['numero_edicion']);
-  
+
 if(isset($_POST['codigo_isbn_libro']))
   $codigo_isbn_libro=trim($_POST['codigo_isbn_libro']);
 
+
 include_once("../class/class_ejemplar.php");
-$ejemplar=new ejemplar();
+$ejemplar=new ejemplars();
 if($lOpt=='Registrar'){
   $ejemplar->codigo_ejemplar($codigo_ejemplar);
   $ejemplar->codigo_clasificacion($codigo_clasificacion);
@@ -37,17 +38,17 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El ejemplar ha sido registrado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido registrada con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=2");
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el ejemplar!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Ejemplar!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=2");
   }
 }
 
 if($lOpt=='Modificar'){
   $ejemplar->codigo_ejemplar($codigo_ejemplar);
-  $ejemplar->codigo_clasificacion($codigo_clasificacion);
+  $ejemplar->codigo_clasificacion($codigo_clasificacion); 
   $ejemplar->numero_edicion($numero_edicion);
   $ejemplar->codigo_isbn_libro($codigo_isbn_libro);
   if($ejemplar->Actualizar($_SESSION['user_name']))
@@ -55,10 +56,10 @@ if($lOpt=='Modificar'){
   else
     $confirmacion=-1;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El ejemplar ha sido modificado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido modificada con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el ejemplar!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Ejemplar!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }
 }
@@ -70,10 +71,10 @@ if($lOpt=='Desactivar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El ejemplar ha sido desactivado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido desactivada con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el ejemplar!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Ejemplar!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }
 }
@@ -85,10 +86,10 @@ if($lOpt=='Activar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El ejemplar ha sido activado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido activada con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el ejemplar!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Ejemplar!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }
 }   

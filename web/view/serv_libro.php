@@ -190,7 +190,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_editorial">Editorial</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' required >
+					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' value="<?=$row['codigo_editorial']?>" required >
 						<option value=0>Seleccione un Editorial</option>
 						<?php
 							require_once('../class/class_bd.php');
@@ -210,7 +210,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_autor">Autor</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' required >
+					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' value="<?=$row['codigo_autor']?>" required >
 						<option value=0>Seleccione un Autor</option>
 						<?php
 							require_once('../class/class_bd.php');
@@ -230,18 +230,18 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_tema">Tema</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' required >
+					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' value="<?=$row['codigo_tema']?>" required >
 						<option value=0>Seleccione un Tema</option>
 						<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.ttema ORDER BY nombre ASC";
+							$sql = "SELECT * FROM biblioteca.ttema ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_tema']==$row['codigo_tema'])
-									echo "<option value=".$rows['codigo_tema']." selected >".$rows['nombre']."</option>";
+									echo "<option value=".$rows['codigo_tema']." selected >".$rows['descripcion']."</option>";
 								else
-									echo "<option value=".$rows['codigo_tema'].">".$rows['nombre']."</option>";
+									echo "<option value=".$rows['codigo_tema'].">".$rows['descripcion']."</option>";
 							}
 						?>
 					</select>

@@ -1,6 +1,6 @@
 <?php
 require_once("class_bd.php");
-class ejemplar {
+class ejemplars {
 	private $codigo_ejemplar; 
 	private $codigo_clasificacion;
 	private $numero_edicion;
@@ -70,13 +70,12 @@ class ejemplar {
    	public function Registrar($user){
 	    $sql="INSERT INTO biblioteca.tejemplar (codigo_clasificacion,numero_edicion,codigo_isbn_libro,creado_por,fecha_creacion) VALUES 
 	    ('$this->codigo_clasificacion','$this->numero_edicion','$this->codigo_isbn_libro','$user',NOW())";
-	   
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
 			return false;
-   	}
-   
+   	
+   }
     public function Activar($user){
 	    $sql="UPDATE biblioteca.tejemplar SET estatus = '1',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ejemplar='$this->codigo_ejemplar'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
@@ -86,7 +85,7 @@ class ejemplar {
    	}
 
     public function Desactivar($user){
-    	$sqlx="SELECT * FROM biblioteca.tejemplar e WHERE codigo_ejemplar = '$this->codigo_ejemplar '
+    	$sqlx="SELECT * FROM biblioteca.tejemplar e WHERE codigo_ejemplar = '$this->codigo_ejemplar'
     	AND (EXISTS (SELECT 1 FROM biblioteca.tlibro l WHERE l.codigo_ejemplar = e.codigo_ejemplar))";
 		$query=$this->pgsql->Ejecutar($sqlx);
 	    if($this->pgsql->Total_Filas($query)==0){
@@ -101,7 +100,8 @@ class ejemplar {
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE biblioteca.tejemplar SET codigo_clasificacion='$this->codigo_clasificacion',numero_edicion='$this->numero_edicion',codigo_isbn_libro='$this->codigo_isbn_libro',
+	    $sql="UPDATE biblioteca.tejemplar SET codigo_clasificacion='$this->codigo_clasificacion',numero_edicion='$this->numero_edicion',
+	    codigo_isbn_libro='$this->codigo_isbn_libro',
 		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ejemplar='$this->codigo_ejemplar'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

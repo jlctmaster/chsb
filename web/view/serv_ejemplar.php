@@ -11,7 +11,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$sql = "SELECT e.*,c.descripcion AS clasificacion,l.titulo As libro 
 	FROM biblioteca.tejemplar e
 	INNER JOIN biblioteca.tclasificacion c ON e.codigo_clasificacion = c.codigo_clasificacion 
-	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro ";
+	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 <fieldset>
@@ -23,8 +23,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<tr>
 						<th>Código</th>
 						<th>Clasificación</th>
-						<th>Libro</th>
 						<th>Número Edición</th>
+						<th>Libro</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -40,8 +40,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						echo '<tr>';
 						echo '<td>'.$filas['codigo_ejemplar'].'</td>';
 						echo '<td>'.$filas['clasificacion'].'</td>';
-						echo '<td>'.$filas['libro'].'</td>';
 						echo '<td>'.$filas['numero_edicion'].'</td>';
+						echo '<td>'.$filas['libro'].'</td>';
+						
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 								echo '<td><a href="?ejemplar&Opt=3&codigo_ejemplar='.$filas['codigo_ejemplar'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -159,7 +160,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_clasificacion">Clasificación</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' required >
+					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' value="<?=$row['codigo_clasificacion']?>" required >
 						<option value=0>Seleccione una Clasificación</option>
 						<?php
 							require_once('../class/class_bd.php');
@@ -185,7 +186,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_isbn_libro">Libro</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione el Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' required >
+					<select class="selectpicker" data-live-search="true" title="Seleccione el Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' value="<?=$row['codigo_isbn_libro']?>" required />
 						<option value=0>Seleccione el Libro</option>
 						<?php
 							require_once('../class/class_bd.php');
@@ -236,7 +237,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT *, c.descripcion as clasificacion
+	$sql = "SELECT *, c.descripcion as clasificacion,l.titulo as libro
 	FROM biblioteca.tejemplar e
 	INNER JOIN biblioteca.tclasificacion c ON e.codigo_clasificacion = c.codigo_clasificacion
 	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro  
@@ -279,7 +280,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>ISBN del Libro:</label>
 					</td>
 					<td>
-						<label><?=$row['codigo_isbn_libro']?></label>
+						<label><?=$row['libro']?></label>
 					</td>
 				</tr>
 			</table>
