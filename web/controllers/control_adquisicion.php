@@ -44,32 +44,29 @@ if($lOpt=='Registrar'){
   $adquisicion->sonlibros(comprobarCheckBox($sonlibros));
   $confirmacion=false;
   $adquisicion->Transaccion('iniciando');
-  if(!$adquisicion->Comprobar()){
-    if($adquisicion->Registrar($_SESSION['user_name'])){
-      if($adquisicion->EliminarAdquisiciones()){
-        if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
-          if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
-            $mov_inventario->fecha_movimiento($fecha_adquisicion);
-            $mov_inventario->tipo_movimiento('E');
-            $mov_inventario->numero_documento($adquisicion->codigo_adquisicion());
-            $mov_inventario->tipo_transaccion('IA'); // Siglas para identificar la tabla relacionada al movimiento Inventario Adquisicion (IA)
-            if($mov_inventario->RegistrarMovimiento($_SESSION['user_name'])){
-              $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
-              $con=0;
-              for($i=0;$i<count($_POST['items']);$i++){
-                $mov_inventario->codigo_item($_POST['items'][$i]);
-                $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
-                $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-                $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
-                $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
-                if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
-                  $con++;
-              }
-              if($con==count($_POST['items']))
-                $confirmacion=1;
-              else
-                $confirmacion=0;
+  if($adquisicion->Registrar($_SESSION['user_name'])){
+    if($adquisicion->EliminarAdquisiciones()){
+      if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
+        if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
+          $mov_inventario->fecha_movimiento($fecha_adquisicion);
+          $mov_inventario->tipo_movimiento('E');
+          $mov_inventario->numero_documento($adquisicion->codigo_adquisicion());
+          $mov_inventario->tipo_transaccion('IA'); // Siglas para identificar la tabla relacionada al movimiento Inventario Adquisicion (IA)
+          if($mov_inventario->RegistrarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
+            $con=0;
+            for($i=0;$i<count($_POST['items']);$i++){
+              $mov_inventario->codigo_item($_POST['items'][$i]);
+              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
+              $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
+              $mov_inventario->sonlibros($sonlibros);
+              if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
+                $con++;
             }
+            if($con==count($_POST['items']))
+              $confirmacion=1;
             else
               $confirmacion=0;
           }
@@ -84,50 +81,9 @@ if($lOpt=='Registrar'){
     }
     else
       $confirmacion=0;
-  }else{
-    if($adquisicion->estatus()==1)
-      $confirmacion=0;
-    else{
-      if($adquisicion->Activar($_SESSION['user_name'])){
-        if($adquisicion->EliminarAdquisiciones()){
-          if(isset($_POST['items']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
-            if($adquisicion->InsertarAdquisiciones($_SESSION['user_name'],$_POST['items'],$_POST['cantidad'],$_POST['ubicacion'])){
-              $mov_inventario->fecha_movimiento($fecha_adquisicion);
-              $mov_inventario->tipo_movimiento('E');
-              $mov_inventario->numero_documento($adquisicion->codigo_adquisicion());
-              if($mov_inventario->RegistrarMovimiento($_SESSION['user_name'])){
-                $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
-                $con=0;
-                for($i=0;$i<count($_POST['items']);$i++){
-                  $mov_inventario->codigo_item($_POST['items'][$i]);
-                  $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
-                  $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-                  $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
-                  $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
-                  if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
-                    $con++;
-                }
-                if($con==count($_POST['items']))
-                  $confirmacion=1;
-                else
-                  $confirmacion=0;
-              }
-              else
-                $confirmacion=0;
-            }
-            else
-              $confirmacion=0;
-          }
-          else
-            $confirmacion=0;
-        }
-        else
-          $confirmacion=0;
-      }
-      else
-        $confirmacion=0;
-    }
   }
+  else
+    $confirmacion=0;
   if($confirmacion==1){
     $adquisicion->Transaccion('finalizado');
     $_SESSION['datos']['procesado']="Y";
@@ -167,6 +123,7 @@ if($lOpt=='Modificar'){
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
               $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->sonlibros($sonlibros);
               if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
                 $con++;
             }

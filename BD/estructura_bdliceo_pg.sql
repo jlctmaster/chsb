@@ -493,8 +493,9 @@ INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
 LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien 
 UNION ALL 
 -- Movimiento de Inventario por Recuperación de Materiales
-SELECT DISTINCT m.codigo_movimiento, 'Recuperación No '||r.codigo_recuperacion AS nro_documento, m.fecha_movimiento, 
-m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+SELECT DISTINCT m.codigo_movimiento,
+CASE r.esrecuperacion WHEN 'Y' THEN 'Recuperación No '::text || r.codigo_recuperacion ELSE 'Reconstrucción No '::text || r.codigo_recuperacion END AS nro_documento, 
+m.fecha_movimiento,m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
 FROM inventario.tmovimiento m 
 INNER JOIN bienes_nacionales.trecuperacion r ON m.numero_documento = r.codigo_recuperacion AND m.tipo_transaccion = 'BR' 
@@ -1207,7 +1208,6 @@ CREATE TABLE biblioteca.tprestamo
 	cota varchar(10) not null,
 	fecha_salida date not null,
 	fecha_entrada date not null,
-	cantidad numeric not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1259,7 +1259,6 @@ CREATE TABLE biblioteca.tentrega
 	cedula_responsable char(10) not null,
 	cedula_persona char(10) not null,
 	fecha_entrada date not null,
-	cantidad numeric not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,

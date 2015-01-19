@@ -1,20 +1,60 @@
 $(document).ready(init);
 function init(){
-		$('#btnPrintReport').click(function(){
+	
+	$('#btnPrintReport').click(function(){
         url = "../pdf/pdf_formato_entrega.php?p1="+$('#codigo_entrega').val();
 		window.open(url, '_blank');
 	})
-
 	$('#btnPrint').click(function(){
 		window.print();
 	});
-
 	$('#btnGuardar').click(ValidarCampos);
 
 	$('#btnImprimirTodos').click(function(){
 		imprimirRegistros();
 	})
+
+	$('#codigo_prestamo').change(function(){
+		var Datos = {'lOpt':'buscarDatosPrestamo','codigo_prestamo':$('#codigo_prestamo').val()};
+		buscarPrestamo(Datos);
+	})
 	
+	function buscarPrestamo(value){
+		$.ajax({
+	        url: '../controllers/control_entrega.php',
+	        type: 'POST',
+	        async: true,
+	        data: value,
+	        dataType: "json",
+	        success: function(resp){
+	        	$('#cedula_responsable option[value='+resp[0].cedula_responsable+']').attr('selected', 'selected');
+	        	$('#cedula_persona').val(resp[0].cedula_persona);
+	        	$('#estudiante').val(resp[0].estudiante);
+	        	$('#fecha_entrada').val(resp[0].fecha_entrada);
+	        	//	Eliminamos el detalle del elemento tablaDetEntrega para reescribir los valores.
+	        	$('#tablaDetEntrega tr[id]').remove();
+	        	for(var contador=0;contador<resp.length;contador++){
+	        		$("#tablaDetEntrega").append("<tr id='"+contador+"'>"+
+	    			"<td>"+
+					"<input type='hidden' name='ejemplar[]' id='ejemplar_"+contador+"' value='"+resp[contador].codigo_ejemplar+"' >"+
+					"<input type='hidden' name='ubicacion[]' id='ubicacion_"+contador+"' value='"+resp[contador].codigo_ubicacion+"' >"+
+					"<input class='input-xlarge' type='text' name='name_ejemplar[]' id='name_ejemplar_"+contador+"' title='Ejemplar a entregar' value='"+resp[contador].name_ejemplar+"' readonly >"+
+					"</td>"+
+					"<td>"+
+					"<input type='hidden' name='cantidad_max[]' id='cantidad_max_"+contador+"' value='"+resp[contador].cantidad+"'>"+
+					"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' title='Cantidad a recuperar' value='"+resp[contador].cantidad+"'>"+
+					"</td>"+
+	                "</tr>");
+	                //	Modificamos el width de la cantidad para este elemento
+	                $('#cantidad_'+contador).css("width","80px");
+	        	}
+	        },
+	        error: function(jqXHR, textStatus, errorThrown){
+	        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
+	        }
+        });
+	}
+
 	function imprimirRegistros(){
 		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?entrega');
 			//Función que procede a cambiar el estatus del Documento a Anular.
@@ -94,16 +134,15 @@ function init(){
 
 	function ValidarCampos(){
 		var send = true;
-		var items = document.getElementsByName('items[]');
+		var ejemplar = document.getElementsByName('ejemplar[]');
 		var cantidad = document.getElementsByName('cantidad[]');
+		var cantidad_max = document.getElementsByName('cantidad_max[]');
 		var ubicacion = document.getElementsByName('ubicacion[]');
-		var ubicacion_hasta = document.getElementsByName('ubicacion_hasta[]');
 		
 		if($('#codigo_prestamo').val()==0){
 			alert("¡Debe seleccionar un Préstamo!");
 			send = false;
 		}
-
 		else if($('#cedula_responsable').val()==0){
 			alert("¡Debe seleccionar una persona responsable!");
 			send = false;
@@ -112,49 +151,22 @@ function init(){
 			alert("¡Debe seleccionar una persona!");
 			send = false;
 		}
-		else if($('#codigo_area').val()==0){
-			alert("¡Debe seleccionar un Área!");
-			send = false;
-		}
-		else if($('#cota').val()==""){
-			alert("¡Debe Ingresar una Cota!");
-			send = false;
-		}
-
 		else if($('#fecha_entrada').val()==""){
 			alert("¡Debe seleccionar la Fecha de Entrada!");
 			send = false;
 		}
-		else if($('#cantidad').val()==""){
-			alert("¡Debe Ingresar la Cantidad!");
-			send = false;
-		}
-
-		else if(items && cantidad && ubicacion && ubicacion_hasta){
-			arregloI = new Array();
-			arregloU = new Array();
-			arregloUH = new Array();
-			for(i=0;i<items.length;i++){
-				arregloI.push($('#ejemplar'+i).val());
-				arregloU.push($('#ubicacion_'+i).val());
+		else if(ejemplar && cantidad && cantidad_max && ubicacion){
+			for(i=0;i<ejemplar.length;i++){
 				var Cant=$('#cantidad_'+i).val();
-				var CantDisponible=obtenerCantidadDisponible($('#ejemplar'+i).val(),$('#ubicacion_'+i).val());
-				if(Cant<=0){
-					alert('¡La cantidad del item '+$('#ejemplar'+i+' option:selected').text()+' debe ser mayor a 0!');
-					send = false;	
-				}
-				if(parseInt(CantDisponible) < parseInt(Cant)){
-					alert('¡La cantidad del item '+$('#ejemplar'+i+' option:selected').text()+' en la Ubicación '+$('#ubicacion_'+i+' option:selected').text()+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
+				var CantMax=$('#cantidad_max_'+i).val();
+				if(parseInt(Cant)>parseInt(CantMax)){
+					alert('¡La cantidad del Ejemplar '+$('#name_ejemplar_'+i+'').val()+' debe ser menor o igual a '+CantMax+'!');
 					send = false;
 				}
 			}
-			if(contarRepetidos(arregloI)>0 && contarRepetidos(arregloU)>0){
-				alert('¡La combinación Item + Ubicación Origen + Ubicación Destino no se puede repetir!')
-				send = false
-			}
 		}
-		else if(!items && !cantidad && !ubicacion && !ubicacion_hasta){
-			alert("¡Debe seleccionar almenos un item!");
+		else if(!ejemplar && !cantidad && !ubicacion){
+			alert("¡Debe Haber almenos un libro a entregar!");
 			send = false;
 		}
 
@@ -196,24 +208,5 @@ function init(){
 	        }
 	    }
 	    return con;
-	}
-
-	function obtenerCantidadDisponible(item,ubicacion){
-		var existencia=0;
-		value ={"lOpt":"BuscarCantidadDisponible","codigo_item":item,"codigo_ubicacion":ubicacion};
-		$.ajax({
-	        url: '../controllers/control_entrega.php',
-	        type: 'POST',
-	        async: false,
-	        data: value,
-	        dataType: "json",
-	        success: function(resp){
-	        	existencia = resp[0].existencia;
-	        },
-	        error: function(jqXHR, textStatus, errorThrown){
-	        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
-	        }
-        });
-        return existencia;
 	}
 }

@@ -110,7 +110,7 @@ class ejemplars {
    	}
 
    	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.tejemplar";
+	    $sql="SELECT * FROM biblioteca.tejemplar WHERE numero_edicion = '$this->numero_edicion' AND codigo_isbn_libro = '$this->codigo_isbn_libro'";
 		$query=$this->pgsql->Ejecutar($sql);
 	    if($this->pgsql->Total_Filas($query)!=0){
 			$tejemplar=$this->pgsql->Respuesta($query);

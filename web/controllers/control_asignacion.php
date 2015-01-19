@@ -43,6 +43,7 @@ if($lOpt=='Registrar'){
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
+              $mov_inventario->sonlibros('N');
               if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $conS++;
             }
@@ -63,6 +64,7 @@ if($lOpt=='Registrar'){
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
+              $mov_inventario->sonlibros('N');
               if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $conE++;
             }
@@ -124,6 +126,7 @@ if($lOpt=='Modificar'){
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
               $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->sonlibros('N');
               if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
                 $conS++;
             }
@@ -144,6 +147,7 @@ if($lOpt=='Modificar'){
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
               $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->sonlibros('N');
               if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
                 $conE++;
             }

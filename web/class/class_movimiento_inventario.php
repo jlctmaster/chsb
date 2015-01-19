@@ -12,6 +12,7 @@ class movimiento_inventario {
 	private $cantidad_movimiento;
 	private $valor_anterior;
 	private $valor_actual;
+    private $sonlibros;
 	private $estatus;
 	private $error; 
 	private $pgsql; 
@@ -28,6 +29,7 @@ class movimiento_inventario {
 		$this->cantidad_movimiento=null;
 		$this->valor_anterior=null;
 		$this->valor_actual=null;
+        $this->sonlibros=null;
 		$this->estatus=null;
 		$this->pgsql=new Conexion();
 	}
@@ -137,6 +139,15 @@ class movimiento_inventario {
 		if($Num_Parametro>0){
 			$this->valor_actual=func_get_arg(0);
 		}
+    }
+
+    public function sonlibros(){
+        $Num_Parametro=func_num_args();
+        if($Num_Parametro==0) return $this->sonlibros;
+
+        if($Num_Parametro>0){
+            $this->sonlibros=func_get_arg(0);
+        }
     }
 
     public function estatus(){
@@ -250,8 +261,8 @@ class movimiento_inventario {
     }
 
     public function RegistrarDetalleMovimiento($user){
-    	$sql="INSERT INTO inventario.tdetalle_movimiento (codigo_movimiento,codigo_item,codigo_ubicacion,cantidad_movimiento,valor_anterior,valor_actual,creado_por,fecha_creacion) 
-    	VALUES ('$this->codigo_movimiento','$this->codigo_item','$this->codigo_ubicacion','$this->cantidad_movimiento','$this->valor_anterior','$this->valor_actual','$user',NOW())";
+    	$sql="INSERT INTO inventario.tdetalle_movimiento (codigo_movimiento,codigo_item,codigo_ubicacion,cantidad_movimiento,valor_anterior,valor_actual,sonlibros,creado_por,fecha_creacion) 
+    	VALUES ('$this->codigo_movimiento','$this->codigo_item','$this->codigo_ubicacion','$this->cantidad_movimiento','$this->valor_anterior','$this->valor_actual','$this->sonlibros','$user',NOW())";
     	if($this->pgsql->Ejecutar($sql)!=null){
             return true;
         }
@@ -274,7 +285,7 @@ class movimiento_inventario {
 
     public function ModificarDetalleMovimiento($user){
     	$sql="UPDATE inventario.tdetalle_movimiento SET codigo_item='$this->codigo_item',codigo_ubicacion='$this->codigo_ubicacion',
-        cantidad_movimiento='$this->cantidad_movimiento',valor_actual='$this->valor_actual',modificado_por='$user',fecha_modificacion=NOW() 
+        cantidad_movimiento='$this->cantidad_movimiento',valor_actual='$this->valor_actual',sonlibros='$this->sonlibros',modificado_por='$user',fecha_modificacion=NOW() 
     	WHERE codigo_detalle_movimiento ='$this->codigo_detalle_movimiento'";
     	if($this->pgsql->Ejecutar($sql)!=null)
     		return true;

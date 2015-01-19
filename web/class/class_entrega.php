@@ -6,7 +6,6 @@ class entrega {
 	private $cedula_responsable;
 	private $cedula_persona;
 	private $fecha_entrada;
-	private $cantidad;
 	private $estatus; 
 	private $error; 
 	private $pgsql; 
@@ -17,7 +16,6 @@ class entrega {
 		$this->cedula_responsable=null;
 		$this->cedula_persona=null;
 		$this->fecha_entrada=null;
-		$this->cantidad=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -74,15 +72,6 @@ class entrega {
 		}
     }
 
-	public function cantidad(){
-    	$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->cantidad;
-     
-		if($Num_Parametro>0){
-	   		$this->cantidad=func_get_arg(0);
-	 	}
-    }
-
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -110,8 +99,8 @@ class entrega {
 	    }
 	}
 
-	public function InsertarEntregas($user,$ejemplar,$cantidad,$ubicacion){
-	    $sql="INSERT INTO biblioteca.tdetalle_entrega(codigo_entrega,codigo_ubicacion,codigo_ejemplar,cantidad,creado_por,fecha_creacion) VALUES ";
+	public function InsertarEntregas($user,$ejemplar,$ubicacion,$cantidad){
+	    $sql="INSERT INTO biblioteca.tdetalle_entrega(codigo_entrega,codigo_ejemplar,codigo_ubicacion,cantidad,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($ejemplar); $i++){
 	    	$sql.="('$this->codigo_entrega','".$ejemplar[$i]."','".$ubicacion[$i]."','".$cantidad[$i]."','$user',NOW()),";
 	    }
@@ -126,9 +115,8 @@ class entrega {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tentrega (codigo_prestamo,cedula_responsable,cedula_persona,fecha_entrada,cantidad,creado_por,fecha_creacion) VALUES 
-	    ('$this->codigo_prestamo','$this->cedula_responsable','$this->cedula_persona','$this->fecha_entrada','$this->cantidad','$user',NOW());";
-	    echo $sql; die();
+	    $sql="INSERT INTO biblioteca.tentrega (codigo_prestamo,cedula_responsable,cedula_persona,fecha_entrada,creado_por,fecha_creacion) VALUES 
+	    ('$this->codigo_prestamo','$this->cedula_responsable','$this->cedula_persona','$this->fecha_entrada','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_entrega FROM biblioteca.tentrega 
 	    	WHERE codigo_prestamo='$this->codigo_prestamo' AND cedula_persona = '$this->cedula_persona' 
@@ -146,7 +134,6 @@ class entrega {
 	    }
 	    else{
 	    	$this->error(pg_last_error());
-	    	echo $this->error()." 1 <br>";
 	    	return false;
 	    }
    	}
@@ -182,14 +169,39 @@ class entrega {
    
     public function Actualizar($user){
 	    $sql="UPDATE biblioteca.tentrega SET codigo_prestamo='$this->codigo_prestamo',cedula_responsable='$this->cedula_responsable',
-	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',cantidad='$this->cantidad',
-	    modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_entrega='$this->codigo_entrega'";
+	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',modificado_por='$user', fecha_modificacion=NOW() 
+	    WHERE codigo_entrega='$this->codigo_entrega'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{
 	    	$this->error(pg_last_error());
 	    	return false;
 	    }
+   	}
+
+   	public function buscarDatosPrestamo($prestamo){
+   		$sql="SELECT p.cedula_responsable,p.cedula_persona,p.cedula_persona||' '||per.primer_nombre||' '||per.primer_apellido AS estudiante,
+   		TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,dp.codigo_ejemplar,
+   		e.codigo_isbn_libro||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,dp.cantidad
+   		FROM biblioteca.tprestamo p 
+   		INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = p.codigo_prestamo 
+   		INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
+   		INNER JOIN biblioteca.tejemplar e ON dp.codigo_ejemplar = e.codigo_ejemplar 
+   		INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+   		WHERE p.codigo_prestamo = $prestamo 
+   		ORDER BY dp.codigo_detalle_prestamo ASC";
+   		$query = $this->pgsql->Ejecutar($sql);
+        while($Obj=$this->pgsql->Respuesta_assoc($query)){
+            $rows[]=array_map("html_entity_decode",$Obj);
+        }
+        if(!empty($rows)){
+            $json = json_encode($rows);
+        }
+        else{
+            $rows[] = array("msj" => "Error al Buscar Registros ");
+            $json = json_encode($rows);
+        }
+        return $json;
    	}
 }
 ?>

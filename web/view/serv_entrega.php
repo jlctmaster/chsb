@@ -91,7 +91,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 				<label class="control-label" for="codigo_prestamo">Préstamos:</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Préstamo" name='codigo_prestamo' id='codigo_prestamo' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Préstamo" name='codigo_prestamo' id='codigo_prestamo' required >
 						<option value=0>Seleccione un Préstamo</option>
 						<?php
 						require_once('../class/class_bd.php');
@@ -99,7 +99,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						$sql = "SELECT a.codigo_prestamo,a.cota||', '||a.fecha_entrada||' .'||
 						a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
 						FROM biblioteca.tprestamo a
-						INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona";
+						INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
+						WHERE NOT EXISTS(SELECT 1 FROM biblioteca.tentrega e WHERE a.codigo_prestamo = e.codigo_prestamo)";
 						$query = $pgsql->Ejecutar($sql);
 						while($row=$pgsql->Respuesta($query)){
 							echo "<option value=".$row['codigo_prestamo'].">".$row['prestamo']."</option>";
@@ -111,7 +112,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="cedula_responsable">Responsable de la Entrega</label>  
 						<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
+						<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
 							<option value=0>Seleccione un Responsable</option>
 							<?php
 								$pgsql = new Conexion();
@@ -130,20 +131,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Estudiante</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Estudiante" name='cedula_persona' id='cedula_persona' required >
-							<option value=0>Seleccione un Estudiante</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) LIKE '%estudiante%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-								}
-							?>
-						</select>
+						<input name="cedula_persona" id="cedula_persona" type="hidden"/>
+						<input class="input-xlarge" title="Estudiante que realiza la entrega" name="estudiante" id="estudiante" type="text" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -152,21 +141,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" readonly required />
 					</div>  
 				</div>
-				
-				<div class="control-group">  
-					<label class="control-label" for="cantidad">Cantidad</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la cantidad" name="cantidad_a_entregar" id="cantidad" type="text" required />
-					</div>  
-				</div>
-				
 				<div class="table-responsive">
 					<table id='tablaDetEntrega' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Ejemplar</label></td>
-							<td><label class="control-label" >Ubicación</label></td>
 							<td><label class="control-label" >Cantidad</label></td>
-							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 					</table>
 				</div>
@@ -180,69 +159,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			</div>  
 		</fieldset>  
 	</form>
-	<script type="text/javascript">
-		var ejemplar = document.getElementsByName('ejemplar[]');
-		var ubicacion = document.getElementsByName('ubicacion[]');
-		var cantidad = document.getElementsByName('cantidad[]');
-		var contador=ejemplar.length;
-		function agrega_campos(){
-			$("#tablaDetEntrega").append("<tr id='"+contador+"'>"+
-			"<td>"+
-			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) ejemplars 
-			FROM biblioteca.tejemplar b 
-			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
-			"<td>"+
-			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
-			"</td>"+
-			"</td>"+
-			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
-			"</td>"+
-			"<td>"+
-			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
-			"</td>"+
-			"</tr>");
-			contador++;
-		}
-
-		function elimina_me(elemento){
-			$("#"+elemento).remove();
-			for(var i=0;i<ejemplar.length;i++){
-				ejemplar[i].removeAttribute('id');
-				ubicacion[i].removeAttribute('id');
-				cantidad[i].removeAttribute('id');
-				
-			}
-			for(var i=0;i<ejemplar.length;i++){
-				ejemplar[i].setAttribute('id','ejemplar_'+i);
-				cantidad[i].setAttribute('id','cantidad_'+i);
-				ubicacion[i].setAttribute('id','ubicacion_'+i);
-			}
-		}
-	</script>
 	<?php
 	if(isset($_SESSION['datos']['procesado']) && $_SESSION['datos']['procesado']=="Y"){
 		echo '<script language="javascript">
@@ -367,13 +283,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<input class="input-xlarge" title="Ingrese la fecha de entrada del Préstamo" name="fecha_entrada" id="fecha_entrada" type="text" value="<?=$row['fecha_entrada']?>" readonly required />
 					</div>  
 				</div> 
- 				<div class="control-group">  
-					<label class="control-label" for="cantidad">Cantidad</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la Cantidad" maxlength=11 onKeyPress="return isNumberKey(event)" name="cantidad_a_entregar" id="cantidad" type="text" value="<?=$row['cantidad']?>" readonly required />
-					</div>  
-				</div>
-
 				</div>
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
@@ -435,6 +344,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
 								        </td>
 								      </tr>";
+								echo "<script>$('#cantidad_'+".$con.").css('width','80px');</script>";
 								$con++;
 							}
 			            ?>
@@ -512,6 +422,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 			"</td>"+
 			"</tr>");
+			//	Modificamos el width de la cantidad para este elemento
+		    $('#cantidad_'+contador).css("width","80px");
 			contador++;
 		}
 

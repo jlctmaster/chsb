@@ -109,7 +109,6 @@ function init(){
 			alert("¡Debe Ingresar una Cota!");
 			send = false;
 		}
-
 		else if($('#fecha_salida').val()==""){
 			alert("¡Debe Seleccionar la fecha de salida!");
 			send = false;
@@ -118,11 +117,6 @@ function init(){
 			alert("¡Debe seleccionar la Fecha de Entrada!");
 			send = false;
 		}
-		else if($('#cantidad').val()==""){
-			alert("¡Debe Ingresar la Cantidad!");
-			send = false;
-		}
-
 		else if(ejemplar && ubicacion){
 			arregloI = new Array();
 			arregloU = new Array();
@@ -159,6 +153,7 @@ function init(){
 				send = false;
 			}
 		}
+
 		if(send==true)
 			$('#form1').submit();
 	}
@@ -200,7 +195,10 @@ function init(){
 	        data: value,
 	        dataType: "json",
 	        success: function(resp){
-	        	existencia = resp[0].existencia;
+	        	if(resp[0].existencia!=undefined)
+	        		existencia = resp[0].existencia;
+	        	else
+	        		existencia = 0;
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){
 	        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)

@@ -219,6 +219,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 			"</td>"+
 			"</tr>");
+			//	Modificamos el width de la cantidad para este elemento
+		    $('#cantidad_'+contador).css("width","80px");
 			contador++;
 		}
 
@@ -421,6 +423,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
 								        </td>
 								      </tr>";
+								echo "<script>$('#cantidad_'+".$con.").css('width','80px');</script>";
 								$con++;
 							}
 			            ?>
@@ -504,6 +507,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 			"</td>"+
 			"</tr>");
+			//	Modificamos el width de la cantidad para este elemento
+		    $('#cantidad_'+contador).css("width","80px");
 			contador++;
 		}
 

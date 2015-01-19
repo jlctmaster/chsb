@@ -139,7 +139,7 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
-        //Agregar Objeto Calendario al input fecha_entrega.
+    //Agregar Objeto Calendario al input fecha_entrega.
     $('#fecha_entrega').datepicker({
         minDate: '-1m',
         maxDate: '0d',
@@ -148,8 +148,8 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
-        //Agregar Objeto Calendario al input fecha_entrada.
-    $('#fecha_entrada').datepicker({
+    //Agregar Objeto Calendario al input fecha_salida.
+    $('#fecha_salida').datepicker({
         minDate: '-1m',
         maxDate: '0d',
         showOn: 'both',
@@ -157,8 +157,8 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
-        //Agregar Objeto Calendario al input fecha_salida.
-    $('#fecha_salida').datepicker({
+    //Agregar Objeto Calendario al input fecha_entrada.
+    $('#fecha_entrada').datepicker({
         minDate: '-1m',
         maxDate: '0d',
         showOn: 'both',

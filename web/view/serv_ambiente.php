@@ -9,7 +9,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT codigo_ambiente, descripcion,
-			CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA' END  AS ambiente
+			CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA' ELSE 'BIBLIOTECA' END AS ambiente
 			FROM general.tambiente";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
@@ -101,7 +101,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<option value="1" >LABORATORIO</option>
 						<option value="2" >CANCHA</option>
 						<option value="3" >DEPÓSITO</option>	
-						<option value="4" >AULA DE CLASES</option>			
+						<option value="4" >AULA DE CLASES</option>	
+						<option value="5" >BIBLIOTECA</option>			
 					</select>
 				</div>
 			</div>   
@@ -146,10 +147,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo_ambiente" required > 
 							<option value=0>Seleccione Tipo de Ambiente </option>
-							<option value="1" <? if($row['tipo_ambiente']=="1") {echo "selected";} ?> LABORATORIO</option>
-							<option value="2" <? if($row['tipo_ambiente']=="2") {echo "selected";} ?> CANCHA</option>
-							<option value="3" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> DEPÓSITO</option>
-							<option value="4" <? if($row['tipo_ambiente']=="3") {echo "selected";} ?> AULA DE CLASES</option>		
+							<option value="1" <?php if($row['tipo_ambiente']=="1") {echo "selected";} ?>> LABORATORIO</option>
+							<option value="2" <?php if($row['tipo_ambiente']=="2") {echo "selected";} ?>> CANCHA</option>
+							<option value="3" <?php if($row['tipo_ambiente']=="3") {echo "selected";} ?>> DEPÓSITO</option>
+							<option value="4" <?php if($row['tipo_ambiente']=="4") {echo "selected";} ?>> AULA DE CLASES</option>	
+							<option value="5" <?php if($row['tipo_ambiente']=="5") {echo "selected";} ?>> BIBLIOTECA</option>		
 						</select>
 					</div>
 				</div> 
@@ -187,7 +189,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT codigo_ambiente, descripcion,
-          	case tipo_ambiente when '4' then 'AULA DE CLASES' when '2' then 'CANCHA' when '3' then 'DEPOSITO' when '1' then 'LABORATORIO' end as ambiente
+          	CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA' ELSE 'BIBLIOTECA' END AS ambiente
 			FROM general.tambiente	
 			WHERE codigo_ambiente =".$pgsql->comillas_inteligentes($_GET['codigo_ambiente']);
 	$query = $pgsql->Ejecutar($sql);

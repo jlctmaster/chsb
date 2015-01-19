@@ -8,7 +8,8 @@ $perfil->url('prestamo');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_prestamo,a.fecha_salida,a.fecha_entrada,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
+	$sql = "SELECT a.codigo_prestamo,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida,a.cota,
+		a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
 		a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona
 		FROM biblioteca.tprestamo a 
 		INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
@@ -22,11 +23,11 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 					<thead>
 						<tr>
-							<th>Código:</th>
-							<th>Fecha Salida:</th>
-							<th>Fecha Entrada:</th>
-							<th>Responsable:</th>
-
+							<th>Código</th>
+							<th>Cota</th>
+							<th>Fecha Salida</th>
+							<th>Responsable</th>
+							<th>Estudiante</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -41,10 +42,10 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						{
 							echo '<tr>';
 							echo '<td>'.$filas['codigo_prestamo'].'</td>';
+							echo '<td>'.$filas['cota'].'</td>';
 							echo '<td>'.$filas['fecha_salida'].'</td>';
-							echo '<td>'.$filas['fecha_entrada'].'</td>';
 							echo '<td>'.$filas['responsable'].'</td>';
-							
+							echo '<td>'.$filas['persona'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?prestamo&Opt=3&codigo_prestamo='.$filas['codigo_prestamo'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -160,19 +161,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<input class="input-xlarge" title="Ingrese la fecha de Salida" name="fecha_salida" id="fecha_salida" type="text" readonly required />
 					</div>  
 				</div>
-					<div class="control-group">  
+				<div class="control-group">  
 					<label class="control-label" for="fecha_entrada">Fecha de Entrada</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" readonly required />
-					</div>  
-				</div>
-					<div class="control-group">  
-					<label class="control-label" for="cantidad">Cantidad</label>  
-					<div class="controls">  
-						<input class="input-xlarge" maxlength=11 onKeyPress="return isNumberKey(event)" title="Ingrese la cantidad" name="cantidad_a_prestar" id="cantidad" type="text"  required />
-					</div>  
-				</div>
-
+					</div>
+				</div>  
 				<div class="table-responsive">
 					<table id='tablaDetPrestamo' class="table-bordered zebra-striped">
 						<tr>
@@ -217,12 +211,13 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"</select>"+
 			"</td>"+
 			"<td>"+
-			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion"+contador+"' title='Seleccione una Ubicación'>"+
+			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
 			<?php
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
+			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion 
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -230,12 +225,14 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			}
 			?>
 			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
+			"<input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 			"</td>"+
 			"</tr>");
+			//	Modificamos el width de la cantidad para este elemento
+		    $('#cantidad_'+contador).css("width","80px");
 			contador++;
 		}
 
@@ -320,7 +317,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
-									if($rows['cedula_persona']==$row['cedula_persona'])
+									if($rows['cedula_persona']==$row['cedula_responsable'])
 										echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
 									else
 										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
@@ -390,13 +387,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cantidad">Cantidad</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la Cantidad" maxlength=11 onKeyPress="return isNumberKey(event)" name="cantidad_a_prestar" id="cantidad" type="text" value="<?=$row['cantidad']?>" readonly required />
-					</div>  
-				</div>
-
-				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>
 				<div class="table-responsive">
@@ -450,12 +440,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        echo "</select>
 								        </td>
 								         <td>
-								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
+								        <input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
 								        </td>
 								        <td>
 								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
 								        </td>
 								      </tr>";
+								echo "<script>$('#cantidad_'+".$con.").css('width','80px');</script>";
 								$con++;
 							}
 			            ?>
@@ -525,12 +516,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"</select>"+
 			"</td>"+
 			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
+			"<input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 			"</td>"+
 			"</tr>");
+			//	Modificamos el width de la cantidad para este elemento
+		    $('#cantidad_'+contador).css("width","80px");
 			contador++;
 		}
 
