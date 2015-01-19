@@ -169,7 +169,7 @@ class entrega {
    
     public function Actualizar($user){
 	    $sql="UPDATE biblioteca.tentrega SET codigo_prestamo='$this->codigo_prestamo',cedula_responsable='$this->cedula_responsable',
-	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',modificado_por='$user', fecha_modificacion=NOW() 
+	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',modificado_por='$user',fecha_modificacion=NOW() 
 	    WHERE codigo_entrega='$this->codigo_entrega'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

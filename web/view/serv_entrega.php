@@ -195,9 +195,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha_entrada,'DD/MM/YYYY') as fecha_entrada 
-	FROM biblioteca.tentrega 
-	WHERE codigo_entrega=".$pgsql->comillas_inteligentes($_GET['codigo_entrega']);
+	$sql = "SELECT e.codigo_entrega,e.codigo_prestamo,TO_CHAR(e.fecha_entrada,'DD/MM/YYYY') as fecha_entrada,
+	e.cedula_responsable,e.cedula_persona,e.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS estudiante,
+	e.estatus 
+	FROM biblioteca.tentrega e 
+	INNER JOIN general.tpersona p ON e.cedula_persona = p.cedula_persona 
+	WHERE e.codigo_entrega=".$pgsql->comillas_inteligentes($_GET['codigo_entrega']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -233,49 +236,34 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						?>
 					</select>
 				</div>
-			<div class="control-group">  
-				<label class="control-label" for="cedula_responsable">Responsable de la Entrega</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
-						<option value=0>Seleccione un Responsable</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-							FROM general.tpersona p 
-							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['cedula_persona']==$row['cedula_persona'])
-									echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								else
-									echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-							}
-						?>
-					</select>
-				</div>  
-			</div>
 				<div class="control-group">  
-				<label class="control-label" for="cedula_persona">Estudiante</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Estudiante" name='cedula_persona' id='cedula_persona' required >
-						<option value=0>Seleccione un Estudiante</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-							FROM general.tpersona p 
-							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) LIKE '%estudiante%'";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['cedula_persona']==$row['cedula_persona'])
-									echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								else
-									echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
+					<label class="control-label" for="cedula_responsable">Responsable de la Entrega</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
+							<option value=0>Seleccione un Responsable</option>
+							<?php
+								$pgsql = new Conexion();
+								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
+								FROM general.tpersona p 
+								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
+								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
+								$query = $pgsql->Ejecutar($sql);
+								while($rows=$pgsql->Respuesta($query)){
+									if($rows['cedula_persona']==$row['cedula_responsable'])
+										echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
+									else
+										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
 								}
 							?>
 						</select>
-					</div>
+					</div>  
+				</div>
+				<div class="control-group">  
+					<label class="control-label" for="cedula_persona">Estudiante</label>  
+					<div class="controls">  
+						<input name="cedula_persona" id="cedula_persona" type="hidden" value="<?=$row['cedula_persona'];?>"/>
+						<input class="input-xlarge" title="Estudiante que realiza la entrega" name="estudiante" id="estudiante" type="text" value="<?=$row['estudiante'];?>" readonly required />
+					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_entrada">Fecha de Entrada</label>  
@@ -291,57 +279,32 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<table id='tablaDetEntrega' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Ejemplar</label></td>
-							<td><label class="control-label" >Ubicación</label></td>
 							<td><label class="control-label" >Cantidad</label></td>
-							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 						<?php
 							$pgsql=new Conexion();
-							$sql = "SELECT codigo_ejemplar, codigo_ubicacion, cantidad 
-							FROM biblioteca.tdetalle_entrega  WHERE codigo_entrega = '".$row['codigo_entrega']."' 
-							ORDER BY codigo_detalle_entrega ASC";
+							$sql = "SELECT de.codigo_ejemplar,de.codigo_ubicacion,de.cantidad,dp.cantidad AS cantidad_max,
+							e.codigo_isbn_libro||' '||l.titulo AS name_ejemplar 
+							FROM biblioteca.tentrega ent 
+							INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entrega 
+							INNER JOIN biblioteca.tprestamo p ON ent.codigo_prestamo = p.codigo_prestamo 
+							INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = dp.codigo_prestamo 
+							INNER JOIN biblioteca.tejemplar e ON de.codigo_ejemplar = e.codigo_ejemplar 
+							INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro  
+							WHERE de.codigo_entrega = '".$row['codigo_entrega']."' 
+							ORDER BY de.codigo_detalle_entrega ASC";
 							$query = $pgsql->Ejecutar($sql);
 							$con=0;
 							while ($row = $pgsql->Respuesta($query)){
 								echo "<tr id='".$con."'>
 								        <td>
-										<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_".$con."' title='Seleccione un Ejemplar' >
-										<option value='0'>Seleccione un Ejemplar</option>";
-										$sqlx = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) ejemplars 
-										FROM biblioteca.tejemplar b 
-										INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-										INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-																	$querys = $pgsql->Ejecutar($sqlx);
-										while ($rows = $pgsql->Respuesta($querys)){
-											if($rows['codigo_ejemplar']==$row['codigo_ejemplar']){
-												echo "<option value='".$rows['codigo_ejemplar']."' selected>".$rows['ejemplars']."</option>";
-											}else{
-												echo "<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>";
-											}
-										}
-										echo "</select>
+								        <input type='hidden' name='ejemplar[]' id='ejemplar_'".$con."' value='".$row['codigo_ejemplar']."' >
+								        <input type='hidden' name='ubicacion[]' id='ubicacion_'.$con.' value='".$row['codigo_ubicacion']."' >
+								        <input class='input-xlarge' type='text' name='name_ejemplar[]' id='name_ejemplar_".$con."' title='Ejemplar a entregar' value='".$row['name_ejemplar']."' readonly >
 								        </td>
 								        <td>
-								        <select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_".$con."' title='Seleccione una Ubicación Origen' >
-								        <option value='0'>Seleccione un Ejemplar</option>";
-								        $sqlz="SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-										FROM inventario.tubicacion u 
-										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
-								        $queryz = $pgsql->Ejecutar($sqlz);
-								          while ($rows = $pgsql->Respuesta($queryz)){
-								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
-								              echo "<option value='".$rows['codigo_ubicacion']."' selected>".$rows['descripcion']."</option>";
-								            }else{
-								              echo "<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>";
-								            }
-								          }
-								        echo "</select>
-								        </td>
-								        <td>
+								        <input type='hidden' name='cantidad_max[]' id='cantidad_max_".$con."' value='".$row['cantidad_max']."' >
 								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
-								        </td>
-								        <td>
-								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
 								        </td>
 								      </tr>";
 								echo "<script>$('#cantidad_'+".$con.").css('width','80px');</script>";
@@ -376,72 +339,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			</div>  
 		</fieldset>  
 	</form>
-	<script type="text/javascript">
-		var ejemplar = document.getElementsByName('ejemplar[]');
-		var ubicacion = document.getElementsByName('ubicacion[]');
-		var cantidad = document.getElementsByName('cantidad[]');
-		var contador=ejemplar.length;
-		function agrega_campos(){
-			$("#tablaDetentrega").append("<tr id='"+contador+"'>"+
-			"<td>"+
-			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) ejemplars 
-			FROM biblioteca.tejemplar b 
-			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
-			"</td>"+
-			
-			"<td>"+
-			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
-			"</td>"+
-			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
-			"</td>"+
-			"<td>"+
-			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
-			"</td>"+
-			"</tr>");
-			//	Modificamos el width de la cantidad para este elemento
-		    $('#cantidad_'+contador).css("width","80px");
-			contador++;
-		}
-
-		function elimina_me(elemento){
-			$("#"+elemento).remove();
-			for(var i=0;i<ejemplar.length;i++){
-				ejemplar[i].removeAttribute('id');
-				ubicacion[i].removeAttribute('id');
-				cantidad[i].removeAttribute('id');
-			}
-			for(var i=0;i<ejemplar.length;i++){
-				ejemplar[i].setAttribute('id','ejemplar_'+i);
-				ubicacion[i].setAttribute('id','ubicacion_'+i);
-				cantidad[i].setAttribute('id','cantidad_'+i);
-				
-			}
-		}
-	</script>
 	<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones

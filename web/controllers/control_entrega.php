@@ -36,7 +36,7 @@ if($lOpt=='Registrar'){
   if($entrega->Registrar($_SESSION['user_name'])){
     if(isset($_POST['ejemplar']) && isset($_POST['cantidad']) && isset($_POST['ubicacion'])){
       if($entrega->InsertarEntregas($_SESSION['user_name'],$_POST['ejemplar'],$_POST['ubicacion'],$_POST['cantidad'])){
-        //  Registrar Salidas
+        //  Registrar Entradas
         $mov_inventario->fecha_movimiento($fecha_entrada);
         $mov_inventario->tipo_movimiento('E');
         $mov_inventario->numero_documento($entrega->codigo_entrega());
@@ -91,41 +91,21 @@ if($lOpt=='Modificar'){
   $entrega->cedula_responsable($cedula_responsable);
   $entrega->cedula_persona($cedula_persona);
   $entrega->fecha_entrada($fecha_entrada);
-  $entrega->cantidad($cantidad);
   $confirmacion=false;
   $entrega->Transaccion('iniciando');
   if($entrega->Actualizar($_SESSION['user_name'])){
     if($entrega->EliminarEntregas()){
       if(isset($_POST['ejemplar']) && isset($_POST['ubicacion']) && isset($_POST['cantidad'])){
         if($entrega->InsertarEntregas($_SESSION['user_name'],$_POST['ejemplar'],$_POST['ubicacion'],$_POST['cantidad'])){
-          //  Registrar Salidas
-          $mov_inventario->fecha_movimiento($fecha_entrega);
-          $mov_inventario->tipo_movimiento('S');
-          $mov_inventario->numero_documento($codigo_entrega);
-          $mov_inventario->tipo_transaccion('BE'); // Siglas para identificar la tabla relacionada al movimiento Biblioteca Entrega(BE)
-          $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
-          if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
-            $conS=0;
-            for($i=0;$i<count($_POST['ejemplar']);$i++){
-              $mov_inventario->codigo_item($_POST['ejemplar'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
-              $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
-              $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
-              if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
-                $conS++;
-            }
-          }
-          else
-            $confirmacion=0;
           //  Registrar Entradas
-          $mov_inventario->fecha_movimiento($fecha_entrega);
+          $mov_inventario->fecha_movimiento($fecha_entrada);
           $mov_inventario->tipo_movimiento('E');
           $mov_inventario->numero_documento($codigo_entrega);
           $mov_inventario->tipo_transaccion('BE'); // Siglas para identificar la tabla relacionada al movimiento Biblioteca Entrega(BE)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
+          echo $mov_inventario->codigo_movimiento();
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
-            $conE=0;
+            $con=0;
             for($i=0;$i<count($_POST['ejemplar']);$i++){
               $mov_inventario->codigo_item($_POST['ejemplar'][$i]);
               $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
@@ -133,13 +113,13 @@ if($lOpt=='Modificar'){
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
               $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
               if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
-                $conE++;
+                $con++;
             }
           }
           else
             $confirmacion=0;
 
-          if($conS==count($_POST['ejemplar']) && $conS==$conE)
+          if($con==count($_POST['ejemplar']))
             $confirmacion=1;
           else
             $confirmacion=0;
@@ -161,7 +141,6 @@ if($lOpt=='Modificar'){
     header("Location: ../view/menu_principal.php?entrega&Opt=3&codigo_entrega=".$entrega->codigo_entrega());
   }else{
     $entrega->Transaccion('cancelado');
-    echo $entrega->error()."<br>".$mov_inventario->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Entrega!";
     header("Location: ../view/menu_principal.php?entrega&Opt=3&codigo_entrega=".$entrega->codigo_entrega());
   }
