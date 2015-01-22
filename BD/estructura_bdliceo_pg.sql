@@ -72,6 +72,39 @@ COST 100;
 
 -- End Trigger
 
+-- Functions for Inventory
+
+-- First / Last (aggregate)
+-- This is a portable SQL-language implementation with no external dependencies.
+-- Create a function that always returns the first non-NULL item
+CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
+RETURNS anyelement LANGUAGE sql IMMUTABLE STRICT AS $$
+        SELECT $1;
+$$;
+ 
+-- And then wrap an aggregate around it
+CREATE AGGREGATE public.first (
+        sfunc    = public.first_agg,
+        basetype = anyelement,
+        stype    = anyelement
+);
+ 
+-- Create a function that always returns the last non-NULL item
+CREATE OR REPLACE FUNCTION public.last_agg ( anyelement, anyelement )
+RETURNS anyelement LANGUAGE sql IMMUTABLE STRICT AS $$
+        SELECT $2;
+$$;
+ 
+-- And then wrap an aggregate around it
+CREATE AGGREGATE public.last (
+        sfunc    = public.last_agg,
+        basetype = anyelement,
+        stype    = anyelement
+);
+-- Credit: http://archives.postgresql.org/pgsql-hackers/2006-03/msg01324.php with a couple of corrections.
+
+-- End Functions
+
 -- General
 
 CREATE SCHEMA general;
@@ -220,6 +253,8 @@ CREATE TABLE general.tpersona
 	direccion varchar(255) not null,
 	telefono_local varchar(15) not null,
 	telefono_movil varchar(15),
+  	profesion varchar(60),
+  	grado_instruccion varchar(20),
 	codigo_tipopersona numeric not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -320,10 +355,35 @@ CREATE TABLE general.tambiente
 	constraint pk_ambiente primary key(codigo_ambiente)
 );
 
-
 CREATE TRIGGER auditoria_registros
 AFTER INSERT OR UPDATE OR DELETE
 ON general.tambiente
+FOR EACH ROW
+EXECUTE PROCEDURE auditoria_general();
+
+CREATE SEQUENCE general.seq_det_familiar;
+
+CREATE TABLE general.tdetalle_familiar
+(
+	codigo_detalle_familiar numeric NOT NULL DEFAULT nextval('general.seq_det_familiar'::regclass),
+	cedula_persona char(10) NOT NULL,
+	cedula_familiar char(10) NOT NULL,
+	codigo_parentesco numeric NOT NULL,
+	es_representantelegal char(1) NOT NULL DEFAULT 'N',
+	estatus char(1) NOT NULL DEFAULT '1',
+	creado_por char(15) NOT NULL,
+	fecha_creacion timestamp without time zone,
+	modificado_por char(15),
+	fecha_modificacion timestamp without time zone DEFAULT NOW(),
+	CONSTRAINT pk_detalle_familiar PRIMARY KEY (codigo_detalle_familiar),
+	CONSTRAINT fk_detalle_familiar_estudiante FOREIGN KEY (cedula_persona) REFERENCES general.tpersona (cedula_persona) ON UPDATE CASCADE ON DELETE RESTRICT,
+	CONSTRAINT fk_detalle_familiar_familiar FOREIGN KEY (cedula_familiar) REFERENCES general.tpersona (cedula_persona) ON UPDATE CASCADE ON DELETE RESTRICT,
+	CONSTRAINT fk_detalle_familiar_parentesco FOREIGN KEY (codigo_parentesco) REFERENCES general.tparentesco (codigo_parentesco) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TRIGGER auditoria_registros
+AFTER INSERT OR UPDATE OR DELETE
+ON general.tdetalle_familiar
 FOR EACH ROW
 EXECUTE PROCEDURE auditoria_general();
 
@@ -374,7 +434,8 @@ CREATE TABLE inventario.tadquisicion
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
 	constraint pk_adquisicion primary key(codigo_adquisicion),
-	constraint fk_adquisicion_organizacion foreign key(rif_organizacion) references general.torganizacion(rif_organizacion) on delete restrict on update cascade
+	constraint fk_adquisicion_organizacion foreign key(rif_organizacion) references general.torganizacion(rif_organizacion) on delete restrict on update cascade,
+	constraint fk_adquisicion_persona foreign key(cedula_persona) references general.tpersona(cedula_persona) on delete restrict on update cascade
 );
 
 CREATE TRIGGER auditoria_registros
@@ -665,7 +726,6 @@ CREATE TABLE educacion.tperiodo (
 	fecha_fin date not null,
 	codigo_lapso numeric not null,
 	esinscripcion char(1) not null default '0',
-	actual char(1) not null default '0',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -687,7 +747,10 @@ CREATE TABLE educacion.tseccion (
  	turno char(1) not null default 'M',
  	capacidad_min numeric not null,
  	capacidad_max numeric not null,
- 	codigo_periodo numeric not null,
+  	peso_min numeric NOT NULL,
+	peso_max numeric NOT NULL DEFAULT 0,
+	talla_min character(1) NOT NULL DEFAULT 'S',
+	talla_max character(1) NOT NULL DEFAULT 'S',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -799,6 +862,7 @@ CREATE TABLE educacion.thorario (
  	codigo_ambiente numeric not null,
  	codigo_horario_profesor numeric not null,
  	dia numeric not null,
+  	codigo_ano_academico numeric NOT NULL,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
