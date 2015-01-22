@@ -1,0 +1,7 @@
+SELECT * 
+FROM biblioteca.tprestamo p 
+INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
+INNER JOIN general.tarea a ON p.codigo_area = a.codigo_area 
+INNER JOIN general.tdepartamento dp ON a.codigo_departamento = dp.codigo_departamento 
+WHERE p.fecha_salida BETWEEN '01/01/2014' AND '21/01/2015' 
+AND dp.descripcion = 'BIBLIOTECA'

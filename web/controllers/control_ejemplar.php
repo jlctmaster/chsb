@@ -18,7 +18,7 @@ if(isset($_POST['codigo_isbn_libro']))
 
 
 include_once("../class/class_ejemplar.php");
-$ejemplar=new ejemplars();
+$ejemplar=new ejemplar();
 if($lOpt=='Registrar'){
   $ejemplar->codigo_ejemplar($codigo_ejemplar);
   $ejemplar->codigo_clasificacion($codigo_clasificacion);
@@ -38,7 +38,7 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido registrada con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido registrado con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=2");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Ejemplar!";
@@ -56,7 +56,7 @@ if($lOpt=='Modificar'){
   else
     $confirmacion=-1;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido modificada con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido modificado con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Ejemplar!";
@@ -71,7 +71,7 @@ if($lOpt=='Desactivar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido desactivada con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido desactivado con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Ejemplar!";
@@ -86,7 +86,7 @@ if($lOpt=='Activar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido activada con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Ejemplar ha sido activado con éxito!";
     header("Location: ../view/menu_principal.php?ejemplar&Opt=3&codigo_ejemplar=".$ejemplar->codigo_ejemplar());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Ejemplar!";

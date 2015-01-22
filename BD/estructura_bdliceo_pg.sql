@@ -471,7 +471,7 @@ CREATE OR REPLACE VIEW inventario.vw_movimiento_inventario AS
 SELECT DISTINCT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
 CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
-dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
+dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
 FROM inventario.tmovimiento m 
 INNER JOIN inventario.tadquisicion a ON m.numero_documento = a.codigo_adquisicion AND m.tipo_transaccion = 'IA' 
 INNER JOIN inventario.tdetalle_adquisicion da ON a.codigo_adquisicion = da.codigo_adquisicion 
@@ -484,7 +484,7 @@ UNION ALL
 -- Movimiento de Inventario por Asignaciones de Materiales
 SELECT DISTINCT m.codigo_movimiento, 'Asignación No '||a.codigo_asignacion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
+b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
 FROM inventario.tmovimiento m 
 INNER JOIN bienes_nacionales.tasignacion a ON m.numero_documento = a.codigo_asignacion AND m.tipo_transaccion = 'BA' 
 INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion 
@@ -496,7 +496,7 @@ UNION ALL
 SELECT DISTINCT m.codigo_movimiento,
 CASE r.esrecuperacion WHEN 'Y' THEN 'Recuperación No '::text || r.codigo_recuperacion ELSE 'Reconstrucción No '::text || r.codigo_recuperacion END AS nro_documento, 
 m.fecha_movimiento,m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
+b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
 FROM inventario.tmovimiento m 
 INNER JOIN bienes_nacionales.trecuperacion r ON m.numero_documento = r.codigo_recuperacion AND m.tipo_transaccion = 'BR' 
 INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
@@ -507,7 +507,8 @@ UNION ALL
 -- Movimiento de Inventario por Prestamos de Libros
 SELECT DISTINCT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
+e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+dm.cantidad_movimiento, dm.sonlibros 
 FROM inventario.tmovimiento m 
 INNER JOIN biblioteca.tprestamo p ON m.numero_documento = p.codigo_prestamo AND m.tipo_transaccion = 'BP'
 INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = dp.codigo_prestamo 
@@ -519,7 +520,8 @@ UNION ALL
 -- Movimiento de Inventario por Entregas de Libros
 SELECT DISTINCT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento 
+e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+dm.cantidad_movimiento, dm.sonlibros 
 FROM inventario.tmovimiento m 
 INNER JOIN biblioteca.tentrega ent ON m.numero_documento = ent.codigo_entrega AND m.tipo_transaccion = 'BE'
 INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entrega 
@@ -910,6 +912,7 @@ CREATE TABLE bienes_nacionales.tbien
 	nombre varchar(40) not null,
 	nro_serial varchar(45) not null,
 	codigo_tipo_bien numeric not null,
+	esconfigurable character(1) NOT NULL DEFAULT 'N',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,

@@ -159,7 +159,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								if($rows['codigo_departamento']==$row['codigo_departamento'])
 									echo "<option value=".$rows['codigo_departamento']." selected >".$rows['descripcion']."</option>";
 								else
-									echo "<option value=".$row['codigo_departamento'].">".$row['descripcion']."</option>";
+									echo "<option value=".$rows['codigo_departamento'].">".$rows['descripcion']."</option>";
 							}
 							?>
 						</select>
