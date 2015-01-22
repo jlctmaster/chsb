@@ -193,15 +193,16 @@ function NbLines($w,$txt)
     $sql="SELECT r.codigo_recuperacion,TO_CHAR(r.fecha,'DD/MM/YYYY') AS fecha,
   p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
   uo.descripcion as ubicacion_origen, u.descripcion as ubicacion, r.cantidad AS cantidad_a_recuperar, 
-  br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item,dr.cantidad, 
-  CASE p.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus 
+  br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item,dr.cantidad,
+  CASE p.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus  
   FROM bienes_nacionales.trecuperacion r 
   INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
   INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
   INNER JOIN inventario.tubicacion uo ON r.codigo_ubicacion = uo.codigo_ubicacion 
   INNER JOIN inventario.tubicacion u ON dr.codigo_ubicacion = u.codigo_ubicacion 
   INNER JOIN bienes_nacionales.tbien br ON r.codigo_bien = br.codigo_bien 
-  INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien";
+  INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien 
+  WHERE r.esrecuperacion='Y'";
    $i=-1;
    //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);

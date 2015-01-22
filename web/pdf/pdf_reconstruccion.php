@@ -34,7 +34,7 @@ require_once("../librerias/fpdf/fpdf.php");
       $this->Cell($anchura*3,$altura,'ITEM',1,0,'L',$color_fondo);
       $this->Cell($anchura*2,$altura,'CANTIDAD',1,0,'L',$color_fondo);
       $this->Cell($anchura*3,$altura,'UBICACIÓN',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
+      $this->Cell($anchura*2,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
                   }
@@ -188,12 +188,12 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,20,35,40,30,33,30,20,30,26));
+      $lobjPdf->SetWidths(array(20,20,35,40,30,33,30,20,30,20));
   $pgsql=new Conexion();
     $sql="SELECT r.codigo_recuperacion,TO_CHAR(r.fecha,'DD/MM/YYYY') AS fecha,
   p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
   uo.descripcion as ubicacion_origen, u.descripcion as ubicacion, r.cantidad AS cantidad_a_recuperar, 
-  br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item,dr.cantidad, 
+  br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item,dr.cantidad,
   CASE p.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus 
   FROM bienes_nacionales.trecuperacion r 
   INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
@@ -201,7 +201,8 @@ function NbLines($w,$txt)
   INNER JOIN inventario.tubicacion uo ON r.codigo_ubicacion = uo.codigo_ubicacion 
   INNER JOIN inventario.tubicacion u ON dr.codigo_ubicacion = u.codigo_ubicacion 
   INNER JOIN bienes_nacionales.tbien br ON r.codigo_bien = br.codigo_bien 
-  INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien";
+  INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien 
+  WHERE r.esrecuperacion='N'";
    $i=-1;
    //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);

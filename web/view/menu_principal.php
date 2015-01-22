@@ -178,6 +178,16 @@ if(isset($_SESSION['user_estado'])){
           //reportes
           else if(isset($_GET['horario_clases'])) include("rep_horario_clases.php");
           else if(isset($_GET['horario_profesor'])) include("rep_horario_profesor.php");
+          else if(isset($_GET['historico_inscripcion'])) include("rep_historico_inscripcion.php");
+          else if(isset($_GET['inventario_analitico'])) include("rep_inventario_analitico.php");
+          else if(isset($_GET['movimiento_inventario'])) include("rep_movimiento_inventario.php");
+          else if(isset($_GET['asistencia_biblioteca'])) include("rep_asistencia_biblioteca.php");
+          else if(isset($_GET['prestamo_libros'])) include("rep_prestamo_libros.php");
+          else if(isset($_GET['carta_morosidad'])) include("rep_carta_morosidad.php");
+          else if(isset($_GET['entrega_libros'])) include("rep_entrega_libros.php");
+          else if(isset($_GET['asignacion_bienes'])) include("rep_asignacion_bienes.php");
+          else if(isset($_GET['recuperacion_bienes'])) include("rep_recuperacion_bienes.php");
+          else if(isset($_GET['reconstruccion_bienes'])) include("rep_reconstruccion_bienes.php");
   				//principal
         	else include("serv_inicio.php");                                                                                                                                                                                                                                                                                                                                            
         }else{

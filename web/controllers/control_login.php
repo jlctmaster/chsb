@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("../class/class_usuario.php");
+$preguntas=null;
+$respuestas=null;
 $Usuario=new Usuario();
 $Usuario->nombre_usuario(trim($_POST['usuario']));
 $Usuario->contrasena(trim($_POST['contrasena']));
