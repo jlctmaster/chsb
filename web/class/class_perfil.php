@@ -148,8 +148,12 @@
    public function INSERTAR_OPCION_SERVICIO_PERFIL($user,$modulo,$servicio,$opcion){
     $sql="INSERT INTO seguridad.tdetalle_servicio_perfil_opcion(codigo_perfil,codigo_servicio,codigo_opcion,creado_por,fecha_creacion) VALUES ";
     foreach ($servicio as $keyS => $valueS) {
-      foreach ($opcion[$valueS] as $keyO => $valueO) {
-        $sql.="('$this->codigo_perfil',$valueS,$valueO,'$user',NOW()),";
+      if(!empty($opcion[$valueS])){
+        foreach ($opcion[$valueS] as $keyO => $valueO) {
+          $sql.="('$this->codigo_perfil',$valueS,$valueO,'$user',NOW()),";
+        }
+      }else{
+        $sql.="('$this->codigo_perfil',$valueS,NULL,'$user',NOW()),";
       }
     }
     $sql=substr($sql,0,-1);
