@@ -343,18 +343,21 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_entrega,b.codigo_prestamo,b.cota||' '||b.fecha_entrada||' '||
-	b.cedula_persona||' '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
-	a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
-	 TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-	a.cantidad AS cantidad_a_prestar
-	FROM biblioteca.tentrega a 
-	LEFT JOIN biblioteca.tprestamo b ON a.codigo_prestamo = b.codigo_prestamo 
-	INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
-	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
- 
-	WHERE a.codigo_entrega =".$pgsql->comillas_inteligentes($_GET['codigo_entrega']);
+	$sql = "SELECT a.codigo_entrega,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
+  a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
+  b.cota||', '||b.fecha_entrada||' .'||
+    a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
+  TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
+   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
+   CASE a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
+  FROM biblioteca.tentrega a 
+  INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
+  INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
+  INNER JOIN biblioteca.tdetalle_entrega da ON a.codigo_entrega = da.codigo_entrega
+  LEFT JOIN biblioteca.tprestamo b ON a.codigo_prestamo = b.codigo_prestamo 
+  LEFT JOIN biblioteca.tejemplar e ON da.codigo_ejemplar = e.codigo_ejemplar 
+  INNER JOIN biblioteca.tlibro l on e.codigo_isbn_libro=l.codigo_isbn_libro
+  WHERE a.codigo_entrega =".$pgsql->comillas_inteligentes($_GET['codigo_entrega']);
 	$query = $pgsql->Ejecutar($sql);
 	while($obj=$pgsql->Respuesta($query)){
 		$row[]=$obj;
@@ -406,14 +409,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label><?=$row[0]['fecha_entrada']?></label>
 						</td>
 					</tr> 
-					<tr>
-						<td>
-							<label>Cantidad:</label>
-						</td>
-						<td>
-							<label><?=$row[0]['cantidad_a_prestar']?></label>
-						</td>
-					</tr> 
 				</table>
 				<table class="bordered-table zebra-striped" >
 					<tr>
@@ -429,7 +424,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					?>
 					<tr>
 						<td>
-							<label><?=$row[$i]['item']?></label>
+							<label><?=$row[$i]['ejemplar']?></label>
 						</td>
 						<td>
 							<label><?=$row[$i]['cantidad']?></label>

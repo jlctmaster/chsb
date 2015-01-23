@@ -1,10 +1,20 @@
 $(document).ready(init);
 function init(){
+		$('#btnPrintReport').click(function(){
+        url = "../pdf/pdf_formato_prestamo.php?p1="+$('#codigo_prestamo').val();
+		window.open(url, '_blank');
+	})
+
+	$('#btnPrint').click(function(){
+		window.print();
+	});
+
+	$('#btnGuardar').click(ValidarCampos);
 
 	$('#btnImprimirTodos').click(function(){
 		imprimirRegistros();
 	})
-
+	
 	function imprimirRegistros(){
 		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?prestamo');
 			//Función que procede a cambiar el estatus del Documento a Anular.
@@ -19,12 +29,7 @@ function init(){
         url = "../pdf/pdf_formato_prestamo.php?p1="+$('#codigo_prestamo').val();
 		window.open(url, '_blank');
 	})
-
-	$('#btnPrint').click(function(){
-		window.print();
-	});
-
-	$('#btnGuardar').click(ValidarCampos);
+	
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),

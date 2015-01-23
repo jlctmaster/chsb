@@ -548,7 +548,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$sql = "SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
 	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,a.cota,
 	TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-	a.cantidad AS cantidad_a_prestar, da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad
+	 da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad
 	FROM biblioteca.tprestamo a 
 	INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
 	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
@@ -622,14 +622,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row[0]['fecha_entrada']?></label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>Cantidad a Prestar:</label>
-						</td>
-						<td>
-							<label><?=$row[0]['cantidad_a_prestar']?></label>
 						</td>
 					</tr>
 				</table>
