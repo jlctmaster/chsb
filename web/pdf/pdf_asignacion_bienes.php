@@ -11,7 +11,7 @@ class clsFpdf extends FPDF {
     $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/view/menu_principal.php");   
     $this->Ln(55);  
     $this->SetFont('Arial','B',12);
-    $this->Cell(0,6,'REPORTE DE LOS ESTUDIANTES ASISTENTE A LA BIBLIOTECA',0,1,"C");
+    $this->Cell(0,6,'REPORTE DE ASIGNACIÓN DE BIENES',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
     $avnzar=15;
@@ -34,11 +34,10 @@ class clsFpdf extends FPDF {
     $this->Ln(4);    
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar);
-    $this->Cell($anchura*4,$altura,'CÉDULA',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*8,$altura,'NOMBRE Y APELLIDO',1,0,'C',$color_fondo);
-    $this->Cell($anchura*7,$altura,'AREA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*10,$altura,'RESPONSABLE',1,0,'C',$color_fondo); 
+    $this->Cell($anchura*8,$altura,'ITEM',1,0,'C',$color_fondo);
     $this->Cell($anchura*4,$altura,'FECHA',1,0,'C',$color_fondo);
-    $this->Ln();
+    $this->Cell($anchura*2,$altura,'CANTIDAD',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }
 
@@ -175,25 +174,30 @@ $avnzar=15;
 $altura=7;
 $anchura=10;
 $color_fondo=false;
-$lobjPdf->SetWidths(array($anchura*4,$anchura*8,$anchura*7,$anchura*4));
+$lobjPdf->SetWidths(array($anchura*10,$anchura*8,$anchura*4,$anchura*2));
 $pgsql=new Conexion();
-$sql="SELECT per.cedula_persona cedula, per.primer_nombre||' '||per.primer_apellido AS nombre, a.descripcion AS area, TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha
-FROM biblioteca.tprestamo p 
-INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
-INNER JOIN general.tarea a ON p.codigo_area = a.codigo_area 
-INNER JOIN general.tdepartamento dp ON a.codigo_departamento = dp.codigo_departamento 
-WHERE p.fecha_salida BETWEEN ".$pgsql->comillas_inteligentes($_POST['fecha_inicio'])." AND ".$pgsql->comillas_inteligentes($_POST['fecha_fin'])."
-AND dp.descripcion = 'BIBLIOTECA'";
+$sql="SELECT TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
+  b.nro_serial||' '||b.nombre AS item,da.cantidad
+  FROM bienes_nacionales.tasignacion a 
+  INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
+  INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion 
+  LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien
+  WHERE fecha_asignacion BETWEEN ".$pgsql->comillas_inteligentes($_POST['fecha_inicio'])." AND ".$pgsql->comillas_inteligentes($_POST['fecha_fin'])."";
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFont('Arial','',9);
+  $total=0;
  while($prestamo=$pgsql->Respuesta($data)){
-    $lobjPdf->Row(array($prestamo['cedula'],
-    $prestamo['nombre'],
-    $prestamo['area'],
-    $prestamo['fecha']));
+    $lobjPdf->Row(array($prestamo['responsable'],
+    $prestamo['item'],
+    $prestamo['fecha_asignacion'],
+    $prestamo['cantidad']));
+    $total+=$prestamo['cantidad'];
     $lobjPdf->Cell($avnzar);         
   }
+  $lobjPdf->SetFont('Arial','B',9);
+  $lobjPdf->Cell($anchura*22,$altura,"TOTAL ASIGNADO:",1,0,"R",$color_fondo);
+  $lobjPdf->Cell($anchura*2,$altura,$total,1,1,"R",$color_fondo);
   $lobjPdf->Output('documento',"I");
 }else{
   echo "ERROR AL GENERAR ESTE REPORTE!";          

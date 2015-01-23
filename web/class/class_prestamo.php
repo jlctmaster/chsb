@@ -202,5 +202,32 @@ class prestamo {
 	    	return false;
 	    }
    	}
+   	public function Consultar(){
+			$sql="SELECT per.cedula_persona, INITCAP(per.primer_nombre||' '||per.primer_apellido) nombre, a.descripcion, p.fecha_entrada, p.fecha_salida
+			FROM biblioteca.tprestamo p 
+			INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
+			INNER JOIN general.tarea a ON p.codigo_area = a.codigo_area 
+			INNER JOIN general.tdepartamento dp ON a.codigo_departamento = dp.codigo_departamento 
+			WHERE p.fecha_salida BETWEEN '$this->fecha_desde' AND '$this->fecha_hasta' 
+			AND dp.descripcion = 'BIBLIOTECA'";
+			$query=$this->objBD->Ejecutar($sql);
+			while($datos=$this->objBD->Respuesta($query)) {
+				$R['hora']['dia'][$i]=$hora['dia'];
+				$R['hora']['hora'][$i]=$hora['hora'];
+				$R['hora']['celda'][$i]=$hora['celda'];
+				$R['hora']['codigo_bloque_hora'][$i]=$hora['codigo_bloque_hora'];
+				$R['hora']['codigo_ano_academico'][$i]=$hora['codigo_ano_academico'];
+				$R['hora']['cedula'][$i]=$hora['cedula'];
+				$R['hora']['nombre'][$i]=$hora['nombre'];
+				$R['hora']['apellido'][$i]=$hora['apellido'];
+				$R['hora']['codigo_ambiente'][$i]=$hora['codigo_ambiente'];
+				$R['hora']['nombre_ambiente'][$i]=$hora['nombre_ambiente'];
+				$R['hora']['materia'][$i]=$hora['materia'];
+				$R['hora']['nombre_materia'][$i]=$hora['nombre_materia'];
+				$R['hora']['seccion'][$i]=$hora['seccion'];
+				$R['hora']['nombre_seccion'][$i]=$hora['nombre_seccion'];
+			}
+			return $R['hora'];
+		}
 }
 ?>

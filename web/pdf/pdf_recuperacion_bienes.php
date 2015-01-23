@@ -11,7 +11,7 @@ class clsFpdf extends FPDF {
     $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/view/menu_principal.php");   
     $this->Ln(55);  
     $this->SetFont('Arial','B',12);
-    $this->Cell(0,6,'REPORTE DE LOS ESTUDIANTES ASISTENTE A LA BIBLIOTECA',0,1,"C");
+    $this->Cell(0,6,'REPORTE DE RECUPERACIÓN DE BIENES',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
     $avnzar=15;
@@ -34,11 +34,13 @@ class clsFpdf extends FPDF {
     $this->Ln(4);    
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar);
-    $this->Cell($anchura*4,$altura,'CÉDULA',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*8,$altura,'NOMBRE Y APELLIDO',1,0,'C',$color_fondo);
-    $this->Cell($anchura*7,$altura,'AREA',1,0,'C',$color_fondo);
-    $this->Cell($anchura*4,$altura,'FECHA',1,0,'C',$color_fondo);
-    $this->Ln();
+    $this->Cell($anchura*2,$altura,'FECHA',1,0,'L',$color_fondo);  
+    $this->Cell($anchura*5,$altura,'RESPONSABLE',1,0,'L',$color_fondo);
+    $this->Cell($anchura*4,$altura,'UBICACIÓN ORIGEN.',1,0,'L',$color_fondo);
+    $this->Cell($anchura*3+5,$altura,'BIEN A REC.',1,0,'L',$color_fondo);
+    $this->Cell($anchura*3+5,$altura,'ITEM',1,0,'L',$color_fondo);
+    $this->Cell($anchura*4,$altura,'UBICACIÓN',1,0,'L',$color_fondo);
+    $this->Cell($anchura*2,$altura,'CANTIDAD',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }
 
@@ -175,25 +177,47 @@ $avnzar=15;
 $altura=7;
 $anchura=10;
 $color_fondo=false;
-$lobjPdf->SetWidths(array($anchura*4,$anchura*8,$anchura*7,$anchura*4));
+$lobjPdf->SetWidths(array(20,50,40,35,35,40,20));
 $pgsql=new Conexion();
-$sql="SELECT per.cedula_persona cedula, per.primer_nombre||' '||per.primer_apellido AS nombre, a.descripcion AS area, TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha
-FROM biblioteca.tprestamo p 
-INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
-INNER JOIN general.tarea a ON p.codigo_area = a.codigo_area 
-INNER JOIN general.tdepartamento dp ON a.codigo_departamento = dp.codigo_departamento 
-WHERE p.fecha_salida BETWEEN ".$pgsql->comillas_inteligentes($_POST['fecha_inicio'])." AND ".$pgsql->comillas_inteligentes($_POST['fecha_fin'])."
-AND dp.descripcion = 'BIBLIOTECA'";
+$sql="SELECT TO_CHAR(r.fecha,'DD/MM/YYYY') AS fecha, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
+  uo.descripcion as ubicacion_origen, u.descripcion as ubicacion, r.cantidad AS cantidad, 
+  br.nro_serial||' '||br.nombre AS bien,b.nro_serial||' '||b.nombre AS item
+  FROM bienes_nacionales.trecuperacion r 
+  INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
+  INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
+  INNER JOIN inventario.tubicacion uo ON r.codigo_ubicacion = uo.codigo_ubicacion 
+  INNER JOIN inventario.tubicacion u ON dr.codigo_ubicacion = u.codigo_ubicacion 
+  INNER JOIN bienes_nacionales.tbien br ON r.codigo_bien = br.codigo_bien 
+  INNER JOIN bienes_nacionales.tbien b ON dr.codigo_item = b.codigo_bien 
+  WHERE fecha BETWEEN ".$pgsql->comillas_inteligentes($_POST['fecha_inicio'])." AND ".$pgsql->comillas_inteligentes($_POST['fecha_fin'])."
+  AND r.esrecuperacion='Y'";
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFont('Arial','',9);
  while($prestamo=$pgsql->Respuesta($data)){
-    $lobjPdf->Row(array($prestamo['cedula'],
-    $prestamo['nombre'],
-    $prestamo['area'],
-    $prestamo['fecha']));
+    $lobjPdf->Row(array($prestamo['fecha'],
+    $prestamo['responsable'],
+    $prestamo['ubicacion_origen'],
+    $prestamo['bien'],
+    $prestamo['item'],
+    $prestamo['ubicacion'],
+    $prestamo['cantidad']));
     $lobjPdf->Cell($avnzar);         
   }
+  $sqlx="SELECT r.cantidad AS cantidad_sumar
+  FROM bienes_nacionales.trecuperacion r 
+  WHERE r.codigo_recuperacion=r.codigo_recuperacion AND r.esrecuperacion='Y'";
+  $data2=$pgsql->Ejecutar($sqlx);
+  if($pgsql->Total_Filas($data2)!=0){
+  $lobjPdf->SetFont('Arial','',9);
+  $total=0;
+ while($prestamo=$pgsql->Respuesta($data2)){
+    $total+=$prestamo['cantidad_sumar'];        
+  }
+  }
+  $lobjPdf->SetFont('Arial','B',9);
+  $lobjPdf->Cell($anchura*22,$altura,"TOTAL RECUPERADO:",1,0,"R",$color_fondo);
+  $lobjPdf->Cell($anchura*2,$altura,$total,1,1,"R",$color_fondo);
   $lobjPdf->Output('documento',"I");
 }else{
   echo "ERROR AL GENERAR ESTE REPORTE!";          
