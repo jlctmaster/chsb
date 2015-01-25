@@ -87,7 +87,7 @@ function init(){
 			alert("¡Debe ingresar el nombre de la Ubicación!");
 			send = false;
 		}
-		else if($('#codigo_departamento').val()==0){
+		else if($('#codigo_ambiente').val()==0){
 			alert("¡Debe Seleccionar un Ambiente!");
 			send = false;
 		}

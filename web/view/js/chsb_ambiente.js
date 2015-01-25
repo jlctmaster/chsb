@@ -87,8 +87,8 @@ function init(){
 			alert("¡Debe ingresar el nombre del Ambiente!");
 			send = false;
 		}
-		else if($('#tipo_ambiente').val()==""){
-			alert("¡Debe ingresar un tipo de ambiente!");
+		else if($('#tipo_ambiente').val()=="0"){
+			alert("¡Debe seleccionar un tipo de ambiente!");
 			send = false;
 		}
 

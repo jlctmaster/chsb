@@ -157,7 +157,7 @@ class inscripcion {
 	    FROM educacion.tinscripcion i 
 	    INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
 	    WHERE p.descripcion='$this->descripcion' AND p.fecha_inicio = '$this->fecha_inicio'
-	    AND p.fecha_fin = '$this->fecha_fin' AND p.fecha_cierre = '$this->fecha_cierre' AND p.esinscripcion = 'Y'";
+	    AND p.fecha_fin = '$this->fecha_fin' AND i.fecha_cierre = '$this->fecha_cierre' AND p.esinscripcion = 'Y'";
 		$query=$this->pgsql->Ejecutar($sql);
 	    if($this->pgsql->Total_Filas($query)!=0){
 			$tinscripcion=$this->pgsql->Respuesta($query);

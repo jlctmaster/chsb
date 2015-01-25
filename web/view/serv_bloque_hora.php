@@ -114,8 +114,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT codigo_bloque_hora, CASE turno WHEN 'M' THEN TO_CHAR(hora_inicio,'HH:MI')||' a.m.' ELSE TO_CHAR(hora_inicio,'HH:MI')||' p.m.' END hora_inicio,
-	CASE turno WHEN 'T' THEN TO_CHAR(hora_fin,'HH:MI')||' p.m.' ELSE TO_CHAR(hora_fin,'HH:MI')||' a.m.' END hora_fin,estatus
+	$sql = "SELECT codigo_bloque_hora, TO_CHAR(hora_inicio,'HH24:MI') hora_inicio,
+	TO_CHAR(hora_fin,'HH24:MI') hora_fin,estatus
 	FROM educacion.tbloque_hora WHERE codigo_bloque_hora =".$pgsql->comillas_inteligentes($_GET['codigo_bloque_hora']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);

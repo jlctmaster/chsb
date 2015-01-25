@@ -1,4 +1,4 @@
--- Created First Country
+﻿-- Created First Country
 
 INSERT INTO general.tpais (descripcion,creado_por,fecha_creacion) VALUES ('VENEZUELA','postgres',NOW());
 

@@ -77,7 +77,7 @@ else if($_GET['Opt']=="2"){
 					<label class="control-label" for="codigo_materia">Codigo Materia:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar"> 
-						<input class="input-xlarge" title="El C´´odigo es genereado por el sistma" maxlength="10" name="codigo_materia" id="codigo_materia" type="text" required /> 
+						<input class="input-xlarge" title="El C´´odigo es genereado por el sistma" onKeyUp="this.value=this.value.toUpperCase()" maxlength="10" name="codigo_materia" id="codigo_materia" type="text" required /> 
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -98,7 +98,6 @@ else if($_GET['Opt']=="2"){
 						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value=0>Seleccione Tipo de Materia</option>
 							<option value="N" >Normal</option>
-							<option value="E" >Electiva</option>
 						</select>
 					</div>
 				</div> 
@@ -130,7 +129,7 @@ else if($_GET['Opt']=="3"){
 					<label class="control-label" for="codigo_materia">Codigo Materia:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar"> 
-						<input class="input-xlarge" title="Ingrese el RIF de la MATERIA" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 name="codigo_materia" id="codigo_materia" type="text" value="<?=$row['codigo_materia']?>" required /> 
+						<input class="input-xlarge" title="Ingrese el Código de la materia" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 name="codigo_materia" id="codigo_materia" type="text" value="<?=$row['codigo_materia']?>" required /> 
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -151,7 +150,6 @@ else if($_GET['Opt']=="3"){
 						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value='0'>Seleccione un Tipo de Materia</option>
 							<option value="N" <? if($row['tipo_materia']=="N") {echo "selected";} ?> >Normal</option>
-							<option value="E" <? if($row['tipo_materia']=="E") {echo "selected";} ?> >Electiva</option>	
 						</select>
 					</div>  
 				</div>   

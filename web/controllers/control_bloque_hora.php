@@ -13,7 +13,7 @@ if(isset($_POST['hora_inicio']))
 if(isset($_POST['hora_fin']))
   $hora_fin=explode(" ",$_POST['hora_fin']);
 
-if(trim($hora_fin[1])<'12:00'){
+if(trim($hora_inicio[0])<'12:00'){
   $turno = 'M';
 }else{
   $turno = 'T';

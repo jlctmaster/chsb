@@ -1,4 +1,4 @@
--- Trigger for the auditories
+﻿-- Trigger for the auditories
 
 CREATE OR REPLACE FUNCTION auditoria_general()
 RETURNS trigger AS
@@ -526,111 +526,6 @@ EXECUTE PROCEDURE auditoria_general();
 
 CREATE INDEX tdetalle_movimiento_idx_1 ON inventario.tdetalle_movimiento(codigo_item);
 
--- View Movimiento Inventario
-CREATE OR REPLACE VIEW inventario.vw_movimiento_inventario AS 
--- Movimiento de Inventario por Adquisiciones de Materiales
-SELECT DISTINCT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
-m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
-dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
-FROM inventario.tmovimiento m 
-INNER JOIN inventario.tadquisicion a ON m.numero_documento = a.codigo_adquisicion AND m.tipo_transaccion = 'IA' 
-INNER JOIN inventario.tdetalle_adquisicion da ON a.codigo_adquisicion = da.codigo_adquisicion 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND da.codigo_item = dm.codigo_item 
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien AND a.sonlibros = 'N'
-LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar AND a.sonlibros = 'Y' 
-LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-UNION ALL 
--- Movimiento de Inventario por Asignaciones de Materiales
-SELECT DISTINCT m.codigo_movimiento, 'Asignación No '||a.codigo_asignacion AS nro_documento, m.fecha_movimiento, 
-m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
-FROM inventario.tmovimiento m 
-INNER JOIN bienes_nacionales.tasignacion a ON m.numero_documento = a.codigo_asignacion AND m.tipo_transaccion = 'BA' 
-INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND da.codigo_item = dm.codigo_item AND (da.codigo_ubicacion = dm.codigo_ubicacion OR da.codigo_ubicacion_hasta = dm.codigo_ubicacion)
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien 
-UNION ALL 
--- Movimiento de Inventario por Recuperación de Materiales
-SELECT DISTINCT m.codigo_movimiento,
-CASE r.esrecuperacion WHEN 'Y' THEN 'Recuperación No '::text || r.codigo_recuperacion ELSE 'Reconstrucción No '::text || r.codigo_recuperacion END AS nro_documento, 
-m.fecha_movimiento,m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
-FROM inventario.tmovimiento m 
-INNER JOIN bienes_nacionales.trecuperacion r ON m.numero_documento = r.codigo_recuperacion AND m.tipo_transaccion = 'BR' 
-INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND ((dr.codigo_item = dm.codigo_item AND dr.codigo_ubicacion = dm.codigo_ubicacion) OR (r.codigo_bien = dm.codigo_item AND r.codigo_ubicacion = dm.codigo_ubicacion))
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
-INNER JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien 
-UNION ALL 
--- Movimiento de Inventario por Prestamos de Libros
-SELECT DISTINCT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
-m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
-dm.cantidad_movimiento, dm.sonlibros 
-FROM inventario.tmovimiento m 
-INNER JOIN biblioteca.tprestamo p ON m.numero_documento = p.codigo_prestamo AND m.tipo_transaccion = 'BP'
-INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = dp.codigo_prestamo 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND dp.codigo_ejemplar = dm.codigo_item AND dp.codigo_ubicacion = dm.codigo_ubicacion 
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
-LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-UNION ALL 
--- Movimiento de Inventario por Entregas de Libros
-SELECT DISTINCT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
-m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
-dm.cantidad_movimiento, dm.sonlibros 
-FROM inventario.tmovimiento m 
-INNER JOIN biblioteca.tentrega ent ON m.numero_documento = ent.codigo_entrega AND m.tipo_transaccion = 'BE'
-INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entrega 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND de.codigo_ejemplar = dm.codigo_item AND de.codigo_ubicacion = dm.codigo_ubicacion 
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
-LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-
--- View Inventario
-CREATE OR REPLACE VIEW inventario.vw_inventario AS 
-SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
-b.nro_serial||' '||b.nombre AS item,dm.sonlibros,
-LAST(dm.valor_actual) AS existencia 
-FROM inventario.tmovimiento m 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien AND m.tipo_transaccion IN ('IA','BR','BA') 
-WHERE dm.sonlibros='N'
-GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,b.nro_serial,b.nombre,dm.sonlibros 
-UNION ALL 
-SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
-e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo AS item,dm.sonlibros,
-LAST(dm.valor_actual) AS existencia 
-FROM inventario.tmovimiento m 
-INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
-INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE')
-LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
-WHERE dm.sonlibros='Y'
-GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_isbn_libro,e.numero_edicion,l.titulo
-
--- View Inventario Items Disponibles
-CREATE OR REPLACE VIEW inventario.vw_inventario_de_items_disponibles AS 
-SELECT cb.codigo_bien AS codigo_item_a_producir,
-ins.codigo_item AS codigo_item_a_usar,
-ins.codigo_ubicacion AS codigo_ubicacion_fuente,
-cb.item_base,
-sum(ins.existencia) AS cant_insumo_disponible,
-max(cb.cantidad) AS cant_necesaria,
-round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_a_usar,
-round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible,
-round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible_a_recuperar
-FROM inventario.vw_inventario ins
-JOIN bienes_nacionales.tconfiguracion_bien cb ON ins.codigo_item = cb.codigo_item
-JOIN inventario.tubicacion u ON ins.codigo_ubicacion = u.codigo_ubicacion
-WHERE ins.sonlibros = 'N'::bpchar AND u.itemsdefectuoso = 'N'::bpchar AND cb.item_base = 'Y'::bpchar
-GROUP BY cb.codigo_bien, ins.codigo_item, ins.codigo_ubicacion, cb.item_base;
-
 -- Fin Inventario
 
 -- Educacion
@@ -756,8 +651,7 @@ CREATE TABLE educacion.tseccion (
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
- 	constraint pk_seccion primary key(seccion),
- 	constraint fk_seccion_periodo foreign key(codigo_periodo) references educacion.tperiodo(codigo_periodo) on delete restrict on update cascade
+ 	constraint pk_seccion primary key(seccion)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -1646,3 +1540,148 @@ FOR EACH ROW
 EXECUTE PROCEDURE auditoria_general();
 
 -- Fin Seguridad
+
+-- Create Views 
+
+-- View Movimiento Inventario
+CREATE OR REPLACE VIEW inventario.vw_movimiento_inventario AS 
+-- Movimiento de Inventario por Adquisiciones de Materiales
+SELECT DISTINCT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
+m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
+dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
+FROM inventario.tmovimiento m 
+INNER JOIN inventario.tadquisicion a ON m.numero_documento = a.codigo_adquisicion AND m.tipo_transaccion = 'IA' 
+INNER JOIN inventario.tdetalle_adquisicion da ON a.codigo_adquisicion = da.codigo_adquisicion 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND da.codigo_item = dm.codigo_item 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien AND a.sonlibros = 'N'
+LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar AND a.sonlibros = 'Y' 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+UNION ALL 
+-- Movimiento de Inventario por Asignaciones de Materiales
+SELECT DISTINCT m.codigo_movimiento, 'Asignación No '||a.codigo_asignacion AS nro_documento, m.fecha_movimiento, 
+m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
+FROM inventario.tmovimiento m 
+INNER JOIN bienes_nacionales.tasignacion a ON m.numero_documento = a.codigo_asignacion AND m.tipo_transaccion = 'BA' 
+INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND da.codigo_item = dm.codigo_item AND (da.codigo_ubicacion = dm.codigo_ubicacion OR da.codigo_ubicacion_hasta = dm.codigo_ubicacion)
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien 
+UNION ALL 
+-- Movimiento de Inventario por Recuperación de Materiales
+SELECT DISTINCT m.codigo_movimiento,
+CASE r.esrecuperacion WHEN 'Y' THEN 'Recuperación No '::text || r.codigo_recuperacion ELSE 'Reconstrucción No '::text || r.codigo_recuperacion END AS nro_documento, 
+m.fecha_movimiento,m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+b.nro_serial||' '||b.nombre item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
+FROM inventario.tmovimiento m 
+INNER JOIN bienes_nacionales.trecuperacion r ON m.numero_documento = r.codigo_recuperacion AND m.tipo_transaccion = 'BR' 
+INNER JOIN bienes_nacionales.tdetalle_recuperacion dr ON r.codigo_recuperacion = dr.codigo_recuperacion 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND ((dr.codigo_item = dm.codigo_item AND dr.codigo_ubicacion = dm.codigo_ubicacion) OR (r.codigo_bien = dm.codigo_item AND r.codigo_ubicacion = dm.codigo_ubicacion))
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
+INNER JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien 
+UNION ALL 
+-- Movimiento de Inventario por Prestamos de Libros
+SELECT DISTINCT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
+m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+dm.cantidad_movimiento, dm.sonlibros 
+FROM inventario.tmovimiento m 
+INNER JOIN biblioteca.tprestamo p ON m.numero_documento = p.codigo_prestamo AND m.tipo_transaccion = 'BP'
+INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = dp.codigo_prestamo 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND dp.codigo_ejemplar = dm.codigo_item AND dp.codigo_ubicacion = dm.codigo_ubicacion 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+UNION ALL 
+-- Movimiento de Inventario por Entregas de Libros
+SELECT DISTINCT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
+m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+dm.cantidad_movimiento, dm.sonlibros 
+FROM inventario.tmovimiento m 
+INNER JOIN biblioteca.tentrega ent ON m.numero_documento = ent.codigo_entrega AND m.tipo_transaccion = 'BE'
+INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entrega 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND de.codigo_ejemplar = dm.codigo_item AND de.codigo_ubicacion = dm.codigo_ubicacion 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro;
+
+-- View Inventario
+CREATE OR REPLACE VIEW inventario.vw_inventario AS 
+SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
+b.nro_serial||' '||b.nombre AS item,dm.sonlibros,
+LAST(dm.valor_actual) AS existencia 
+FROM inventario.tmovimiento m 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN bienes_nacionales.tbien b ON dm.codigo_item = b.codigo_bien AND m.tipo_transaccion IN ('IA','BR','BA') 
+WHERE dm.sonlibros='N'
+GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,b.nro_serial,b.nombre,dm.sonlibros 
+UNION ALL 
+SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
+e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo AS item,dm.sonlibros,
+LAST(dm.valor_actual) AS existencia 
+FROM inventario.tmovimiento m 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE')
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+WHERE dm.sonlibros='Y'
+GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_isbn_libro,e.numero_edicion,l.titulo;
+
+-- View Inventario Items Disponibles
+CREATE OR REPLACE VIEW inventario.vw_inventario_de_items_disponibles AS 
+SELECT cb.codigo_bien AS codigo_item_a_producir,
+ins.codigo_item AS codigo_item_a_usar,
+ins.codigo_ubicacion AS codigo_ubicacion_fuente,
+cb.item_base,
+sum(ins.existencia) AS cant_insumo_disponible,
+max(cb.cantidad) AS cant_necesaria,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_a_usar,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible,
+round(sum(ins.existencia) / max(cb.cantidad), 0) AS cant_disponible_a_recuperar
+FROM inventario.vw_inventario ins
+JOIN bienes_nacionales.tconfiguracion_bien cb ON ins.codigo_item = cb.codigo_item
+JOIN inventario.tubicacion u ON ins.codigo_ubicacion = u.codigo_ubicacion
+WHERE ins.sonlibros = 'N'::bpchar AND u.itemsdefectuoso = 'N'::bpchar AND cb.item_base = 'Y'::bpchar
+GROUP BY cb.codigo_bien, ins.codigo_item, ins.codigo_ubicacion, cb.item_base;-- View: educacion.vhorario
+
+-- View Educacion Horario
+CREATE OR REPLACE VIEW educacion.vhorario AS 
+SELECT pr.primer_nombre AS nombre,
+pr.primer_apellido AS apellido,
+(h.codigo_bloque_hora || '-'::text) || h.dia AS celda,
+pr.cedula_persona AS cedula,
+h.dia,
+h.codigo_bloque_hora,
+hp.codigo_materia AS materia,
+hp.cedula_persona AS profesor,
+h.codigo_ambiente,
+hp.seccion,
+h.codigo_ano_academico,
+tm.nombre_materia,
+ta.descripcion AS nombre_ambiente,
+(bh.hora_inicio || '-'::text) || bh.hora_fin AS hora,
+s.nombre_seccion
+FROM educacion.thorario h
+LEFT JOIN educacion.thorario_profesor hp ON hp.codigo_horario_profesor = h.codigo_horario_profesor
+LEFT JOIN educacion.tseccion s ON s.seccion = hp.seccion
+LEFT JOIN general.tpersona pr ON pr.cedula_persona = hp.cedula_persona
+LEFT JOIN educacion.tmateria tm ON tm.codigo_materia = hp.codigo_materia
+LEFT JOIN general.tambiente ta ON ta.codigo_ambiente = h.codigo_ambiente
+LEFT JOIN educacion.tbloque_hora bh ON bh.codigo_bloque_hora = h.codigo_bloque_hora;
+
+-- View Educacion Horario por Sección
+CREATE OR REPLACE VIEW educacion.vmateria_seccion_horario AS 
+SELECT s.seccion,
+s.peso_min AS periodo,
+count(h.codigo_materia) AS cantidad_materia_horario,
+count(ms.codigo_materia) AS cantidad_materia_seccion
+FROM educacion.tseccion s
+LEFT JOIN educacion.tmateria_seccion ms ON s.seccion = ms.seccion
+LEFT JOIN educacion.thorario_profesor h ON h.seccion = s.seccion
+GROUP BY s.seccion, s.peso_min, ms.codigo_materia;
+
+-- End Views 

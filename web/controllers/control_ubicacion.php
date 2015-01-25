@@ -33,8 +33,8 @@ if($lOpt=='Registrar'){
   $ubicacion->codigo_ubicacion($codigo_ubicacion);
   $ubicacion->descripcion($descripcion);
   $ubicacion->codigo_ambiente($codigo_ambiente);
-  $tipo_persona->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
-  $tipo_persona->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
+  $ubicacion->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
+  $ubicacion->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
   if(!$ubicacion->Comprobar()){
     if($ubicacion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -61,8 +61,8 @@ if($lOpt=='Modificar'){
   $ubicacion->codigo_ubicacion($codigo_ubicacion);
   $ubicacion->descripcion($descripcion);
   $ubicacion->codigo_ambiente($codigo_ambiente);
-  $tipo_persona->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
-  $tipo_persona->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
+  $ubicacion->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
+  $ubicacion->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
   if($ubicacion->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

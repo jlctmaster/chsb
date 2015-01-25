@@ -9,7 +9,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT codigo_ambiente, descripcion,
-			CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA' ELSE 'BIBLIOTECA' END AS ambiente
+			CASE tipo_ambiente WHEN '1' THEN 'LABORATORIO' WHEN '2' THEN 'CANCHA' WHEN '3' THEN 'DEPOSITO' WHEN '4' THEN 'AULA DE CLASES' ELSE 'BIBLIOTECA' END AS ambiente
 			FROM general.tambiente";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
