@@ -147,6 +147,7 @@ if(isset($_SESSION['user_estado'])){
   				//inventario
         	else if(isset($_GET['ubicacion'])) include("serv_ubicacion.php");
         	else if(isset($_GET['adquisicion'])) include("serv_adquisicion.php");
+          else if(isset($_GET['adquisicion_libros'])) include("serv_adquisicion_libros.php");
           else if(isset($_GET['movimiento'])) include("serv_movimiento.php");
           else if(isset($_GET['inventario'])) include("serv_inventario.php");
   				//educación

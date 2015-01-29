@@ -4,17 +4,17 @@ require_once("../class/class_perfil.php");
 require_once('../class/class_bd.php'); 
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
-$perfil->url('adquisicion');
+$perfil->url('adquisicion_libros');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
 	$sql = "SELECT codigo_adquisicion,TO_CHAR(fecha_adquisicion,'DD/MM/YYYY') AS fecha_adquisicion,
 	CASE tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion
-	FROM inventario.tadquisicion WHERE sonlibros='N'";
+	FROM inventario.tadquisicion WHERE sonlibros='Y'";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>
-		<legend><center>Vista: ADQUISICIÓN DE BIENES NACIONALES</center></legend>		
+		<legend><center>Vista: ADQUISICIÓN DE LIBROS</center></legend>		
 		<div id="paginador" class="enjoy-css"> 
 			<div class="container">
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
@@ -41,9 +41,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['tipo_adquisicion'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
-						echo '<td><a href="?adquisicion&Opt=3&codigo_adquisicion='.$filas['codigo_adquisicion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+						echo '<td><a href="?adquisicion_libros&Opt=3&codigo_adquisicion='.$filas['codigo_adquisicion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
 						else if($a[$x]['orden']=='5') //Imprimir o Ver el Registro
-						echo '<td><a href="?adquisicion&Opt=4&codigo_adquisicion='.$filas['codigo_adquisicion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+						echo '<td><a href="?adquisicion_libros&Opt=4&codigo_adquisicion='.$filas['codigo_adquisicion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
 					}
 					echo "</tr>";
 				}
@@ -54,7 +54,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<?php
 					for($x=0;$x<count($a);$x++)
 						if($a[$x]['orden']=='1')
-							echo '<a href="?adquisicion&Opt=2"><button type="button" class="btn btn-large btn-primary"><i class='.$a[$x]['icono'].'></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button></a>';
+							echo '<a href="?adquisicion_libros&Opt=2"><button type="button" class="btn btn-large btn-primary"><i class='.$a[$x]['icono'].'></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button></a>';
 						?>
 						<button type="button" id="btnImprimirTodos" class="btn btn-large btn-primary"><i class="icon-download-alt"></i>&nbsp;Descargar Archivo</button>
 					</center>
@@ -76,15 +76,15 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 } // Fin Ventana Principal
 else if($_GET['Opt']=="2"){ // Ventana de Registro
 	?>
-	<form class="form-horizontal" action="../controllers/control_adquisicion.php" method="post" id="form1">  
+	<form class="form-horizontal" action="../controllers/control_adquisicion_libros.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: ADQUISICIÓN DE BIENES NACIONALES</center></legend>		
+			<legend><center>Vista: ADQUISICIÓN DE LIBROS</center></legend>		
 			<div id="paginador" class="enjoy-css">
 				<div class="control-group">  
 					<label class="control-label" for="codigo_adquisicion">Código</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input type="hidden" name="sonlibros" id="sonlibros" value="N">
+						<input type="hidden" name="sonlibros" id="sonlibros" value="Y">
 						<input class="input-xlarge" title="el Código del adquisicion es generado por el sistema" name="codigo_adquisicion" id="codigo_adquisicion" type="text" readonly /> 
 					</div>  
 				</div>   
@@ -156,7 +156,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>  
 				<div class="form-actions">
 					<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-					<a href="?adquisicion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+					<a href="?adquisicion_libros"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div> 
 			</div>  
 		</fieldset>  
@@ -172,9 +172,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT codigo_bien AS codigo_item, nombre AS nombre_item 
-			FROM bienes_nacionales.tbien WHERE estatus = '1' 
-			ORDER BY codigo_bien ASC";
+			$sql = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+			FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+			WHERE e.estatus = '1' 
+			ORDER BY codigo_ejemplar ASC";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -192,7 +193,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '3'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -266,9 +267,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
-	<form class="form-horizontal" action="../controllers/control_adquisicion.php" method="post" id="form1">  
+	<form class="form-horizontal" action="../controllers/control_adquisicion_libros.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: ADQUISICIÓN DE BIENES NACIONALES</center></legend>		
+			<legend><center>Vista: ADQUISICIÓN DE LIBROS</center></legend>		
 			<div id="paginador" class="enjoy-css">
 				<div class="control-group">  
 					<label class="control-label" for="codigo_adquisicion">Código</label>  
@@ -360,9 +361,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 								          <select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Item' >
 								          <option value='0'>Seleccione un Item</option>";
-								          $sqlx = "SELECT codigo_bien AS codigo_item, nombre AS nombre_item 
-								          FROM bienes_nacionales.tbien WHERE estatus = '1'
-										  ORDER BY codigo_bien ASC";
+								          $sqlx = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+										  FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+										  WHERE e.estatus = '1' 
+										  ORDER BY codigo_ejemplar ASC";
 								          $querys = $pgsql->Ejecutar($sqlx);
 								          while ($rows = $pgsql->Respuesta($querys)){
 								            if($rows['codigo_item']==$row['codigo_item']){
@@ -381,7 +383,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <option value='0'>Seleccione un Item</option>";
 								        $sqlz="SELECT u.* FROM inventario.tubicacion u 
 										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-										WHERE u.estatus = '1' AND a.tipo_ambiente = '3'";
+										WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
@@ -424,7 +426,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							}
 					?>
 					<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Formato de Impresión</button>
-					<a href="?adquisicion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+					<a href="?adquisicion_libros"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>  
 			</div>  
 		</fieldset>  
@@ -440,9 +442,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT codigo_bien AS codigo_item, nombre AS nombre_item 
-			FROM bienes_nacionales.tbien WHERE estatus = '1'
-			ORDER BY codigo_bien ASC";
+			$sql = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+			FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+			WHERE e.estatus = '1' 
+			ORDER BY codigo_ejemplar ASC";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -460,7 +463,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '3'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -516,7 +519,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	?>
 	<link rel="STYLESHEET" type="text/css" href="css/print.css" media="print" />
 	<fieldset>
-		<legend><center>Vista: ADQUISICIÓN DE BIENES NACIONALES</center></legend>		
+		<legend><center>Vista: ADQUISICIÓN DE LIBROS</center></legend>		
 		<div id="paginador" class="enjoy-css">
 			<div class="printer">
 				<table class="bordered-table zebra-striped" >
@@ -587,7 +590,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 				</table>
 				<center>
 					<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>
-					<a href="?adquisicion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+					<a href="?adquisicion_libros"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</center>
 			</div>
 		</div>
