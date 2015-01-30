@@ -313,11 +313,10 @@ class estudiante {
 
     public function Inscribir($user){
     	$sql="INSERT INTO educacion.tproceso_inscripcion (codigo_inscripcion,fecha_inscripcion,codigo_ano_academico,cedula_responsable,cedula_persona,
-    	anio_a_cursar,coordinacion_pedagogica,peso,talla,indice,cedula_representante,codigo_parentesco,creado_por,fecha_creacion) VALUES 
+    	anio_a_cursar,coordinacion_pedagogica,peso,talla,indice,cedula_representante,codigo_parentesco,procesado,creado_por,fecha_creacion) VALUES 
 		($this->codigo_inscripcion,'$this->fecha_inscripcion',$this->codigo_ano_academico,'$this->cedula_responsable','$this->cedula_persona',
 		'$this->anio_a_cursar','$this->coordinacion_pedagogica','$this->peso','$this->talla','$this->indice','$this->cedula_representante',
-		$this->codigo_parentesco,,,'Y',
-		'$user',NOW())";
+		$this->codigo_parentesco,'Y','$user',NOW())";
 		if($this->pgsql->Ejecutar($sql)!=null){
 			$sqlx="UPDATE educacion.tproceso_inscripcion SET seccion=(SELECT s.seccion FROM educacion.tseccion s 
 	   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 

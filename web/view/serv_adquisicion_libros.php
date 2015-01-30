@@ -193,7 +193,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '5' AND u.itemsdefectuoso ='N'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -383,7 +383,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <option value='0'>Seleccione un Item</option>";
 								        $sqlz="SELECT u.* FROM inventario.tubicacion u 
 										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-										WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
+										WHERE u.estatus = '1' AND a.tipo_ambiente = '5' AND u.itemsdefectuoso ='N'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
@@ -463,7 +463,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '5'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '5' AND u.itemsdefectuoso ='N'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){

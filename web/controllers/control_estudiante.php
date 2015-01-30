@@ -110,8 +110,9 @@ if($lOpt=='Registrar'){
   $estudiante->Transaccion('iniciando');
   if(!$estudiante->Comprobar()){
     if($estudiante->Registrar($_SESSION['user_name'])){
-      if($estudiante->Inscribir($_SESSION['user_name']))
+      if($estudiante->Inscribir($_SESSION['user_name'])){
         $confirmacion=1;
+      }
       else
         $confirmacion=-1;
     }
@@ -133,7 +134,7 @@ if($lOpt=='Registrar'){
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }else{
     $estudiante->Transaccion('cancelado');
-    echo $estudiante->error(); die();
+    echo $estudiante->error(); 
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Estudiante!";
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }

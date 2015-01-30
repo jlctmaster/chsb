@@ -512,11 +512,11 @@ else if($_GET['Opt']=="3"){
 					<div class="controls">
 						<select class="selectpicker" data-live-search="true" name="talla" id="talla" title="Seleccione una Talla" required > 
 							<option value=0>Seleccione</option>
-							<option value="1" >Talla S</option>
-							<option value="2" >Talla M</option>
-							<option value="3" >Talla L</option>
-							<option value="4" >Talla X</option>
-							<option value="5" >Talla XL</option>	
+							<option value="1" <?php if($row['talla']=="1"){ echo "selected"; } ?> >Talla S</option>
+							<option value="2" <?php if($row['talla']=="2"){ echo "selected"; } ?>>Talla M</option>
+							<option value="3" <?php if($row['talla']=="3"){ echo "selected"; } ?>>Talla L</option>
+							<option value="4" <?php if($row['talla']=="4"){ echo "selected"; } ?>>Talla X</option>
+							<option value="5" <?php if($row['talla']=="5"){ echo "selected"; } ?>>Talla XL</option>	
 			            </select>
 					</div>  
 				</div>  

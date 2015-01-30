@@ -25,14 +25,6 @@ if(isset($_POST['cedula_persona']))
 if(isset($_POST['sonlibros']))
   $sonlibros=trim($_POST['sonlibros']);
 
-function comprobarCheckBox($value){
-  if($value == "on")
-    $chk = "Y";
-  else
-    $chk = "N";
-  return $chk;
-}
-
 $adquisicion=new adquisicion();
 $mov_inventario = new movimiento_inventario();
 if($lOpt=='Registrar'){
@@ -41,7 +33,7 @@ if($lOpt=='Registrar'){
   $adquisicion->tipo_adquisicion($tipo_adquisicion);
   $adquisicion->rif_organizacion($rif_organizacion);
   $adquisicion->cedula_persona($cedula_persona);
-  $adquisicion->sonlibros(comprobarCheckBox($sonlibros));
+  $adquisicion->sonlibros($sonlibros);
   $confirmacion=false;
   $adquisicion->Transaccion('iniciando');
   if($adquisicion->Registrar($_SESSION['user_name'])){
@@ -103,7 +95,7 @@ if($lOpt=='Modificar'){
   $adquisicion->tipo_adquisicion($tipo_adquisicion);
   $adquisicion->rif_organizacion($rif_organizacion);
   $adquisicion->cedula_persona($cedula_persona);
-  $adquisicion->sonlibros(comprobarCheckBox($sonlibros));
+  $adquisicion->sonlibros($sonlibros);
   $confirmacion=false;
   $adquisicion->Transaccion('iniciando');
   if($adquisicion->Actualizar($_SESSION['user_name'])){
