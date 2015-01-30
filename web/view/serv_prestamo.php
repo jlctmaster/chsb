@@ -104,7 +104,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 							FROM general.tpersona p 
 							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
+							WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
@@ -114,16 +114,16 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>  
 			</div> 
 				<div class="control-group">  
-				<label class="control-label" for="cedula_persona">Estudiante</label>  
+				<label class="control-label" for="cedula_persona">Solicitante</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Estudiante" name='cedula_persona' id='cedula_persona' required >
-						<option value=0>Seleccione un Estudiante</option>
+					<select class="selectpicker" data-live-search="true" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
+						<option value=0>Seleccione un Solicitante</option>
 						<?php
 							$pgsql = new Conexion();
 							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 							FROM general.tpersona p 
 							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) LIKE '%estudiante%'";
+							WHERE LOWER(descripcion) NOT LIKE '%bibliotecario%' AND LOWER(descripcion) NOT LIKE '%representante%'";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
@@ -314,7 +314,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
 								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
+								WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($rows['cedula_persona']==$row['cedula_responsable'])
@@ -327,16 +327,16 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cedula_persona">Estudiante</label>  
+					<label class="control-label" for="cedula_persona">Solicitante</label>  
 						<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Estudiante" name='cedula_persona' id='cedula_persona' required >
-							<option value=0>Seleccione un Estudiante</option>
+						<select class="selectpicker" data-live-search="true" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
+							<option value=0>Seleccione un Solicitante</option>
 							<?php
 								$pgsql = new Conexion();
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
 								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion)  LIKE '%estudiante%'";
+								WHERE LOWER(descripcion) NOT LIKE '%bibliotecario%' AND LOWER(descripcion) NOT LIKE '%representante%'";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($rows['cedula_persona']==$row['cedula_persona'])
@@ -586,7 +586,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</tr> 
 					<tr>
 						<td>
-							<label>Estudiante:</label>
+							<label>Solicitante:</label>
 						</td>
 						<td>
 							<label><?=$row[0]['persona']?></label>

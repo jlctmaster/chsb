@@ -80,26 +80,36 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 // Fin Ventana Principal
 // Ventana de Registro
 else if($_GET['Opt']=="2"){ 
+	$pgsql=new Conexion();
+	$sql="SELECT i.codigo_inscripcion,INITCAP(p.descripcion) descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') fecha_inicio,
+	TO_CHAR(p.fecha_fin,'DD/MM/YYYY') fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre, 
+	EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes 
+	FROM educacion.tinscripcion i
+	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
+	WHERE i.estatus = '1'";
+	$query = $pgsql->Ejecutar($sql);
+	$row=$pgsql->Respuesta($query);
 	?>
 	<form class="form-horizontal" action="../controllers/control_estudiante.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: ESTUDIANTE</center></legend>		
+			<legend><center>Vista: ESTUDIANTE</center></legend>	
+			<?php
+				if($row['dias_restantes']>0){
+			?>	
 			<div id="paginador" class="enjoy-css">
-				<?php
-					$pgsql=new Conexion();
-					$sql="SELECT i.codigo_inscripcion,INITCAP(p.descripcion) descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') fecha_inicio,
-					TO_CHAR(p.fecha_fin,'DD/MM/YYYY') fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre 
-					FROM educacion.tinscripcion i
-					INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
-					WHERE i.estatus = '1'";
-					$query = $pgsql->Ejecutar($sql);
-					while ($row = $pgsql->Respuesta($query)){
-						echo "<span style='font-weight: bold;'>".$row['descripcion']." (Fecha de Inicio: </span>".$row['fecha_inicio']."<span style='font-weight: bold;'> Fecha de Culminación: </span>".$row['fecha_fin']."<span style='font-weight: bold;'> Fecha Máxima: </span>".$row['fecha_cierre']."<span style='font-weight: bold;'> )</span>";
-						echo "<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='".$row['codigo_inscripcion']."' />";
-						echo "<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='".$row['fecha_inicio']."' />";
-						echo "<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='".$row['fecha_cierre']."' /> <br><br>";
-					}
-				?>
+				<span style='font-weight: bold;'>¡Lo sentimos, el Proceso de Inscripción ya ha Culminado!</span>
+				<div class="form-actions">
+					<a href="?estudiante"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+				</div>
+			</div>
+			<?php
+				}else{
+			?>
+			<div id="paginador" class="enjoy-css">
+				<span style='font-weight: bold;'><?=$row['descripcion']?> (Fecha de Inicio: </span><?=$row['fecha_inicio']?><span style='font-weight: bold;'> Fecha de Culminación: </span><?=$row['fecha_fin']?><span style='font-weight: bold;'> Fecha Máxima: </span><?=$row['fecha_cierre']?><span style='font-weight: bold;'> )</span>
+				<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='<?=$row['codigo_inscripcion']?>' />
+				<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='<?=$row['fecha_inicio']?>' />
+				<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='<?=$row['fecha_cierre']?>' /> <br><br>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inscripcion">Fecha Inscripción</label>  
 					<div class="controls">
@@ -292,6 +302,9 @@ else if($_GET['Opt']=="2"){
 					<a href="?estudiante"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>
 			</div>
+			<?php
+				}
+			?>
 		</fieldset>  
 	</form>
 	<?php
@@ -342,26 +355,37 @@ else if($_GET['Opt']=="3"){
 	WHERE p.cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
+	// Verificar Disponibilidad de Inscripción
+	$pgsqlx=new Conexion();
+	$sqlx="SELECT i.codigo_inscripcion,INITCAP(p.descripcion) descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') fecha_inicio,
+	TO_CHAR(p.fecha_fin,'DD/MM/YYYY') fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre, 
+	EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes  
+	FROM educacion.tinscripcion i
+	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
+	WHERE i.estatus = '1'";
+	$queryx = $pgsqlx->Ejecutar($sqlx);
+	$fila=$pgsql->Respuesta($queryx);
 	?>
 	<form class="form-horizontal" action="../controllers/control_estudiante.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: ESTUDIANTE</center></legend>		
-			<div id="paginador" class="enjoy-css">  
-				<?php
-					$pgsql=new Conexion();
-					$sql="SELECT i.codigo_inscripcion,INITCAP(p.descripcion) descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') fecha_inicio,
-					TO_CHAR(p.fecha_fin,'DD/MM/YYYY') fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre 
-					FROM educacion.tinscripcion i
-					INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
-					WHERE i.estatus = '1'";
-					$query = $pgsql->Ejecutar($sql);
-					while ($rows = $pgsql->Respuesta($query)){
-						echo "<span style='font-weight: bold;'>".$rows['descripcion']." (Fecha de Inicio: </span>".$rows['fecha_inicio']."<span style='font-weight: bold;'> Fecha de Culminación: </span>".$rows['fecha_fin']."<span style='font-weight: bold;'> Fecha Máxima: </span>".$rows['fecha_cierre']."<span style='font-weight: bold;'> )</span>";
-						echo "<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='".$rows['codigo_inscripcion']."' />";
-						echo "<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='".$rows['fecha_inicio']."' />";
-						echo "<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='".$rows['fecha_cierre']."' /> <br><br>";
-					}
-				?>
+			<legend><center>Vista: ESTUDIANTE</center></legend>
+			<?php
+				if($fila['dias_restantes']>0){
+			?>	
+			<div id="paginador" class="enjoy-css">
+				<span style='font-weight: bold;'>¡Lo sentimos, el Proceso de Inscripción ya ha Culminado!</span>
+				<div class="form-actions">
+					<a href="?estudiante"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+				</div>
+			</div>
+			<?php
+				}else{
+			?>
+			<div id="paginador" class="enjoy-css"> 
+				<span style='font-weight: bold;'><?=$fila['descripcion']?> (Fecha de Inicio: </span><?=$fila['fecha_inicio']?><span style='font-weight: bold;'> Fecha de Culminación: </span><?=$fila['fecha_fin']?><span style='font-weight: bold;'> Fecha Máxima: </span><?=$fila['fecha_cierre']?><span style='font-weight: bold;'> )</span>
+				<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='<?=$fila['codigo_inscripcion']?>' />
+				<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='<?=$fila['fecha_inicio']?>' />
+				<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='<?=$fila['fecha_cierre']?>' /> <br><br>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inscripcion">Fecha Inscripción</label>  
 					<div class="controls">
@@ -616,6 +640,9 @@ else if($_GET['Opt']=="3"){
 					<a href="?estudiante"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 				</div>  
 			</div>
+			<?php
+				}
+			?>
 		</fieldset>  
 	</form>
 <?php

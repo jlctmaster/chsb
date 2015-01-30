@@ -171,7 +171,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								if($rows['codigo_clasificacion']==$row['codigo_clasificacion'])
 									echo "<option value=".$rows['codigo_clasificacion']." selected >".$rows['descripcion']."</option>";
 								else
-									echo "<option value=".$row['codigo_clasificacion'].">".$row['descripcion']."</option>";
+									echo "<option value=".$rows['codigo_clasificacion'].">".$rows['descripcion']."</option>";
 							}
 						?>
 					</select>
@@ -197,7 +197,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								if($rows['codigo_isbn_libro']==$row['codigo_isbn_libro'])
 									echo "<option value=".$rows['codigo_isbn_libro']." selected >".$rows['titulo']."</option>";
 								else
-									echo "<option value=".$row['codigo_isbn_libro'].">".$row['titulo']."</option>";
+									echo "<option value=".$rows['codigo_isbn_libro'].">".$rows['titulo']."</option>";
 							}
 						?>
 					</select>

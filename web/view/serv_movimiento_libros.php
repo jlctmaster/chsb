@@ -5,7 +5,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$sql = "SELECT codigo_movimiento,nro_documento,TO_CHAR(fecha_movimiento,'DD/MM/YYYY') AS fecha_movimiento,
 	descrip_tipo_movimiento as tipo,item,ubicacion,cantidad_movimiento  
 	FROM inventario.vw_movimiento_inventario 
-	WHERE sonlibros='N' 
+	WHERE sonlibros='Y' 
 	ORDER BY fecha_movimiento ASC";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>

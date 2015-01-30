@@ -8,7 +8,8 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tmateria";
+	$sql = "SELECT codigo_materia,nombre_materia,CASE tipo_materia WHEN 'N' THEN 'NORMAL' ELSE 'POR EQUIVALENCIA' END AS tipo_materia 
+	FROM educacion.tmateria";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>
@@ -20,6 +21,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						<tr>
 							<th>Codigo Materia</th>
 							<th>Materia</th>
+							<th>Tipo de Materia</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -35,6 +37,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<tr>';
 							echo '<td>'.$filas['codigo_materia'].'</td>';
 							echo '<td>'.$filas['nombre_materia'].'</td>';
+							echo '<td>'.$filas['tipo_materia'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?materia&Opt=3&codigo_materia='.$filas['codigo_materia'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -98,6 +101,7 @@ else if($_GET['Opt']=="2"){
 						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value=0>Seleccione Tipo de Materia</option>
 							<option value="N" >Normal</option>
+							<option value="E" >Por Equivalencia</option>
 						</select>
 					</div>
 				</div> 
@@ -150,6 +154,7 @@ else if($_GET['Opt']=="3"){
 						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value='0'>Seleccione un Tipo de Materia</option>
 							<option value="N" <? if($row['tipo_materia']=="N") {echo "selected";} ?> >Normal</option>
+							<option value="E" <? if($row['tipo_materia']=="E") {echo "selected";} ?> >Por Equivalencia</option>
 						</select>
 					</div>  
 				</div>   
@@ -189,7 +194,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql ="	SELECT * ,
-			CASE tipo_materia WHEN 'N' THEN 'NORMAL' WHEN 'E' THEN 'ELECTIVA' END AS tipo
+			CASE tipo_materia WHEN 'N' THEN 'NORMAL' WHEN 'E' THEN 'POR EQUIVALENCIA' END AS tipo
 			FROM educacion.tmateria 
 			WHERE codigo_materia =".$pgsql->comillas_inteligentes($_GET['codigo_materia']);
 	$query = $pgsql->Ejecutar($sql);

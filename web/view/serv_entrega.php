@@ -110,7 +110,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>  
 			</div>
 				<div class="control-group">  
-					<label class="control-label" for="cedula_responsable">Responsable de la Entrega</label>  
+					<label class="control-label" for="cedula_responsable">Responsable de la Recepción</label>  
 						<div class="controls">  
 						<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
 							<option value=0>Seleccione un Responsable</option>
@@ -119,7 +119,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
 								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
+								WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
 								$query = $pgsql->Ejecutar($sql);
 								while($row=$pgsql->Respuesta($query)){
 									echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
@@ -129,10 +129,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cedula_persona">Estudiante</label>  
+					<label class="control-label" for="cedula_persona">Solicitante</label>  
 					<div class="controls">  
 						<input name="cedula_persona" id="cedula_persona" type="hidden"/>
-						<input class="input-xlarge" title="Estudiante que realiza la entrega" name="estudiante" id="estudiante" type="text" readonly required />
+						<input class="input-xlarge" title="Solicitante que realiza la entrega" name="estudiante" id="estudiante" type="text" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -237,7 +237,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</select>
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cedula_responsable">Responsable de la Entrega</label>  
+					<label class="control-label" for="cedula_responsable">Responsable de la Recepción</label>  
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
 							<option value=0>Seleccione un Responsable</option>
@@ -246,7 +246,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
 								FROM general.tpersona p 
 								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
+								WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($rows['cedula_persona']==$row['cedula_responsable'])
@@ -259,10 +259,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="cedula_persona">Estudiante</label>  
+					<label class="control-label" for="cedula_persona">Solicitante</label>  
 					<div class="controls">  
 						<input name="cedula_persona" id="cedula_persona" type="hidden" value="<?=$row['cedula_persona'];?>"/>
-						<input class="input-xlarge" title="Estudiante que realiza la entrega" name="estudiante" id="estudiante" type="text" value="<?=$row['estudiante'];?>" readonly required />
+						<input class="input-xlarge" title="Solicitante que realiza la entrega" name="estudiante" id="estudiante" type="text" value="<?=$row['estudiante'];?>" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  

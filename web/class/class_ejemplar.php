@@ -1,6 +1,6 @@
 <?php
 require_once("class_bd.php");
-class ejemplars {
+class ejemplar {
 	private $codigo_ejemplar; 
 	private $codigo_clasificacion;
 	private $numero_edicion;

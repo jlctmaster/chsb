@@ -16,7 +16,6 @@ if(isset($_POST['numero_edicion']))
 if(isset($_POST['codigo_isbn_libro']))
   $codigo_isbn_libro=trim($_POST['codigo_isbn_libro']);
 
-
 include_once("../class/class_ejemplar.php");
 $ejemplar=new ejemplar();
 if($lOpt=='Registrar'){

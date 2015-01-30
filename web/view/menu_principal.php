@@ -149,7 +149,9 @@ if(isset($_SESSION['user_estado'])){
         	else if(isset($_GET['adquisicion'])) include("serv_adquisicion.php");
           else if(isset($_GET['adquisicion_libros'])) include("serv_adquisicion_libros.php");
           else if(isset($_GET['movimiento'])) include("serv_movimiento.php");
+          else if(isset($_GET['movimiento_libros'])) include("serv_movimiento_libros.php");
           else if(isset($_GET['inventario'])) include("serv_inventario.php");
+          else if(isset($_GET['inventario_libros'])) include("serv_inventario_libros.php");
   				//educación
         	else if(isset($_GET['bloque_hora'])) include("serv_bloque_hora.php");
         	else if(isset($_GET['ano_academico'])) include("serv_ano_academico.php");

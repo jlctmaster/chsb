@@ -330,7 +330,7 @@ function isRif(evt,object)
   {
     var charCode = (evt.which) ? evt.which : event.keyCode
     if(object.length<1){
-        if (charCode != 103 && charCode != 106 && charCode != 118)
+        if (charCode != 101 && charCode != 103 && charCode != 106 && charCode != 118)
             return false;
         return true;
 

@@ -4,8 +4,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
 	$sql = "SELECT item,ubicacion,existencia   
 	FROM inventario.vw_inventario 
-	WHERE sonlibros='N' 
-	ORDER BY ubicacion,item ASC";
+	WHERE sonlibros='Y' 
+	ORDER BY ubicacion,item ASC ";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 <fieldset>

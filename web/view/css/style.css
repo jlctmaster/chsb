@@ -1067,9 +1067,13 @@ ul.navi li {
 }
 
 table.bordered-table.zebra-striped td{
-	max-width: 50px;
+	max-width: 70px;
 }
 
 table.bordered-table.zebra-striped td label{
 	max-width: 100%;
+}
+
+#bitacora table.bordered-table.zebra-striped td{
+	max-width: 300px;
 }
