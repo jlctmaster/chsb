@@ -105,7 +105,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tano_academico WHERE codigo_ano_academico =".$pgsql->comillas_inteligentes($_GET['codigo_ano_academico']);
+	$sql = "SELECT * FROM educacion.tano_academico 
+	WHERE codigo_ano_academico =".$pgsql->comillas_inteligentes($_GET['codigo_ano_academico']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -126,7 +127,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<input class="input-xlarge" title="Ingrese el año académico" onKeyUp="this.value=this.value.toUpperCase()" name="ano" id="ano" type="text" value="<?=$row['ano']?>" required />
 					</div>  
 				</div>   
-
+				<div class="control-group">  
+					<label class="control-label" for="cerrado">¿Cerrado? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que el año académico esta cerrado" name="cerrado" id="cerrado" <?php if($row['cerrado']=="Y"){echo "checked='checked'";}?> />
+						</div>
+					</div>
+				</div> 
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>  

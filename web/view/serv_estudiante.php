@@ -121,7 +121,7 @@ else if($_GET['Opt']=="2"){
 					<div class="controls">  
 						<?php
 							$pgsql=new Conexion();
-							$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1'";
+							$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N'";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<input type='hidden' name='codigo_ano_academico' id='codigo_ano_academico' value='".$row['codigo_ano_academico']."' />";
@@ -397,7 +397,7 @@ else if($_GET['Opt']=="3"){
 					<div class="controls">  
 						<?php
 							$pgsql=new Conexion();
-							$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1'";
+							$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N'";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								echo "<input type='hidden' name='codigo_ano_academico' id='codigo_ano_academico' value='".$rows['codigo_ano_academico']."' />";

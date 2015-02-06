@@ -4,11 +4,14 @@ class ano_academico {
 	private $codigo_ano_academico; 
 	private $ano;
 	private $estatus; 
+	private $cerrado; 
 	private $pgsql; 
 	 
 	public function __construct(){
 		$this->codigo_ano_academico=null;
 		$this->ano=null;
+		$this->estatus=null;
+		$this->cerrado=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -37,7 +40,6 @@ class ano_academico {
 	   		$this->ano=func_get_arg(0);
 	 	}
     }
-
   
     public function estatus(){
 		$Num_Parametro=func_num_args();
@@ -46,6 +48,23 @@ class ano_academico {
 		if($Num_Parametro>0){
 			$this->estatus=func_get_arg(0);
 		}
+    }
+  
+    public function cerrado(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->cerrado;
+
+		if($Num_Parametro>0){
+			$this->cerrado=func_get_arg(0);
+		}
+    }
+
+    public function Cerrar(){
+    	$sql="UPDATE educacion.tano_academico SET cerrado='Y' WHERE ano <> '$this->ano'";
+    	if($this->pgsql->Ejecutar($sql)!=null)
+			return true;
+		else
+			return false;
     }
    
    	public function Registrar($user){
@@ -80,7 +99,8 @@ class ano_academico {
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE educacion.tano_academico SET ano='$this->ano',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ano_academico='$this->codigo_ano_academico'";
+	    $sql="UPDATE educacion.tano_academico SET ano='$this->ano',cerrado='$this->cerrado',modificado_por='$user',fecha_modificacion=NOW() 
+	    WHERE codigo_ano_academico='$this->codigo_ano_academico'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else

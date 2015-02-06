@@ -134,7 +134,7 @@
 								                <label class="control-label">Año Académico:</label>
 								                <?php
 												$pgsql=new Conexion();
-												$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1'";
+												$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N'";
 												$query = $pgsql->Ejecutar($sql);
 												while($row=$pgsql->Respuesta($query)){
 													echo "<input type='hidden' name='codigo_ano_academico' id='codigo_ano_academico' value='".$row['codigo_ano_academico']."' />";
@@ -990,7 +990,8 @@
 	else if($_GET['Opt']=="3"){ // Ventana de Modificaciones		
 		$pgsql=new Conexion();
 		$sql = "SELECT pins.codigo_proceso_inscripcion,TO_CHAR(pins.fecha_inscripcion,'DD/MM/YYYY') as fecha_inscripcion,
-		pins.codigo_ano_academico,pins.cedula_persona,pins.cedula_responsable,p.primer_nombre,p.segundo_nombre,p.primer_apellido,
+		(SELECT codigo_ano_academico FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N') AS codigo_ano_academico,
+		pins.cedula_persona,pins.cedula_responsable,p.primer_nombre,p.segundo_nombre,p.primer_apellido,
 		p.segundo_apellido,p.sexo,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,p.lugar_nacimiento,
 		p.direccion,p.telefono_local,p.telefono_movil,pins.anio_a_cursar,pins.coordinacion_pedagogica,aa.ano,
 		i.codigo_inscripcion,INITCAP(per.descripcion) descripcion,TO_CHAR(per.fecha_inicio,'DD/MM/YYYY') fecha_inicio,

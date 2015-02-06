@@ -104,7 +104,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus = '1' ORDER BY ano ASC";
+							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N' ORDER BY ano ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_ano_academico'].">".$row['ano']."</option>";
@@ -162,7 +162,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus='1' ORDER BY ano ASC";
+							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus='1' AND cerrado = 'N' ORDER BY ano ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_ano_academico']==$row['codigo_ano_academico'])

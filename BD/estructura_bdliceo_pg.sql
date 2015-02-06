@@ -559,6 +559,7 @@ CREATE TABLE educacion.tano_academico (
 	codigo_ano_academico numeric not null default nextval('educacion.seq_ano_academico'),
 	ano char(8) not null,
 	estatus char(1) not null default '1',
+	cerrado char(1) not null default 'Y',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
