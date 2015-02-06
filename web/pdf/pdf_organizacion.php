@@ -9,7 +9,8 @@ class clsFpdf extends FPDF {
   var $aligns;
   //Cabecera de página
   public function Header(){
-    $this->Image("../images/banner.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   $this->Ln(55);  
+    $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   
+    $this->Ln(55);  
     $this->SetFont('Arial','B',12);
     $this->Cell(0,6,'LISTADO DE LAS ORGANIZACIONES',0,1,"C");
     $this->Ln(8);

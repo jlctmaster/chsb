@@ -27,7 +27,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							<th>Cota</th>
 							<th>Fecha Salida</th>
 							<th>Responsable</th>
-							<th>Estudiante</th>
+							<th>Solicitante</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')

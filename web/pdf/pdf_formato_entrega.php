@@ -87,6 +87,10 @@ class clsFpdf extends FPDF {
 		$this->Cell(19);
 		$this->SetFont("Arial","",10);
 		$this->Row(array($fila['elaborado_por'][0],$fila['recibido_por'][0]),false);
+		$this->SetFont('Arial','B',10);
+		$this->Cell(60,10,"Fecha De Emisión: ",0,0,'R',false);
+        $this->SetFont('Arial','',10);  
+        $this->Cell(32,10,date("d/m/y H:i:s"),0,1,'R',false); 
 		//Posición: a 2 cm del final
 		$this->SetY(-20);
 		//Arial italic 8
