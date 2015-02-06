@@ -6,13 +6,13 @@
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inicio">Fecha desde</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha desde la cual desea ver los prestamos de libros" name="fecha_inicio" id="fecha_inicio" type="text" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha desde la cual desea ver las asignaciones de los bienes de libros" name="fecha_inicio" id="fecha_inicio" type="text" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha hasta</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha hasta donde desea ver los prestamos de libros" name="fecha_fin" id="fecha_fin" type="text" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha hasta donde desea ver las asignaciones de los bienes de libros" name="fecha_fin" id="fecha_fin" type="text" readonly required />
 					</div>  
 				</div>
 				<div class="form-actions">

@@ -191,6 +191,8 @@ if(isset($_SESSION['user_estado'])){
           else if(isset($_GET['asignacion_bienes'])) include("rep_asignacion_bienes.php");
           else if(isset($_GET['recuperacion_bienes'])) include("rep_recuperacion_bienes.php");
           else if(isset($_GET['reconstruccion_bienes'])) include("rep_reconstruccion_bienes.php");
+          else if(isset($_GET['usuarios'])) include("rep_usuarios.php");
+          else if(isset($_GET['estudiante_seccion'])) include("rep_estudiante_seccion.php");
   				//principal
         	else include("serv_inicio.php");                                                                                                                                                                                                                                                                                                                                            
         }else{
