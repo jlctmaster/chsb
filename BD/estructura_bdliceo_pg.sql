@@ -620,7 +620,7 @@ CREATE TABLE educacion.tperiodo (
 	descripcion varchar(45) not null,
 	fecha_inicio date not null,
 	fecha_fin date not null,
-	codigo_lapso numeric not null,
+	codigo_lapso numeric null,
 	esinscripcion char(1) not null default '0',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
