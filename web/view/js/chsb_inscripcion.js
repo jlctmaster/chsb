@@ -111,7 +111,33 @@ function init(){
 		}
 
 		if(send==true)
-			$('#form1').submit();
+			noty({
+		        text: stringUnicode("Sí continua con el registro estará cerrando los periodos de inscripciones anteriores ¿Está seguro que quiere continuar?"),
+		        layout: "center",
+		        type: "confirm",
+		        dismissQueue: true,
+		        animateOpen: {"height": "toggle"},
+		        animateClose: {"height": "toggle"},
+		        theme: "defaultTheme",
+		        closeButton: false,
+		        closeOnSelfClick: true,
+		        closeOnSelfOver: false,
+		        buttons: [
+		        {
+		            addClass: 'btn btn-primary', text: 'Aceptar', onClick: function($noty){
+		                $noty.close();
+		                setInterval(function(){
+							$('#form1').submit();
+		                },1000)
+		            }
+		        },
+		        {
+		            addClass: 'btn btn-danger', text: 'Cancelar', onClick: function($noty){
+		                $noty.close();
+		            }
+		        }
+		        ]
+		    });
 	}
 
 	function CambiarEstatus(valor){

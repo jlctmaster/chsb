@@ -1,12 +1,12 @@
 <script type="text/javascript" src="js/chsb_periodo.js"></script>
 <?php
 require_once("../class/class_perfil.php");
+require_once('../class/class_bd.php');
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('periodo');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT *, TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin 
 	FROM educacion.tperiodo p 
@@ -109,9 +109,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Lapso" name='codigo_lapso' id='codigo_lapso' required >
 							<option value=0>Seleccione un Lapso</option>
 							<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tlapso ORDER BY lapso ASC";
+							$sql = "SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
+							FROM educacion.tlapso l 
+							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
+							WHERE a.cerrado='N' 
+							ORDER BY l.lapso ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_lapso'].">".$row['lapso']."</option>";
@@ -135,7 +138,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tperiodo WHERE codigo_periodo =".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." AND esinscripcion='N'";
+	$sql = "SELECT * FROM educacion.tperiodo 
+	WHERE codigo_periodo =".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." 
+	AND esinscripcion='N'";
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -176,7 +181,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql ="SELECT * FROM educacion.tlapso ORDER BY lapso ASC";
+							$sql = "SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
+							FROM educacion.tlapso l 
+							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
+							ORDER BY l.lapso ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_lapso']==$row['codigo_lapso'])

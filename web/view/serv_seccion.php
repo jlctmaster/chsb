@@ -113,42 +113,16 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="peso_min">Peso Mínimo</label>  
+				<label class="control-label" for="indice_min">Índice Mínimo</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el peso mínimo" onKeyPress="return isNumberKey(event)" maxlength=2 name="peso_min" id="peso_min" type="text" required />
+					<input class="input-xlarge" title="Ingrese el Índice Corporal Mínimo" onKeyPress="return isNumberKey(event)" maxlength=2 name="indice_min" id="indice_min" type="text" required />
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="peso_max">Peso Máximo</label>  
+				<label class="control-label" for="indice_max">Índice Máximo</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el peso Máximo" onKeyPress="return isNumberKey(event)" maxlength=2 name="peso_max" id="peso_max" type="text" required />
+					<input class="input-xlarge" title="Ingrese el Índice Corporal Máximo" onKeyPress="return isNumberKey(event)" maxlength=2 name="indice_max" id="indice_max" type="text" required />
 				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="talla_min">Talla Mínima</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="talla_min" id="talla_min" title="Seleccione una Talla" required > 
-						<option value=0>Seleccione una Talla</option>
-						<option value="1" >Talla S</option>
-						<option value="2" >Talla M</option>
-						<option value="3" >Talla L</option>
-						<option value="4" >Talla X</option>
-						<option value="5" >Talla XL</option>	
-		            </select>
-		        </div>
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="talla_max">Talla Máxima</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="talla_max" id="talla_max" title="Seleccione una Talla" required > 
-						<option value=0>Seleccione una Talla</option>
-						<option value="1" >Talla S</option>
-						<option value="2" >Talla M</option>
-						<option value="3" >Talla L</option>
-						<option value="4" >Talla X</option>
-						<option value="5" >Talla XL</option>
-		             </select>
-		         </div>
 			</div>
 			<br>
 			<div class="table-responsive">
@@ -245,8 +219,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="controls">  
 					<select class="selectpicker" data-live-search="true" name="turno" id="turno" title="Seleccione un turno" placeholder="Seleccione un turno"  required >
 						<option value='0'>Seleccione un Turno</option>
-						<option value="M" <? if($row['turno']=="M") {echo "selected";} ?> >Mañana</option>
-						<option value="T" <? if($row['turno']=="T") {echo "selected";} ?> >Tarde</option>	
+						<option value="M" <?php if($row['turno']=="M") {echo "selected";} ?> >Mañana</option>
+						<option value="T" <?php if($row['turno']=="T") {echo "selected";} ?> >Tarde</option>	
 					</select>	
 				</div>  
 			</div>
@@ -263,43 +237,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="peso_min">Peso Mínimo
+				<label class="control-label" for="indice_min">Índice Mínimo
 				</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el peso mínimo" onKeyPress="return isNumberKey(event)" maxlength=2 name="peso_min" id="peso_min" type="text" value="<?=$row['peso_min']?>" required />
+					<input class="input-xlarge" title="Ingrese el Índice Corporal Mínimo" onKeyPress="return isNumberKey(event)" maxlength=2 name="indice_min" id="indice_min" type="text" value="<?=$row['indice_min']?>" required />
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="peso_max">Peso Máximo</label>  
+				<label class="control-label" for="indice_max">Índice Máximo</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el Peso Máxima" onKeyPress="return isNumberKey(event)" maxlength=2 name="peso_max" id="peso_max" type="text" value="<?=$row['peso_max']?>" required />
+					<input class="input-xlarge" title="Ingrese el Índice Corporal Máximo" onKeyPress="return isNumberKey(event)" maxlength=2 name="indice_max" id="indice_max" type="text" value="<?=$row['indice_max']?>" required />
 				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="talla_min">Talla Mínima</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="talla_min" id="talla_min" title="Seleccione una Talla" required > 
-						<option value=0>Seleccione una Talla</option>
-						<option value="1" <?php if($row['talla_min']=="1") {echo "selected";} ?>>Talla S</option>
-						<option value="2" <?php if($row['talla_min']=="2") {echo "selected";} ?>>Talla M</option>	
-						<option value="3" <?php if($row['talla_min']=="3") {echo "selected";} ?>>Talla L</option>
-						<option value="4" <?php if($row['talla_min']=="4") {echo "selected";} ?>>Talla X</option>
-						<option value="5" <?php if($row['talla_min']=="5") {echo "selected";} ?>>Talla XL</option>
-					</select>
-		         </div>
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="talla_max">Talla Máxima</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="talla_max" id="talla_max" title="Seleccione una Talla" required > 
-						<option value=0>Seleccione una Talla</option>
-						<option value="1" <?php if($row['talla_max']=="1") {echo "selected";} ?>>Talla S</option>
-						<option value="2" <?php if($row['talla_max']=="2") {echo "selected";} ?>>Talla M</option>	
-						<option value="3" <?php if($row['talla_max']=="3") {echo "selected";} ?>>Talla L</option>
-						<option value="4" <?php if($row['talla_max']=="4") {echo "selected";} ?>>Talla X</option>
-						<option value="5" <?php if($row['talla_max']=="5") {echo "selected";} ?>>Talla XL</option>
-					</select>
-		         </div>
 			</div>
 			<div class="control-group">  
 				<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
@@ -427,8 +375,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT seccion,nombre_seccion,CASE turno WHEN 'M' THEN 'MAÑANA' WHEN 'T' THEN 'TARDE' ELSE 'NOCHE' END AS turno,
-	capacidad_min,capacidad_max,peso_min,peso_max,CASE talla_min WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_min,
-	CASE talla_max WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_max
+	capacidad_min,capacidad_max,indice_min,indice_max 
 	FROM educacion.tseccion 
 	WHERE seccion =".$pgsql->comillas_inteligentes($_GET['seccion']);
 	$query = $pgsql->Ejecutar($sql);
@@ -482,37 +429,20 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 				</tr>
 						<tr>
 					<td>
-						<label>Peso Mínimo:</label>
+						<label>Índice Mínimo:</label>
 					</td>
 					<td>
-						<label><?=$row['peso_min']?></label>
+						<label><?=$row['indice_min']?></label>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<label>Peso Máximo:</label>
+						<label>Índice Máximo:</label>
 					</td>
 					<td>
-						<label><?=$row['peso_max']?></label>
+						<label><?=$row['indice_max']?></label>
 					</td>
 				</tr>
-						<tr>
-					<td>
-						<label>Talla Mínima:</label>
-					</td>
-					<td>
-						<label><?=$row['talla_min']?></label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Talla Máxima:</label>
-					</td>
-					<td>
-						<label><?=$row['talla_max']?></label>
-					</td>
-				</tr>
-				
 			</table>
 			<center>
 				<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>

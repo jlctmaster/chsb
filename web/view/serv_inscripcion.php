@@ -128,7 +128,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,
-	TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,i.estatus  
+	TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,i.estatus,i.cerrado,i.codigo_periodo 
 	FROM educacion.tinscripcion i 
 	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
 	WHERE p.esinscripcion='Y' AND codigo_inscripcion = '".$_GET['codigo_inscripcion']."'";
@@ -142,13 +142,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_inscripcion">Código:</label>  
 					<div class="controls">  
-						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
+						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">
 						<input class="input-xlarge" title="el Código del período de inscripción es generado por el sistema" name="codigo_inscripcion" id="codigo_inscripcion" type="text" value="<?=$row['codigo_inscripcion']?>" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Descripción:</label>  
 					<div class="controls">  
+						<input name="codigo_periodo" id="codigo_periodo" type="hidden" value="<?=$row['codigo_periodo']?>"/>
 						<input class="input-xlarge" title="Ingrese el nombre o descripción para el período de inscripción" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>
@@ -170,6 +171,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<input class="input-xlarge" title="Ingrese la fecha de cierre del período de inscripción" name="fecha_cierre" id="fecha_cierre" type="text" size="50" value="<?=$row['fecha_cierre']?>" readonly required />
 					</div>  
 				</div>
+				<div class="control-group">  
+					<label class="control-label" for="cerrado">¿Cerrado? </label>  
+					<div class="controls">  
+						<div class="radios">
+							<input type="checkbox" title="Si el Check está marcado indica que el año académico esta cerrado" name="cerrado" id="cerrado" <?php if($row['cerrado']=="Y"){echo "checked='checked'";}?> />
+						</div>
+					</div>
+				</div> 
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div> 

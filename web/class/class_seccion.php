@@ -6,10 +6,8 @@ class Seccion {
 	private $turno; 
 	private $capacidad_min; 
 	private $capacidad_max;
-	private $peso_min; 
-	private $peso_max;  
-	private $talla_min; 
-	private $talla_max;
+	private $indice_min; 
+	private $indice_max;
     private $codigo_materia;
 	private $estatus;
 	private $pgsql; 
@@ -20,10 +18,8 @@ class Seccion {
 		$this->turno=null;
 		$this->capacidad_min=null;
 		$this->capacidad_max=null;
-		$this->peso_min=null;
-		$this->peso_max=null;
-		$this->talla_min=null;
-		$this->talla_max=null;
+		$this->indice_min=null;
+		$this->indice_max=null;
 		$this->codigo_materia=null;
 		$this->estatus=null;
 		$this->pgsql=new Conexion();
@@ -82,39 +78,21 @@ class Seccion {
 		}
     }
 
-        public function peso_min(){
+        public function indice_min(){
 		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->peso_min;
+		if($Num_Parametro==0) return $this->indice_min;
 
 		if($Num_Parametro>0){
-			$this->peso_min=func_get_arg(0);
+			$this->indice_min=func_get_arg(0);
 		}
     }
 
-    public function peso_max(){
+    public function indice_max(){
 		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->peso_max;
+		if($Num_Parametro==0) return $this->indice_max;
 
 		if($Num_Parametro>0){
-			$this->peso_max=func_get_arg(0);
-		}
-    }
-
-        public function talla_min(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->talla_min;
-
-		if($Num_Parametro>0){
-			$this->talla_min=func_get_arg(0);
-		}
-    }
-
-    public function talla_max(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->talla_max;
-
-		if($Num_Parametro>0){
-			$this->talla_max=func_get_arg(0);
+			$this->indice_max=func_get_arg(0);
 		}
     }
 
@@ -158,10 +136,10 @@ class Seccion {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO educacion.tseccion (seccion,nombre_seccion,turno,capacidad_min,capacidad_max,peso_min,
-	    peso_max,talla_min,talla_max,creado_por,fecha_creacion) 
+	    $sql="INSERT INTO educacion.tseccion (seccion,nombre_seccion,turno,capacidad_min,capacidad_max,indice_min,
+	    indice_max,creado_por,fecha_creacion) 
 		VALUES ('$this->seccion','$this->nombre_seccion','$this->turno','$this->capacidad_min','$this->capacidad_max',
-		'$this->peso_min','$this->peso_max','$this->talla_min','$this->talla_max','$user',NOW())";
+		'$this->indice_min','$this->indice_max','$user',NOW())";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -196,8 +174,8 @@ class Seccion {
    
     public function Actualizar($user,$oldseccion){
 	    $sql="UPDATE educacion.tseccion SET seccion='$this->seccion',nombre_seccion='$this->nombre_seccion',turno='$this->turno',
-	    capacidad_min='$this->capacidad_min',capacidad_max='$this->capacidad_max',peso_min='$this->peso_min',peso_max='$this->peso_max',
-	    talla_min='$this->talla_min',talla_max='$this->talla_max',modificado_por='$user',fecha_modificacion=NOW() 
+	    capacidad_min='$this->capacidad_min',capacidad_max='$this->capacidad_max',indice_min='$this->indice_min',
+	    indice_max='$this->indice_max',modificado_por='$user',fecha_modificacion=NOW() 
 	    WHERE seccion='$oldseccion'";
 	  	if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
@@ -215,10 +193,8 @@ class Seccion {
 			$this->turno($tseccion['turno']);
 			$this->capacidad_min($tseccion['capacidad_min']);
 			$this->capacidad_max($tseccion['capacidad_max']);
-			$this->peso_min($tseccion['peso_min']);
-			$this->peso_max($tseccion['peso_max']);
-			$this->talla_min($tseccion['talla_min']);
-			$this->talla_max($tseccion['talla_max']);
+			$this->indice_min($tseccion['indice_min']);
+			$this->indice_max($tseccion['indice_max']);
 			$this->estatus($tseccion['estatus']);
 			return true;
 		}

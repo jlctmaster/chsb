@@ -163,6 +163,7 @@ if(isset($_SESSION['user_estado'])){
         	else if(isset($_GET['estudiante'])) include("serv_estudiante.php");
         	else if(isset($_GET['horario'])) include("serv_horario.php");
         	else if(isset($_GET['proceso_inscripcion'])) include("serv_proceso_inscripcion.php");
+          else if(isset($_GET['asignar_seccion'])) include("serv_asignarseccion.php");
   				//bienes nacionales
         	else if(isset($_GET['tipo_bien'])) include("serv_tipo_bien.php");
         	else if(isset($_GET['bien'])) include("serv_bien.php");

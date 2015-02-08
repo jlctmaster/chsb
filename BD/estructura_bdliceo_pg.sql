@@ -643,10 +643,8 @@ CREATE TABLE educacion.tseccion (
  	turno char(1) not null default 'M',
  	capacidad_min numeric not null,
  	capacidad_max numeric not null,
-  	peso_min numeric NOT NULL,
-	peso_max numeric NOT NULL DEFAULT 0,
-	talla_min character(1) NOT NULL DEFAULT 'S',
-	talla_max character(1) NOT NULL DEFAULT 'S',
+  	indice_min numeric NOT NULL Default 0,
+	indice_max numeric NOT NULL Default 0,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -712,6 +710,7 @@ CREATE TABLE educacion.tinscripcion (
  	codigo_periodo numeric not null,
  	fecha_cierre date not null,
 	estatus char(1) not null default '1',
+	cerrado char(1) not null default 'Y',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
@@ -1677,12 +1676,11 @@ LEFT JOIN educacion.tbloque_hora bh ON bh.codigo_bloque_hora = h.codigo_bloque_h
 -- View Educacion Horario por Sección
 CREATE OR REPLACE VIEW educacion.vmateria_seccion_horario AS 
 SELECT s.seccion,
-s.peso_min AS periodo,
 count(h.codigo_materia) AS cantidad_materia_horario,
 count(ms.codigo_materia) AS cantidad_materia_seccion
 FROM educacion.tseccion s
 LEFT JOIN educacion.tmateria_seccion ms ON s.seccion = ms.seccion
 LEFT JOIN educacion.thorario_profesor h ON h.seccion = s.seccion
-GROUP BY s.seccion, s.peso_min, ms.codigo_materia;
+GROUP BY s.seccion, ms.codigo_materia;
 
 -- End Views 

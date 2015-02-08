@@ -86,7 +86,7 @@ else if($_GET['Opt']=="2"){
 	EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes 
 	FROM educacion.tinscripcion i
 	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
-	WHERE i.estatus = '1'";
+	WHERE i.estatus = '1' AND i.cerrado='N'";
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -248,24 +248,11 @@ else if($_GET['Opt']=="2"){
 					</div>  
 				</div>  
 				<div class="control-group">  
-					<label class="control-label" for="talla">Talla</label>  
+					<label class="control-label" for="talla">Estatura en CM</label>  
 					<div class="controls">
-						<select class="selectpicker" data-live-search="true" name="talla" id="talla" title="Seleccione una Talla" required > 
-							<option value=0>Seleccione</option>
-							<option value="1" >Talla S</option>
-							<option value="2" >Talla M</option>
-							<option value="3" >Talla L</option>
-							<option value="4" >Talla X</option>
-							<option value="5" >Talla XL</option>	
-			            </select>
+						<input class="input-xlarge" title="Ingrese el número de estatura en centimétros que mide el estudiante" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla" type="text" required />
 					</div>  
 				</div>  
-				<div class="control-group">  
-					<label class="control-label" for="indice">Índice</label>  
-					<div class="controls">  
-		                <input class="input-xlarge" type="text" title="Ingrese su indice acádemico" maxlength=4 onKeyPress="return isNumberKey(event)" name="indice" id="indice" required />
-					</div>  
-				</div>
 				<div class="control-group">  
 					<label class="control-label" for="cedula_representante">Cédula del Representante</label>  
 					<div class="controls">  
@@ -362,7 +349,7 @@ else if($_GET['Opt']=="3"){
 	EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes  
 	FROM educacion.tinscripcion i
 	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo AND p.esinscripcion =  'Y'
-	WHERE i.estatus = '1'";
+	WHERE i.estatus = '1' AND i.cerrado='N'";
 	$queryx = $pgsqlx->Ejecutar($sqlx);
 	$fila=$pgsql->Respuesta($queryx);
 	?>
@@ -532,24 +519,11 @@ else if($_GET['Opt']=="3"){
 					</div>  
 				</div>  
 				<div class="control-group">  
-					<label class="control-label" for="talla">Talla</label>  
+					<label class="control-label" for="talla">Estatura en CM</label>  
 					<div class="controls">
-						<select class="selectpicker" data-live-search="true" name="talla" id="talla" title="Seleccione una Talla" required > 
-							<option value=0>Seleccione</option>
-							<option value="1" <?php if($row['talla']=="1"){ echo "selected"; } ?> >Talla S</option>
-							<option value="2" <?php if($row['talla']=="2"){ echo "selected"; } ?>>Talla M</option>
-							<option value="3" <?php if($row['talla']=="3"){ echo "selected"; } ?>>Talla L</option>
-							<option value="4" <?php if($row['talla']=="4"){ echo "selected"; } ?>>Talla X</option>
-							<option value="5" <?php if($row['talla']=="5"){ echo "selected"; } ?>>Talla XL</option>	
-			            </select>
+						<input class="input-xlarge" title="Ingrese el número de estatura en centimétros que mide el estudiante" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla" type="text" value="<?=$row['talla']?>" required />
 					</div>  
 				</div>  
-				<div class="control-group">  
-					<label class="control-label" for="indice">Índice</label>  
-					<div class="controls">  
-		                <input class="input-xlarge" type="text" title="Ingrese su indice acádemico" maxlength=4 onKeyPress="return isNumberKey(event)" name="indice" id="indice" value="<?=$row['indice']?>" required />
-					</div>  
-				</div>
 				<div class="control-group">  
 					<label class="control-label" for="cedula_representante">Cédula del Representante</label>  
 					<div class="controls">  

@@ -7,6 +7,9 @@ if(isset($_POST['lOpt']))
 if(isset($_POST['codigo_inscripcion']))
   $codigo_inscripcion=trim($_POST['codigo_inscripcion']);
 
+if(isset($_POST['codigo_periodo']))
+  $codigo_periodo=trim($_POST['codigo_periodo']);
+
 if(isset($_POST['descripcion']))
   $descripcion=trim($_POST['descripcion']);
 
@@ -19,6 +22,17 @@ if(isset($_POST['fecha_fin']))
 if(isset($_POST['fecha_cierre']))
   $fecha_cierre=trim($_POST['fecha_cierre']);
 
+if(isset($_POST['cerrado']))
+  $cerrado=trim($_POST['cerrado']);
+
+function comprobarCheckBox($value){
+  if($value == "on")
+    $chk = "Y";
+  else
+    $chk = "N";
+  return $chk;
+}
+
 include_once("../class/class_inscripcion.php");
 $inscripcion=new inscripcion();
 if($lOpt=='Registrar'){
@@ -28,6 +42,7 @@ if($lOpt=='Registrar'){
   $inscripcion->fecha_fin($fecha_fin);
   $inscripcion->fecha_cierre($fecha_cierre);
   if(!$inscripcion->Comprobar()){
+    $inscripcion->Cerrar($_SESSION['user_name']);
     if($inscripcion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -52,9 +67,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $inscripcion->codigo_inscripcion($codigo_inscripcion);
   $inscripcion->descripcion($descripcion);
+  $inscripcion->codigo_periodo($codigo_periodo);
   $inscripcion->fecha_inicio($fecha_inicio);
   $inscripcion->fecha_fin($fecha_fin);
   $inscripcion->fecha_cierre($fecha_cierre);
+  $inscripcion->cerrado(comprobarCheckBox($cerrado));
+  $inscripcion->Cerrar($_SESSION['user_name']);
   if($inscripcion->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

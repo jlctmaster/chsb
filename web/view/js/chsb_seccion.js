@@ -93,7 +93,6 @@ function init(){
 			alert("¡Debe Seleccionar un Turno!");
 			send = false;
 		}
-
 		else if($('#capacidad_min').val()==""){
 			alert("¡Debe ingresar la Capacidad Mínima en la Sección!");
 			send = false;
@@ -102,20 +101,12 @@ function init(){
 			alert("¡Debe ingresar la Capacidad Máxima de la Sección!");
 			send = false;
 		}
-		else if($('#peso_min').val()==0){
-			alert("¡Debe Seleccionar un Peso Mínimo!");
+		else if($('#indice_min').val()==""){
+			alert("¡Debe ingresar un Índice Corporal Mínimo!");
 			send = false;
 		}
-		else if($('#peso_max').val()==0){
-			alert("¡Debe Seleccionar un Peso Máximo!");
-			send = false;
-		}
-		else if($('#talla_min').val()==0){
-			alert("¡Debe Seleccionar una Talla Mínima!");
-			send = false;
-		}
-		else if($('#talla_max').val()==0){
-			alert("¡Debe Seleccionar una Talla Máxima!");
+		else if($('#indice_max').val()==""){
+			alert("¡Debe ingresar un Índice Corporal Máximo!");
 			send = false;
 		}
 		else if(document.getElementsByName('materias[]')){

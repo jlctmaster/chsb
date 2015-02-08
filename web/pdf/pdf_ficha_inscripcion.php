@@ -7,7 +7,7 @@ class clsFpdf extends FPDF {
   var $aligns;
   //Cabecera de página
   public function Header(){
-    $this->Image("../images/banner.jpg" , 25 ,15, 160 , 20, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   
+    $this->Image("../images/cintillo.jpg" , 25 ,15, 160 , 20, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   
     $this->Ln(25);  
   }
 
@@ -378,7 +378,7 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(20,5,'Año: ',1,0);
     $lobjPdf->Cell(45,5,$arr['estudian_aca'][0]=="Y" ? $arr['que_anio'][0] : '',1,1);
     $lobjPdf->Cell(50,5,'Peso del Estudiante: '.$arr['peso'][0],1,0);
-    $lobjPdf->Cell(30,5,'Talla: '.($arr['talla'][0]=="1" ? "S" : ($arr['talla'][0]=="2" ? "M" : ($arr['talla'][0]=="3" ? "L" : ($arr['talla'][0]=="4" ? "X" : "XL")))),1,0,'C');
+    $lobjPdf->Cell(30,5,'Estatura: '.$arr['talla'][0],1,0,'C');
     $lobjPdf->Cell(35,5,'Índice: '.$arr['indice'][0],1,0);
     $lobjPdf->Cell(75,5,$arr['tiene_talento'][0]=="Y" ? 'Tiene habilidades/talento: SÍ ¿Cuál? '.$arr['cual_talento'][0] : 'Tiene habilidades/talento: NO ¿Cuál? ',1,1);
     $lobjPdf->SetFont('Arial','B',10);
@@ -485,8 +485,8 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(10,5,'Años',1,0);
     $lobjPdf->Cell(10,5,'Meses',1,0);
     $lobjPdf->Cell(5,5,$arr['meses'][0],1,0,'C');
-    $lobjPdf->Cell(10,5,'Talla',1,0);
-    $lobjPdf->Cell(10,5,($arr['talla'][0]=="1" ? "S" : ($arr['talla'][0]=="2" ? "M" : ($arr['talla'][0]=="3" ? "L" : ($arr['talla'][0]=="4" ? "X" : "XL")))),1,0,'C');
+    $lobjPdf->Cell(15,5,'Estatura',1,0);
+    $lobjPdf->Cell(5,5,($arr['talla'][0]),1,0,'C');
     $lobjPdf->Cell(10,5,'Peso',1,0);
     $lobjPdf->Cell(10,5,$arr['peso'][0],1,0,'C');
     $lobjPdf->Cell(15,5,'Índice',1,0);

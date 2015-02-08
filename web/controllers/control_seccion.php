@@ -24,17 +24,11 @@ if(isset($_POST['capacidad_min']))
 if(isset($_POST['capacidad_max']))
   $capacidad_max=trim($_POST['capacidad_max']);
 
-if(isset($_POST['peso_min']))
-  $peso_min=trim($_POST['peso_min']);
+if(isset($_POST['indice_min']))
+  $indice_min=trim($_POST['indice_min']);
 
-if(isset($_POST['peso_max']))
-  $peso_max=trim($_POST['peso_max']);
-
-if(isset($_POST['talla_min']))
-  $talla_min=trim($_POST['talla_min']);
-
-if(isset($_POST['talla_max']))
-  $talla_max=trim($_POST['talla_max']);
+if(isset($_POST['indice_max']))
+  $indice_max=trim($_POST['indice_max']);
 
 include_once("../class/class_seccion.php");
 $seccion=new Seccion();
@@ -44,10 +38,8 @@ if($lOpt=='Registrar'){
   $seccion->turno($turno);
   $seccion->capacidad_min($capacidad_min);
   $seccion->capacidad_max($capacidad_max);
-  $seccion->peso_min($peso_min);
-  $seccion->peso_max($peso_max);
-  $seccion->talla_min($talla_min);
-  $seccion->talla_max($talla_max);
+  $seccion->indice_min($indice_min);
+  $seccion->indice_max($indice_max);
   if(!$seccion->Comprobar()){
     if($seccion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -80,10 +72,8 @@ if($lOpt=='Modificar'){
   $seccion->turno($turno);
   $seccion->capacidad_min($capacidad_min);
   $seccion->capacidad_max($capacidad_max);  
-  $seccion->peso_min($peso_min);
-  $seccion->peso_max($peso_max);
-  $seccion->talla_min($talla_min);
-  $seccion->talla_max($talla_max);
+  $seccion->indice_min($indice_min);
+  $seccion->indice_max($indice_max);
   if($seccion->Actualizar($_SESSION['user_name'],$oldseccion)){
     $confirmacion=1;
     if(isset($_POST['materias'])){

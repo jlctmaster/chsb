@@ -160,6 +160,14 @@ function init(){
 			alert("¡Debe ingresar el teléfono local del estudiante!");
 			send = false;
 		}
+		else if($('#peso').val()==""){
+			alert("¡Debe ingresar el peso del estudiante!");
+			send = false;
+		}
+		else if($('#talla').val()==""){
+			alert("¡Debe ingresar la estatura del estudiante!");
+			send = false;
+		}
 
 		//Comprobamos si el elemento estatus existe para luego verificar su valor.
 		if(document.getElementById("estatus")){

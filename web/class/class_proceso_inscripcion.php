@@ -4,6 +4,7 @@ require_once("class_tipo_persona.php");
 require_once("class_parentesco.php");
 require_once("class_estudiante.php");
 require_once("class_persona.php");
+require_once("class_tabulador.php");
 class proceso_inscripcion {
 	private $codigo_proceso_inscripcion; 
 	private $codigo_inscripcion;
@@ -904,8 +905,10 @@ class proceso_inscripcion {
    		if($row=$this->pgsql->Respuesta($query)){
    			return $row['codigo_proceso_inscripcion'];
    		}
-   		else
-   			return null;
+   		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
     }
    
    	public function Registrar_Paso1($user){
@@ -932,11 +935,15 @@ class proceso_inscripcion {
 			    	$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 					$ok=true;
 			    }
-				else
+				else{
+			    	$this->error(pg_last_error());
 					$ok=false;
+			    }
 			}
-			else
+			else{
+		    	$this->error(pg_last_error());
 				$ok=false;
+		    }
 		}else{
 			if($estudiante->estatus()==1)
 				$ok=false;
@@ -949,8 +956,10 @@ class proceso_inscripcion {
 				    	$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 						$ok=true;
 				    }
-					else
+					else{
+				    	$this->error(pg_last_error());
 						$ok=false;
+				    }
 				}
 			}
 		}
@@ -965,6 +974,20 @@ class proceso_inscripcion {
    	}
 
    	public function Registrar_Paso2($user){
+   		$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad,
+		i.peso,i.talla  
+		FROM educacion.tproceso_inscripcion i 
+		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
+		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
+		$query=$this->pgsql->Ejecutar($sqlx);
+		if($this->pgsql->Total_Filas($query)!=0){
+			$testudiante=$this->pgsql->Respuesta($query);
+			$tabulador=new tabulador();
+			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$testudiante['peso'],$testudiante['talla']));
+		}else{
+	    	$this->error(pg_last_error());
+			return false;
+	    }
    		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
    		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
    		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
@@ -974,8 +997,10 @@ class proceso_inscripcion {
 	    	$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 			return true;
 	    }
-		else
+		else{
+	    	$this->error(pg_last_error());
 			return false;
+	    }
    	}
 
    	public function Registrar_Paso3($user){
@@ -1011,13 +1036,19 @@ class proceso_inscripcion {
 	    						$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 								$ok=true;
 							}
-							else
+							else{
+						    	$this->error(pg_last_error());
 								$ok=false;
-						else
+						    }
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
+					    }
 					}
-					else
+					else{
+				    	$this->error(pg_last_error());
 						$ok=false;
+				    }
 				}else{
 					if($padre->estatus()==1)
 						$ok=false;
@@ -1030,16 +1061,21 @@ class proceso_inscripcion {
 	    							$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 									$ok=true;
 								}
-								else
+								else{
+							    	$this->error(pg_last_error());
 									$ok=false;
-							else
+							    }
+							else{
+						    	$this->error(pg_last_error());
 								$ok=false;
+						    }
 						}
 					}
 				}
 			}else{
-				$ok=true;
-			}
+		    	$this->error(pg_last_error());
+				$ok=false;
+		    }
 	   		$madre = new persona();
 			$madre->cedula_persona($this->cedula_madre);
 			$madre->primer_nombre($this->primer_nombre_madre);
@@ -1065,14 +1101,20 @@ class proceso_inscripcion {
 					    		$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 								$ok2=true;
 					    	}
-							else
+							else{
+						    	$this->error(pg_last_error());
 								$ok2=false;
+						    }
 					    }
-						else
+						else{
+					    	$this->error(pg_last_error());
 							$ok2=false;
+					    }
 					}
-					else
+					else{
+				    	$this->error(pg_last_error());
 						$ok2=false;
+				    }
 				}else{
 					if($madre->estatus()==1)
 						$ok2=false;
@@ -1085,16 +1127,21 @@ class proceso_inscripcion {
 									$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 									$ok2=true;
 								}
-								else
+								else{
+							    	$this->error(pg_last_error());
 									$ok2=false;
-							else
+							    }
+							else{
+						    	$this->error(pg_last_error());
 								$ok2=false;
+						    }
 						}
 					}
 				}
 			}else{
-				$ok2=true;
-			}
+		    	$this->error(pg_last_error());
+				$ok2=false;
+		    }
 			if($ok==true && $ok2==true){
 				$this->Transaccion('finalizado');
 				return true;
@@ -1137,13 +1184,19 @@ class proceso_inscripcion {
 							$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 							$ok=true;
 						}
-						else
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
-					else
+					    }
+					else{
+				    	$this->error(pg_last_error());
 						$ok=false;
+				    }
 				}
-				else
+				else{
+			    	$this->error(pg_last_error());
 					$ok=false;
+			    }
 			}else{
 				if($representante->estatus()==1)
 					$ok=false;
@@ -1156,10 +1209,14 @@ class proceso_inscripcion {
 								$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 								$ok=true;
 							}
-							else
+							else{
+						    	$this->error(pg_last_error());
 								$ok=false;
-						else
+						    }
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
+					    }
 					}
 				}
 			}
@@ -1183,11 +1240,15 @@ class proceso_inscripcion {
 		    	WHERE cedula_persona='$this->cedula_persona' AND cedula_familiar='$this->cedula_representante' AND codigo_parentesco='$this->codigo_parentesco'";
 		    	if($this->pgsql->Ejecutar($sqlx)!=null)
 					$ok=true;
-				else
+				else{
+			    	$this->error(pg_last_error());
 					$ok=false;
+			    }
 		    }
-			else
+			else{
+		    	$this->error(pg_last_error());
 				$ok=false;
+		    }
 
 			if($ok==true){
 				$this->Transaccion('finalizado');
@@ -1206,14 +1267,11 @@ class proceso_inscripcion {
    		$sql="UPDATE educacion.tproceso_inscripcion SET integracion_escuela_comunidad='$this->integracion_escuela_comunidad',especifique_integracion='$this->especifique_integracion',
    		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
-			if($this->Registrar_Paso6($user)){
-				$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
-				$ok=true;
-			}
-			else
-				$ok=false;
-		else
+			$ok=true;
+		else{
+	    	$this->error(pg_last_error());
 			$ok=false;
+	    }
 
 		if($ok==true){
 			$this->Transaccion('finalizado');
@@ -1223,43 +1281,6 @@ class proceso_inscripcion {
 			$this->Transaccion('cancelado');
 			return false;
 		}
-   	}
-
-   	public function Registrar_Paso6($user){
-   		$sql="UPDATE educacion.tproceso_inscripcion SET seccion=(SELECT s.seccion FROM educacion.tseccion s 
-   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
-   		WHERE pi.peso BETWEEN s.peso_min AND s.peso_max AND pi.talla BETWEEN s.talla_min AND s.talla_max AND pi.codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion') 
-   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),
-		observacion='ASIGNACIÓN AUTOMATICA POR EL SISTEMA',procesado='Y',modificado_por='$user',fecha_modificacion=NOW() 
-		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-	    if($this->pgsql->Ejecutar($sql)!=null){
-	    	$sqlx="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ('$this->cedula_persona',(SELECT s.seccion FROM educacion.tseccion s 
-	   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE 
-	   		EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi WHERE pi.peso BETWEEN s.peso_min AND s.peso_max AND pi.talla BETWEEN s.talla_min AND s.talla_max AND pi.codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion') 
-	   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),'$user',NOW())";
-	    	if($this->pgsql->Ejecutar($sqlx)!=null)
-	    		return true;
-	    	else{
-	    		$sqlz="SELECT s.seccion FROM educacion.tseccion s 
-				LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion 
-				WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
-				WHERE pi.peso BETWEEN s.peso_min AND s.peso_max AND pi.talla BETWEEN s.talla_min AND s.talla_max AND 
-				pi.codigo_proceso_inscripcion='14') 
-				GROUP BY s.seccion,s.nombre_seccion 
-				ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC";
-				$query=$this->pgsql->Ejecutar($sql);
-				if($this->pgsql->Total_Filas($query)==0){
-					$this->error('No hay secciones disponibles');
-					return false;
-				}
-				else{
-					$this->error(pg_last_error());
-					return false;
-				}
-	    	}
-	    }
-		else
-			return false;
    	}
    
     public function Actualizar_Paso1($user,$oldci){
@@ -1284,11 +1305,15 @@ class proceso_inscripcion {
 			WHERE codigo_proceso_inscripcion = '$this->codigo_proceso_inscripcion' AND cedula_persona = '$oldci'";
 		    if($this->pgsql->Ejecutar($sql)!=null)
 				$ok=true;
-			else
+			else{
+		    	$this->error(pg_last_error());
 				$ok=false;
+		    }
 		}
-		else
+		else{
+	    	$this->error(pg_last_error());
 			$ok=false;
+	    }
 
 		if($ok==true){
 			$this->Transaccion('finalizado');
@@ -1301,6 +1326,19 @@ class proceso_inscripcion {
    	}
 
    	public function Actualizar_Paso2($user){
+   		$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad   
+		FROM educacion.tproceso_inscripcion i 
+		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
+		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
+		$query=$this->pgsql->Ejecutar($sqlx);
+		if($this->pgsql->Total_Filas($query)!=0){
+			$testudiante=$this->pgsql->Respuesta($query);
+			$tabulador=new tabulador();
+			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+		}else{
+	    	$this->error(pg_last_error());
+			return false;
+	    }
    		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
    		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
    		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
@@ -1308,8 +1346,10 @@ class proceso_inscripcion {
    		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
+		else{
+	    	$this->error(pg_last_error());
 			return false;
+	    }
    	}
 
    	public function Actualizar_Paso3($user,$oldcip,$oldcim){
@@ -1345,15 +1385,20 @@ class proceso_inscripcion {
 				    	WHERE cedula_persona='$this->cedula_persona' AND cedula_familiar='$this->cedula_padre' AND codigo_parentesco='$parentesco_padre'";
 				    	if($this->pgsql->Ejecutar($sqlx)!=null)
 							$ok=true;
-						else
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
+					    }
 				    }
-					else
+					else{
+				    	$this->error(pg_last_error());
 						$ok=false;
+				    }
 				}
 			}else{
-				$ok=true;
-			}
+		    	$this->error(pg_last_error());
+				$ok=false;
+		    }
 	   		$madre = new persona();
 			$madre->cedula_persona($this->cedula_madre);
 			$madre->primer_nombre($this->primer_nombre_madre);
@@ -1378,16 +1423,21 @@ class proceso_inscripcion {
 				    	$sqlx="UPDATE general.tdetalle_familiar SET es_representantelegal='Y',modificado_por='$user',fecha_modificacion=NOW() 
 				    	WHERE cedula_persona='$this->cedula_persona' AND cedula_familiar='$this->cedula_madre' AND codigo_parentesco='$parentesco_madre'";
 				    	if($this->pgsql->Ejecutar($sqlx)!=null)
-							$ok=true;
-						else
-							$ok=false;
+							$ok2=true;
+						else{
+					    	$this->error(pg_last_error());
+							$ok2=false;
+					    }
 				    }
-					else
-						$ok=false;
+					else{
+				    	$this->error(pg_last_error());
+						$ok2=false;
+				    }
 				}
 			}else{
-				$ok2=true;
-			}
+		    	$this->error(pg_last_error());
+				$ok2=false;
+		    }
 			if($ok==true && $ok2==true){
 				$this->Transaccion('finalizado');
 				return true;
@@ -1428,13 +1478,19 @@ class proceso_inscripcion {
 				    if($this->pgsql->Ejecutar($sql)!=null)
 						if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user))
 							$ok=true;
-						else
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
-					else
+					    }
+					else{
+				    	$this->error(pg_last_error());
 						$ok=false;
+				    }
 				}
-				else
+				else{
+			    	$this->error(pg_last_error());
 					$ok=false;
+			    }
 			}else{
 				if($representante->estatus()==1)
 					$ok=false;
@@ -1445,10 +1501,14 @@ class proceso_inscripcion {
 					    if($this->pgsql->Ejecutar($sql)!=null)
 							if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user))
 								$ok=true;
-							else
+							else{
+						    	$this->error(pg_last_error());
 								$ok=false;
-						else
+						    }
+						else{
+					    	$this->error(pg_last_error());
 							$ok=false;
+					    }
 					}
 				}
 			}
@@ -1471,11 +1531,15 @@ class proceso_inscripcion {
 		    	WHERE cedula_persona='$this->cedula_persona' AND cedula_familiar='$this->cedula_representante' AND codigo_parentesco='$this->codigo_parentesco'";
 		    	if($this->pgsql->Ejecutar($sqlx)!=null)
 					$ok=true;
-				else
+				else{
+			    	$this->error(pg_last_error());
 					$ok=false;
+			    }
 		    }
-			else
+			else{
+		    	$this->error(pg_last_error());
 				$ok=false;
+		    }
 
 			if($ok==true){
 				$this->Transaccion('finalizado');
@@ -1493,8 +1557,10 @@ class proceso_inscripcion {
    		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
+		else{
+	    	$this->error(pg_last_error());
 			return false;
+	    }
    	}
 
    	public function Actualizar_Paso6($user,$oldseccion){
@@ -1509,10 +1575,14 @@ class proceso_inscripcion {
 		    	$sqlx1="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ('$this->cedula_persona','$this->seccion','$user',NOW())";
 		    	if($this->pgsql->Ejecutar($sqlx1)!=null)
 		    		$ok= true;
-		    	else
-		    		$ok= false;
-	    	}else
-	    		$ok= true;
+		    	else{
+			    	$this->error(pg_last_error());
+					$ok=false;
+			    }
+	    	}else{
+		    	$this->error(pg_last_error());
+				$ok=false;
+		    }
 	    }
 		else{
 			$this->error(pg_last_error());
@@ -1534,8 +1604,48 @@ class proceso_inscripcion {
    		('$persona','$familiar','$parentesco','$representante','$user',NOW())";
    		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
+		else{
+	    	$this->error(pg_last_error());
 			return false;
+	    }
+   	}
+
+   	public function Asignar_Seccion($user,$pins,$ci){
+   		$sql="UPDATE educacion.tproceso_inscripcion SET seccion=(SELECT s.seccion FROM educacion.tseccion s 
+   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
+   		WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.codigo_proceso_inscripcion='$pins') 
+   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),
+		observacion='ASIGNADO POR $user SEGÚN TABULADOR',procesado='Y',modificado_por='$user',fecha_modificacion=NOW() 
+		WHERE codigo_proceso_inscripcion='$pins' AND cedula_persona='$ci'";
+	    if($this->pgsql->Ejecutar($sql)!=null){
+	    	$sqlx="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ('$ci',(SELECT s.seccion FROM educacion.tseccion s 
+	   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE 
+	   		EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.codigo_proceso_inscripcion='$pins') 
+	   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),'$user',NOW())";
+	    	if($this->pgsql->Ejecutar($sqlx)!=null)
+	    		return true;
+	    	else{
+	    		$sqlz="SELECT s.seccion FROM educacion.tseccion s 
+				LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion 
+				WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
+				WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.codigo_proceso_inscripcion='$pins') 
+				GROUP BY s.seccion,s.nombre_seccion 
+				ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC";
+				$query=$this->pgsql->Ejecutar($sql);
+				if($this->pgsql->Total_Filas($query)==0){
+					$this->error('No hay secciones disponibles');
+					return false;
+				}
+				else{
+					$this->error(pg_last_error());
+					return false;
+				}
+	    	}
+	    }
+		else{
+			$this->error(pg_last_error());
+			return false;
+		}
    	}
 }
 ?>

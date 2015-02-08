@@ -231,11 +231,7 @@ function init(){
 				send = false;
 			}
 			else if($('#talla').val()==""){
-				alert("¡Debe ingresar la talla del estudiante!");
-				send = false;
-			}
-			else if($('#indice').val()==""){
-				alert("¡Debe ingresar el índice académico del estudiante!");
+				alert("¡Debe ingresar la estatura del estudiante!");
 				send = false;
 			}
 			else if($('#tiene_talento:checked').val()=="Y" && $('#cual_talento').val()==""){

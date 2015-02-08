@@ -112,9 +112,6 @@ if(isset($_POST['peso']))
 if(isset($_POST['talla']))
   $talla=trim($_POST['talla']);
 
-if(isset($_POST['indice']))
-  $indice=trim($_POST['indice']);
-
 if(isset($_POST['tiene_talento']))
   $tiene_talento=trim($_POST['tiene_talento']);
 
@@ -322,7 +319,6 @@ if($lOpt=='Registrar_Paso2'){
   $proceso_inscripcion->que_anio($que_anio);
   $proceso_inscripcion->peso($peso);
   $proceso_inscripcion->talla($talla);
-  $proceso_inscripcion->indice($indice);
   $proceso_inscripcion->tiene_talento($tiene_talento);
   $proceso_inscripcion->cual_talento($cual_talento);
   if($proceso_inscripcion->Registrar_Paso2($_SESSION['user_name']))
@@ -482,7 +478,6 @@ if($lOpt=='Modificar_Paso2'){
   $proceso_inscripcion->que_anio($que_anio);
   $proceso_inscripcion->peso($peso);
   $proceso_inscripcion->talla($talla);
-  $proceso_inscripcion->indice($indice);
   $proceso_inscripcion->tiene_talento($tiene_talento);
   $proceso_inscripcion->cual_talento($cual_talento);
   if($proceso_inscripcion->Actualizar_Paso2($_SESSION['user_name']))
@@ -602,7 +597,26 @@ if($lOpt=='Modificar_Paso6'){
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la asignación del estudiante en una sección en el proceso de inscripción!";
     $_SESSION['datos']['error']=$proceso_inscripcion->error();
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-inscripcion");  }
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-inscripcion");
+  }
+}
+
+if($lOpt=="Asignar_Seccion"){
+  $con=0;
+  if(isset($_POST['codigos']) && isset($_POST['cedulas'])){
+    $proceso_inscripcion->Transaccion('iniciando');
+    for($i=0;$i<count($_POST['codigos']);$i++){
+      if($proceso_inscripcion->Asignar_Seccion($_SESSION['user_name'],$_POST['codigos'][$i],$_POST['cedulas'][$i]))
+        $con++;
+    }
+    $rest=count($_POST['codigos'])-$con;
+    if($con!=0)
+      $proceso_inscripcion->Transaccion('finalizado');
+    else
+      $proceso_inscripcion->Transaccion('cancelado');
+  }
+  $_SESSION['datos']['mensaje']="Cantidad de Estudiantes Seleccionados: ".count($_POST['codigos']).", Cantidad Asignados: ".$con.", Cantidad Restantes: ".$rest;
+  header("Location: ../view/menu_principal.php?asignar_seccion");
 }
   
 ?>

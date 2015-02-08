@@ -8,6 +8,7 @@ class inscripcion {
     private $fecha_fin;
 	private $fecha_cierre;
 	private $estatus; 
+	private $cerrado; 
 	private $pgsql; 
 	 
 	public function __construct(){
@@ -16,6 +17,7 @@ class inscripcion {
 		$this->fecha_inicio=null;
      	$this->fecha_fin=null;
 		$this->fecha_cierre=null;
+		$this->cerrado=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -89,6 +91,24 @@ class inscripcion {
 			$this->estatus=func_get_arg(0);
 		}
     }
+  
+    public function cerrado(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->cerrado;
+
+		if($Num_Parametro>0){
+			$this->cerrado=func_get_arg(0);
+		}
+    }
+
+    public function Cerrar($user){
+    	$sql="UPDATE educacion.tinscripcion SET cerrado='Y',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_periodo IN 
+    	(SELECT codigo_periodo FROM educacion.tperiodo WHERE descripcion <> '$this->descripcion')";
+    	if($this->pgsql->Ejecutar($sql)!=null)
+			return true;
+		else
+			return false;
+    }
    
    	public function Registrar($user){
    		$sqlx="INSERT INTO educacion.tperiodo (descripcion,fecha_inicio,fecha_fin,esinscripcion,creado_por,fecha_creacion) 
@@ -143,11 +163,16 @@ class inscripcion {
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE educacion.tinscripcion i JOIN educacion.tperiodo p SET p.descripcion='$this->descripcion',p.fecha_inicio='$this->fecha_inicio',
-	    p.fecha_fin='$this->fecha_fin',i.fecha_cierre='$this->fecha_cierre',p.modificado_por='$user',p.fecha_modificacion=NOW(),
-	    i.modificado_por='$user',i.fecha_modificacion=NOW() WHERE i.codigo_inscripcion='$this->codigo_inscripcion' AND i.codigo_periodo = p.codigo_periodo";
+    	$sql="UPDATE educacion.tinscripcion SET fecha_cierre='$this->fecha_cierre',cerrado='$this->cerrado',modificado_por='$user',fecha_modificacion=NOW() 
+    	WHERE codigo_inscripcion='$this->codigo_inscripcion'";
+	    $sqlx="UPDATE educacion.tperiodo SET descripcion='$this->descripcion',fecha_inicio='$this->fecha_inicio',
+	    fecha_fin='$this->fecha_fin',modificado_por='$user',fecha_modificacion=NOW() 
+	    WHERE codigo_periodo = '$this->codigo_periodo'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
-			return true;
+			if($this->pgsql->Ejecutar($sqlx)!=null)
+				return true;
+			else
+				return false;
 		else
 			return false;
    	}

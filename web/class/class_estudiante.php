@@ -1,5 +1,6 @@
 <?php
 require_once("class_bd.php");
+require_once("class_tabulador.php");
 class estudiante {
 	private $codigo_proceso_inscripcion; 
 	private $codigo_inscripcion;
@@ -312,24 +313,23 @@ class estudiante {
     }
 
     public function Inscribir($user){
+    	$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),'$this->fecha_nacimiento'))||'.'||EXTRACT(Month FROM age(NOW(),'$this->fecha_nacimiento')) AS numeric) edad";
+		$query=$this->pgsql->Ejecutar($sqlx);
+		if($this->pgsql->Total_Filas($query)!=0){
+			$testudiante=$this->pgsql->Respuesta($query);
+			$tabulador=new tabulador();
+			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+		}else{
+	    	$this->error(pg_last_error());
+			return false;
+	    }
     	$sql="INSERT INTO educacion.tproceso_inscripcion (codigo_inscripcion,fecha_inscripcion,codigo_ano_academico,cedula_responsable,cedula_persona,
     	anio_a_cursar,coordinacion_pedagogica,peso,talla,indice,cedula_representante,codigo_parentesco,procesado,creado_por,fecha_creacion) VALUES 
-		($this->codigo_inscripcion,'$this->fecha_inscripcion',$this->codigo_ano_academico,'$this->cedula_responsable','$this->cedula_persona',
+		($this->codigo_inscripcion,'$this->fecha_inscripcion','$this->codigo_ano_academico','$this->cedula_responsable','$this->cedula_persona',
 		'$this->anio_a_cursar','$this->coordinacion_pedagogica','$this->peso','$this->talla','$this->indice','$this->cedula_representante',
-		$this->codigo_parentesco,'Y','$user',NOW())";
-		if($this->pgsql->Ejecutar($sql)!=null){
-			$sqlx="UPDATE educacion.tproceso_inscripcion SET seccion=(SELECT s.seccion FROM educacion.tseccion s 
-	   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
-	   		WHERE pi.peso BETWEEN s.peso_min AND s.peso_max AND pi.talla BETWEEN s.talla_min AND s.talla_max AND pi.cedula_persona='$this->cedula_persona') 
-	   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),observacion='ASIGNACIÓN AUTOMATICA POR EL SISTEMA',
-			procesado='Y',modificado_por='$user',fecha_modificacion=NOW() WHERE cedula_persona='$this->cedula_persona'";
-			if($this->pgsql->Ejecutar($sqlx)!=null)
-				return true;
-			else{
-				$this->error(pg_last_error());
-				return false;
-			}
-		}
+		'$this->codigo_parentesco','Y','$user',NOW())";
+		if($this->pgsql->Ejecutar($sql)!=null)
+			return true;
 		else{
 			$this->error(pg_last_error());
 			return false;
@@ -337,12 +337,25 @@ class estudiante {
     }
 
     public function ActualizarInscripcion($user){
+    	$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad   
+		FROM educacion.tproceso_inscripcion i 
+		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
+		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
+		$query=$this->pgsql->Ejecutar($sqlx);
+		if($this->pgsql->Total_Filas($query)!=0){
+			$testudiante=$this->pgsql->Respuesta($query);
+			$tabulador=new tabulador();
+			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+		}else{
+	    	$this->error(pg_last_error());
+			return false;
+	    }
     	$sql="UPDATE educacion.tproceso_inscripcion SET codigo_inscripcion=$this->codigo_inscripcion,fecha_inscripcion='$this->fecha_inscripcion',
     	codigo_ano_academico=$this->codigo_ano_academico,cedula_responsable='$this->cedula_responsable',cedula_persona='$this->cedula_persona',
     	anio_a_cursar='$this->anio_a_cursar',coordinacion_pedagogica='$this->coordinacion_pedagogica',peso='$this->peso',talla='$this->talla',
     	indice='$this->indice',cedula_representante='$this->cedula_representante',codigo_parentesco=$this->codigo_parentesco,seccion=(SELECT s.seccion 
     	FROM educacion.tseccion s LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
-   		WHERE pi.peso BETWEEN s.peso_min AND s.peso_max AND pi.talla BETWEEN s.talla_min AND s.talla_max AND pi.cedula_persona='$this->cedula_persona') 
+   		WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.cedula_persona='$this->cedula_persona') 
    		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),observacion='$this->observacion',
    		modificado_por='$user',fecha_modificacion=NOW() 
 		WHERE codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";

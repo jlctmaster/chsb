@@ -67,9 +67,6 @@ if(isset($_POST['peso']))
 if(isset($_POST['talla']))
   $talla=trim($_POST['talla']);
 
-if(isset($_POST['indice']))
-  $indice=trim($_POST['indice']);
-
 if(isset($_POST['cedula_representante']))
   $cedula_representante=trim($_POST['cedula_representante']);
 
@@ -103,7 +100,6 @@ if($lOpt=='Registrar'){
   $estudiante->coordinacion_pedagogica($coordinacion_pedagogica);
   $estudiante->peso($peso);
   $estudiante->talla($talla);
-  $estudiante->indice($indice);
   $estudiante->cedula_representante($cedula_representante);
   $estudiante->codigo_parentesco($codigo_parentesco);
   $confirmacion=false;
@@ -128,13 +124,14 @@ if($lOpt=='Registrar'){
   }
   if($confirmacion==1){
     $estudiante->Transaccion('finalizado');
+    $estudiante->ObtenerCodigoPI();
     $_SESSION['datos']['procesado']="Y";
-    $_SESSION['datos']['codigo_proceso_inscripcion']=$estudiante->ObtenerCodigoPI();
+    $_SESSION['datos']['codigo_proceso_inscripcion']=$estudiante->codigo_proceso_inscripcion();
     $_SESSION['datos']['mensaje']="¡El Estudiante ha sido registrado con éxito!";
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }else{
     $estudiante->Transaccion('cancelado');
-    echo $estudiante->error(); 
+    echo $estudiante->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Estudiante!";
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }
@@ -161,7 +158,6 @@ if($lOpt=='Modificar'){
   $estudiante->coordinacion_pedagogica($coordinacion_pedagogica);
   $estudiante->peso($peso);
   $estudiante->talla($talla);
-  $estudiante->indice($indice);
   $estudiante->cedula_representante($cedula_representante);
   $estudiante->codigo_parentesco($codigo_parentesco);
   $estudiante->seccion($seccion);
