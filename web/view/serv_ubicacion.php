@@ -88,13 +88,13 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="codigo_ubicacion">Código:</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input class="input-xlarge" title="el Código del ubicacion es generado por el sistema" name="codigo_ubicacion" id="codigo_ubicacion" type="text" readonly /> 
+						<input class="input-xlarge" title="el Código de la ubicación es generado por el sistema" name="codigo_ubicacion" id="codigo_ubicacion" type="text" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Ubicación:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el nombre del ubicacion" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
+						<input class="input-xlarge" title="Ingrese el nombre de la ubicación" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
 					</div>  
 				</div>   
 				<div class="control-group">  
@@ -157,13 +157,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_ubicacion">Código:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-						<input class="input-xlarge" title="el Código del ubicacion es generado por el sistema" name="codigo_ubicacion" id="codigo_ubicacion" type="text" value="<?=$row['codigo_ubicacion']?>" readonly /> 
+						<input class="input-xlarge" title="el Código de la ubicación es generado por el sistema" name="codigo_ubicacion" id="codigo_ubicacion" type="text" value="<?=$row['codigo_ubicacion']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">ubicacion:</label>  
+					<label class="control-label" for="descripcion">ubicación:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el nombre del ubicacion" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
+						<input class="input-xlarge" title="Ingrese el nombre de la ubicación" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   
 				<div class="control-group">  
@@ -260,7 +260,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</tr>
 					<tr>
 						<td>
-							<label>ubicacion:</label>
+							<label>ubicación:</label>
 						</td>
 						<td>
 							<label><?=$row['descripcion']?></label>

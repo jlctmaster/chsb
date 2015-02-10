@@ -87,14 +87,7 @@ function init(){
 			alert("¡Debe ingresar el nombre del Autor!");
 			send = false;
 		}
-		else if($('#codigo_pais').val()==0){
-			alert("¡Debe Seleccionar una Parroquia!");
-			send = false;
-		}
-		else if($('#fecha_nacimiento').val()==""){
-			alert("¡Debe ingresar la fecha de nacimiento del Autor!");
-			send = false;
-		}
+		
 		//Comprobamos si el elemento estatus existe para luego verificar su valor.
 		if(document.getElementById("estatus")){
 			if($.trim($('#estatus').text())=="Activo"){

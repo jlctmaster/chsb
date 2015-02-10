@@ -11,7 +11,7 @@ class clsFpdf extends FPDF {
     $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   
     $this->Ln(55);  
     $this->SetFont('Arial','B',12);
-    $this->Cell(0,6,'LISTADO DE LOS TIPOS PERSONA',0,1,"C");
+    $this->Cell(0,6,'LISTADO DE LOS TIPOS DE PERSONA',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
     $avnzar=73;
@@ -22,7 +22,7 @@ class clsFpdf extends FPDF {
     $this->SetTextColor(0,0,0);
     $this->Cell($avnzar); 
     $this->Cell($anchura*4+5,$altura,'TIPO PERSONA',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*6,$altura,'¿ES USUARIO DEL SITEMA?',1,0,'C',$color_fondo);  
+    $this->Cell($anchura*6,$altura,'¿ES USUARIO DEL SISTEMA?',1,0,'C',$color_fondo);  
     $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }

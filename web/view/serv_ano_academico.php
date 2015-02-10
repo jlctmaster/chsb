@@ -188,7 +188,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</tr>
 					<tr>
 						<td>
-							<label>Año:</label>
+							<label>Año Académico:</label>
 						</td>
 						<td>
 							<label><?=$row['ano']?></label>

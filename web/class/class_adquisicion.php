@@ -132,7 +132,7 @@ class adquisicion {
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_adquisicion FROM inventario.tadquisicion 
 	    	WHERE fecha_adquisicion='$this->fecha_adquisicion' AND rif_organizacion = '$this->rif_organizacion' 
-	    	AND cedula_persona = '$this->cedula_persona' AND tipo_adquisicion = '$this->tipo_adquisicion'";
+	    	AND cedula_persona = '$this->cedula_persona' AND tipo_adquisicion = '$this->tipo_adquisicion' AND sonlibros = '$this->sonlibros'";
 	    	$query=$this->pgsql->Ejecutar($sqlx);
 	    	if($this->pgsql->Total_Filas($query)!=0){
 				$tadquisicion=$this->pgsql->Respuesta($query);

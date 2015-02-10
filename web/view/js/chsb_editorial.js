@@ -85,20 +85,6 @@ function init(){
 			alert("¡Debe ingresar el nombre del editorial!");
 			send = false;
 		}
-		else if($('#direccion').val()==""){
-			alert("¡Debe ingresar la dirección!");
-			send = false;
-		}
-		else if($('#telefono').val()==""){
-			alert("¡Debe ingresar el número de teléfono!");
-			send = false;
-		}
-		else if($('#codigo_parroquia').val()==0){
-			alert("¡Debe seleccionar la Parroquia!");
-			send = false;
-		}
-	
-
 		//Comprobamos si el elemento estatus existe para luego verificar su valor.
 		if(document.getElementById("estatus")){
 			if($.trim($('#estatus').text())=="Activo"){

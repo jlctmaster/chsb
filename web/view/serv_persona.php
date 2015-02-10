@@ -151,7 +151,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="telefono_local">Teléfono Local</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" required />
+						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" />
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -168,7 +168,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.ttipo_persona ORDER BY descripcion ASC";
+							$sql = "SELECT * FROM general.ttipo_persona 
+							WHERE descripcion NOT LIKE '%ESTUDIANTE%' 
+							ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								echo "<option value=".$rows['codigo_tipopersona'].">".$rows['descripcion']."</option>";
@@ -276,7 +278,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="telefono_local">Teléfono Local</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$row['telefono_local']?>" required />
+						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$row['telefono_local']?>"/>
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -293,7 +295,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.ttipo_persona ORDER BY descripcion ASC";
+							$sql = "SELECT * FROM general.ttipo_persona 
+							WHERE descripcion NOT LIKE '%ESTUDIANTE%' 
+							ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_tipopersona']==$row['codigo_tipopersona'])

@@ -22,7 +22,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<tr>
 						<th>Código</th>
 						<th>Nombre del Bien Nacional</th>
-						<th>Serial del Bien Nacional</th>
+						<th>Código Externo del Bien</th>
 						<th>Tipo Bien Nacional</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
@@ -92,7 +92,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		</div>  
 	</div>
 	<div class="control-group">  
-		<label class="control-label" for="nro_serial">Serial del Bien</label>  
+		<label class="control-label" for="nro_serial">Código Externo del Bien</label>  
 		<div class="controls">  
 			<input class="input-xlarge" title="Ingrese el Serial del bien" onKeyUp="this.value=this.value.toUpperCase()" name="nro_serial" id="nro_serial" type="text" size="50" required />
 		</div>  
@@ -222,9 +222,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		</div>  
 	</div>
 		<div class="control-group">  
-		<label class="control-label" for="nro_serial">Serial del Bien</label>  
+		<label class="control-label" for="nro_serial">Código Externo del Bien</label>  
 		<div class="controls">  
-			<input class="input-xlarge" title="Ingrese el serial del bien" onKeyUp="this.value=this.value.toUpperCase()" name="nro_serial" id="nro_serial" type="text" value="<?=$row['nro_serial']?>" required />
+			<input class="input-xlarge" title="Ingrese el código externo del Bien" onKeyUp="this.value=this.value.toUpperCase()" name="nro_serial" id="nro_serial" type="text" value="<?=$row['nro_serial']?>" required />
 		</div>  
 	</div>      
 	<div class="control-group">  
@@ -423,7 +423,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			</tr>
 				<tr>
 				<td>
-					<label class="control-label">Serial del Bien Nacional:</label>
+					<label class="control-label">Código Externo del Bien:</label>
 				</td>
 				<td>
 					<label><?=$row['nro_serial']?></label>

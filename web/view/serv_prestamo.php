@@ -8,7 +8,7 @@ $perfil->url('prestamo');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_prestamo,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida,a.cota,
+	$sql = "SELECT a.codigo_prestamo,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida,
 		a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
 		a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona
 		FROM biblioteca.tprestamo a 
@@ -24,7 +24,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Cota</th>
 							<th>Fecha Salida</th>
 							<th>Responsable</th>
 							<th>Solicitante</th>
@@ -42,7 +41,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						{
 							echo '<tr>';
 							echo '<td>'.$filas['codigo_prestamo'].'</td>';
-							echo '<td>'.$filas['cota'].'</td>';
 							echo '<td>'.$filas['fecha_salida'].'</td>';
 							echo '<td>'.$filas['responsable'].'</td>';
 							echo '<td>'.$filas['persona'].'</td>';
@@ -149,12 +147,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</select>
 				</div>  
 			</div>
-					<div class="control-group">  
-					<label class="control-label" for="cota">Cota</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la cota" name="cota" id="cota" type="text" required />
-					</div>  
-				</div>
 					<div class="control-group">  
 					<label class="control-label" for="fecha_salida">Fecha de Salida</label>  
 					<div class="controls">  
@@ -369,12 +361,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>			
 				<div class="control-group">  
-					<label class="control-label" for="cota">Cota</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la cota" name="cota" id="cota" type="text" value="<?=$row['cota']?>" readonly required />
-					</div>  
-				</div>
-				<div class="control-group">  
 					<label class="control-label" for="fecha_salida">Fecha de Salida</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese la fecha de Salida" name="fecha_salida" id="fecha_salida" type="text" value="<?=$row['fecha_salida']?>" readonly required />
@@ -546,7 +532,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,a.cota,
+	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,
 	TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
 	 da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad
 	FROM biblioteca.tprestamo a 
@@ -598,14 +584,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row[0]['area']?></label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>Cota:</label>
-						</td>
-						<td>
-							<label><?=$row[0]['cota']?></label>
 						</td>
 					</tr> 
 					<tr>

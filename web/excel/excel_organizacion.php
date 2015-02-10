@@ -25,7 +25,7 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Organizaciones";
-	$titulosColumnas = array('RIF', 'Organización', 'Dirección', 'Teléfono', 'Tipo', 'Estatus');
+	$titulosColumnas = array('RIF', 'Organización', 'Dirección', 'Teléfono', 'Tipo Organización', 'Estatus');
 	
 	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1')->mergeCells('A2:F2');
 					

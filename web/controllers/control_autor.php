@@ -10,19 +10,11 @@ if(isset($_POST['codigo_autor']))
 if(isset($_POST['nombre']))
   $nombre=trim($_POST['nombre']);
 
-if(isset($_POST['codigo_parroquia']))
-  $codigo_parroquia=trim($_POST['codigo_parroquia']);
-  
-if(isset($_POST['fecha_nacimiento']))
-  $fecha_nacimiento=trim($_POST['fecha_nacimiento']);
-
 include_once("../class/class_autor.php");
 $autor=new autor();
 if($lOpt=='Registrar'){
   $autor->codigo_autor($codigo_autor);
   $autor->nombre($nombre);
-  $autor->codigo_parroquia($codigo_parroquia);
-   $autor->fecha_nacimiento($fecha_nacimiento);
   if(!$autor->Comprobar()){
     if($autor->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -48,8 +40,6 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $autor->codigo_autor($codigo_autor);
   $autor->nombre($nombre);
-  $autor->codigo_parroquia($codigo_parroquia);
-  $autor->fecha_nacimiento($fecha_nacimiento);
   if($autor->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

@@ -5,7 +5,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,CASE WHEN p.primer_nombre IS NOT NULL AND p.segundo_nombre IS NOT NULL AND p.primer_apellido IS NOT NULL AND p.segundo_apellido IS NOT NULL THEN INITCAP(p.primer_nombre||' '||p.segundo_nombre||' '||p.primer_apellido||' '||p.segundo_apellido) 
     WHEN p.primer_nombre IS NOT NULL AND p.segundo_nombre IS NOT NULL AND p.primer_apellido IS NOT NULL AND p.segundo_apellido IS NULL THEN INITCAP(p.primer_nombre||' '||p.segundo_nombre||' '||p.primer_apellido) 
     WHEN p.primer_nombre IS NOT NULL AND p.segundo_nombre IS NULL AND p.primer_apellido IS NOT NULL AND p.segundo_apellido IS NOT NULL THEN INITCAP(p.primer_nombre||' '||p.primer_apellido||' '||p.segundo_apellido) 
-    ELSE INITCAP(p.primer_nombre||' '||p.primer_apellido) END AS nombre,pi.indice,pi.peso,pi.talla AS estatura 
+    ELSE INITCAP(p.primer_nombre||' '||p.primer_apellido) END AS nombre, date_part('year',age( p.fecha_nacimiento )) AS edad,pi.indice,pi.peso,pi.talla AS estatura 
     FROM educacion.tproceso_inscripcion pi 
     INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
     WHERE pi.seccion IS NULL 
@@ -24,6 +24,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							<th>Seleccione</th>
 							<th>Cédula del Estudiante</th>
 							<th>Nombre del Estudiante</th>
+							<th>Edad</th>
 							<th>Índice</th>
 							<th>Peso</th>
 							<th>Estatura</th>
@@ -39,6 +40,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							</td>";
 				            echo "<td>".$filas['cedula_persona']."</td>";
 				            echo "<td>".$filas['nombre']."</td>";
+				            echo "<td>".$filas['edad']."</td>";
 				            echo "<td>".$filas['indice']."</td>";
 				            echo "<td>".$filas['peso']."</td>";
 				            echo "<td>".$filas['estatura']."</td>";

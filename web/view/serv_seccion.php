@@ -443,8 +443,8 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label><?=$row['indice_max']?></label>
 					</td>
 				</tr>
-			</table>
-			<center>
+				</table>
+				<center>
 				<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>
 				<a href="?seccion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 			</center>

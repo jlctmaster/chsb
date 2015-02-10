@@ -372,8 +372,7 @@ class estudiante {
 		$query=$this->pgsql->Ejecutar($sql);
 	    if($this->pgsql->Total_Filas($query)!=0){
 			$tproceso_inscripcion=$this->pgsql->Respuesta($query);
-			$this->codigo_proceso_inscripcion($tproceso_inscripcion['codigo_proceso_inscripcion']);
-			return true;
+			return $tproceso_inscripcion['codigo_proceso_inscripcion'];
 		}
 		else{
 			$this->error(pg_last_error());
@@ -383,10 +382,13 @@ class estudiante {
    
    	public function Registrar($user){
 	    $sql="INSERT INTO general.tpersona (cedula_persona,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,sexo,
-	    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,creado_por,fecha_creacion) VALUES 
+	    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,creado_por,fecha_creacion) 
+		VALUES 
 	    ('$this->cedula_persona','$this->primer_nombre','$this->segundo_nombre','$this->primer_apellido','$this->segundo_apellido',
 	    	'$this->sexo','$this->fecha_nacimiento','$this->lugar_nacimiento','$this->direccion','$this->telefono_local',
-	    	'$this->telefono_movil',(SELECT codigo_tipopersona FROM general.ttipo_persona WHERE LOWER(descripcion) LIKE '%estudiante%'),'$user',NOW())";
+	    	'$this->telefono_movil',
+	    	(SELECT codigo_tipopersona FROM general.ttipo_persona 
+	    		WHERE LOWER(descripcion) LIKE '%estudiante%'),'$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else{

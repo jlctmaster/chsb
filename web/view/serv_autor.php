@@ -8,10 +8,8 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_autor, a.nombre, p.descripcion AS parroquia, 
-	TO_CHAR(a.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento  
-	FROM biblioteca.tautor a 
-	INNER JOIN general.tparroquia p ON a.codigo_parroquia = p.codigo_parroquia";
+	$sql = "SELECT *
+	FROM biblioteca.tautor ";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 <fieldset>
@@ -23,8 +21,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<tr>
 						<th>Código</th>
 						<th>Autor</th>
-						<th>Fecha Nacimiento</th>
-						<th>Lugar de Nacimiento</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -40,8 +36,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						echo '<tr>';
 						echo '<td>'.$filas['codigo_autor'].'</td>';
 						echo '<td>'.$filas['nombre'].'</td>';
-						echo '<td>'.$filas['fecha_nacimiento'].'</td>';
-						echo '<td>'.$filas['parroquia'].'</td>';
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 								echo '<td><a href="?autor&Opt=3&codigo_autor='.$filas['codigo_autor'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -93,29 +87,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>  
 			</div>   
 			<div class="control-group">  
-				<label class="control-label" for="codigo_parroquia">Lugar de Nacimiento</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Lugar de Nacimiento" name='codigo_parroquia' id='codigo_parroquia' required >
-						<option value=0>Seleccione un Lugar de Nacimiento</option>
-						<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-							}
-						?>
-					</select>
-				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="fecha_nacimiento">Fecha de Nacimiento</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese la fecha de nacimiento de la persona" name="fecha_nacimiento" id="fecha_nacimiento" type="text" readonly required />
-				</div>
-			</div> 
-			<div class="control-group">  
 				<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
 			</div>  
 			<div class="form-actions">
@@ -153,32 +124,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				</div>  
 			</div>   
 			<div class="control-group">  
-				<label class="control-label" for="codigo_parroquia">Lugar de Nacimiento</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un lugar de nacimiento" name='codigo_parroquia' id='codigo_parroquia' required >
-						<option value=0>Seleccione un Lugar de Nacimiento</option>
-						<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_parroquia']==$row['codigo_parroquia'])
-									echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-						?>
-					</select>
-				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="fecha_nacimiento">Fecha de Nacimiento</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese la fecha de nacimiento de la persona" name="fecha_nacimiento" id="fecha_nacimiento" type="text" value="<?=$row['fecha_nacimiento']?>" readonly required />
-				</div>  
-			</div>  
-			<div class="control-group">  
 				<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{
 					echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 			</div>  
@@ -212,11 +157,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT a.codigo_autor, a.nombre, p.descripcion AS parroquia, 
-	TO_CHAR(a.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento 
-	FROM biblioteca.tautor a
-	INNER JOIN general.tparroquia p ON a.codigo_parroquia = p.codigo_parroquia 
-	WHERE a.codigo_autor =".$pgsql->comillas_inteligentes($_GET['codigo_autor']);
+	$sql = "SELECT *
+	FROM biblioteca.tautor 
+	WHERE codigo_autor =".$pgsql->comillas_inteligentes($_GET['codigo_autor']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -240,22 +183,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</td>
 					<td>
 						<label><?=$row['nombre']?></label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Lugar de Nacimiento:</label>
-					</td>
-					<td>
-						<label><?=$row['parroquia']?></label>
-					</td>
-				</tr>
-						<tr>
-					<td>
-						<label>Fecha de Nacimiento:</label>
-					</td>
-					<td>
-						<label><?=$row['fecha_nacimiento']?></label>
 					</td>
 				</tr>
 			</table>

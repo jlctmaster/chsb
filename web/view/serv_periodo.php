@@ -138,7 +138,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tperiodo 
+	$sql = "SELECT codigo_periodo,descripcion,TO_CHAR(fecha_inicio,'DD/MM/YYYY') as fecha_inicio,
+	TO_CHAR(fecha_fin,'DD/MM/YYYY') as fecha_fin,codigo_lapso,estatus 
+	FROM educacion.tperiodo 
 	WHERE codigo_periodo =".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." 
 	AND esinscripcion='N'";
 	$query = $pgsql->Ejecutar($sql);
@@ -164,13 +166,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inicio">Fecha de Inicio:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha inicial del trayecto" onKeyUp="this.value=this.value.toUpperCase()" name="fecha_inicio" id="fecha_inicio" type="text" size="50" value="<?=$row['fecha_inicio']?>" required />
+						<input class="input-xlarge" title="Ingrese la fecha inicial del trayecto" name="fecha_inicio" id="fecha_inicio" type="text" size="50" value="<?=$row['fecha_inicio']?>" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha de Culminación:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha de culminación del trayecto" onKeyUp="this.value=this.value.toUpperCase()" name="fecha_fin" id="fecha_fin" type="text" size="50" value="<?=$row['fecha_fin']?>" required />
+						<input class="input-xlarge" title="Ingrese la fecha de culminación del trayecto" name="fecha_fin" id="fecha_fin" type="text" size="50" value="<?=$row['fecha_fin']?>" readonly required />
 					</div>  
 				</div>   
 				<div class="control-group">  

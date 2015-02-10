@@ -476,7 +476,7 @@ CREATE SEQUENCE inventario.seq_movimiento;
 CREATE TABLE inventario.tmovimiento
 (
 	codigo_movimiento numeric not null default nextval('inventario.seq_movimiento'),
-	fecha_movimiento numeric not null,
+	fecha_movimiento timestamp NOT NULL default current_timestamp,
 	tipo_movimiento char(1) not null default 'E',
 	numero_documento numeric not null,
 	tipo_transaccion char(2) not null default 'IA',
@@ -620,7 +620,7 @@ CREATE TABLE educacion.tperiodo (
 	descripcion varchar(45) not null,
 	fecha_inicio date not null,
 	fecha_fin date not null,
-	codigo_lapso numeric not null,
+	codigo_lapso numeric null,
 	esinscripcion char(1) not null default '0',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -783,8 +783,8 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	codigo_ano_academico numeric not null,
  	cedula_responsable char(10) not null,
  	cedula_persona char(10) not null,
-	anio_a_cursar char(1) NOT NULL DEFAULT '1',
-	coordinacion_pedagogica char(1) NOT NULL DEFAULT '1',
+	anio_a_cursar char(1) NOT NULL default '1',
+	coordinacion_pedagogica char(1) NOT NULL default '1',
  	estado_salud char(1) not null default '1',
  	alergico char(1) not null default 'N',
  	impedimento_deporte char(1) not null default 'N',
@@ -793,27 +793,27 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	cual_deporte varchar(40) default null,
  	tiene_beca char(1) not null default 'N',
  	organismo varchar(60) default null,
-	tiene_hermanos char(1) NOT NULL DEFAULT 'N',
+	tiene_hermanos char(1) NOT NULL default 'N',
  	numero_hermanos numeric not null default 0,
  	cuantos_varones numeric not null default 0,
  	cuantas_hembras numeric not null default 0,
  	estudian_aca char(1) not null default 'N',
  	que_anio char(1) default null,
- 	peso numeric not null,
- 	talla numeric not null,
- 	indice numeric not null,
+ 	peso numeric not null default 0,
+ 	talla numeric not null default 0,
+ 	indice numeric not null default 0,
  	tiene_talento char(1) not null default 'N',
  	cual_talento varchar(50) default null,
  	cedula_padre char(10) default null,
  	cedula_madre char(10) default null,
- 	cedula_representante char(10) not null,
- 	codigo_parentesco numeric not null,
+ 	cedula_representante char(10) default null,
+ 	codigo_parentesco numeric null,
  	integracion_escuela_comunidad char(1) not null default '9',
  	especifique_integracion varchar(60) default null,
- 	seccion char(5) not null,
+ 	seccion char(5) null,
  	observacion varchar(255) default null,
  	estatus char(1) not null default '1',
-	procesado char(1) NOT NULL DEFAULT 'N',
+	procesado char(1) NOT NULL default 'N',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
@@ -1067,15 +1067,12 @@ CREATE TABLE biblioteca.tautor
 (
 	codigo_autor numeric not null default nextval('biblioteca.seq_autor'),
 	nombre varchar(80) not null,
-	codigo_parroquia numeric not null,
-	fecha_nacimiento date not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-	constraint pk_autor primary key(codigo_autor),
-	constraint fk_autor_parroquia foreign key(codigo_parroquia) references general.tparroquia(codigo_parroquia) on delete restrict on update cascade
+	constraint pk_autor primary key(codigo_autor)
 );
 
 CREATE TRIGGER auditoria_registros
@@ -1090,9 +1087,6 @@ CREATE TABLE biblioteca.teditorial
 (
 	codigo_editorial numeric not null default nextval('biblioteca.seq_editorial'),
 	nombre varchar(150) not null,
-	direccion varchar(255) not null,
-	telefono varchar(15) not null,
-	codigo_parroquia numeric not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1166,7 +1160,6 @@ CREATE TABLE biblioteca.tprestamo
 	cedula_responsable char(10) not null,
 	cedula_persona char(10) not null,
 	codigo_area numeric not null,
-	cota varchar(10) not null,
 	fecha_salida date not null,
 	fecha_entrada date not null,
 	estatus char(1) not null default '1',
@@ -1646,7 +1639,7 @@ FROM inventario.vw_inventario ins
 JOIN bienes_nacionales.tconfiguracion_bien cb ON ins.codigo_item = cb.codigo_item
 JOIN inventario.tubicacion u ON ins.codigo_ubicacion = u.codigo_ubicacion
 WHERE ins.sonlibros = 'N'::bpchar AND u.itemsdefectuoso = 'N'::bpchar AND cb.item_base = 'Y'::bpchar
-GROUP BY cb.codigo_bien, ins.codigo_item, ins.codigo_ubicacion, cb.item_base;-- View: educacion.vhorario
+GROUP BY cb.codigo_bien, ins.codigo_item, ins.codigo_ubicacion, cb.item_base;
 
 -- View Educacion Horario
 CREATE OR REPLACE VIEW educacion.vhorario AS 

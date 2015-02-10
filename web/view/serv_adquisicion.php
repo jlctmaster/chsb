@@ -172,7 +172,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT codigo_bien AS codigo_item, nombre AS nombre_item 
+			$sql = "SELECT codigo_bien AS codigo_item, nro_serial ||' - '|| nombre AS nombre_item 
 			FROM bienes_nacionales.tbien WHERE estatus = '1' 
 			ORDER BY codigo_bien ASC";
 			$query = $pgsql->Ejecutar($sql);
@@ -360,7 +360,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 								          <select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Item' >
 								          <option value='0'>Seleccione un Item</option>";
-								          $sqlx = "SELECT codigo_bien AS codigo_item, nombre AS nombre_item 
+								          $sqlx = "SELECT codigo_bien AS codigo_item, nro_serial ||' - '|| nombre AS nombre_item 
 								          FROM bienes_nacionales.tbien WHERE estatus = '1'
 										  ORDER BY codigo_bien ASC";
 								          $querys = $pgsql->Ejecutar($sqlx);

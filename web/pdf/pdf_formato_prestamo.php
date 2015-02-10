@@ -261,7 +261,7 @@ $lobjPdf->SetWidths(array(80,40,20));
 $pgsql=new Conexion();
 $sql="SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
 p.telefono_movil,a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
-ar.descripcion AS area,a.cota,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, 
+ar.descripcion AS area,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, 
 TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
 da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
    u.codigo_ubicacion||' '||u.descripcion AS ubicacion
@@ -284,7 +284,6 @@ if($pgsql->Total_Filas($data)!=0){
 		$filas['telefono_movil'][]=$rows['telefono_movil'];
 		$filas['persona'][]=$rows['persona'];
 		$filas['area'][]=$rows['area'];
-		$filas['cota'][]=$rows['cota'];
 		$filas['fecha_salida'][]=$rows['fecha_salida'];
 		$filas['fecha_entrada'][]=$rows['fecha_entrada'];
 		$filas['ejemplar'][]=$rows['ejemplar'];

@@ -145,7 +145,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nombre AS nombre_item 
+			$sql = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nro_serial ||' - '|| b.nombre AS nombre_item 
 			FROM bienes_nacionales.tbien b 
 			INNER JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item ";
 			$query = $pgsql->Ejecutar($sql);
@@ -321,7 +321,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 										<select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Item' >
 										<option value='0'>Seleccione un Item</option>";
-										$sqlx = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nombre AS nombre_item 
+										$sqlx = "SELECT DISTINCT b.codigo_bien AS codigo_item, b.nro_serial ||' - '|| b.nombre AS nombre_item 
 										FROM bienes_nacionales.tbien b 
 										INNER JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item ";
 										$querys = $pgsql->Ejecutar($sqlx);

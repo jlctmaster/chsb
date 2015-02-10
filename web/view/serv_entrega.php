@@ -96,8 +96,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<?php
 						require_once('../class/class_bd.php');
 						$pgsql = new Conexion();
-						$sql = "SELECT a.codigo_prestamo,a.cota||', '||a.fecha_entrada||' .'||
-						a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
+						$sql = "SELECT a.codigo_prestamo,a.fecha_entrada||' .'||a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
 						FROM biblioteca.tprestamo a
 						INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
 						WHERE NOT EXISTS(SELECT 1 FROM biblioteca.tentrega e WHERE a.codigo_prestamo = e.codigo_prestamo)";

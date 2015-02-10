@@ -15,7 +15,7 @@ class clsFpdf extends FPDF {
     $this->Cell(0,6,'LISTADO DE LAS ORGANIZACIONES',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
-    $avnzar=50;
+    $avnzar=25;
     $altura=7;
     $anchura=10;
     $color_fondo=false;
@@ -23,10 +23,10 @@ class clsFpdf extends FPDF {
     $this->SetTextColor(0,0,0);
     $this->Cell($avnzar);
     $this->Cell($anchura*2,$altura,'RIF',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*3,$altura,'NOMBRE',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*6,$altura,'DIRECCION',1,0,'C',$color_fondo);
-    $this->Cell($anchura*2+5,$altura,'TELEFONO',1,0,'C',$color_fondo);
-    $this->Cell($anchura*4,$altura,'TIPO ORGANIZACION',1,0,'C',$color_fondo);  
+    $this->Cell($anchura*6,$altura,'ORGANIZACIÓN',1,0,'C',$color_fondo); 
+    $this->Cell($anchura*6,$altura,'DIRECCIÓN',1,0,'C',$color_fondo);
+    $this->Cell($anchura*2+5,$altura,'TELÉFONO',1,0,'C',$color_fondo);
+    $this->Cell($anchura*4,$altura,'TIPO ORGANIZACIÓN',1,0,'C',$color_fondo);  
     $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }
@@ -165,7 +165,7 @@ $lobjPdf->AliasNbPages();
 $lobjPdf->SetFont("arial","B",8);
 $lobjPdf->SetFont('Arial','',12);
 //Table with 20 rows and 5 columns
-$lobjPdf->SetWidths(array(20,30,60,25,40,26));
+$lobjPdf->SetWidths(array(20,60,60,25,40,26));
 $pgsql=new Conexion();
 $sql="SELECT rif_organizacion, nombre, direccion, telefono, 
 CASE tipo_organizacion when '1' then 'PÚBLICA' when '2' then 'PRIVADA' when '3' then 'GUBERNAMENTAL' else 'OTRAS' end as tipo_organizacion, 
@@ -176,7 +176,7 @@ $i=-1;
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFillColor(0,0,140); 
-  $avnzar=50;
+  $avnzar=25;
   $altura=7;
   $anchura=10;
   $color_fondo=false;

@@ -192,7 +192,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="fecha_nacimiento">Fecha de Nacimiento</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento" type="text" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento_estudiante" type="text" readonly required />
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -220,7 +220,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="telefono_local">Teléfono Local</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" required />
+						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text"  />
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -460,7 +460,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="fecha_nacimiento">Fecha de Nacimiento</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento" type="text" value="<?=$row['fecha_nacimiento']?>" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento_estudiante" type="text" value="<?=$row['fecha_nacimiento']?>"  required />
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -491,7 +491,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="telefono_local">Teléfono Local</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$row['telefono_local']?>" required />
+						<input class="input-xlarge" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$row['telefono_local']?>" />
 					</div>  
 				</div>  
 				<div class="control-group">  

@@ -19,9 +19,6 @@ if(isset($_POST['cedula_persona']))
 if(isset($_POST['codigo_area']))
   $codigo_area=trim($_POST['codigo_area']);
 
-if(isset($_POST['cota']))
-  $cota=trim($_POST['cota']);
-
 if(isset($_POST['fecha_salida']))
   $fecha_salida=trim($_POST['fecha_salida']);
 
@@ -35,7 +32,6 @@ if($lOpt=='Registrar'){
   $prestamo->cedula_responsable($cedula_responsable);
   $prestamo->cedula_persona($cedula_persona);
   $prestamo->codigo_area($codigo_area);
-  $prestamo->cota($cota);
   $prestamo->fecha_salida($fecha_salida);
   $prestamo->fecha_entrada($fecha_entrada);
   $confirmacion=false;
@@ -99,7 +95,6 @@ if($lOpt=='Modificar'){
   $prestamo->cedula_responsable($cedula_responsable);
   $prestamo->cedula_persona($cedula_persona);
   $prestamo->codigo_area($codigo_area);
-  $prestamo->cota($cota);
   $prestamo->fecha_salida($fecha_salida);
   $prestamo->fecha_entrada($fecha_entrada);
   $confirmacion=false;

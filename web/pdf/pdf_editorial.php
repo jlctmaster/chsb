@@ -17,7 +17,7 @@
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=45;
+         $avnzar=90;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -25,10 +25,7 @@
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar);
       $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*2,$altura,'NOMBRE',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3+5,$altura,'DIRECCION',1,0,'L',$color_fondo);
-      $this->Cell($anchura*3+5,$altura,'TELEFONO',1,0,'L',$color_fondo);
-      $this->Cell($anchura*5,$altura,'PARROQUIA',1,0,'L',$color_fondo);  
+      $this->Cell($anchura*5,$altura,'NOMBRE EDITORIAL',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
@@ -183,17 +180,16 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,20,35,35,50,26));
+      $lobjPdf->SetWidths(array(20,50,26));
   $pgsql=new Conexion();
-    $sql="SELECT e.codigo_editorial,e.nombre, e.direccion, e.telefono, p.codigo_parroquia||'-'||p.descripcion AS parroquia, 
-(CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM biblioteca.teditorial e
-INNER JOIN general.tparroquia AS p ON e.codigo_parroquia = p.codigo_parroquia";
+    $sql="SELECT codigo_editorial,nombre,
+(CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM biblioteca.teditorial";
    $i=-1;
    //echo $sql; die();
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=45;
+         $avnzar=90;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -206,9 +202,6 @@ INNER JOIN general.tparroquia AS p ON e.codigo_parroquia = p.codigo_parroquia";
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_editorial']),
          ucwords($tperfil['nombre']),
-         ucwords($tperfil['direccion']),
-         ucwords($tperfil['telefono']),
-         ucwords($tperfil['parroquia']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

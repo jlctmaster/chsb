@@ -74,7 +74,7 @@ else if($_GET['Opt']=="2"){
 	?>
 	<form class="form-horizontal" action="../controllers/control_materia.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: TIPO PERSONA</center></legend>		
+			<legend><center>Vista: MATERIA</center></legend>		
 			<div id="paginador" class="enjoy-css"> 
 				<div class="control-group">  
 					<label class="control-label" for="codigo_materia">Codigo Materia:</label>  
@@ -127,7 +127,7 @@ else if($_GET['Opt']=="3"){
 	?>
 	<form class="form-horizontal" action="../controllers/control_materia.php" method="post" id="form1">  
 		<fieldset>
-			<legend><center>Vista: TIPO PERSONA</center></legend>		
+			<legend><center>Vista: MATERIA</center></legend>		
 			<div id="paginador" class="enjoy-css"> 
 				<div class="control-group">  
 					<label class="control-label" for="codigo_materia">Codigo Materia:</label>  
@@ -152,9 +152,9 @@ else if($_GET['Opt']=="3"){
 					<label class="control-label" for="tipo_materia">Tipo Materia:</label>  
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
-							<option value='0'>Seleccione un Tipo de Materia</option>
-							<option value="N" <? if($row['tipo_materia']=="N") {echo "selected";} ?> >Normal</option>
-							<option value="E" <? if($row['tipo_materia']=="E") {echo "selected";} ?> >Por Equivalencia</option>
+							<option value=0>Seleccione un Tipo de Materia</option>
+							<option value="N" <?php if($row['tipo_materia']=="N") {echo "selected";} ?>> Normal</option>
+							<option value="E" <?php if($row['tipo_materia']=="E") {echo "selected";} ?>> Por Equivalencia</option>
 						</select>
 					</div>  
 				</div>   
@@ -202,7 +202,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	?>
 	<link rel="STYLESHEET" type="text/css" href="css/print.css" media="print" />
 	<fieldset>
-		<legend><center>Vista: TIPO PERSONA</center></legend>		
+		<legend><center>Vista: MATERIA</center></legend>		
 		<div id="paginador" class="enjoy-css"> 
 			<div class="printer">
 				<table class="bordered-table zebra-striped" >

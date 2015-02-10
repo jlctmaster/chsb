@@ -21,8 +21,8 @@ class clsFpdf extends FPDF {
     $this->SetFont('Arial','B',10);
     $this->SetTextColor(0,0,0);
     $this->Cell($avnzar); 
-    $this->Cell($anchura*4+5,$altura,'TIPO PERSONA',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*6,$altura,'¿ES USUARIO DEL SITEMA?',1,0,'C',$color_fondo);  
+    $this->Cell($anchura*4+5,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+    $this->Cell($anchura*6,$altura,'TIPO DE BIEN','1',0,'C',$color_fondo);  
     $this->Cell($anchura*2+5,$altura,'ESTATUS',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }

@@ -60,7 +60,7 @@ class ano_academico {
     }
 
     public function Cerrar($user){
-    	$sql="UPDATE educacion.tano_academico SET cerrado='Y',modificado_por='$user',fecha_modificacion=NOW() WHERE ano <> '$this->ano'";
+    	$sql="UPDATE educacion.tano_academico SET cerrado='Y',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ano_academico='$this->codigo_ano_academico'";
     	if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else

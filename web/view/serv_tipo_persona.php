@@ -19,7 +19,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Tipo persona</th>
+							<th>Tipo Persona</th>
 							<th>¿Es Usuario del Sistema?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -81,11 +81,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="codigo_tipopersona">Código:</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input class="input-xlarge" title="el Código del Tipo persona es generado por el sistema" name="codigo_tipopersona" id="codigo_tipopersona" type="text" readonly /> 
+						<input class="input-xlarge" title="el Código del Tipo Persona es generado por el sistema" name="codigo_tipopersona" id="codigo_tipopersona" type="text" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">Tipo persona:</label>  
+					<label class="control-label" for="descripcion">Tipo Persona:</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese el nombre del tipo persona" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
 					</div>  
@@ -125,11 +125,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_tipopersona">Código:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-						<input class="input-xlarge" title="el Código del Tipo persona es generado por el sistema" name="codigo_tipopersona" id="codigo_tipopersona" type="text" value="<?=$row['codigo_tipopersona']?>" readonly /> 
+						<input class="input-xlarge" title="el Código del Tipo Persona es generado por el sistema" name="codigo_tipopersona" id="codigo_tipopersona" type="text" value="<?=$row['codigo_tipopersona']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">Tipo persona:</label>  
+					<label class="control-label" for="descripcion">Tipo Persona:</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese el nombre del tipo persona" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
@@ -196,7 +196,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</tr>
 					<tr>
 						<td>
-							<label>Tipo persona:</label>
+							<label>Tipo Persona:</label>
 						</td>
 						<td>
 							<label><?=$row['descripcion']?></label>

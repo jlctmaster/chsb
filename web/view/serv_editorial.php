@@ -8,9 +8,8 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT e.codigo_editorial,e.nombre,p.descripcion as parroquia 
-	FROM biblioteca.teditorial e 
-	INNER JOIN general.tparroquia p ON e.codigo_parroquia = p.codigo_parroquia";
+	$sql = "SELECT *
+	FROM biblioteca.teditorial";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 <fieldset>
@@ -22,7 +21,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<tr>
 						<th>Código</th>
 						<th>Nombre</th>
-						<th>Parroquia</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -38,7 +36,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						echo '<tr>';
 						echo '<td>'.$filas['codigo_editorial'].'</td>';
 						echo '<td>'.$filas['nombre'].'</td>';
-						echo '<td>'.$filas['parroquia'].'</td>';
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 								echo '<td><a href="?editorial&Opt=3&codigo_editorial='.$filas['codigo_editorial'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -87,36 +84,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<label class="control-label" for="nombre">Nombre</label>  
 				<div class="controls">  
 					<input class="input-xlarge" title="Ingrese el nombre del Editorial" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" required />
-			</div>  
-			<div class="control-group">  
-				<label class="control-label" for="direccion">Direccion</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese la Dirección" name="direccion" onKeyUp="this.value=this.value.toUpperCase()" id="direccion" type="text" required />
-				</div>  
-			</div>
-				<div class="control-group">  
-				<label class="control-label" for="telefono">Teléfono</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el teléfono" onKeyPress="return isNumberKey(event)" name="telefono" id="telefono" type="text" />
-				</div>  
-			</div>  
-			<div class="control-group">  
-				<label class="control-label" for="codigo_parroquia">Parroquia</label>  
-					<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-						<option value=0>Seleccione una Parroquia</option>
-						<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-							}
-						?>
-					</select>
-				</div>  
-			</div>  
+			</div> 
+			</div> 
 			<div class="control-group">  
 				<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
 			</div>  
@@ -152,38 +121,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<label class="control-label" for="nombre">Nombre</label>  
 				<div class="controls">  
 					<input class="input-xlarge" onKeyUp="this.value=this.value.toUpperCase()" title="Ingrese el Nombre del Editorial" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" />
-				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="direccion">Direccion</label>  
-				<div class="controls">  
-					<input class="input-xlarge" onKeyUp="this.value=this.value.toUpperCase()" title="Ingrese la Dirección" name="direccion" id="direccion" type="text" value="<?=$row['direccion']?>"  />
-				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="telefono">Teléfono</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el teléfono" onKeyPress="return isNumberKey(event)" name="telefono" id="telefono" type="text" value="<?=$row['telefono']?>" />
-				</div>
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="codigo_parroquia">Parroquia</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-						<option value=0>Seleccione una Parroquia</option>
-						<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_parroquia']==$row['codigo_parroquia'])
-									echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-						?>
-					</select>
 				</div>  
 			</div>
 			<div class="control-group">  
@@ -246,31 +183,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label><?=$row['nombre']?></label>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<label>Direccion:</label>
-					</td>
-					<td>
-						<label><?=$row['direccion']?></label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Teléfono:</label>
-					</td>
-					<td>
-						<label><?=$row['telefono']?></label>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<label>Parroquia:</label>
-					</td>
-					<td>
-						<label><?=$row['codigo_parroquia']?></label>
-					</td>
-				</tr>
-
 			</table>
 			<center>
 				<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>

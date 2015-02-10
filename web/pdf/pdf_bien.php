@@ -18,7 +18,7 @@ require_once("../class/class_bd.php");
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=40;
+         $avnzar=50;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -27,7 +27,7 @@ require_once("../class/class_bd.php");
          $this->Cell($avnzar);
       $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
       $this->Cell($anchura*5,$altura,'BIEN',1,0,'C',$color_fondo);
-      $this->Cell($anchura*4,$altura,'Nº SERIAL',1,0,'C',$color_fondo);
+      $this->Cell($anchura*5,$altura,'CÓD. EXTERNO DEL BIEN',1,0,'C',$color_fondo);
       $this->Cell($anchura*4,$altura,'TIPO BIEN',1,0,'C',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
@@ -183,7 +183,7 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,50,40,40,26));
+      $lobjPdf->SetWidths(array(20,50,50,40,26));
   $pgsql=new Conexion();
     $sql="SELECT b.codigo_bien,b.nombre,b.nro_serial,t.descripcion AS tipo_bien, 
 (CASE b.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus
@@ -193,7 +193,7 @@ INNER JOIN bienes_nacionales.ttipo_bien AS t ON b.codigo_tipo_bien = t.codigo_ti
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=40;
+         $avnzar=50;
          $altura=7;
          $anchura=10;
          $color_fondo=false;

@@ -41,10 +41,10 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Tipo persona ha sido registrado con exito!";
+    $_SESSION['datos']['mensaje']="¡El Tipo de Persona ha sido registrado con éxito!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=2");
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Tipo persona!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Tipo de Persona!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=2");
   }
 }
@@ -58,10 +58,10 @@ if($lOpt=='Modificar'){
   else
     $confirmacion=-1;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Tipo persona ha sido modificado con exito!";
+    $_SESSION['datos']['mensaje']="¡El Tipo de Persona ha sido modificado con éxito!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Tipo persona!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Tipo de Persona!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }
 }
@@ -73,10 +73,10 @@ if($lOpt=='Desactivar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Tipo persona ha sido desactivado con exito!";
+    $_SESSION['datos']['mensaje']="¡El Tipo de Persona ha sido desactivado con éxito!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Tipo persona!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Tipo de Persona!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }
 }
@@ -88,10 +88,10 @@ if($lOpt=='Activar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Tipo persona ha sido activado con exito!";
+    $_SESSION['datos']['mensaje']="¡El Tipo de Persona ha sido activado con éxito!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Tipo persona!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Tipo de Persona!";
     header("Location: ../view/menu_principal.php?tipo_persona&Opt=3&codigo_tipopersona=".$tipo_persona->codigo_tipopersona());
   }
 }   

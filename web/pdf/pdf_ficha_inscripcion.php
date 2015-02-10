@@ -485,9 +485,9 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(10,5,'Años',1,0);
     $lobjPdf->Cell(10,5,'Meses',1,0);
     $lobjPdf->Cell(5,5,$arr['meses'][0],1,0,'C');
-    $lobjPdf->Cell(15,5,'Estatura',1,0);
-    $lobjPdf->Cell(5,5,($arr['talla'][0]),1,0,'C');
-    $lobjPdf->Cell(10,5,'Peso',1,0);
+    $lobjPdf->Cell(12,5,'Estatura',1,0);
+    $lobjPdf->Cell(9,5,($arr['talla'][0]),1,0,'C');
+    $lobjPdf->Cell(9,5,'Peso',1,0);
     $lobjPdf->Cell(10,5,$arr['peso'][0],1,0,'C');
     $lobjPdf->Cell(15,5,'Índice',1,0);
     $lobjPdf->Cell(10,5,$arr['indice'][0],1,0,'C');

@@ -246,7 +246,7 @@
 									        <div class="row-fluid">
 									            <div class="span6">
 									                <label class="control-label">Teléfono Local:</label>
-									                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" required />
+									                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text"  />
 									            </div>
 									            <div class="span6">
 									                <label class="control-label">Teléfono Móvil:</label>
@@ -1170,7 +1170,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Teléfono Local:</label>
-							                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$rows['telefono_local']?>" required />
+							                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text" value="<?=$rows['telefono_local']?>"  />
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Teléfono Móvil:</label>
@@ -1542,7 +1542,7 @@
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Fecha de Nacimiento de la Madre:</label>
-							                <input class="span12" title="Ingrese la fecha de nacimiento de la madre" name="fecha_nacimiento_madre" id="fecha_nacimiento_madre" type="text" readonly value="<?=$rows['fecha_nacimiento_madre']?>" />
+							                <input class="span12" title="Ingrese la fecha de nacimiento de la madre" name="fecha_nacimiento_madre" id="fecha_nacimiento_madre" type="text"  value="<?=$rows['fecha_nacimiento_madre']?>" readonly />
 							            </div>
 							        </div>
 							    </div>
@@ -1716,7 +1716,7 @@
 						            </div>
 							            <div class="span6">
 							                <label class="control-label">Fecha de Nacimiento del <br> Representante:</label>
-							                <input class="span12" title="Ingrese la fecha de nacimiento del representante" name="fecha_nacimiento_representante" id="fecha_nacimiento_representante" type="text" readonly value="<?=$rows['fecha_nacimiento_representante']?>" />
+							                <input class="span12" title="Ingrese la fecha de nacimiento del representante" name="fecha_nacimiento_representante" id="fecha_nacimiento_representante" type="text"  value="<?=$rows['fecha_nacimiento_representante']?>" readonly />
 							            </div>
 							        </div>
 							    </div>
@@ -1823,7 +1823,7 @@
 							<?php
 								$pgsql=new Conexion();
 								$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,
-								pi.integracion_escuela_comunidad,pi.especifique_integracion 
+								pi.integracion_escuela_comunidad,pi.especifique_integracion,pi.procesado 
 								FROM educacion.tproceso_inscripcion pi 
 								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
 								WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
@@ -1875,79 +1875,6 @@
 							</div>  
 							<div class="form-actions">
 								<button type="button" id="btnGuardar5" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-								<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-							</div>
-						</div> 
-					</fieldset>
-				</form>
-		    </div>
-			<div class="tab-pane" id="tab-inscripcion">
-				<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form6"> 
-					<fieldset>
-						<div id="paginador" class="enjoy-css">
-							<input type="hidden" name="lOpt" id="lOpt" value="Modificar_Paso6">
-							<?php
-								$pgsql=new Conexion();
-								$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,
-								pi.seccion,pi.observacion,pi.procesado 
-								FROM educacion.tproceso_inscripcion pi 
-								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
-								WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
-								$query = $pgsql->Ejecutar($sql);
-								$rows=$pgsql->Respuesta($query);
-				      		?>
-				      		<div class="row">
-							    <div class="span6">
-							        <div class="row-fluid">
-							            <div class="span6">
-							                <label class="control-label">Cédula Estudiante:</label>
-							                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
-							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
-							            </div>
-							            <div class="span6">
-							                <label class="control-label">Nombre y Apellido:</label>
-							                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
-							            </div>
-							        </div>
-							    </div>
-							</div>
-							<div class="row">
-							    <div class="span6">
-							        <div class="row-fluid">
-							            <div class="span6">
-							                <label class="control-label">Sección:</label>
-							                <input type="hidden" name="oldseccion" id="oldseccion" value="<?=$rows['seccion']?>">
-							                <select class="bootstrap-select form-control" title="Seleccione una Sección" name='seccion' id='seccion' >
-												<option value=0>Seleccione una Sección</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT s.seccion,s.nombre_seccion||' ('||MAX(s.capacidad_max)-COUNT(isec.seccion)||')' AS nombre_seccion 
-													FROM educacion.tseccion s 
-													LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion 
-													GROUP BY s.seccion,s.nombre_seccion 
-													ORDER BY MAX(s.capacidad_max)-COUNT(isec.seccion) DESC,s.seccion ASC";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['seccion']==$row['seccion'])
-															echo "<option value=".$row['seccion']." selected >".$row['nombre_seccion']."</option>";
-														else
-															echo "<option value=".$row['seccion'].">".$row['nombre_seccion']."</option>";
-													}
-												?>
-											</select>
-							            </div>
-							            <div class="span6">
-							            	<label class="control-label">Observación:</label>
-							            	<textarea class="span12" title="Ingrese alguna observación sobre el proceso de inscripción" onKeyUp="this.value=this.value.toUpperCase()" name="observacion" id="observacion" ><?php echo $rows['observacion'];?></textarea>
-							            </div>
-							        </div>
-							    </div>
-							</div>
-							<div class="control-group">  
-								<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-							</div>  
-							<div class="form-actions">
-								<button type="button" id="btnGuardar6" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
 								<?php
 									if($rows['procesado']=="Y")
 										echo '<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir Ficha</button>';

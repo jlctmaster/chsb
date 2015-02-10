@@ -110,10 +110,7 @@ function init(){
 			alert("¡Debe ingresar la direccion de la persona!");
 			send = false;
 		}
-		else if($('#telefono_local').val()==""){
-			alert("¡Debe ingresar el teléfono local de la persona!");
-			send = false;
-		}
+	
 		else if($('#codigo_tipopersona').val()==0){
 			alert("¡Debe seleccionar un Tipo de Persona!");
 			send = false;

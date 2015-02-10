@@ -1,11 +1,10 @@
 <?php
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
-	$sql = "SELECT e.codigo_editorial, e.nombre, e.codigo_parroquia, p.descripcion, e.direccion, e.telefono,
-			(CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
-			FROM biblioteca.teditorial AS e
-			INNER JOIN general.tparroquia p ON e.codigo_parroquia = p.codigo_parroquia
-			ORDER BY e.codigo_editorial ASC";
+	$sql = "SELECT codigo_editorial, nombre,
+			(CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus 
+			FROM biblioteca.teditorial
+			ORDER BY codigo_editorial ASC";
 	$query = $mysql->Ejecutar($sql);
 
 	date_default_timezone_set('America/Caracas');
@@ -26,19 +25,16 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Editoriales";
-	$titulosColumnas = array('Código', 'Nombre', 'Dirección', 'Parroquia', 'Teléfono', 'Estatus');
+	$titulosColumnas = array('Código', 'Nombre', 'Estatus');
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1')->mergeCells('A2:F2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:C1')->mergeCells('A2:C2');
 					
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A1', $tituloReporte)
 				->setCellValue('A3', $titulosColumnas[0])
 				->setCellValue('B3', $titulosColumnas[1])
-				->setCellValue('C3', $titulosColumnas[2])
-				->setCellValue('D3', $titulosColumnas[3])
-				->setCellValue('E3', $titulosColumnas[4])
-				->setCellValue('F3', $titulosColumnas[5]);
+				->setCellValue('C3', $titulosColumnas[2]);
 	
 	//Se agregan los datos de los alumnos
 	$i = 5;
@@ -46,10 +42,7 @@
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A'.$i, $row['codigo_editorial'])
 		->setCellValue('B'.$i, $row['nombre'])
-		->setCellValue('C'.$i, $row['direccion'])
-		->setCellValue('D'.$i, $row['descripcion'])
-		->setCellValue('E'.$i, $row['telefono'])
-		->setCellValue('F'.$i, $row['estatus']);
+		->setCellValue('C'.$i, $row['estatus']);
 		$i++;
 	}
 	
@@ -141,13 +134,13 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:F".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle('A1:C1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A3:C3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:C".($i-1));
 	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			
-	for($i = 'A'; $i <= 'E'; $i++){
+	for($i = 'A'; $i <= 'C'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
 	}
 	

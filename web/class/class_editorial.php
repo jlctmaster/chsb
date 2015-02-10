@@ -2,19 +2,13 @@
 require_once("class_bd.php");
 	class editorial {
 	private $codigo_editorial;
-	private $nombre;  
-	private $direccion;
-	private $telefono;
-	private $codigo_parroquia;
+	private $nombre;
 	private $estatus; 
 	private $pgsql; 
 	 
 	public function __construct(){
 		$this->codigo_editorial=null;
 		$this->nombre=null;
-		$this->direccion=null;
-		$this->telefono=null;
-		$this->codigo_parroquia=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -43,33 +37,6 @@ require_once("class_bd.php");
 		}
     }
 
-    public function direccion(){
-    	$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->direccion;
-     
-		if($Num_Parametro>0){
-	   		$this->direccion=func_get_arg(0);
-	 	}
-    }
-
-    public function telefono(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->telefono;
-
-		if($Num_Parametro>0){
-			$this->telefono=func_get_arg(0);
-		}
-    }
-
-    public function codigo_parroquia(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->codigo_parroquia;
-
-		if($Num_Parametro>0){
-			$this->codigo_parroquia=func_get_arg(0);
-		}
-    }
-
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -80,8 +47,8 @@ require_once("class_bd.php");
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.teditorial (nombre,direccion,telefono,codigo_parroquia,creado_por,fecha_creacion) VALUES 
-	    ('$this->nombre','$this->direccion','$this->telefono','$this->codigo_parroquia','$user',NOW());";
+	    $sql="INSERT INTO biblioteca.teditorial (nombre,creado_por,fecha_creacion) VALUES 
+	    ('$this->nombre','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -111,8 +78,8 @@ require_once("class_bd.php");
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE biblioteca.teditorial SET nombre='$this->nombre', direccion='$this->direccion',telefono='$this->telefono', codigo_parroquia='$this->codigo_parroquia',
-	    modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_editorial='$this->codigo_editorial'";
+	    $sql="UPDATE biblioteca.teditorial SET nombre='$this->nombre',modificado_por='$user', fecha_modificacion=NOW() 
+	    WHERE codigo_editorial='$this->codigo_editorial'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -126,9 +93,6 @@ require_once("class_bd.php");
 			$editorial=$this->pgsql->Respuesta($query);
 			$this->codigo_editorial($editorial['codigo_editorial']);
 			$this->nombre($editorial['nombre']);
-			$this->direccion($editorial['direccion']);
-			$this->telefono($editorial['telefono']);
-			$this->codigo_parroquia($editorial['codigo_parroquia']);
 			$this->estatus($editorial['estatus']);
 			return true;
 		}

@@ -185,10 +185,6 @@ function init(){
 				alert("¡Debe ingresar la dirección del estudiante!");
 				send = false;
 			}
-			else if($('#telefono_local').val()==""){
-				alert("¡Debe ingresar el número de teléfono local!");
-				send = false;
-			}
 
 			//Comprobamos si el elemento estatus existe para luego verificar su valor.
 			if(document.getElementById("estatus")){
@@ -280,10 +276,7 @@ function init(){
 					alert("¡Debe ingresar la dirección del padre del estudiante!");
 					send = false;
 				}
-				else if($('#telefono_local_padre').val()==""){
-					alert("¡Debe ingresar el número de teléfono local del padre!");
-					send = false;
-				}
+			
 				else if($('#profesion_padre').val()==""){
 					alert("¡Debe ingresar la profesión del padre!");
 					send = false;
@@ -318,10 +311,7 @@ function init(){
 					alert("¡Debe ingresar la dirección de la madre del estudiante!");
 					send = false;
 				}
-				else if($('#telefono_local_madre').val()==""){
-					alert("¡Debe ingresar el número de teléfono local de la madre!");
-					send = false;
-				}
+			
 				else if($('#profesion_madre').val()==""){
 					alert("¡Debe ingresar la profesión de la madre!");
 					send = false;
@@ -359,10 +349,7 @@ function init(){
 				alert("¡Debe ingresar la cédula del representante del estudiante!");
 				send = false;
 			}
-			else if($('#fecha_nacimiento_representante').val()==""){
-				alert("¡Debe seleccionar la fecha de nacimiento del representante del estudiante!");
-				send = false;
-			}
+	
 			else if($('#primer_nombre_representante').val()==""){
 				alert("¡Debe ingresar el primer nombre del representante del estudiante!");
 				send = false;
@@ -379,10 +366,7 @@ function init(){
 				alert("¡Debe ingresar la dirección del representante del estudiante!");
 				send = false;
 			}
-			else if($('#telefono_local_representante').val()==""){
-				alert("¡Debe ingresar el número de teléfono local del representante!");
-				send = false;
-			}
+		
 			else if($('#profesion_representante').val()==""){
 				alert("¡Debe ingresar la profesión del representante!");
 				send = false;

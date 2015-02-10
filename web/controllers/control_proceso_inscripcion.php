@@ -606,6 +606,7 @@ if($lOpt=="Asignar_Seccion"){
   if(isset($_POST['codigos']) && isset($_POST['cedulas'])){
     $proceso_inscripcion->Transaccion('iniciando');
     for($i=0;$i<count($_POST['codigos']);$i++){
+      echo "a".$i;
       if($proceso_inscripcion->Asignar_Seccion($_SESSION['user_name'],$_POST['codigos'][$i],$_POST['cedulas'][$i]))
         $con++;
     }

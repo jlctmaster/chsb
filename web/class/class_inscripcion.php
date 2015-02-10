@@ -113,9 +113,9 @@ class inscripcion {
    	public function Registrar($user){
    		$sqlx="INSERT INTO educacion.tperiodo (descripcion,fecha_inicio,fecha_fin,esinscripcion,creado_por,fecha_creacion) 
    		VALUES ('$this->descripcion','$this->fecha_inicio','$this->fecha_fin','Y','$user',NOW())";
-	    $sql="INSERT INTO educacion.tinscripcion (fecha_cierre,codigo_periodo,creado_por,fecha_creacion) VALUES 
+	    $sql="INSERT INTO educacion.tinscripcion (fecha_cierre,codigo_periodo,cerrado,creado_por,fecha_creacion) VALUES 
 	    ('$this->fecha_cierre',(SELECT codigo_periodo FROM educacion.tperiodo WHERE descripcion = '$this->descripcion' 
-	    AND fecha_inicio = '$this->fecha_inicio' AND fecha_fin = '$this->fecha_fin' AND esinscripcion = 'Y'),'$user',NOW());";
+	    AND fecha_inicio = '$this->fecha_inicio' AND fecha_fin = '$this->fecha_fin' AND esinscripcion = 'Y'),'N','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sqlx)!=null)
 			if($this->pgsql->Ejecutar($sql)!=null)
 				return true;

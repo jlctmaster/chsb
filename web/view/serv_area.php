@@ -20,7 +20,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Area</th>
+							<th>Área</th>
 							<th>Departamento</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -83,11 +83,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="codigo_area">Código:</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input class="input-xlarge" title="el Código del Area es generado por el sistema" name="codigo_area" id="codigo_area" type="text" readonly /> 
+						<input class="input-xlarge" title="el Código del Área es generado por el sistema" name="codigo_area" id="codigo_area" type="text" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">Area:</label>  
+					<label class="control-label" for="descripcion">Área:</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese el nombre del area" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
 					</div>  
@@ -136,7 +136,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_area">Código:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-						<input class="input-xlarge" title="el Código del Area es generado por el sistema" name="codigo_area" id="codigo_area" type="text" value="<?=$row['codigo_area']?>" readonly /> 
+						<input class="input-xlarge" title="el Código del Área es generado por el sistema" name="codigo_area" id="codigo_area" type="text" value="<?=$row['codigo_area']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -220,7 +220,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			</tr>
 			<tr>
 				<td>
-					<label>Area:</label>
+					<label>Área:</label>
 				</td>
 				<td>
 					<label><?=$row['descripcion']?></label>

@@ -2,8 +2,7 @@
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
 	$sql = "SELECT seccion,nombre_seccion,CASE turno WHEN 'M' THEN 'MAÑANA' WHEN 'T' THEN 'TARDE' ELSE 'NOCHE' END AS turno,
-  capacidad_min,capacidad_max,peso_min,peso_max,CASE talla_min WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_min,
-  CASE talla_max WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_max,
+  capacidad_min,capacidad_max,indice_min,indice_max,
   CASE estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM educacion.tseccion";
 	$query = $mysql->Ejecutar($sql);
@@ -26,9 +25,9 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Secciones";
-	$titulosColumnas = array('Sección', 'Nombre', 'Turno', 'Capacidad Min.', 'Capacidad Máx.', 'Peso Min.', 'Peso Máx.', 'Talla Min.', 'Talla Máx.', 'Estatus');
+	$titulosColumnas = array('Sección', 'Nombre', 'Turno', 'Capacidad Min.', 'Capacidad Máx.', 'Índice Min.', 'Índice Máx.', 'Estatus');
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:J1')->mergeCells('A2:J2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')->mergeCells('A2:H2');
 					
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
@@ -40,9 +39,7 @@
 				->setCellValue('E3', $titulosColumnas[4])
 				->setCellValue('F3', $titulosColumnas[5])
 				->setCellValue('G3', $titulosColumnas[6])
-				->setCellValue('H3', $titulosColumnas[7])
-				->setCellValue('I3', $titulosColumnas[8])
-				->setCellValue('J3', $titulosColumnas[9]);
+				->setCellValue('H3', $titulosColumnas[7]);
 	
 	//Se agregan los datos de los alumnos
 	$i = 5;
@@ -53,11 +50,9 @@
 		->setCellValue('C'.$i, $row['turno'])
 		->setCellValue('D'.$i, $row['capacidad_min'])
 		->setCellValue('E'.$i, $row['capacidad_max'])
-		->setCellValue('F'.$i, $row['peso_min'])
-		->setCellValue('G'.$i, $row['peso_max'])
-		->setCellValue('H'.$i, $row['talla_min'])
-		->setCellValue('I'.$i, $row['talla_max'])
-		->setCellValue('J'.$i, $row['estatus']);
+		->setCellValue('F'.$i, $row['indice_min'])
+		->setCellValue('G'.$i, $row['indice_max'])
+		->setCellValue('H'.$i, $row['estatus']);
 		$i++;
 	}
 	
@@ -149,14 +144,14 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:J".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:H".($i-1));
 
 	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			
-	for($i = 'A'; $i <= 'J'; $i++){
+	for($i = 'A'; $i <= 'H'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
 	}
 	

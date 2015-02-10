@@ -3,16 +3,12 @@ require_once("class_bd.php");
 class autor {
 	private $codigo_autor; 
 	private $nombre;
-	private $codigo_parroquia;
-	private $fecha_nacimiento;
 	private $estatus; 
 	private $pgsql; 
 	 
 	public function __construct(){
 		$this->codigo_autor=null;
 		$this->nombre=null;
-		$this->codigo_parroquia=null;
-		$this->fecha_nacimiento=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -42,22 +38,6 @@ class autor {
 	 	}
     }
 
-    public function codigo_parroquia(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->codigo_parroquia;
-
-		if($Num_Parametro>0){
-			$this->codigo_parroquia=func_get_arg(0);
-		}
-    }
-    public function fecha_nacimiento(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->fecha_nacimiento;
-
-		if($Num_Parametro>0){
-			$this->fecha_nacimiento=func_get_arg(0);
-		}
-    }
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -68,8 +48,8 @@ class autor {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tautor (nombre,codigo_parroquia,fecha_nacimiento,creado_por,fecha_creacion) VALUES 
-	    ('$this->nombre','$this->codigo_parroquia','$this->fecha_nacimiento','$user',NOW())";
+	    $sql="INSERT INTO biblioteca.tautor (nombre,creado_por,fecha_creacion) VALUES 
+	    ('$this->nombre','$user',NOW())";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -100,8 +80,8 @@ class autor {
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE biblioteca.tautor SET nombre='$this->nombre',codigo_parroquia='$this->codigo_parroquia',fecha_nacimiento='$this->fecha_nacimiento',
-		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_autor='$this->codigo_autor'";
+	    $sql="UPDATE biblioteca.tautor SET nombre='$this->nombre',modificado_por='$user',fecha_modificacion=NOW() 
+	    WHERE codigo_autor='$this->codigo_autor'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -115,8 +95,6 @@ class autor {
 			$tautor=$this->pgsql->Respuesta($query);
 			$this->codigo_autor($tautor['codigo_autor']);
 			$this->nombre($tautor['nombre']);
-			$this->codigo_parroquia($tautor['codigo_parroquia']);
-			$this->fecha_nacimiento($tautor['fecha_nacimiento']);
 			$this->estatus($tautor['estatus']);
 			return true;
 		}

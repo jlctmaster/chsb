@@ -25,7 +25,7 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Materias";
-	$titulosColumnas = array('Código', 'Materia', 'Und. Credito', 'Tipo', 'Estatus');
+	$titulosColumnas = array('Código', 'Materia', 'Und. Crédito', 'Tipo Materia', 'Estatus');
 	
 	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:E1')->mergeCells('A2:E2');
 					

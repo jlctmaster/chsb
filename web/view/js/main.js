@@ -72,6 +72,15 @@ function init(){
         buttonImage: '../images/calendario.png',
         buttonImageOnly: true
     });
+        //Agregar Objeto Calendario al input fecha_nacimiento_representante.
+    $('#fecha_nacimiento_representante').datepicker({
+        minDate: '-18y',
+        maxDate: '-10y',
+        showOn: 'both',
+        numberOfMonths: 1,
+        buttonImage: '../images/calendario.png',
+        buttonImageOnly: true
+    });
     //Agregar Objeto Calendario al input fecha_inscripcion.
     $('#fecha_inscripcion').datepicker({
         minDate: $('#fecha_inicio_ins').val(),
@@ -150,28 +159,26 @@ function init(){
     });
     //Agregar Objeto Calendario al input fecha_salida.
     $('#fecha_salida').datepicker({
-        minDate: '-1m',
+        minDate: '-7d',
         maxDate: '0d',
         showOn: 'both',
         numberOfMonths: 1,
         buttonImage: '../images/calendario.png',
-        buttonImageOnly: true
+        buttonImageOnly: true,
+        onClose: function (selectedDate) {
+            $("#fecha_entrada").datepicker("option", "minDate", selectedDate)
+        }
     });
     //Agregar Objeto Calendario al input fecha_entrada.
     $('#fecha_entrada').datepicker({
-        minDate: '-1m',
-        maxDate: '0d',
+        maxDate: '+7d',
         showOn: 'both',
         numberOfMonths: 1,
         buttonImage: '../images/calendario.png',
-        buttonImageOnly: true
-    });
-    //Agregar Objeto Calendario al input fecha_edicion.
-    $('#fecha_edicion').datepicker({
-        showOn: 'both',
-        numberOfMonths: 1,
-        buttonImage: '../images/calendario.png',
-        buttonImageOnly: true
+        buttonImageOnly: true,
+        onClose: function (selectedDate) {
+            $("#fecha_salida").datepicker("option", "maxDate", selectedDate)
+        }
     });
 	//Agregar Objeto de Horas al input hora_inicio
 	$('#hora_inicio').timepicker({

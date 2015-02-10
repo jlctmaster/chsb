@@ -5,7 +5,6 @@ class prestamo {
 	private $cedula_responsable;
 	private $cedula_persona;
 	private $codigo_area;
-	private $cota;
 	private $fecha_salida;
 	private $fecha_entrada;
 	private $estatus; 
@@ -16,7 +15,6 @@ class prestamo {
 		$this->cedula_responsable=null;
 		$this->cedula_persona=null;
 		$this->codigo_area=null;
-		$this->cota=null;
 		$this->fecha_salida=null;
 		$this->fecha_entrada=null;
 		$this->pgsql=new Conexion();
@@ -64,15 +62,6 @@ class prestamo {
 		if($Num_Parametro>0){
 			$this->codigo_area=func_get_arg(0);
 		}
-    }
-
-    public function cota(){
-    	$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->cota;
-     
-		if($Num_Parametro>0){
-	   		$this->cota=func_get_arg(0);
-	 	}
     }
 
     public function fecha_salida(){
@@ -137,12 +126,12 @@ class prestamo {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tprestamo (cedula_responsable,cedula_persona,codigo_area,cota,fecha_salida,fecha_entrada,creado_por,fecha_creacion) VALUES 
-	    ('$this->cedula_responsable','$this->cedula_persona','$this->codigo_area','$this->cota','$this->fecha_salida','$this->fecha_entrada','$user',NOW());";
+	    $sql="INSERT INTO biblioteca.tprestamo (cedula_responsable,cedula_persona,codigo_area,fecha_salida,fecha_entrada,creado_por,fecha_creacion) VALUES 
+	    ('$this->cedula_responsable','$this->cedula_persona','$this->codigo_area','$this->fecha_salida','$this->fecha_entrada','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_prestamo FROM biblioteca.tprestamo 
 	    	WHERE cedula_responsable='$this->cedula_responsable' AND cedula_persona = '$this->cedula_persona' AND codigo_area='$this->codigo_area' 
-	    	AND cota = '$this->cota' AND fecha_salida = '$this->fecha_salida' AND fecha_entrada = '$this->fecha_entrada' 
+	    	AND fecha_salida = '$this->fecha_salida' AND fecha_entrada = '$this->fecha_entrada' 
 	    	ORDER BY creado_por DESC LIMIT 1";
 	    	$query=$this->pgsql->Ejecutar($sqlx);
 	    	if($this->pgsql->Total_Filas($query)!=0){
@@ -193,7 +182,7 @@ class prestamo {
    
     public function Actualizar($user){
 	    $sql="UPDATE biblioteca.tprestamo SET cedula_responsable='$this->cedula_responsable',cedula_persona='$this->cedula_persona',
-	    codigo_area='$this->codigo_area', cota='$this->cota',fecha_salida='$this->fecha_salida',
+	    codigo_area='$this->codigo_area',fecha_salida='$this->fecha_salida',
 	    fecha_entrada='$this->fecha_entrada',modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_prestamo='$this->codigo_prestamo'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

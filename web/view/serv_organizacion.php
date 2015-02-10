@@ -21,7 +21,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>RIf organización</th>
-							<th>Organizacion</th>
+							<th>Organización</th>
 							<th>Parroquia</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -86,16 +86,16 @@ else if($_GET['Opt']=="2"){
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="nombre">Organizacion</label>  
+				<label class="control-label" for="nombre">Organización</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el nombre del organizacion" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" required />
+					<input class="input-xlarge" title="Ingrese el nombre del organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" required />
 				</div>  
 			</div>  
 
 			<div class="control-group">  
 				<label class="control-label" for="telefono">Teléfono</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el número de la organizacion" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" required />
+					<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" required />
 				</div>  
 			</div>   
 			<div class="control-group">  
@@ -105,10 +105,10 @@ else if($_GET['Opt']=="2"){
 				</div>  
 			</div>   
 			<div class="control-group">  
-				<label class="control-label" for="tipo_organizacion">Tipo de Organizacion</label>  
+				<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
 				<div class="controls">  
 					<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required /> 
-					<option value=0>Seleccione un Tipo de Organizacion</option>
+					<option value=0>Seleccione un Tipo de Organización</option>
 					<option value="1" >PÚBLICA</option>
 					<option value="2" >PRIVADA</option>
 					<option value="3" >GUBERNAMENTAL</option>		
@@ -118,8 +118,8 @@ else if($_GET['Opt']=="2"){
 		<div class="control-group">  
 			<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 			<div class="controls">  
-				<select class="selectpicker" data-live-search="true" title="Seleccione la Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-					<option value=0>Seleccione la Parroquia</option>
+				<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
+					<option value=0>Seleccione una Parroquia</option>
 					<?php
 					require_once('../class/class_bd.php');
 					$pgsql = new Conexion();
@@ -166,28 +166,28 @@ else if($_GET['Opt']=="3"){
 				</div>  
 			</div>
 			<div class="control-group">  
-				<label class="control-label" for="nombre">Organizacion</label>  
+				<label class="control-label" for="nombre">Organización</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el nombre del organizacion" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" required />
+					<input class="input-xlarge" title="Ingrese el nombre de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" required />
 				</div>  
 			</div>   
 			<div class="control-group">  
 				<label class="control-label" for="telefono">Teléfono</label>  
 				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el número de la organizacion" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" value="<?=$row['telefono']?>" required />
+					<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" value="<?=$row['telefono']?>" required />
 				</div>  
 			</div>   
 			<div class="control-group">  
 				<label class="control-label" for="direccion">Dirección</label>  
 				<div class="controls">  
-					<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" required /><?php echo $row['direccion']; ?></textarea>
+					<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" value required /><?php echo $row['direccion']; ?></textarea>
 				</div>  
 			</div>  
 			<div class="control-group">  
 				<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo_organizacion" required > 
-						<option value=0>Seleccione un tipo_organizacion </option>
+					<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required/> 
+						<option value=0>Seleccione un Tipo de Organización </option>
 						<option value="1" <?php if($row['tipo_organizacion']=="1") {echo "selected";} ?> >PÚBLICA</option>
 						<option value="2" <?php if($row['tipo_organizacion']=="2") {echo "selected";} ?> >PRIVADA</option>
 						<option value="3" <?php if($row['tipo_organizacion']=="3") {echo "selected";} ?> >GUBERNAMENTAL</option>		
@@ -195,10 +195,10 @@ else if($_GET['Opt']=="3"){
 				</div>
 			</div>   
 			<div class="control-group">  
-				<label class="control-label" for="codigo_parroquia">Parroquia</label>  
-				<div class="controls">  
-					<select class="selectpicker data-live-search="true" title="Seleccione una Parroquia" name="codigo_parroquia" id="codigo_parroquia" required />
-					<option value=0>Seleccione la Parroquia</option>
+			<label class="control-label" for="codigo_parroquia">Parroquia</label>  
+			<div class="controls">  
+				<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
+					<option value=0>Seleccione una Parroquia</option>
 					<?php
 					require_once('../class/class_bd.php');
 					$pgsql = new Conexion();
@@ -211,9 +211,9 @@ else if($_GET['Opt']=="3"){
 							echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
 					}
 					?>
-				</select>
-			</div>  
-		</div>
+					</select>
+				</div>
+			</div>
 		<center>
 		<div class="control-group">  
 			<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{
@@ -263,7 +263,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 		<table class="bordered-table zebra-striped" >
 			<tr>
 				<td>
-					<label>RIf Organización:</label>
+					<label>RIF Organización:</label>
 				</td>
 				<td>
 					<label><?=$row['rif_organizacion']?></label>
@@ -271,7 +271,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			</tr>
 			<tr>
 				<td>
-					<label>Organizacion:</label>
+					<label>Organización:</label>
 				</td>
 				<td>
 					<label><?=$row['nombre']?></label>
@@ -279,7 +279,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			</tr>
 			<tr>
 				<td>
-					<label>Direción:</label>
+					<label>Dirección:</label>
 				</td>
 				<td>
 					<label><?=$row['direccion']?></label>
@@ -295,7 +295,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			</tr>
 			<tr>
 				<td>
-					<label>Tipo Organizacion:</label>
+					<label>Tipo Organización:</label>
 				</td>
 				<td>
 					<label><?=$row['tipo_organizacion']?></label>

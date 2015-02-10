@@ -262,8 +262,7 @@ $lobjPdf->SetWidths(array(80,50,20));
 $pgsql=new Conexion();
 $sql="SELECT a.codigo_entrega,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,p.telefono_movil,
   a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
-  b.cota||', '||b.fecha_entrada||' .'||
-    a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
+  b.fecha_entrada||' .'||a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
   TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
    da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
    u.codigo_ubicacion||' '||u.descripcion AS ubicacion

@@ -31,9 +31,9 @@ require_once("../librerias/fpdf/fpdf.php");
       $this->Cell($anchura*1+5,$altura,'SEXO',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'FECHA NAC.',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'LUGAR NAC.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*4,$altura,'DIRECCION',1,0,'L',$color_fondo);
+      $this->Cell($anchura*4,$altura,'DIRECCIÓN',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'TELF. LOCAL',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'TELF MOVIL',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'TELF MÓVIL',1,0,'L',$color_fondo);
       $this->Cell($anchura*3,$altura,'TIPO PERSONA',1,0,'L',$color_fondo);
       $this->Cell($anchura*2,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       

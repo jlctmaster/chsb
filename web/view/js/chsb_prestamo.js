@@ -110,10 +110,7 @@ function init(){
 			alert("¡Debe seleccionar un Área!");
 			send = false;
 		}
-		else if($('#cota').val()==""){
-			alert("¡Debe Ingresar una Cota!");
-			send = false;
-		}
+	
 		else if($('#fecha_salida').val()==""){
 			alert("¡Debe Seleccionar la fecha de salida!");
 			send = false;

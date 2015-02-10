@@ -17,7 +17,7 @@
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=60;
+         $avnzar=90;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -25,9 +25,7 @@
          $this->SetTextColor(0,0,0);
          $this->Cell($avnzar);
       $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*3,$altura,'AUTOR',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+7,$altura,'PARROQUIA',1,0,'L',$color_fondo);
-	  $this->Cell($anchura*4+2,$altura,'FECHA DE NACIMIENTO',1,0,'L',$color_fondo);
+      $this->Cell($anchura*4,$altura,'AUTOR',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
@@ -182,16 +180,15 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,30,27,42,26));
+      $lobjPdf->SetWidths(array(20,40,26));
   $pgsql=new Conexion();
-    $sql="SELECT a.codigo_autor,a.nombre, a.fecha_nacimiento,p.codigo_parroquia||' '||p.descripcion AS parroquia, 
-(CASE a.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM biblioteca.tautor a
-INNER JOIN general.tparroquia AS p ON a.codigo_parroquia = p.codigo_parroquia";
+    $sql="SELECT codigo_autor,nombre, 
+(CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus FROM biblioteca.tautor";
    $i=-1;
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=60;
+         $avnzar=90;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -205,8 +202,6 @@ INNER JOIN general.tparroquia AS p ON a.codigo_parroquia = p.codigo_parroquia";
          $lobjPdf->Row(array(
          ucwords($tperfil['codigo_autor']),
          ucwords($tperfil['nombre']),
-         ucwords($tperfil['parroquia']),
-		 ucwords($tperfil['fecha_nacimiento']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

@@ -18,7 +18,7 @@ require_once("../librerias/fpdf/fpdf.php");
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=10;
+         $avnzar=30;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -26,14 +26,12 @@ require_once("../librerias/fpdf/fpdf.php");
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar); 
       $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
-      $this->Cell($anchura*2,$altura,'SECCIÓN',1,0,'L',$color_fondo);  
+      $this->Cell($anchura*3,$altura,'SECCIÓN',1,0,'L',$color_fondo);  
       $this->Cell($anchura*1+5,$altura,'TURNO',1,0,'L',$color_fondo);
       $this->Cell($anchura*3+5,$altura,'CAPACIDAD MIN.',1,0,'L',$color_fondo);
       $this->Cell($anchura*3+5,$altura,'CAPACIDAD MÁX.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'PESO MIN.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'PESO MÁX.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'TALLA MIN.',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+6,$altura,'TALLA MÁX.',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ÍNDICE MIN.',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2+6,$altura,'ÍNDICE MÁX.',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
@@ -188,11 +186,10 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,20,15,35,35,26,26,26,26,26));
+      $lobjPdf->SetWidths(array(20,30,15,35,35,26,26,26));
   $pgsql=new Conexion();
     $sql="SELECT seccion,nombre_seccion,CASE turno WHEN 'M' THEN 'MAÑANA' WHEN 'T' THEN 'TARDE' ELSE 'NOCHE' END AS turno,
-  capacidad_min,capacidad_max,peso_min,peso_max,CASE talla_min WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_min,
-  CASE talla_max WHEN '1' THEN 'S' WHEN '2' THEN 'M' WHEN '3' THEN 'L' WHEN '4' THEN 'X' ELSE 'XL' END AS talla_max,
+  capacidad_min,capacidad_max,indice_min,indice_max,
   CASE estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM educacion.tseccion ";
    $i=-1;
@@ -200,7 +197,7 @@ function NbLines($w,$txt)
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=10;
+         $avnzar=30;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -217,10 +214,8 @@ function NbLines($w,$txt)
          ucwords($tperfil['turno']),
          ucwords($tperfil['capacidad_min']),
          ucwords($tperfil['capacidad_max']),
-         ucwords($tperfil['peso_min']),
-         ucwords($tperfil['peso_max']),
-         ucwords($tperfil['talla_min']),
-         ucwords($tperfil['talla_max']),
+         ucwords($tperfil['indice_min']),
+         ucwords($tperfil['indice_max']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

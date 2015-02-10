@@ -25,7 +25,7 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de los Roles";
-	$titulosColumnas = array('Tipo', '¿Es usuario del sistema?', 'Estatus');
+	$titulosColumnas = array('Tipo de Persona', '¿Es usuario del Sistema?', 'Estatus');
 	
 	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:C1')->mergeCells('A2:C2');
 					

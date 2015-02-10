@@ -84,6 +84,7 @@ if($lOpt=='Registrar'){
     header("Location: ../view/menu_principal.php?adquisicion&Opt=2");
   }else{
     $adquisicion->Transaccion('cancelado');
+    "1 =>".$adquisicion->error()." <br> 2 => ".$mov_inventario->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la Adquisición!";
     header("Location: ../view/menu_principal.php?adquisicion&Opt=2");
   }

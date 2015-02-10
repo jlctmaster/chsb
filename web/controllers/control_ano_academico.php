@@ -27,7 +27,7 @@ if($lOpt=='Registrar'){
   $ano_academico->codigo_ano_academico($codigo_ano_academico);
   $ano_academico->ano($ano);
   if(!$ano_academico->Comprobar()){
-    $ano_academico->Cerrar();
+    $ano_academico->Cerrar($_SESSION['user_name']);
     if($ano_academico->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -53,7 +53,7 @@ if($lOpt=='Modificar'){
   $ano_academico->codigo_ano_academico($codigo_ano_academico);
   $ano_academico->ano($ano);
   $ano_academico->cerrado(comprobarCheckBox($cerrado));
-  $ano_academico->Cerrar();
+  $ano_academico->Cerrar($_SESSION['user_name']);
   if($ano_academico->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

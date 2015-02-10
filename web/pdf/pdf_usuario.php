@@ -23,14 +23,14 @@ class clsFpdf extends FPDF {
     $this->Cell($anchura*4,$altura-2,'PARÁMETROS:',0,1,'C',$color_fondo);  
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar-8);
-    $this->Cell($anchura*4,$altura-2,'FECHA DESDE:',0,0,'C',$color_fondo); 
+    $this->Cell($anchura*4,$altura-2,'PERFIL DESDE:',0,0,'C',$color_fondo); 
     $this->SetFont('Arial','',10);
-    $this->Cell($anchura*2,$altura-2,$_POST['fecha_inicio'],0,1,'C',$color_fondo); 
+    $this->Cell($anchura*2,$altura-2,substr($_POST['perfil_desde'],strpos($_POST['perfil_desde'],'-')+1,strlen($_POST['perfil_desde'])),0,1,'C',$color_fondo); 
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar-8);
-    $this->Cell($anchura*4,$altura-2,'FECHA HASTA:',0,0,'C',$color_fondo);
+    $this->Cell($anchura*4,$altura-2,'PERFIL HASTA:',0,0,'C',$color_fondo);
     $this->SetFont('Arial','',10);
-    $this->Cell($anchura*2,$altura-2,$_POST['fecha_fin'],0,1,'C',$color_fondo);
+    $this->Cell($anchura*2,$altura-2,substr($_POST['perfil_hasta'],strpos($_POST['perfil_hasta'],'-')+1,strlen($_POST['perfil_hasta'])),0,1,'C',$color_fondo);
     $this->Ln(4);    
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar);
@@ -165,6 +165,9 @@ class clsFpdf extends FPDF {
   }
 }
 
+  $pdesde = substr($_POST['perfil_desde'],0,strpos($_POST['perfil_desde'],'-'));
+  $phasta = substr($_POST['perfil_hasta'],0,strpos($_POST['perfil_hasta'],'-'));
+
   //generar el listado 
   setlocale(LC_ALL,"es_VE.UTF8");
   $lobjPdf=new clsFpdf();
@@ -181,8 +184,7 @@ class clsFpdf extends FPDF {
     FROM seguridad.tusuario u
     INNER JOIN general.tpersona p ON u.cedula_persona = p.cedula_persona 
     INNER JOIN seguridad.tperfil per ON per.codigo_perfil = u.codigo_perfil 
-    WHERE u.codigo_perfil = ".$pgsql->comillas_inteligentes($_POST['codigo_perfil'])."
-      ORDER BY u.nombre_usuario ASC";
+    WHERE u.codigo_perfil BETWEEN ".$pgsql->comillas_inteligentes($pdesde)." AND ".$pgsql->comillas_inteligentes($phasta)."";
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFont('Arial','',9);

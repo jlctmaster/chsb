@@ -10,23 +10,11 @@ if(isset($_POST['codigo_editorial']))
 if(isset($_POST['nombre']))
   $nombre=trim($_POST['nombre']);
 
-if(isset($_POST['direccion']))
-  $direccion=trim($_POST['direccion']);
-
-if(isset($_POST['telefono']))
-  $telefono=trim($_POST['telefono']);
-
-if(isset($_POST['codigo_parroquia']))
-  $codigo_parroquia=trim($_POST['codigo_parroquia']);
-
 include_once("../class/class_editorial.php");
 $editorial= new editorial();
 if($lOpt=='Registrar'){
   $editorial->codigo_editorial($codigo_editorial);
   $editorial->nombre($nombre);
-  $editorial->direccion($direccion);
-  $editorial->telefono($telefono);
-  $editorial->codigo_parroquia($codigo_parroquia);
   if(!$editorial->Comprobar()){
     if($editorial->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -52,9 +40,6 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $editorial->codigo_editorial($codigo_editorial);
   $editorial->nombre($nombre);
-  $editorial->direccion($direccion);
-  $editorial->telefono($telefono);
-  $editorial->codigo_parroquia($codigo_parroquia);
   if($editorial->Actualizar($_SESSION['user_name']))
     $confirmacion=1;
   else

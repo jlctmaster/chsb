@@ -144,7 +144,7 @@ function init(){
 			alert("¡Debe ingresar el sexo del estudiante!");
 			send = false;
 		}
-		else if($('#fecha_nacimiento').val()==""){
+		else if($('#fecha_nacimiento_estudiante').val()==""){
 			alert("¡Debe ingresar la fecha de nacimiento del estudiante!");
 			send = false;
 		}
@@ -156,10 +156,7 @@ function init(){
 			alert("¡Debe ingresar la direccion del estudiante!");
 			send = false;
 		}
-		else if($('#telefono_local').val()==""){
-			alert("¡Debe ingresar el teléfono local del estudiante!");
-			send = false;
-		}
+	
 		else if($('#peso').val()==""){
 			alert("¡Debe ingresar el peso del estudiante!");
 			send = false;

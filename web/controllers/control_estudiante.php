@@ -123,15 +123,15 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
+    $cPI=$estudiante->ObtenerCodigoPI();
     $estudiante->Transaccion('finalizado');
-    $estudiante->ObtenerCodigoPI();
     $_SESSION['datos']['procesado']="Y";
-    $_SESSION['datos']['codigo_proceso_inscripcion']=$estudiante->codigo_proceso_inscripcion();
+    $_SESSION['datos']['codigo_proceso_inscripcion']=$cPI;
     $_SESSION['datos']['mensaje']="¡El Estudiante ha sido registrado con éxito!";
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }else{
     $estudiante->Transaccion('cancelado');
-    echo $estudiante->error(); die();
+    echo $estudiante->error();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Estudiante!";
     header("Location: ../view/menu_principal.php?estudiante&Opt=2");
   }
