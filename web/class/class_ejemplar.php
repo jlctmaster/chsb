@@ -2,6 +2,7 @@
 require_once("class_bd.php");
 class ejemplar {
 	private $codigo_ejemplar; 
+	private $codigo_cra; 
 	private $codigo_clasificacion;
 	private $numero_edicion;
 	private $codigo_isbn_libro;
@@ -10,6 +11,7 @@ class ejemplar {
 	 
 	public function __construct(){
 		$this->codigo_ejemplar=null;
+		$this->codigo_cra=null;
 		$this->codigo_clasificacion=null;
 		$this->numero_edicion=null;
 		$this->codigo_isbn_libro=null;
@@ -30,6 +32,15 @@ class ejemplar {
 
 		if($Num_Parametro>0){
 			$this->codigo_ejemplar=func_get_arg(0);
+		}
+    }
+
+    public function codigo_cra(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->codigo_cra;
+
+		if($Num_Parametro>0){
+			$this->codigo_cra=func_get_arg(0);
 		}
     }
 
@@ -68,8 +79,8 @@ class ejemplar {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tejemplar (codigo_clasificacion,numero_edicion,codigo_isbn_libro,creado_por,fecha_creacion) VALUES 
-	    ('$this->codigo_clasificacion','$this->numero_edicion','$this->codigo_isbn_libro','$user',NOW())";
+	    $sql="INSERT INTO biblioteca.tejemplar (codigo_cra,codigo_clasificacion,numero_edicion,codigo_isbn_libro,creado_por,fecha_creacion) VALUES 
+	    ('$this->codigo_cra','$this->codigo_clasificacion','$this->numero_edicion','$this->codigo_isbn_libro','$user',NOW())";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -100,7 +111,7 @@ class ejemplar {
    	}
    
     public function Actualizar($user){
-	    $sql="UPDATE biblioteca.tejemplar SET codigo_clasificacion='$this->codigo_clasificacion',numero_edicion='$this->numero_edicion',
+	    $sql="UPDATE biblioteca.tejemplar SET codigo_cra='$this->codigo_cra',codigo_clasificacion='$this->codigo_clasificacion',numero_edicion='$this->numero_edicion',
 	    codigo_isbn_libro='$this->codigo_isbn_libro',
 		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ejemplar='$this->codigo_ejemplar'";
 	    if($this->pgsql->Ejecutar($sql)!=null)

@@ -145,7 +145,7 @@
       //Logo
       //$this->Image("../images/UDS.jpg" , 10 ,15, 40 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/udesur/vistas");
       //$this->Image("../images/cintillo.jpg" , 10 ,5, 270 , 8, "JPG" ,$_SERVER['HTTP_HOST']);
-      $this->Image("../images/banner.jpg" , 25 ,15, 250 , 25, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/view/menu_principal.php");
+      $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 25, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/view/menu_principal.php");
       $this->Ln(35); 
       $this->SetFont('Arial','B',14);
       $this->Cell(0,7,"* HORARIO DE LA ".$_SESSION['datos']['name_seccion'][0]." *",0,1,"C");  

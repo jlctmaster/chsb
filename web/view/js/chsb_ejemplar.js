@@ -83,11 +83,14 @@ function init(){
 
 	function ValidarCampos(){
 		var send = true;
-		if($('#codigo_clasificacion').val()==0){
+		if($('#codigo_cra').val()==""){
+			alert("¡Debe Ingresar el Código C.R.A.!");
+			send = false;
+		}
+		else if($('#codigo_clasificacion').val()==0){
 			alert("¡Debe Seleccionar una Clasificación!");
 			send = false;
 		}
-
 		else if($('#numero_edicion').val()==""){
 			alert("¡Debe ingresar el numero de edición del ejemplar!");
 			send = false;

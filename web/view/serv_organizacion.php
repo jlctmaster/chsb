@@ -250,7 +250,8 @@ else if($_GET['Opt']=="3"){
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT o.rif_organizacion, o.nombre,o.direccion,o.telefono,o.tipo_organizacion, p.descripcion AS parroquia 
+	$sql = "SELECT o.rif_organizacion, o.nombre,o.direccion,o.telefono, 
+	CASE tipo_organizacion when '1' then 'PÚBLICA' when '2' then 'PRIVADA' when '3' then 'GUBERNAMENTAL' else 'OTRAS' end as tipo_organizacion, p.descripcion AS parroquia 
 	FROM general.torganizacion o 
 	INNER JOIN general.tparroquia p ON o.codigo_parroquia = p.codigo_parroquia 
 	WHERE rif_organizacion=".$pgsql->comillas_inteligentes($_GET['rif_organizacion']);

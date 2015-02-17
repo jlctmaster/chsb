@@ -25,10 +25,10 @@
          $this->SetFont('Arial','B',10);
          $this->SetTextColor(0,0,0);
          $this->Cell($avnzar);
-      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
+      $this->Cell($anchura*3,$altura,'CÓDIGO C.R.A.',1,0,'C',$color_fondo); 
       $this->Cell($anchura*3+5,$altura,'CLASIFICACIÓN',1,0,'C',$color_fondo);
       $this->Cell($anchura*2+7,$altura,'N° DE EDICIÓN',1,0,'C',$color_fondo);
-	  $this->Cell($anchura*7,$altura,'ISBN DEL LIBRO - TITULO',1,0,'L',$color_fondo);
+	  $this->Cell($anchura*6,$altura,'ISBN DEL LIBRO - TITULO',1,0,'L',$color_fondo);
       $this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
       
                   $this->Cell($avnzar); 
@@ -183,7 +183,7 @@ function NbLines($w,$txt)
    
     $lobjPdf->SetFont('Arial','',12);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,35,27,70,26));
+      $lobjPdf->SetWidths(array(30,35,27,60,26));
   $pgsql=new Conexion();
     $sql="SELECT *, c.descripcion AS clasificacion, l.codigo_isbn_libro||' - '||l.titulo AS libro, 
     (CASE e.estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus
@@ -207,7 +207,7 @@ function NbLines($w,$txt)
          $xxxx=0;
          while($tperfil=$pgsql->Respuesta($data)){
          $lobjPdf->Row(array(
-         ucwords($tperfil['codigo_ejemplar']),
+         ucwords($tperfil['codigo_cra']),
          ucwords($tperfil['clasificacion']),
          ucwords($tperfil['numero_edicion']),
 		     ucwords($tperfil['libro']),

@@ -154,7 +154,7 @@ class clsFpdf extends FPDF {
   WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido END AS estudiante,
   per.primer_nombre,per.segundo_nombre,per.primer_apellido,per.segundo_apellido,SUBSTR(ps.cedula_persona,2,LENGTH(ps.cedula_persona)) AS cedula_persona,SUBSTR(ps.cedula_persona,1,1) AS nacionalidad,per.sexo,
   TO_CHAR(per.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento,extract(year from age(per.fecha_nacimiento)) AS edad,extract(month from age(per.fecha_nacimiento)) AS meses,pa.descripcion AS lugar_nacimiento,e.descripcion AS entidad_federal,
-  per.direccion,ps.anio_a_cursar,ps.coordinacion_pedagogica,per.telefono_local,ps.estado_salud,ps.alergico,ps.impedimento_deporte,ps.especifique_deporte,ps.practica_deporte,ps.cual_deporte, 
+  per.direccion,ps.anio_a_cursar,ps.coordinacion_pedagogica,per.telefono_local,ps.estado_salud,ps.alergico,ps.impedimento_deporte,ps.especifique_deporte,ps.materia_pendiente,ps.cual_materia,ps.practica_deporte,ps.cual_deporte, 
   ps.tiene_beca,ps.organismo,ps.tiene_hermanos,ps.cuantos_varones,ps.cuantas_hembras,ps.estudian_aca,ps.que_anio,ps.peso,ps.talla,ps.indice,ps.tiene_talento,ps.cual_talento,
   CASE WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
   WHEN pad.segundo_nombre IS NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
@@ -216,6 +216,8 @@ class clsFpdf extends FPDF {
       $arr['alergico'][$ind]=$sacar_datos['alergico'];
       $arr['impedimento_deporte'][$ind]=$sacar_datos['impedimento_deporte'];
       $arr['especifique_deporte'][$ind]=$sacar_datos['especifique_deporte'];
+      $arr['materia_pendiente'][$ind]=$sacar_datos['materia_pendiente'];
+      $arr['cual_materia'][$ind]=$sacar_datos['cual_materia'];
       $arr['practica_deporte'][$ind]=$sacar_datos['practica_deporte'];
       $arr['cual_deporte'][$ind]=$sacar_datos['cual_deporte'];
       $arr['tiene_beca'][$ind]=$sacar_datos['tiene_beca'];
@@ -334,11 +336,11 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(20,5,'X',1,0,'C');
     $lobjPdf->Cell(20,5,'',1,0);
     $lobjPdf->Cell(10,5,'SÍ',1,0);
-    $lobjPdf->Cell(10,5,'',1,0);
+    $lobjPdf->Cell(10,5,$arr['materia_pendiente'][0]=="Y" ? 'X' : '',1,0);
     $lobjPdf->Cell(10,5,'NO',1,0);
-    $lobjPdf->Cell(10,5,'X',1,0,'C');
+    $lobjPdf->Cell(10,5,$arr['materia_pendiente'][0]=="N" ? 'X' : '',1,0,'C');
     $lobjPdf->SetXY(90,107);
-    $lobjPdf->Cell(110,10,'¿Cúal?',1,1);
+    $lobjPdf->Cell(110,10,'¿Cúal? '.$arr['cual_materia'][0],1,1);
     $lobjPdf->SetFont('Arial','B',8);
     $lobjPdf->Cell(140,5,'Procedencia:',1,0);
     $lobjPdf->SetFont('Arial','',8);
@@ -540,7 +542,7 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(15,5,'por los docentes de la institución la misma será entregada al final del año escolar. ',0,1);
     $lobjPdf->Ln(2);
     $lobjPdf->Cell(15);
-    $lobjPdf->Cell(15,5,'2. El uso reglamentario del uniforme escolar y bolso transparente. ',0,1);
+    $lobjPdf->Cell(15,5,'2. El uso reglamentario del uniforme escolar, calzado negro, uniforme de deporte y bolso transparente. ',0,1);
     $lobjPdf->Ln(2);
     $lobjPdf->Cell(15);
     $lobjPdf->Cell(15,5,'3. Asistir a las citaciones enviadas por la institución para tratar asuntos relacionados con mi representado. ',0,1);

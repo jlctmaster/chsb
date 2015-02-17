@@ -96,7 +96,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<?php
 						require_once('../class/class_bd.php');
 						$pgsql = new Conexion();
-						$sql = "SELECT a.codigo_prestamo,a.fecha_entrada||' .'||a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
+						$sql = "SELECT a.codigo_prestamo,a.fecha_entrada||' - '||a.cedula_persona||' - '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
 						FROM biblioteca.tprestamo a
 						INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
 						WHERE NOT EXISTS(SELECT 1 FROM biblioteca.tentrega e WHERE a.codigo_prestamo = e.codigo_prestamo)";
@@ -140,6 +140,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" readonly required />
 					</div>  
 				</div>
+				<div class="control-group">  
+					<label class="control-label" for="observacion">Observación</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese una Observación de la entrega" onKeyUp="this.value=this.value.toUpperCase()" name="observacion" id="observacion" type="text"/></textarea>
+					</div>  
+				</div> 
 				<div class="table-responsive">
 					<table id='tablaDetEntrega' class="table-bordered zebra-striped">
 						<tr>
@@ -196,7 +202,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
 	$sql = "SELECT e.codigo_entrega,e.codigo_prestamo,TO_CHAR(e.fecha_entrada,'DD/MM/YYYY') as fecha_entrada,
 	e.cedula_responsable,e.cedula_persona,e.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS estudiante,
-	e.estatus 
+	e.observacion,e.estatus 
 	FROM biblioteca.tentrega e 
 	INNER JOIN general.tpersona p ON e.cedula_persona = p.cedula_persona 
 	WHERE e.codigo_entrega=".$pgsql->comillas_inteligentes($_GET['codigo_entrega']);
@@ -221,8 +227,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<option value=0>Seleccione un Préstamo</option>
 						<?php
 							$pgsql = new Conexion();
-							$sql = "SELECT a.codigo_prestamo,a.cota||', '||a.fecha_entrada||' .'||
-							a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
+							$sql = "SELECT a.codigo_prestamo,a.fecha_entrada||' - '||a.cedula_persona||' - '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
 							FROM biblioteca.tprestamo a
 							INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona";
 							$query = $pgsql->Ejecutar($sql);
@@ -270,6 +275,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<input class="input-xlarge" title="Ingrese la fecha de entrada del Préstamo" name="fecha_entrada" id="fecha_entrada" type="text" value="<?=$row['fecha_entrada']?>" readonly required />
 					</div>  
 				</div> 
+				<div class="control-group">  
+					<label class="control-label" for="observacion">Observación</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese una observación de la Entrega" onKeyUp="this.value=this.value.toUpperCase()" name="observacion"type="text" /><?php echo $row['observacion']; ?></textarea>
+					</div>  
 				</div>
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
@@ -283,7 +293,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						<?php
 							$pgsql=new Conexion();
 							$sql = "SELECT de.codigo_ejemplar,de.codigo_ubicacion,de.cantidad,dp.cantidad AS cantidad_max,
-							e.codigo_isbn_libro||' '||l.titulo AS name_ejemplar 
+							e.codigo_cra||' '||l.titulo AS name_ejemplar 
 							FROM biblioteca.tentrega ent 
 							INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entrega 
 							INNER JOIN biblioteca.tprestamo p ON ent.codigo_prestamo = p.codigo_prestamo 
@@ -344,10 +354,9 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_entrega,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
   a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
-  b.cota||', '||b.fecha_entrada||' .'||
-    a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
+  b.fecha_entrada||' - '||a.cedula_persona||' - '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
   TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
+   e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad,a.observacion,
    CASE a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM biblioteca.tentrega a 
   INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
@@ -406,6 +415,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row[0]['fecha_entrada']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Observación:</label>
+						</td>
+						<td>
+							<label><?=$row[0]['observacion']?></label>
 						</td>
 					</tr> 
 				</table>

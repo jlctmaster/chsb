@@ -7,6 +7,9 @@ if(isset($_POST['lOpt']))
 if(isset($_POST['codigo_ejemplar']))
   $codigo_ejemplar=trim($_POST['codigo_ejemplar']);
 
+if(isset($_POST['codigo_cra']))
+  $codigo_cra=trim($_POST['codigo_cra']);
+
 if(isset($_POST['codigo_clasificacion']))
   $codigo_clasificacion=trim($_POST['codigo_clasificacion']);
 
@@ -20,6 +23,7 @@ include_once("../class/class_ejemplar.php");
 $ejemplar=new ejemplar();
 if($lOpt=='Registrar'){
   $ejemplar->codigo_ejemplar($codigo_ejemplar);
+  $ejemplar->codigo_cra($codigo_cra);
   $ejemplar->codigo_clasificacion($codigo_clasificacion);
   $ejemplar->numero_edicion($numero_edicion);
   $ejemplar->codigo_isbn_libro($codigo_isbn_libro);
@@ -47,6 +51,7 @@ if($lOpt=='Registrar'){
 
 if($lOpt=='Modificar'){
   $ejemplar->codigo_ejemplar($codigo_ejemplar);
+  $ejemplar->codigo_cra($codigo_cra);
   $ejemplar->codigo_clasificacion($codigo_clasificacion); 
   $ejemplar->numero_edicion($numero_edicion);
   $ejemplar->codigo_isbn_libro($codigo_isbn_libro);

@@ -36,7 +36,7 @@ class clsFpdf extends FPDF {
     $this->Cell($avnzar);
     $this->Cell($anchura*4,$altura,'CÉDULA',1,0,'C',$color_fondo); 
     $this->Cell($anchura*8,$altura,'NOMBRE Y APELLIDO',1,0,'C',$color_fondo);
-    $this->Cell($anchura*7,$altura,'AREA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*7,$altura,'ÁREA',1,0,'C',$color_fondo);
     $this->Cell($anchura*4,$altura,'FECHA',1,0,'C',$color_fondo);
     $this->Ln();
     $this->Cell($avnzar); 

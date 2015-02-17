@@ -8,7 +8,7 @@ class clsFpdf extends FPDF {
   var $aligns;
   //Cabecera de página
   public function Header(){
-    $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   
+    $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   
     $this->Ln(55);  
     $this->SetFont('Arial','B',12);
     $this->Cell(0,6,'REPORTE DE ENTREGA DE LIBROS',0,1,"C");
@@ -177,7 +177,7 @@ $color_fondo=false;
 $lobjPdf->SetWidths(array($anchura*6,$anchura*7,$anchura*4,$anchura*2));
 $pgsql=new Conexion();
 $sql="SELECT TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
-   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad
+  e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad
   FROM biblioteca.tentrega a 
   INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
   INNER JOIN biblioteca.tdetalle_entrega da ON a.codigo_entrega = da.codigo_entrega 
@@ -197,7 +197,7 @@ if($pgsql->Total_Filas($data)!=0){
     $lobjPdf->Cell($avnzar);         
   }
   $lobjPdf->SetFont('Arial','B',9);
-  $lobjPdf->Cell($anchura*17,$altura,"TOTAL ASIGNADO:",1,0,"R",$color_fondo);
+  $lobjPdf->Cell($anchura*17,$altura,"TOTAL ENTREGADO:",1,0,"R",$color_fondo);
   $lobjPdf->Cell($anchura*2,$altura,$total,1,1,"R",$color_fondo);
   $lobjPdf->Output('documento',"I");
 }else{

@@ -789,6 +789,8 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	alergico char(1) not null default 'N',
  	impedimento_deporte char(1) not null default 'N',
  	especifique_deporte varchar(40) default null,
+ 	materia_pendiente char(1) not null default 'N',
+ 	cual_materia varchar(120) default null,
  	practica_deporte char(1) not null default 'N',
  	cual_deporte varchar(40) default null,
  	tiene_beca char(1) not null default 'N',
@@ -1133,6 +1135,7 @@ CREATE SEQUENCE biblioteca.seq_ejemplar;
 CREATE TABLE biblioteca.tejemplar
 (
 	codigo_ejemplar numeric not null default nextval('biblioteca.seq_ejemplar'),
+	codigo_cra varchar(20) not null,
 	codigo_clasificacion numeric not null,
 	numero_edicion numeric not null,
 	codigo_isbn_libro numeric not null,
@@ -1142,6 +1145,7 @@ CREATE TABLE biblioteca.tejemplar
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
 	constraint pk_ejemplar primary key(codigo_ejemplar),
+	constraint uk_ejemplar_codigo_cra unique(codigo_cra),
 	constraint fk_ejemplar_clasificacion foreign key(codigo_clasificacion) references biblioteca.tclasificacion(codigo_clasificacion) on delete restrict on update cascade,
 	constraint fk_ejemplar_libro foreign key(codigo_isbn_libro) references biblioteca.tlibro(codigo_isbn_libro) on delete restrict on update cascade
 );
@@ -1160,8 +1164,10 @@ CREATE TABLE biblioteca.tprestamo
 	cedula_responsable char(10) not null,
 	cedula_persona char(10) not null,
 	codigo_area numeric not null,
+	lugar_prestamo char(1) not null default '0',
 	fecha_salida date not null,
 	fecha_entrada date not null,
+	observacion varchar(100),
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1213,6 +1219,7 @@ CREATE TABLE biblioteca.tentrega
 	cedula_responsable char(10) not null,
 	cedula_persona char(10) not null,
 	fecha_entrada date not null,
+	observacion varchar(100),
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1541,7 +1548,7 @@ CREATE OR REPLACE VIEW inventario.vw_movimiento_inventario AS
 -- Movimiento de Inventario por Adquisiciones de Materiales
 SELECT DISTINCT m.codigo_movimiento, 'Adquisición No '||a.codigo_adquisicion AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
+CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
 dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
 FROM inventario.tmovimiento m 
 INNER JOIN inventario.tadquisicion a ON m.numero_documento = a.codigo_adquisicion AND m.tipo_transaccion = 'IA' 
@@ -1578,7 +1585,7 @@ UNION ALL
 -- Movimiento de Inventario por Prestamos de Libros
 SELECT DISTINCT m.codigo_movimiento, 'Prestamo No '||p.codigo_prestamo AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
 dm.cantidad_movimiento, dm.sonlibros 
 FROM inventario.tmovimiento m 
 INNER JOIN biblioteca.tprestamo p ON m.numero_documento = p.codigo_prestamo AND m.tipo_transaccion = 'BP'
@@ -1591,7 +1598,7 @@ UNION ALL
 -- Movimiento de Inventario por Entregas de Libros
 SELECT DISTINCT m.codigo_movimiento, 'Entrega No '||ent.codigo_entrega AS nro_documento, m.fecha_movimiento, 
 m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
-e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
+e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item, dm.codigo_ubicacion,u.descripcion AS ubicacion, 
 dm.cantidad_movimiento, dm.sonlibros 
 FROM inventario.tmovimiento m 
 INNER JOIN biblioteca.tentrega ent ON m.numero_documento = ent.codigo_entrega AND m.tipo_transaccion = 'BE'
@@ -1614,7 +1621,7 @@ WHERE dm.sonlibros='N'
 GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,b.nro_serial,b.nombre,dm.sonlibros 
 UNION ALL 
 SELECT dm.codigo_ubicacion,u.descripcion AS ubicacion,dm.codigo_item,
-e.codigo_isbn_libro||' '||e.numero_edicion||' '||l.titulo AS item,dm.sonlibros,
+e.codigo_cra||' '||e.numero_edicion||' '||l.titulo AS item,dm.sonlibros,
 LAST(dm.valor_actual) AS existencia 
 FROM inventario.tmovimiento m 
 INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
@@ -1622,7 +1629,7 @@ INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion
 LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE')
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 WHERE dm.sonlibros='Y'
-GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_isbn_libro,e.numero_edicion,l.titulo;
+GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_cra,e.numero_edicion,l.titulo;
 
 -- View Inventario Items Disponibles
 CREATE OR REPLACE VIEW inventario.vw_inventario_de_items_disponibles AS 

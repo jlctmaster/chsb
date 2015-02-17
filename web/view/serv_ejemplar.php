@@ -21,7 +21,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 			<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 				<thead>
 					<tr>
-						<th>Código</th>
+						<th>Código CRA</th>
 						<th>Clasificación</th>
 						<th>Número Edición</th>
 						<th>Libro</th>
@@ -38,7 +38,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					while ($filas = $pgsql->Respuesta($consulta))
 					{
 						echo '<tr>';
-						echo '<td>'.$filas['codigo_ejemplar'].'</td>';
+						echo '<td>'.$filas['codigo_cra'].'</td>';
 						echo '<td>'.$filas['clasificacion'].'</td>';
 						echo '<td>'.$filas['numero_edicion'].'</td>';
 						echo '<td>'.$filas['libro'].'</td>';
@@ -81,10 +81,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		<legend><center>EJEMPLARES DE LOS LIBROS</center></legend>
 		<div id="paginador" class="enjoy-css">
 			<div class="control-group">  
-				<label class="control-label" for="codigo_ejemplar">Código</label>  
+				<label class="control-label" for="codigo_ejemplar">Código C.R.A.</label>  
 				<div class="controls">  
 					<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-					<input class="input-xlarge" title="el Código del ejemplar es generado por el sistema" name="codigo_ejemplar" id="codigo_ejemplar" type="text" readonly /> 
+					<input type="hidden" name="codigo_ejemplar" id="codigo_ejemplar" /> 
+					<input class="input-xlarge" title="Ingrese Código C.R.A. del ejemplar" maxlength=20 name="codigo_cra" id="codigo_cra" type="text" onKeyUp="this.value=this.value.toUpperCase()" required /> 
 				</div>  
 			</div>   
 			<div class="control-group">  
@@ -151,10 +152,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		<legend><center>EJEMPLARES DE LOS LIBROS</center></legend>
 		<div id="paginador" class="enjoy-css">
 			<div class="control-group">  
-				<label class="control-label" for="codigo_ejemplar">Código</label>  
+				<label class="control-label" for="codigo_ejemplar">Código C.R.A.</label>  
 				<div class="controls">
 					<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-					<input class="input-xlarge" title="el Código del ejemplar es generado por el sistema" name="codigo_ejemplar" id="codigo_ejemplar" type="text" value="<?=$row['codigo_ejemplar']?>" readonly /> 
+					<input type="hidden" name="codigo_ejemplar" id="codigo_ejemplar" value="<?=$row['codigo_ejemplar']?>" /> 
+					<input class="input-xlarge" title="Ingrese Código C.R.A. del ejemplar" maxlength=20 name="codigo_cra" id="codigo_cra" type="text" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$row['codigo_cra']?>" required /> 
 				</div>  
 			</div>
 			<div class="control-group">  
@@ -253,10 +255,10 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 			<table class="bordered-table zebra-striped" >
 				<tr>
 					<td>
-						<label>Código:</label>
+						<label>Código C.R.A.:</label>
 					</td>
 					<td>
-						<label><?=$row['codigo_ejemplar']?></label>
+						<label><?=$row['codigo_cra']?></label>
 					</td>
 				</tr>
 				<tr>

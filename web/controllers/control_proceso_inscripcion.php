@@ -79,6 +79,12 @@ if(isset($_POST['impedimento_deporte']))
 if(isset($_POST['especifique_deporte']))
   $especifique_deporte=trim($_POST['especifique_deporte']);
 
+if(isset($_POST['materia_pendiente']))
+  $materia_pendiente=trim($_POST['materia_pendiente']);
+
+if(isset($_POST['cual_materia']))
+  $cual_materia=trim($_POST['cual_materia']);
+
 if(isset($_POST['practica_deporte']))
   $practica_deporte=trim($_POST['practica_deporte']);
 
@@ -308,6 +314,8 @@ if($lOpt=='Registrar_Paso2'){
   $proceso_inscripcion->alergico($alergico);
   $proceso_inscripcion->impedimento_deporte($impedimento_deporte);
   $proceso_inscripcion->especifique_deporte($especifique_deporte);
+  $proceso_inscripcion->materia_pendiente($materia_pendiente);
+  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->practica_deporte($practica_deporte);
   $proceso_inscripcion->cual_deporte($cual_deporte);
   $proceso_inscripcion->tiene_beca($tiene_beca);
@@ -467,6 +475,8 @@ if($lOpt=='Modificar_Paso2'){
   $proceso_inscripcion->alergico($alergico);
   $proceso_inscripcion->impedimento_deporte($impedimento_deporte);
   $proceso_inscripcion->especifique_deporte($especifique_deporte);
+  $proceso_inscripcion->materia_pendiente($materia_pendiente);
+  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->practica_deporte($practica_deporte);
   $proceso_inscripcion->cual_deporte($cual_deporte);
   $proceso_inscripcion->tiene_beca($tiene_beca);

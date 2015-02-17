@@ -521,7 +521,8 @@
 		}
 
 		public function Resultado_Json_de_Consulta_Seccion($a,$c,$b){
-			$sql="SELECT * FROM educacion.vhorario where codigo_ambiente='$a' and codigo_ano_academico='$b' and seccion='$c'";
+			$sql="SELECT * FROM educacion.vhorario where 
+			(codigo_ambiente='$a' and codigo_ano_academico='$b' and seccion='$c') OR (codigo_ano_academico='$b' and seccion='$c')";
 			$query=$this->objBD->Ejecutar($sql);
 			$rows = array();
 			while($Actividad=$this->objBD->Respuesta_assoc($query)) {

@@ -6,6 +6,7 @@ class entrega {
 	private $cedula_responsable;
 	private $cedula_persona;
 	private $fecha_entrada;
+	private $observacion;
 	private $estatus; 
 	private $error; 
 	private $pgsql; 
@@ -16,6 +17,7 @@ class entrega {
 		$this->cedula_responsable=null;
 		$this->cedula_persona=null;
 		$this->fecha_entrada=null;
+		$this->observacion=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -72,6 +74,15 @@ class entrega {
 		}
     }
 
+    public function observacion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->observacion;
+
+		if($Num_Parametro>0){
+			$this->observacion=func_get_arg(0);
+		}
+    }
+
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -115,8 +126,8 @@ class entrega {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tentrega (codigo_prestamo,cedula_responsable,cedula_persona,fecha_entrada,creado_por,fecha_creacion) VALUES 
-	    ('$this->codigo_prestamo','$this->cedula_responsable','$this->cedula_persona','$this->fecha_entrada','$user',NOW());";
+	    $sql="INSERT INTO biblioteca.tentrega (codigo_prestamo,cedula_responsable,cedula_persona,fecha_entrada,observacion,creado_por,fecha_creacion) VALUES 
+	    ('$this->codigo_prestamo','$this->cedula_responsable','$this->cedula_persona','$this->fecha_entrada','$this->observacion','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_entrega FROM biblioteca.tentrega 
 	    	WHERE codigo_prestamo='$this->codigo_prestamo' AND cedula_persona = '$this->cedula_persona' 
@@ -169,8 +180,8 @@ class entrega {
    
     public function Actualizar($user){
 	    $sql="UPDATE biblioteca.tentrega SET codigo_prestamo='$this->codigo_prestamo',cedula_responsable='$this->cedula_responsable',
-	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',modificado_por='$user',fecha_modificacion=NOW() 
-	    WHERE codigo_entrega='$this->codigo_entrega'";
+	    cedula_persona='$this->cedula_persona',fecha_entrada='$this->fecha_entrada',observacion='$this->observacion',modificado_por='$user',
+	    fecha_modificacion=NOW() WHERE codigo_entrega='$this->codigo_entrega'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{
@@ -182,7 +193,7 @@ class entrega {
    	public function buscarDatosPrestamo($prestamo){
    		$sql="SELECT p.cedula_responsable,p.cedula_persona,p.cedula_persona||' '||per.primer_nombre||' '||per.primer_apellido AS estudiante,
    		TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,dp.codigo_ejemplar,
-   		e.codigo_isbn_libro||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,dp.cantidad
+   		e.codigo_cra||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,dp.cantidad
    		FROM biblioteca.tprestamo p 
    		INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = p.codigo_prestamo 
    		INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 

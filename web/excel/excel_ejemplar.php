@@ -26,7 +26,7 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de los Ejemplares";
-	$titulosColumnas = array('Código', 'Clasificaión', 'N° Edición', 'ISBN Del Libro - Titulo', 'Estatus');
+	$titulosColumnas = array('Código C.R.A.', 'Clasificaión', 'N° Edición', 'ISBN Del Libro - Titulo', 'Estatus');
 	
 	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:E1')->mergeCells('A2:E2');
 					
@@ -43,7 +43,7 @@
 	$i = 4;
 	while ($row = $mysql->Respuesta($query)){
 		$objPHPExcel->setActiveSheetIndex(0)
-		->setCellValue('A'.$i, $row['codigo_ejemplar'])
+		->setCellValue('A'.$i, $row['codigo_cra'])
 		->setCellValue('B'.$i, $row['clasificacion'])
 		->setCellValue('C'.$i, $row['numero_edicion'])
 		->setCellValue('D'.$i, $row['libro'])

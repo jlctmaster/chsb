@@ -5,8 +5,10 @@ class prestamo {
 	private $cedula_responsable;
 	private $cedula_persona;
 	private $codigo_area;
+	private $lugar_prestamo;
 	private $fecha_salida;
 	private $fecha_entrada;
+	private $observacion;
 	private $estatus; 
 	private $error; 
 	private $pgsql; 
@@ -15,8 +17,10 @@ class prestamo {
 		$this->cedula_responsable=null;
 		$this->cedula_persona=null;
 		$this->codigo_area=null;
+		$this->lugar_prestamo=null;
 		$this->fecha_salida=null;
 		$this->fecha_entrada=null;
+		$this->observacion=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -64,6 +68,15 @@ class prestamo {
 		}
     }
 
+         public function lugar_prestamo(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->lugar_prestamo;
+
+		if($Num_Parametro>0){
+			$this->lugar_prestamo=func_get_arg(0);
+		}
+    }
+
     public function fecha_salida(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->fecha_salida;
@@ -79,6 +92,15 @@ class prestamo {
 
 		if($Num_Parametro>0){
 			$this->fecha_entrada=func_get_arg(0);
+		}
+    }
+
+    public function observacion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->observacion;
+
+		if($Num_Parametro>0){
+			$this->observacion=func_get_arg(0);
 		}
     }
 
@@ -126,8 +148,9 @@ class prestamo {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO biblioteca.tprestamo (cedula_responsable,cedula_persona,codigo_area,fecha_salida,fecha_entrada,creado_por,fecha_creacion) VALUES 
-	    ('$this->cedula_responsable','$this->cedula_persona','$this->codigo_area','$this->fecha_salida','$this->fecha_entrada','$user',NOW());";
+	    $sql="INSERT INTO biblioteca.tprestamo (cedula_responsable,cedula_persona,codigo_area,lugar_prestamo,fecha_salida,fecha_entrada,observacion,creado_por,fecha_creacion) VALUES 
+	    ('$this->cedula_responsable','$this->cedula_persona','$this->codigo_area','$this->lugar_prestamo','$this->fecha_salida','$this->fecha_entrada','$this->observacion','$user',NOW());";
+	    //_echo $sql; die();
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_prestamo FROM biblioteca.tprestamo 
 	    	WHERE cedula_responsable='$this->cedula_responsable' AND cedula_persona = '$this->cedula_persona' AND codigo_area='$this->codigo_area' 
@@ -182,8 +205,8 @@ class prestamo {
    
     public function Actualizar($user){
 	    $sql="UPDATE biblioteca.tprestamo SET cedula_responsable='$this->cedula_responsable',cedula_persona='$this->cedula_persona',
-	    codigo_area='$this->codigo_area',fecha_salida='$this->fecha_salida',
-	    fecha_entrada='$this->fecha_entrada',modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_prestamo='$this->codigo_prestamo'";
+	    codigo_area='$this->codigo_area',lugar_prestamo='$this->lugar_prestamo',fecha_salida='$this->fecha_salida',
+	    fecha_entrada='$this->fecha_entrada',observacion='$this->observacion',modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_prestamo='$this->codigo_prestamo'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{
@@ -192,7 +215,7 @@ class prestamo {
 	    }
    	}
    	public function Consultar(){
-			$sql="SELECT per.cedula_persona, INITCAP(per.primer_nombre||' '||per.primer_apellido) nombre, a.descripcion, p.fecha_entrada, p.fecha_salida
+			$sql="SELECT per.cedula_persona, INITCAP(per.primer_nombre||' '||per.primer_apellido) nombre, a.descripcion,p.lugar_prestamo, p.fecha_entrada, p.fecha_salida, p.observacion
 			FROM biblioteca.tprestamo p 
 			INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
 			INNER JOIN general.tarea a ON p.codigo_area = a.codigo_area 

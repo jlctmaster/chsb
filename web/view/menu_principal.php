@@ -127,10 +127,11 @@ if(isset($_SESSION['user_estado'])){
         	else if(isset($_GET['servicio'])) include("serv_servicio.php");
         	else if(isset($_GET['configuracion'])) include("serv_configuracion.php");
         	else if(isset($_GET['sistema'])) include("serv_sistema.php");
-        	else if(isset($_GET['bitacora'])) include("serv_bitacora.php");
         	else if(isset($_GET['desbloquearusuario'])) include("serv_desbloquearusuario.php");
         	else if(isset($_GET['modulo'])) include("serv_modulo.php");
         	else if(isset($_GET['botones'])) include("serv_opcion.php");
+          else if(isset($_GET['bitacora'])) include("serv_bitacora.php");
+          else if(isset($_GET['bitacora_seguridad'])) include("serv_bitacora_seguridad.php");
   				//ubicaciones
         	else if(isset($_GET['pais'])) include("serv_pais.php");
         	else if(isset($_GET['estado'])) include("serv_estado.php");
@@ -188,6 +189,7 @@ if(isset($_SESSION['user_estado'])){
           else if(isset($_GET['asistencia_biblioteca'])) include("rep_asistencia_biblioteca.php");
           else if(isset($_GET['prestamo_libros'])) include("rep_prestamo_libros.php");
           else if(isset($_GET['carta_morosidad'])) include("rep_carta_morosidad.php");
+          else if(isset($_GET['solvencia_biblioteca'])) include("rep_solvencia_biblioteca.php");
           else if(isset($_GET['entrega_libros'])) include("rep_entrega_libros.php");
           else if(isset($_GET['asignacion_bienes'])) include("rep_asignacion_bienes.php");
           else if(isset($_GET['recuperacion_bienes'])) include("rep_recuperacion_bienes.php");

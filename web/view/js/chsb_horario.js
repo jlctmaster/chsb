@@ -31,7 +31,7 @@ function cargar_datos(){
 			}
 		});
 
-		if($(this).val()=="null" ||$(this).val()==""){
+		if($(this).val()=="null" || $(this).val()==""){
 			$("#codigo_materia").html("<option value='null'>Elige una opcion...</option>").attr("disabled","disabled");
 			$("#cedula_persona > option[value='']").attr("selected",true);       				
 			$("#cedula_persona").prop("disabled","disabled");

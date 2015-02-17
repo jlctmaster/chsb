@@ -19,11 +19,17 @@ if(isset($_POST['cedula_persona']))
 if(isset($_POST['codigo_area']))
   $codigo_area=trim($_POST['codigo_area']);
 
+if(isset($_POST['lugar_prestamo']))
+  $lugar_prestamo=trim($_POST['lugar_prestamo']);
+
 if(isset($_POST['fecha_salida']))
   $fecha_salida=trim($_POST['fecha_salida']);
 
 if(isset($_POST['fecha_entrada']))
   $fecha_entrada=trim($_POST['fecha_entrada']);
+
+if(isset($_POST['observacion']))
+  $observacion=trim($_POST['observacion']);
 
 $prestamo=new prestamo();
 $mov_inventario = new movimiento_inventario();
@@ -32,8 +38,10 @@ if($lOpt=='Registrar'){
   $prestamo->cedula_responsable($cedula_responsable);
   $prestamo->cedula_persona($cedula_persona);
   $prestamo->codigo_area($codigo_area);
+  $prestamo->lugar_prestamo($lugar_prestamo);
   $prestamo->fecha_salida($fecha_salida);
   $prestamo->fecha_entrada($fecha_entrada);
+  $prestamo->observacion($observacion);
   $confirmacion=false;
   $prestamo->Transaccion('iniciando');
      if($prestamo->Registrar($_SESSION['user_name'])){
@@ -95,8 +103,10 @@ if($lOpt=='Modificar'){
   $prestamo->cedula_responsable($cedula_responsable);
   $prestamo->cedula_persona($cedula_persona);
   $prestamo->codigo_area($codigo_area);
+  $prestamo->lugar_prestamo($lugar_prestamo);
   $prestamo->fecha_salida($fecha_salida);
   $prestamo->fecha_entrada($fecha_entrada);
+  $prestamo->observacion($observacion);
   $confirmacion=false;
   $prestamo->Transaccion('iniciando');
   if($prestamo->Actualizar($_SESSION['user_name'])){

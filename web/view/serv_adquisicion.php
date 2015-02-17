@@ -145,8 +145,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<table id='tablaDetAdquisicion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Item</label></td>
-							<td><label class="control-label" >Cantidad</label></td>
 							<td><label class="control-label" >Ubicación</label></td>
+							<td><label class="control-label" >Cantidad</label></td>
 							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 					</table>
@@ -184,15 +184,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"</select>"+
 			"</td>"+
 			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
-			"</td>"+
-			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
 			<?php
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '3' AND u.itemsdefectuoso ='N'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente <> '5' AND u.itemsdefectuoso ='N'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -200,6 +197,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			}
 			?>
 			"</select>"+
+			"</td>"+
+			"<td>"+
+			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
@@ -344,8 +344,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<table id='tablaDetAdquisicion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Item</label></td>
-							<td><label class="control-label" >Cantidad</label></td>
 							<td><label class="control-label" >Ubicación</label></td>
+							<td><label class="control-label" >Cantidad</label></td>
 							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 						<?php
@@ -374,14 +374,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								          echo "</select>
 								        </td>
 								        <td>
-								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
-								        </td>
-								        <td>
 								        <select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_".$con."' title='Seleccione un Item' >
 								        <option value='0'>Seleccione un Item</option>";
 								        $sqlz="SELECT u.* FROM inventario.tubicacion u 
 										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-										WHERE u.estatus = '1' AND a.tipo_ambiente = '3' AND u.itemsdefectuoso ='N'";
+										WHERE u.estatus = '1' AND a.tipo_ambiente <> '5' AND u.itemsdefectuoso ='N'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
@@ -391,6 +388,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								            }
 								          }
 								        echo "</select>
+								        </td>
+								        <td>
+								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
 								        </td>
 								        <td>
 								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
@@ -452,15 +452,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"</select>"+
 			"</td>"+
 			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
-			"</td>"+
-			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
 			<?php
 			$pgsql=new Conexion();
 			$sql = "SELECT u.* FROM inventario.tubicacion u 
 			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-			WHERE u.estatus = '1' AND a.tipo_ambiente = '3' AND u.itemsdefectuoso ='N'";
+			WHERE u.estatus = '1' AND a.tipo_ambiente <> '5' AND u.itemsdefectuoso ='N'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -468,6 +465,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			}
 			?>
 			"</select>"+
+			"</td>"+
+			"<td>"+
+			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+

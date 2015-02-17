@@ -5,12 +5,12 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$sql = "SELECT codigo_auditoria,usuario_aplicacion,usuario_db,nombre_esquema,nombre_tabla,
 	proceso,identificador_tabla,valor_nuevo,valor_anterior,TO_CHAR(fecha_operacion,'DD/MM/YYYY HH:MM') AS fecha_operacion 
 	FROM seguridad.tauditoria 
-	WHERE nombre_esquema <> 'seguridad'
+	WHERE nombre_esquema = 'seguridad'
 	ORDER BY codigo_auditoria DESC";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 	<fieldset>
-		<legend><center>Vista: BITACORA TRANSACIONAL</center></legend>		
+		<legend><center>Vista: BITACORA SEGURIDAD</center></legend>		
 		<div id="paginador" class="enjoy-css">
 			<div id="bitacora" class="container">
 				<div class="scrollBitacora">
@@ -20,7 +20,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 								<th>Código:</th>
 								<th>Usuario App.:</th>
 								<th>Usuario BD:</th>
-								<th>Esquema:</th>
 								<th>Entidad:</th>
 								<th>Proceso:</th>
 								<th>ID Entidad:</th>
@@ -37,7 +36,6 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 								echo '<td>'.$filas['codigo_auditoria'].'</td>';
 								echo '<td>'.$filas['usuario_aplicacion'].'</td>';
 								echo '<td>'.$filas['usuario_db'].'</td>';
-								echo '<td>'.$filas['nombre_esquema'].'</td>';
 								echo '<td>'.$filas['nombre_tabla'].'</td>';
 								echo '<td>'.$filas['proceso'].'</td>';
 								echo '<td>'.$filas['identificador_tabla'].'</td>';

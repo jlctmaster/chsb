@@ -115,16 +115,18 @@ function init(){
 		}
 		else if(items && cantidad && ubicacion){
 			arregloI = new Array();
+			arregloU = new Array();
 			for(i=0;i<items.length;i++){
 				arregloI.push($('#items_'+i).val());
+				arregloU.push($('#ubicacion_'+i).val());
 				var Cant=$('#cantidad_'+i).val();
 				if(Cant<=0){
 					alert('¡La cantidad del item '+$('#items_'+i+' option:selected').text()+' debe ser mayor a 0!');
 					send = false;	
 				}
 			}
-			if(contarRepetidos(arregloI)>0){
-				alert('¡No pueden haber items repetidos!')
+			if(combinacionRepetida(arregloI,arregloU)>0){
+				alert('¡La combinación Item + Ubicación no se puede repetir!')
 				send = false
 			}
 		}
@@ -161,6 +163,26 @@ function init(){
 	            if(n!=m)
 	            {
 	                if(arreglo2[m]==arreglo2[n])
+	                {
+	                	con++;
+	                }
+	            }
+	        }
+	    }
+	    return con;
+	}
+
+	function combinacionRepetida(arregloA,arregloB){
+	    var arreglo1 = arregloA;
+	    var arreglo2 = arregloB;
+	    var con=0;
+	    for (var m=0; m<arreglo1.length; m++)
+	    {
+	        for (var n=0; n<arreglo1.length; n++)
+	        {
+	            if(n!=m)
+	            {
+	                if(arreglo1[m]==arreglo1[n] && arreglo2[m]==arreglo2[n])
 	                {
 	                	con++;
 	                }

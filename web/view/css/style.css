@@ -1077,3 +1077,121 @@ table.bordered-table.zebra-striped td label{
 #bitacora table.bordered-table.zebra-striped td{
 	max-width: 300px;
 }
+
+/*********************************************************************************/
+/* Process Inscription Form Custom Style                                         */
+/*********************************************************************************/
+
+#PInscripcion {
+	width: auto;
+	border: 1px solid #cccccc;
+	min-height: 200px;
+	padding: 5px 5px 30px;
+}
+
+#PInscripcion .tabs-left>.nav-tabs {
+	float: left;
+	margin: 0 1px 0 0;
+	border-right: 0px solid #ddd;
+}
+
+#PInscripcion fieldset {
+	width: auto;
+	border: 1px solid #cccccc;
+	min-height: 200px;
+	padding: 5px 5px 30px;
+}
+
+#PInscripcion .enjoy-css {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+	height: auto;
+	border: none;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	font-size: 15px;
+	color: #000;
+	text-align: center;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	background: -webkit-linear-gradient(-90deg, #ededed 0, #ededed 100%);
+	background: -moz-linear-gradient(180deg, #ededed 0, #ededed 100%);
+	background: linear-gradient(180deg, #ededed 0, #ededed 100%);
+	background-position: 50% 50%;
+	-webkit-background-origin: padding-box;
+	background-origin: padding-box;
+	-webkit-background-clip: border-box;
+	background-clip: border-box;
+	-webkit-background-size: auto auto;
+	background-size: auto auto;
+	-webkit-box-shadow: 3px 3px 18px 3px rgba(112,119,124,0.91);
+	box-shadow: 3px 3px 18px 3px rgba(112,119,124,0.91);
+}
+
+#PInscripcion .row > [class*="span"] {
+	display: inline;
+	margin-left: 7%;
+	width: auto;
+}
+
+#PInscripcion .form-horizontal .control-label {
+	width: 305px;
+	padding-top: 5px;
+	text-align: left;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#PInscripcion select.bootstrap-select.form-control:not([class*="col-"]) {
+	width: 305px;
+	height: 35px;
+	float: left;
+	margin-left: 0.5px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-webkit-transition: border linear .2s,box-shadow linear .2s;
+	-moz-transition: border linear .2s,box-shadow linear .2s;
+	-ms-transition: border linear .2s,box-shadow linear .2s;
+	-o-transition: border linear .2s,box-shadow linear .2s;
+	transition: border linear .2s,box-shadow linear .2s;
+}
+
+/*********************************************************************************/
+/* Details Transactions Form Custom Style                                        */
+/*********************************************************************************/
+
+.table-responsive .table-bordered.zebra-striped select.bootstrap-select.form-control:not([class*="col-"]) {
+	width: 250px;
+	height: 35px;
+	float: left;
+	margin-left: 0.5px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	-webkit-transition: border linear .2s,box-shadow linear .2s;
+	-moz-transition: border linear .2s,box-shadow linear .2s;
+	-ms-transition: border linear .2s,box-shadow linear .2s;
+	-o-transition: border linear .2s,box-shadow linear .2s;
+	transition: border linear .2s,box-shadow linear .2s;
+}
+
+.table-responsive .table-bordered.zebra-striped .input-xlarge {
+	width: 250px;
+	float: left;
+	margin-left: 0.5px;
+}

@@ -28,6 +28,8 @@ class proceso_inscripcion {
 	private $alergico;
 	private $impedimento_deporte; 
 	private $especifique_deporte; 
+	private $materia_pendiente; 
+	private $cual_materia;
 	private $practica_deporte; 
 	private $cual_deporte;
 	private $tiene_beca;
@@ -111,6 +113,8 @@ class proceso_inscripcion {
 		$this->alergico=null;
 		$this->impedimento_deporte=null;
 		$this->especifique_deporte=null;
+		$this->materia_pendiente=null;
+		$this->cual_materia=null;
 		$this->practica_deporte=null;
 		$this->cual_deporte=null;
 		$this->tiene_beca=null;
@@ -374,6 +378,24 @@ class proceso_inscripcion {
 
 		if($Num_Parametro>0){
 			$this->especifique_deporte=func_get_arg(0);
+		}
+    }
+
+    public function materia_pendiente(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->materia_pendiente;
+     
+		if($Num_Parametro>0){
+	   		$this->materia_pendiente=func_get_arg(0);
+	 	}
+    }
+
+    public function cual_materia(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->cual_materia;
+
+		if($Num_Parametro>0){
+			$this->cual_materia=func_get_arg(0);
 		}
     }
 
@@ -989,9 +1011,9 @@ class proceso_inscripcion {
 			return false;
 	    }
    		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
-   		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
-   		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
-   		estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
+   		especifique_deporte='$this->especifique_deporte',materia_pendiente='$this->materia_pendiente',cual_materia='$this->cual_materia',practica_deporte='$this->practica_deporte',
+   		cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',
+   		cuantos_varones='$this->cuantos_varones',estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
    		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
@@ -1340,9 +1362,9 @@ class proceso_inscripcion {
 			return false;
 	    }
    		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
-   		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
-   		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
-   		estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
+   		especifique_deporte='$this->especifique_deporte',materia_pendiente='$this->materia_pendiente',cual_materia='$this->cual_materia',practica_deporte='$this->practica_deporte',
+   		cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',
+   		cuantos_varones='$this->cuantos_varones',estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
    		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

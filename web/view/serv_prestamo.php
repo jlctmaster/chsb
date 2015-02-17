@@ -147,6 +147,16 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</select>
 				</div>  
 			</div>
+				<div class="control-group">  
+					<label class="control-label" for="lugar_prestamo">Lugar del Préstamo:</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un lugar del préstamo" required > 
+							<option value=0>Seleccione un Lugar</option>
+							<option value="S" >SALA</option>
+							<option value="A" >AULA</option>
+						</select>
+					</div>
+				</div> 
 					<div class="control-group">  
 					<label class="control-label" for="fecha_salida">Fecha de Salida</label>  
 					<div class="controls">  
@@ -158,7 +168,13 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" readonly required />
 					</div>
-				</div>  
+				</div>
+				<div class="control-group">  
+					<label class="control-label" for="observacion">Observación</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese una Observación del préstamo" onKeyUp="this.value=this.value.toUpperCase()" name="observacion" id="observacion" type="text"/></textarea>
+					</div>  
+				</div>    
 				<div class="table-responsive">
 					<table id='tablaDetPrestamo' class="table-bordered zebra-striped">
 						<tr>
@@ -190,7 +206,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) ejemplars 
+			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) ejemplars 
 			FROM biblioteca.tejemplar b 
 			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
 			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
@@ -277,7 +293,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	}
 }
 // Ventana de Registro
-else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
+else if($_GET['Opt']=="3"){ 
+// Ventana de Modificaciones
 	$pgsql=new Conexion();
 	$sql = "SELECT *,TO_CHAR(fecha_salida,'DD/MM/YYYY') as fecha_salida,TO_CHAR(fecha_entrada,'DD/MM/YYYY') as fecha_entrada 
 	FROM biblioteca.tprestamo 
@@ -359,7 +376,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							?>
 						</select>
 					</div>  
-				</div>			
+				</div>
+				<div class="control-group">  
+					<label class="control-label" for="lugar_prestamo">Lugar del Préstamo:</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un tipo de materia" required > 
+							<option value=0>Seleccione un Lugar</option>
+							<option value="S" <?php if($row['lugar_prestamo']=="S") {echo "selected";} ?>> SALA</option>
+							<option value="A" <?php if($row['lugar_prestamo']=="A") {echo "selected";} ?>> AULA</option>
+						</select>
+					</div>  
+				</div>   			
 				<div class="control-group">  
 					<label class="control-label" for="fecha_salida">Fecha de Salida</label>  
 					<div class="controls">  
@@ -370,6 +397,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="fecha_entrada">Fecha de Entrada</label>  
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" value="<?=$row['fecha_entrada']?>" readonly required />
+					</div>  
+				</div>
+				<div class="control-group">  
+					<label class="control-label" for="observacion">Observación</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese una observación del Préstamo" onKeyUp="this.value=this.value.toUpperCase()" name="observacion"type="text" /><?php echo $row['observacion']; ?></textarea>
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -395,7 +428,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 										<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_".$con."' title='Seleccione un Ejemplar' >
 										<option value='0'>Seleccione un Ejemplar</option>";
-										$sqlx = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) AS ejemplars 
+										$sqlx = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) AS ejemplars 
 										FROM biblioteca.tejemplar b 
 										INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
 										INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
@@ -404,7 +437,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 											if($rows['codigo_ejemplar']==$row['codigo_ejemplar']){
 												echo "<option value='".$rows['codigo_ejemplar']."' selected>".$rows['ejemplars']."</option>";
 											}else{
-												echo "<option value='".$rows['codigo_ejemplar']."'>".$rows['codigo_ejemplar']."</option>";
+												echo "<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>";
 											}
 										}
 										echo "</select>
@@ -443,7 +476,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				</div>  
 				<div class="form-action">
 					<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-				</div>
 					<?php
 						for($x=0;$x<count($a);$x++)
 							if($a[$x]['orden']=='3'){
@@ -476,7 +508,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(l.codigo_isbn_libro||' '||l.titulo) ejemplars 
+			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) ejemplars 
 			FROM biblioteca.tejemplar b 
 			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
 			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
@@ -532,9 +564,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,
-	TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-	 da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad
+	a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area, CASE a.lugar_prestamo WHEN 'S' THEN 'SALA' ELSE 'AULA' END AS lugar_prestamo,
+	TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada, a.observacion,
+	 b.codigo_cra||' - '||b.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad
 	FROM biblioteca.tprestamo a 
 	INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
 	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
@@ -585,6 +617,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<td>
 							<label><?=$row[0]['area']?></label>
 						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Lugar del Préstamo:</label>
+						</td>
+						<td>
+							<label><?=$row[0]['lugar_prestamo']?></label>
+						</td>
 					</tr> 
 					<tr>
 						<td>
@@ -600,6 +640,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row[0]['fecha_entrada']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Observación:</label>
+						</td>
+						<td>
+							<label><?=$row[0]['observacion']?></label>
 						</td>
 					</tr>
 				</table>

@@ -16,68 +16,68 @@
 		INNER JOIN general.tpersona est ON pi.cedula_persona = est.cedula_persona";
 		$consulta = $pgsql->Ejecutar($sql);
 ?>
-		<fieldset>
-			<legend><center>Vista: PROCESO DE INSCRIPCIÓN</center></legend>		
-			<div id="paginador" class="enjoy-css"> 
-				<div class="container">
-					<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
-						<thead>
-							<tr>
-								<th>Código</th>
-								<th>Cédula</th>
-								<th>Nombre y Apellido</th>
-								<th>Fecha Inscripción</th>
-								<th>Grado Académico</th>
-								<?php
-								for($x=0;$x<count($a);$x++){
-									if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
-										echo '<th>'.$a[$x]['nombre_opcion'].'</th>';
-								}
-								?>
-							</tr>
-						</thead>
-						<tbody>
+	<fieldset>
+		<legend><center>Vista: PROCESO DE INSCRIPCIÓN</center></legend>		
+		<div id="paginador" class="enjoy-css"> 
+			<div class="container">
+				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
+					<thead>
+						<tr>
+							<th>Código</th>
+							<th>Cédula</th>
+							<th>Nombre y Apellido</th>
+							<th>Fecha Inscripción</th>
+							<th>Grado Académico</th>
 							<?php
-								while ($filas = $pgsql->Respuesta($consulta))
-								{
-									echo '<tr>';
-									echo '<td>'.$filas['codigo_proceso_inscripcion'].'</td>';
-									echo '<td>'.$filas['cedula_persona'].'</td>';
-									echo '<td>'.$filas['nombre'].'</td>';
-									echo '<td>'.$filas['fecha_inscripcion'].'</td>';
-									echo '<td>'.$filas['anio_a_cursar'].'</td>';
-									for($x=0;$x<count($a);$x++){
-										if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
-											echo '<td><a href="?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion='.$filas['codigo_proceso_inscripcion'].'#tab-datosestudiantes" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
-										else if($a[$x]['orden']=='5') //Imprimir o Ver el Registro
-											echo '<td><a href="?proceso_inscripcion&Opt=4&codigo_proceso_inscripcion='.$filas['codigo_proceso_inscripcion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
-									}
-									echo "</tr>";
-								}
+							for($x=0;$x<count($a);$x++){
+								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
+									echo '<th>'.$a[$x]['nombre_opcion'].'</th>';
+							}
 							?>
-						<tbody>
-					</table>
-					<center>
+						</tr>
+					</thead>
+					<tbody>
 						<?php
-							for($x=0;$x<count($a);$x++)
-								if($a[$x]['orden']=='1')
-									echo '<a href="?proceso_inscripcion&Opt=2"><button type="button" class="btn btn-large btn-primary"><i class='.$a[$x]['icono'].'></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button></a>';
+							while ($filas = $pgsql->Respuesta($consulta))
+							{
+								echo '<tr>';
+								echo '<td>'.$filas['codigo_proceso_inscripcion'].'</td>';
+								echo '<td>'.$filas['cedula_persona'].'</td>';
+								echo '<td>'.$filas['nombre'].'</td>';
+								echo '<td>'.$filas['fecha_inscripcion'].'</td>';
+								echo '<td>'.$filas['anio_a_cursar'].'</td>';
+								for($x=0;$x<count($a);$x++){
+									if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
+										echo '<td><a href="?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion='.$filas['codigo_proceso_inscripcion'].'#tab-datosestudiantes" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+									else if($a[$x]['orden']=='5') //Imprimir o Ver el Registro
+										echo '<td><a href="?proceso_inscripcion&Opt=4&codigo_proceso_inscripcion='.$filas['codigo_proceso_inscripcion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
+								}
+								echo "</tr>";
+							}
 						?>
-						<button type="button" id="btnImprimirTodos" class="btn btn-large btn-primary"><i class="icon-download-alt"></i>&nbsp;Descargar Archivo</button>
+					<tbody>
+				</table>
+				<center>
+					<?php
+						for($x=0;$x<count($a);$x++)
+							if($a[$x]['orden']=='1')
+								echo '<a href="?proceso_inscripcion&Opt=2"><button type="button" class="btn btn-large btn-primary"><i class='.$a[$x]['icono'].'></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button></a>';
+					?>
+					<button type="button" id="btnImprimirTodos" class="btn btn-large btn-primary"><i class="icon-download-alt"></i>&nbsp;Descargar Archivo</button>
 
-					</center>
+				</center>
 
-					<div id="Imprimir" style="display:none;">
-						<span>Descargar Como:</span>
-						<br/><br/>
-						<a href="<?php echo  '../pdf/pdf_proceso_inscripcion.php';?>" target="_blank"> <img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"> </a>
-						&nbsp;&nbsp;
-						<a href="../excel/excel_proceso_inscripcion.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
-				    </div>
-					</center>
-				</div>
+				<div id="Imprimir" style="display:none;">
+					<span>Descargar Como:</span>
+					<br/><br/>
+					<a href="<?php echo  '../pdf/pdf_proceso_inscripcion.php';?>" target="_blank"> <img src="images/icon-pdf.png" alt="Exportar a PDF" style="width:60px;heigth:60px;float:center;"> </a>
+					&nbsp;&nbsp;
+					<a href="../excel/excel_proceso_inscripcion.php" ><img src="images/icon-excel.png" alt="Exportar a Excel" style="width:60px;heigth:60px;float:center;"></a>
+			    </div>
+				</center>
 			</div>
-		</fieldset>
+		</div>
+	</fieldset>
 	<?php
 	} // Fin Ventana Principal
 	else if($_GET['Opt']=="2"){ // Ventana de Registro
@@ -91,211 +91,413 @@
 		$query = $pgsql->Ejecutar($sql);
 		$fila=$pgsql->Respuesta($query);
 	?>
-		<fieldset>
-			<legend><center>PROCESO DE INSCRIPCIÓN</center></legend>
-			<?php
-				if($fila['dias_restantes']>0){
-			?>	
-			<div id="paginador" class="enjoy-css">
-				<span style='font-weight: bold;'>¡Lo sentimos, el Proceso de Inscripción ya ha Culminado!</span>
-				<div class="form-actions">
-					<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-				</div>
+	<fieldset id="PInscripcion">
+		<legend><center>PROCESO DE INSCRIPCIÓN</center></legend>
+		<!-- Remover aqui para activar validación para limitar el formulario cuando haya finalizado el periodo de inscripción
+		<?php
+			if($fila['dias_restantes']>0){
+		?>	
+		<div id="paginador" class="enjoy-css">
+			<span style='font-weight: bold;'>¡Lo sentimos, el Proceso de Inscripción ya ha Culminado!</span>
+			<div class="form-actions">
+				<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 			</div>
-			<?php
-				}else{
-			?>
-			<div id="rootwizard" class="tabbable tabs-left">
-				<ul class="nav nav-tabs">
-				  	<li class="active"><a href="#tab-datosestudiantes" data-toggle="tab" id="tab1">Datos del <br>Estudiante</a></li>
-					<li><a href="#tab-condicionestudiante" data-toggle="tab" id="tab2">Condición del <br>Estudiante</a></li>
-					<li><a href="#tab-antecedentesfamiliares" data-toggle="tab" id="tab3">Antecedentes <br>Familiares</a></li>
-					<li><a href="#tab-datosrepresentante" data-toggle="tab" id="tab4">Datos Rep. Legal</a></li>
-					<li><a href="#tab-integracionec" data-toggle="tab" id="tab5">Integración <br>Escuela-Comunidad</a></li>
-				</ul>
-				<div class="tab-content">
-				    <div class="tab-pane active in" id="tab-datosestudiantes">
-				    	<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form1">  
-							<fieldset>
-								<div id="paginador" class="enjoy-css"> 
-									<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso1">
-									<span style='font-weight: bold;'><?=$fila['descripcion']?> (Fecha de Inicio: </span><?=$fila['fecha_inicio']?><span style='font-weight: bold;'> Fecha de Culminación: </span><?=$fila['fecha_fin']?><span style='font-weight: bold;'> Fecha Máxima: </span><?=$fila['fecha_cierre']?><span style='font-weight: bold;'> )</span>
-									<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='<?=$fila['codigo_inscripcion']?>' />
-									<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='<?=$fila['fecha_inicio']?>' />
-									<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='<?=$fila['fecha_cierre']?>' /><br><br>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Fecha Inscripción:</label>
-									                <input class="span12" type="text" name="fecha_inscripcion" id="fecha_inscripcion" readonly required /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Año Académico:</label>
-									                <?php
-													$pgsql=new Conexion();
-													$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N'";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														echo "<input type='hidden' name='codigo_ano_academico' id='codigo_ano_academico' value='".$row['codigo_ano_academico']."' />";
-														echo "<input class='span12' type='text' name='ano_academico' id='ano_academico' value='".$row['ano']."' readonly required />";
-													}
-									                ?>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula Estudiante:</label>
-									                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 required /> 
-									            </div>
-									            <div class="span6">
-									            	<label class="control-label">Docente Responsable</label>
-									            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
-														<option value=0>Seleccione un Docente</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-															FROM general.tpersona p 
-															INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-															WHERE LOWER(descripcion) LIKE '%docente%'";
-															$query = $pgsql->Ejecutar($sql);
-															while($row=$pgsql->Respuesta($query)){
-																echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Nombre:</label>
-									                <input class="span12" title="Ingrese el primer nombre del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre" id="primer_nombre" type="text" required />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Nombre:</label>
-									                <input class="span12" title="Ingrese el segundo nombre del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre" id="segundo_nombre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Apellido:</label>
-									                <input class="span12" title="Ingrese el primer apellido del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido" id="primer_apellido" type="text" required />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Apellido:</label>
-									                <input class="span12" title="Ingrese el segundo apellido del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido" id="segundo_apellido" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Género:</label>
-									                <div class="radios">
-														<input type="radio" name="sexo" id="sexo" value="F" checked="checked" required /> Femenino
-														<input type="radio" name="sexo" id="sexo" value="M" required /> Masculino
-													</div>
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Fecha de Nacimiento:</label>
-									                <input class="span12" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento_estudiante" id="fecha_nacimiento_estudiante" type="text" readonly required />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Lugar de Nacimiento:</label>
-									                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento' id='lugar_nacimiento' required >
-														<option value=0>Seleccione el Lugar de Nacimiento</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-															$query = $pgsql->Ejecutar($sql);
-															while($rows=$pgsql->Respuesta($query)){
-																echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									            <div class="span6">
-									            	<label class="control-label">Dirección:</label>
-									            	<textarea class="span12" title="Ingrese la direccion de la persona" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" required ></textarea>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Teléfono Local:</label>
-									                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text"  />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Teléfono Móvil:</label>
-									                <input class="span12" title="Ingrese el número de teléfono movil" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil" id="telefono_movil" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Año a Cursar:</label>
-									                <div class="radios">
-														<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="1" checked="checked" required /> 1ero
-														<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="2" required /> 2do
-														<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="3" required /> 3ero
-														<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="4" required /> 4to
-														<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="5" required /> 5to
-													</div>
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Coordinación Pedagógica N°:</label>
-														<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="1" checked="checked" required /> 1
-														<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="2" required /> 2
-														<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="3" required /> 3
-														<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="4" required /> 4
-														<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="5" required /> 5
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="control-group">  
-										<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-									</div>  
-									<div class="form-actions">
-										<button type="button" id="btnGuardar1" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-										<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-									</div>
-								</div>  
-							</fieldset>  
-						</form>
-				    </div>
-				    <div class="tab-pane" id="tab-condicionestudiante">
-				      <form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form2"> 
-				      	<fieldset>
+		</div>
+		<?php
+			}else{
+		?>
+		Remover aqui	-->
+		<div id="rootwizard" class="tabbable tabs-left">
+			<ul class="nav nav-tabs">
+			  	<li class="active"><a href="#tab-datosestudiantes" data-toggle="tab" id="tab1">Datos del <br>Estudiante</a></li>
+				<li><a href="#tab-condicionestudiante" data-toggle="tab" id="tab2">Condición del <br>Estudiante</a></li>
+				<li><a href="#tab-antecedentesfamiliares" data-toggle="tab" id="tab3">Antecedentes <br>Familiares</a></li>
+				<li><a href="#tab-datosrepresentante" data-toggle="tab" id="tab4">Datos Rep. Legal</a></li>
+				<li><a href="#tab-integracionec" data-toggle="tab" id="tab5">Integración <br>Escuela-Comunidad</a></li>
+			</ul>
+			<div class="tab-content">
+			    <div class="tab-pane active in" id="tab-datosestudiantes">
+			    	<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form1">  
+						<fieldset>
 							<div id="paginador" class="enjoy-css"> 
-					      		<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso2">
-					      		<?php
+								<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso1">
+								<span style='font-weight: bold;'><?=$fila['descripcion']?> (Fecha de Inicio: </span><?=$fila['fecha_inicio']?><span style='font-weight: bold;'> Fecha de Culminación: </span><?=$fila['fecha_fin']?><span style='font-weight: bold;'> Fecha Máxima: </span><?=$fila['fecha_cierre']?><span style='font-weight: bold;'> )</span>
+								<input type='hidden' name='codigo_inscripcion' id='codigo_inscripcion' value='<?=$fila['codigo_inscripcion']?>' />
+								<input type='hidden' name='fecha_inicio' id='fecha_inicio_ins' value='<?=$fila['fecha_inicio']?>' />
+								<input type='hidden' name='fecha_cierre' id='fecha_fin_ins' value='<?=$fila['fecha_cierre']?>' /><br><br>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Fecha Inscripción:</label>
+								                <input class="span12" type="text" name="fecha_inscripcion" id="fecha_inscripcion" readonly required /> 
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Año Académico:</label>
+								                <?php
+												$pgsql=new Conexion();
+												$sql="SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N'";
+												$query = $pgsql->Ejecutar($sql);
+												while($row=$pgsql->Respuesta($query)){
+													echo "<input type='hidden' name='codigo_ano_academico' id='codigo_ano_academico' value='".$row['codigo_ano_academico']."' />";
+													echo "<input class='span12' type='text' name='ano_academico' id='ano_academico' value='".$row['ano']."' readonly required />";
+												}
+								                ?>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Cédula Estudiante:</label>
+								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 required /> 
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Docente Responsable</label>
+								            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
+													<option value=0>Seleccione un Docente</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
+														FROM general.tpersona p 
+														INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
+														WHERE LOWER(descripcion) LIKE '%docente%'";
+														$query = $pgsql->Ejecutar($sql);
+														while($row=$pgsql->Respuesta($query)){
+															echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
+														}
+													?>
+												</select>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Primer Nombre:</label>
+								                <input class="span12" title="Ingrese el primer nombre del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre" id="primer_nombre" type="text" required />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Segundo Nombre:</label>
+								                <input class="span12" title="Ingrese el segundo nombre del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre" id="segundo_nombre" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Primer Apellido:</label>
+								                <input class="span12" title="Ingrese el primer apellido del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido" id="primer_apellido" type="text" required />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Segundo Apellido:</label>
+								                <input class="span12" title="Ingrese el segundo apellido del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido" id="segundo_apellido" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Género:</label>
+								                <div class="radios">
+													<input type="radio" name="sexo" id="sexo" value="F" checked="checked" required /> Femenino
+													<input type="radio" name="sexo" id="sexo" value="M" required /> Masculino
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Fecha de Nacimiento:</label>
+								                <input class="span12" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento_estudiante" id="fecha_nacimiento_estudiante" type="text" readonly required />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Lugar de Nacimiento:</label>
+								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento' id='lugar_nacimiento' required >
+													<option value=0>Seleccione el Lugar de Nacimiento</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$query = $pgsql->Ejecutar($sql);
+														while($rows=$pgsql->Respuesta($query)){
+															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+														}
+													?>
+												</select>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Dirección:</label>
+								            	<textarea class="span12" title="Ingrese la direccion de la persona" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" required ></textarea>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Teléfono Local:</label>
+								                <input class="span12" title="Ingrese el número de teléfono local" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local" id="telefono_local" type="text"  />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Teléfono Móvil:</label>
+								                <input class="span12" title="Ingrese el número de teléfono movil" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil" id="telefono_movil" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Año a Cursar:</label>
+								                <div class="radios">
+													<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="1" checked="checked" required /> 1ero
+													<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="2" required /> 2do
+													<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="3" required /> 3ero
+													<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="4" required /> 4to
+													<input type="radio" name="anio_a_cursar" id="anio_a_cursar" value="5" required /> 5to
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Coordinación Pedagógica N°:</label>
+								                <div class="radios">
+													<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="1" checked="checked" required /> 1
+													<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="2" required /> 2
+													<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="3" required /> 3
+													<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="4" required /> 4
+													<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="5" required /> 5
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="control-group">  
+									<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+								</div>  
+								<div class="form-actions">
+									<button type="button" id="btnGuardar1" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+									<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+								</div>
+							</div>  
+						</fieldset>  
+					</form>
+			    </div>
+			    <div class="tab-pane" id="tab-condicionestudiante">
+			      <form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form2"> 
+			      	<fieldset>
+						<div id="paginador" class="enjoy-css"> 
+				      		<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso2">
+				      		<?php
+								$pgsql = new Conexion();
+								$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
+								FROM educacion.tproceso_inscripcion pi 
+								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
+								WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
+								$query = $pgsql->Ejecutar($sql);
+								$rows=$pgsql->Respuesta($query);
+				      		?>
+				      		<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Cédula Estudiante:</label>
+							                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
+							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Nombre y Apellido:</label>
+							                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Estado de Salud:</label>
+							                <div class="radios">
+												<input type="radio" name="estado_salud" id="estado_salud" value="1" checked="checked" required /> Excelente
+												<input type="radio" name="estado_salud" id="estado_salud" value="2" required /> Bueno
+												<input type="radio" name="estado_salud" id="estado_salud" value="3" required /> Regular
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿Es Alérgico(a)?</label>
+							                <div class="radios">
+												<input type="radio" name="alergico" id="alergico" value="Y" required /> Sí
+												<input type="radio" name="alergico" id="alergico" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Tiene Materia Pendiente?</label>
+							                <div class="radios">
+												<input type="radio" name="materia_pendiente" id="materia_pendiente" value="Y" required /> Sí
+												<input type="radio" name="materia_pendiente" id="materia_pendiente" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿Cuál?</label>
+											<input class="span12" type="text" title="Ingrese el nombre de las materias que tiene pendiente" onKeyUp="this.value=this.value.toUpperCase()" name="cual_materia" id="cual_materia" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Presenta algún Impedimento <br>Deportivo?</label>
+							                <div class="radios">
+												<input type="radio" name="impedimento_deporte" id="impedimento_deporte" value="Y" required /> Sí
+												<input type="radio" name="impedimento_deporte" id="impedimento_deporte" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Especifique:</label>
+											<textarea class="span12" title="Ingrese su impedimento deportivo" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_deporte" id="especifique_deporte"></textarea>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Practica algún Deporte?</label>
+							                <div class="radios">
+												<input type="radio" name="practica_deporte" id="practica_deporte" value="Y" required /> Sí
+												<input type="radio" name="practica_deporte" id="practica_deporte" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿Cuál?</label>
+											<input class="span12" type="text" title="Ingrese el nombre del deporte que practica" onKeyUp="this.value=this.value.toUpperCase()" name="cual_deporte" id="cual_deporte" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Tiene Beca?</label>
+							                <div class="radios">
+												<input type="radio" name="tiene_beca" id="tiene_beca" value="Y" required /> Sí
+												<input type="radio" name="tiene_beca" id="tiene_beca" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿De que Organismo?</label>
+											<input class="span12" type="text" title="Ingrese el nombre del organismo" onKeyUp="this.value=this.value.toUpperCase()" name="organismo" id="organismo" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Tiene Hermanos?</label>
+							                <div class="radios">
+												<input type="radio" name="tiene_hermanos" id="tiene_hermanos" value="Y" required /> Sí
+												<input type="radio" name="tiene_hermanos" id="tiene_hermanos" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span3">
+							                <label class="control-label">¿Cant. Hembras?</label>
+											<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="0" />
+							            </div>
+							            <div class="span3">
+							                <label class="control-label">¿Cant. Varones?</label>
+											<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="0" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Estudian Acá?</label>
+							                <div class="radios">
+												<input type="radio" name="estudian_aca" id="estudian_aca" value="Y" required /> Sí
+												<input type="radio" name="estudian_aca" id="estudian_aca" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿En que Año?</label>
+											<input class="span12" type="text" title="Ingrese los años que estudian sus hermanos(as) separado por coma (,)" onKeyUp="this.value=this.value.toUpperCase()" name="que_anio" id="que_anio" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Peso en KG:</label>
+											<input class="span12" type="text" title="Ingrese el número de kilogramos que pesa" maxlength=4 onKeyPress="return isNumberKey(event)" name="peso" id="peso">
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Estatura en CM:</label>
+											<input class="span12" type="text" title="Ingrese el número de estatura en centimétros que mide" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla">
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">¿Tiene Habilidades/Talento?</label>
+							                <div class="radios">
+												<input type="radio" name="tiene_talento" id="tiene_talento" value="Y" required /> Sí
+												<input type="radio" name="tiene_talento" id="tiene_talento" value="N" checked="checked" required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿Cuál?</label>
+											<input class="span12" type="text" title="Ingrese el nombre de la habilidad o talento que posee" onKeyUp="this.value=this.value.toUpperCase()" name="cual_talento" id="cual_talento" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="control-group">  
+								<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+							</div>  
+							<div class="form-actions">
+								<button type="button" id="btnGuardar2" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+								<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+							</div>
+						</div> 
+			      	</fieldset>
+			      </form>
+			    </div>
+				<div class="tab-pane" id="tab-antecedentesfamiliares">
+					<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form3"> 
+						<fieldset>
+							<div id="paginador" class="enjoy-css"> 
+								<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso3">
+								<?php
 									$pgsql = new Conexion();
 									$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
 									FROM educacion.tproceso_inscripcion pi 
@@ -323,17 +525,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">Estado de Salud:</label>
-								                <div class="radios">
-													<input type="radio" name="estado_salud" id="estado_salud" value="1" checked="checked" required /> Excelente
-													<input type="radio" name="estado_salud" id="estado_salud" value="2" required /> Bueno
-													<input type="radio" name="estado_salud" id="estado_salud" value="3" required /> Regular
-												</div>
+								                <label class="control-label">Cédula del Padre:</label>
+								                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">¿Es Alérgico(a)?</label>
-													<input type="radio" name="alergico" id="alergico" value="Y" required /> Sí
-													<input type="radio" name="alergico" id="alergico" value="N" checked="checked" required /> No
+								                <label class="control-label">Fecha de Nacimiento del Padre:</label>
+								                <input class="span12" title="Ingrese la fecha de nacimiento del padre" name="fecha_nacimiento_padre" id="fecha_nacimiento_padre" type="text" readonly />
 								            </div>
 								        </div>
 								    </div>
@@ -342,15 +539,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Presenta algún Impedimento <br>Deportivo?</label>
-								                <div class="radios">
-													<input type="radio" name="impedimento_deporte" id="impedimento_deporte" value="Y" required /> Sí
-													<input type="radio" name="impedimento_deporte" id="impedimento_deporte" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Primer Nombre del Padre:</label>
+								                <input class="span12" title="Ingrese el primer nombre del padre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_padre" id="primer_nombre_padre" type="text" />
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">Especifique:</label>
-												<textarea class="span12" title="Ingrese su impedimento deportivo" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_deporte" id="especifique_deporte"></textarea>
+								                <label class="control-label">Segundo Nombre del Padre:</label>
+								                <input class="span12" title="Ingrese el segundo nombre del padre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_padre" id="segundo_nombre_padre" type="text" />
 								            </div>
 								        </div>
 								    </div>
@@ -359,15 +553,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Practica algún Deporte?</label>
-								                <div class="radios">
-													<input type="radio" name="practica_deporte" id="practica_deporte" value="Y" required /> Sí
-													<input type="radio" name="practica_deporte" id="practica_deporte" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Primer Apellido del Padre:</label>
+								                <input class="span12" title="Ingrese el primer apellido del padre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_padre" id="primer_apellido_padre" type="text" />
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">¿Cuál?</label>
-												<input class="span12" type="text" title="Ingrese el nombre del deporte que practica" onKeyUp="this.value=this.value.toUpperCase()" name="cual_deporte" id="cual_deporte" />
+								                <label class="control-label">Segundo Apellido del Padre:</label>
+								                <input class="span12" title="Ingrese el segundo apellido del padre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_padre" id="segundo_apellido_padre" type="text" />
 								            </div>
 								        </div>
 								    </div>
@@ -376,15 +567,22 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Tiene Beca?</label>
-								                <div class="radios">
-													<input type="radio" name="tiene_beca" id="tiene_beca" value="Y" required /> Sí
-													<input type="radio" name="tiene_beca" id="tiene_beca" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Lugar de Nacimiento del Padre:</label>
+								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_padre' id='lugar_nacimiento_padre' >
+													<option value=0>Seleccione el Lugar de Nacimiento</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$query = $pgsql->Ejecutar($sql);
+														while($rows=$pgsql->Respuesta($query)){
+															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+														}
+													?>
+												</select>
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">¿De que Organismo?</label>
-												<input class="span12" type="text" title="Ingrese el nombre del organismo" onKeyUp="this.value=this.value.toUpperCase()" name="organismo" id="organismo" />
+								            	<label class="control-label">Dirección:</label>
+								            	<textarea class="span12" title="Ingrese la dirección del Padre" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_padre" id="direccion_padre" ></textarea>
 								            </div>
 								        </div>
 								    </div>
@@ -393,19 +591,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Tiene Hermanos?</label>
-								                <div class="radios">
-													<input type="radio" name="tiene_hermanos" id="tiene_hermanos" value="Y" required /> Sí
-													<input type="radio" name="tiene_hermanos" id="tiene_hermanos" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Teléfono Local del Padre:</label>
+								                <input class="span12" title="Ingrese el número de teléfono local del padre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_padre" id="telefono_local_padre" type="text" />
 								            </div>
-								            <div class="span3">
-								                <label class="control-label">¿Cant. Hembras?</label>
-												<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="0" />
-								            </div>
-								            <div class="span3">
-								                <label class="control-label">¿Cant. Varones?</label>
-												<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="0" />
+								            <div class="span6">
+								                <label class="control-label">Teléfono Móvil del Padre:</label>
+								                <input class="span12" title="Ingrese el número de teléfono movil del padre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_padre" id="telefono_movil_padre" type="text" />
 								            </div>
 								        </div>
 								    </div>
@@ -414,15 +605,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Estudian Acá?</label>
-								                <div class="radios">
-													<input type="radio" name="estudian_aca" id="estudian_aca" value="Y" required /> Sí
-													<input type="radio" name="estudian_aca" id="estudian_aca" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Profesión del Padre:</label>
+								                <input class="span12" title="Ingrese la profesión del padre" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_padre" id="profesion_padre" type="text" />
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">¿En que Año?</label>
-												<input class="span12" type="text" title="Ingrese los años que estudian sus hermanos(as) separado por coma (,)" onKeyUp="this.value=this.value.toUpperCase()" name="que_anio" id="que_anio" />
+								                <label class="control-label">Grado de Instrucción del Padre:</label>
+								                <input class="span12" title="Ingrese el grado de instrucción del padre" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_padre" id="grado_instruccion_padre" type="text" />
 								            </div>
 								        </div>
 								    </div>
@@ -431,12 +619,12 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">Peso en KG:</label>
-												<input class="span12" type="text" title="Ingrese el número de kilogramos que pesa" maxlength=4 onKeyPress="return isNumberKey(event)" name="peso" id="peso">
+								                <label class="control-label">Cédula de la Madre:</label>
+								                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">Estatura en CM:</label>
-												<input class="span12" type="text" title="Ingrese el número de estatura en centimétros que mide" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla">
+								                <label class="control-label">Fecha de Nacimiento de la Madre:</label>
+								                <input class="span12" title="Ingrese la fecha de nacimiento de la madre" name="fecha_nacimiento_madre" id="fecha_nacimiento_madre" type="text" readonly />
 								            </div>
 								        </div>
 								    </div>
@@ -445,15 +633,78 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">¿Tiene Habilidades/Talento?</label>
-								                <div class="radios">
-													<input type="radio" name="tiene_talento" id="tiene_talento" value="Y" required /> Sí
-													<input type="radio" name="tiene_talento" id="tiene_talento" value="N" checked="checked" required /> No
-												</div>
+								                <label class="control-label">Primer Nombre de la Madre:</label>
+								                <input class="span12" title="Ingrese el primer nombre de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_madre" id="primer_nombre_madre" type="text" />
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">¿Cuál?</label>
-												<input class="span12" type="text" title="Ingrese el nombre de la habilidad o talento que posee" onKeyUp="this.value=this.value.toUpperCase()" name="cual_talento" id="cual_talento" />
+								                <label class="control-label">Segundo Nombre de la Madre:</label>
+								                <input class="span12" title="Ingrese el segundo nombre de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_madre" id="segundo_nombre_madre" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Primer Apellido de la Madre:</label>
+								                <input class="span12" title="Ingrese el primer apellido de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_madre" id="primer_apellido_madre" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Segundo Apellido de la Madre:</label>
+								                <input class="span12" title="Ingrese el segundo apellido de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_madre" id="segundo_apellido_madre" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Lugar de Nacimiento de la Madre:</label>
+								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_madre' id='lugar_nacimiento_madre' >
+													<option value=0>Seleccione el Lugar de Nacimiento</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$query = $pgsql->Ejecutar($sql);
+														while($rows=$pgsql->Respuesta($query)){
+															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+														}
+													?>
+												</select>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Dirección:</label>
+								            	<textarea class="span12" title="Ingrese la dirección de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_madre" id="direccion_madre" ></textarea>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Teléfono Local de la Madre:</label>
+								                <input class="span12" title="Ingrese el número de teléfono local de la madre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_madre" id="telefono_local_madre" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Teléfono Móvil de la Madre:</label>
+								                <input class="span12" title="Ingrese el número de teléfono movil de la madre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_madre" id="telefono_movil_madre" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Profesión de la Madre:</label>
+								                <input class="span12" title="Ingrese la profesión de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_madre" id="profesion_madre" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Grado de Instrucción de la Madre:</label>
+								                <input class="span12" title="Ingrese el grado de instrucción de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_madre" id="grado_instruccion_madre" type="text" />
 								            </div>
 								        </div>
 								    </div>
@@ -462,474 +713,246 @@
 									<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
 								</div>  
 								<div class="form-actions">
-									<button type="button" id="btnGuardar2" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+									<button type="button" id="btnGuardar3" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
 									<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
 								</div>
 							</div> 
-				      	</fieldset>
-				      </form>
-				    </div>
-					<div class="tab-pane" id="tab-antecedentesfamiliares">
-						<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form3"> 
-							<fieldset>
-								<div id="paginador" class="enjoy-css"> 
-									<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso3">
-									<?php
-										$pgsql = new Conexion();
-										$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
-										FROM educacion.tproceso_inscripcion pi 
-										INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
-										WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
-										$query = $pgsql->Ejecutar($sql);
-										$rows=$pgsql->Respuesta($query);
-						      		?>
-						      		<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula Estudiante:</label>
-									                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
-									                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Nombre y Apellido:</label>
-									                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula del Padre:</label>
-									                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Fecha de Nacimiento del Padre:</label>
-									                <input class="span12" title="Ingrese la fecha de nacimiento del padre" name="fecha_nacimiento_padre" id="fecha_nacimiento_padre" type="text" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Nombre del Padre:</label>
-									                <input class="span12" title="Ingrese el primer nombre del padre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_padre" id="primer_nombre_padre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Nombre del Padre:</label>
-									                <input class="span12" title="Ingrese el segundo nombre del padre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_padre" id="segundo_nombre_padre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Apellido del Padre:</label>
-									                <input class="span12" title="Ingrese el primer apellido del padre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_padre" id="primer_apellido_padre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Apellido del Padre:</label>
-									                <input class="span12" title="Ingrese el segundo apellido del padre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_padre" id="segundo_apellido_padre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Lugar de Nacimiento del Padre:</label>
-									                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_padre' id='lugar_nacimiento_padre' >
-														<option value=0>Seleccione el Lugar de Nacimiento</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-															$query = $pgsql->Ejecutar($sql);
-															while($rows=$pgsql->Respuesta($query)){
-																echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									            <div class="span6">
-									            	<label class="control-label">Dirección:</label>
-									            	<textarea class="span12" title="Ingrese la dirección del Padre" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_padre" id="direccion_padre" ></textarea>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Teléfono Local del Padre:</label>
-									                <input class="span12" title="Ingrese el número de teléfono local del padre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_padre" id="telefono_local_padre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Teléfono Móvil del Padre:</label>
-									                <input class="span12" title="Ingrese el número de teléfono movil del padre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_padre" id="telefono_movil_padre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Profesión del Padre:</label>
-									                <input class="span12" title="Ingrese la profesión del padre" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_padre" id="profesion_padre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Grado de Instrucción del Padre:</label>
-									                <input class="span12" title="Ingrese el grado de instrucción del padre" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_padre" id="grado_instruccion_padre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula de la Madre:</label>
-									                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Fecha de Nacimiento de la Madre:</label>
-									                <input class="span12" title="Ingrese la fecha de nacimiento de la madre" name="fecha_nacimiento_madre" id="fecha_nacimiento_madre" type="text" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Nombre de la Madre:</label>
-									                <input class="span12" title="Ingrese el primer nombre de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_madre" id="primer_nombre_madre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Nombre de la Madre:</label>
-									                <input class="span12" title="Ingrese el segundo nombre de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_madre" id="segundo_nombre_madre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Apellido de la Madre:</label>
-									                <input class="span12" title="Ingrese el primer apellido de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_madre" id="primer_apellido_madre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Apellido de la Madre:</label>
-									                <input class="span12" title="Ingrese el segundo apellido de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_madre" id="segundo_apellido_madre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Lugar de Nacimiento de la Madre:</label>
-									                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_madre' id='lugar_nacimiento_madre' >
-														<option value=0>Seleccione el Lugar de Nacimiento</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-															$query = $pgsql->Ejecutar($sql);
-															while($rows=$pgsql->Respuesta($query)){
-																echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									            <div class="span6">
-									            	<label class="control-label">Dirección:</label>
-									            	<textarea class="span12" title="Ingrese la dirección de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_madre" id="direccion_madre" ></textarea>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Teléfono Local de la Madre:</label>
-									                <input class="span12" title="Ingrese el número de teléfono local de la madre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_madre" id="telefono_local_madre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Teléfono Móvil de la Madre:</label>
-									                <input class="span12" title="Ingrese el número de teléfono movil de la madre" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_madre" id="telefono_movil_madre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Profesión de la Madre:</label>
-									                <input class="span12" title="Ingrese la profesión de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_madre" id="profesion_madre" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Grado de Instrucción de la Madre:</label>
-									                <input class="span12" title="Ingrese el grado de instrucción de la madre" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_madre" id="grado_instruccion_madre" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="control-group">  
-										<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-									</div>  
-									<div class="form-actions">
-										<button type="button" id="btnGuardar3" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-										<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-									</div>
-								</div> 
-							</fieldset>
-						</form>
-				    </div>
-					<div class="tab-pane" id="tab-datosrepresentante">
-						<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form4"> 
-							<fieldset>
-								<div id="paginador" class="enjoy-css">
-									<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso4">
-									<?php
-										$pgsql = new Conexion();
-										$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,pi.cedula_padre,pi.cedula_madre 
-										FROM educacion.tproceso_inscripcion pi 
-										INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
-										WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
-										$query = $pgsql->Ejecutar($sql);
-										$rows=$pgsql->Respuesta($query);
-						      		?>
-						      		<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula Estudiante:</label>
-									                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
-									                <input type="hidden" name="cedula_padre" id="cedula_padre" value="<?=$rows['cedula_padre']?>" />
-									                <input type="hidden" name="cedula_madre" id="cedula_madre" value="<?=$rows['cedula_madre']?>" />
-									                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Nombre y Apellido:</label>
-									                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula del Representante:</label>
-									                <input class="span12" type="text" name="cedula_representante" id="cedula_representante" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Parentesco:</label>
-									                <select class="bootstrap-select form-control" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' >
-														<option value=0>Seleccione un Parentesco</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT * FROM general.tparentesco ORDER BY descripcion ASC";
-															$query = $pgsql->Ejecutar($sql);
-															while($rows=$pgsql->Respuesta($query)){
-																echo "<option value=".$rows['codigo_parentesco'].">".$rows['descripcion']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Género:</label>
-									                <div class="radios">
-														<input type="radio" name="sexo_representante" id="sexo_representante" value="F" checked="checked" required /> Femenino
-														<input type="radio" name="sexo_representante" id="sexo_representante" value="M" required /> Masculino
-													</div>
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Fecha de Nacimiento del Representante:</label>
-									                <input class="span12" title="Ingrese la fecha de nacimiento del representante" name="fecha_nacimiento_representante" id="fecha_nacimiento_representante" type="text" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Nombre del Representante:</label>
-									                <input class="span12" title="Ingrese el primer nombre del representante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_representante" id="primer_nombre_representante" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Nombre del Representante:</label>
-									                <input class="span12" title="Ingrese el segundo nombre del representante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_representante" id="segundo_nombre_representante" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Primer Apellido del Representante:</label>
-									                <input class="span12" title="Ingrese el primer apellido del representante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_representante" id="primer_apellido_representante" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Segundo Apellido del Representante:</label>
-									                <input class="span12" title="Ingrese el segundo apellido del representante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_representante" id="segundo_apellido_representante" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Lugar de Nacimiento del <br>Representante:</label>
-									                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_representante' id='lugar_nacimiento_representante' >
-														<option value=0>Seleccione el Lugar de Nacimiento</option>
-														<?php
-															$pgsql = new Conexion();
-															$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-															$query = $pgsql->Ejecutar($sql);
-															while($rows=$pgsql->Respuesta($query)){
-																echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-															}
-														?>
-													</select>
-									            </div>
-									            <div class="span6">
-									            	<label class="control-label">Dirección:</label>
-									            	<textarea class="span12" title="Ingrese la dirección del Representante" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_representante" id="direccion_representante" ></textarea>
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Teléfono Local del Representante:</label>
-									                <input class="span12" title="Ingrese el número de teléfono local del representante" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_representante" id="telefono_local_representante" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Teléfono Móvil del Representante:</label>
-									                <input class="span12" title="Ingrese el número de teléfono movil del representante" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_representante" id="telefono_movil_representante" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Profesión del Representante:</label>
-									                <input class="span12" title="Ingrese la profesión del representante" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_representante" id="profesion_representante" type="text" />
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Grado de Instrucción del Representante:</label>
-									                <input class="span12" title="Ingrese el grado de instrucción del representante" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_representante" id="grado_instruccion_representante" type="text" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="control-group">  
-										<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-									</div>  
-									<div class="form-actions">
-										<button type="button" id="btnGuardar4" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-										<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-									</div>
-								</div> 
-							</fieldset>
-						</form>
-				    </div>
-					<div class="tab-pane" id="tab-integracionec">
-						<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form5"> 
-							<fieldset>
-								<div id="paginador" class="enjoy-css">
-									<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso5">
-									<?php
-										$pgsql = new Conexion();
-										$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
-										FROM educacion.tproceso_inscripcion pi 
-										INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
-										WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
-										$query = $pgsql->Ejecutar($sql);
-										$rows=$pgsql->Respuesta($query);
-						      		?>
-						      		<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									                <label class="control-label">Cédula Estudiante:</label>
-									                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
-									                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Nombre y Apellido:</label>
-									                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="row">
-									    <div class="span6">
-									        <div class="row-fluid">
-									            <div class="span6">
-									            	<label class="control-label">En que podría usted aportar para <br>la Integración Escuela-Comunidad, <br>a fin de participar en bienestar <br>de la Institución:</label>
-									                <div class="radios">
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="1" checked="checked" required /> Educativo
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="2" required /> Plomería <br>
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" required /> Electricidad
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" required /> Albañilería <br>
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" required /> Peluquería 
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="6" required /> Ambientación <br>
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="7" required /> Manualidades
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="8" required /> Bisutería <br>
-														<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="9" required /> Otros
-													</div>
-									            </div>
-									            <div class="span6">
-									                <label class="control-label">Especifique:</label>
-													<input class="span12" type="text" title="Especifique en que puede aportar" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_integracion" id="especifique_integracion" />
-									            </div>
-									        </div>
-									    </div>
-									</div>
-									<div class="control-group">  
-										<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-									</div>  
-									<div class="form-actions">
-										<button type="button" id="btnGuardar5" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-										<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-									</div>
-								</div> 
-							</fieldset>
-						</form>
-				    </div>
-				</div>	
-			</div>
-			<?php
-				}
-			?>
-		</fieldset>
+						</fieldset>
+					</form>
+			    </div>
+				<div class="tab-pane" id="tab-datosrepresentante">
+					<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form4"> 
+						<fieldset>
+							<div id="paginador" class="enjoy-css">
+								<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso4">
+								<?php
+									$pgsql = new Conexion();
+									$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,pi.cedula_padre,pi.cedula_madre 
+									FROM educacion.tproceso_inscripcion pi 
+									INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
+									WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
+									$query = $pgsql->Ejecutar($sql);
+									$rows=$pgsql->Respuesta($query);
+					      		?>
+					      		<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Cédula Estudiante:</label>
+								                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
+								                <input type="hidden" name="cedula_padre" id="cedula_padre" value="<?=$rows['cedula_padre']?>" />
+								                <input type="hidden" name="cedula_madre" id="cedula_madre" value="<?=$rows['cedula_madre']?>" />
+								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Nombre y Apellido:</label>
+								                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Cédula del Representante:</label>
+								                <input class="span12" type="text" name="cedula_representante" id="cedula_representante" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Parentesco:</label>
+								                <select class="bootstrap-select form-control" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' >
+													<option value=0>Seleccione un Parentesco</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT * FROM general.tparentesco ORDER BY descripcion ASC";
+														$query = $pgsql->Ejecutar($sql);
+														while($rows=$pgsql->Respuesta($query)){
+															echo "<option value=".$rows['codigo_parentesco'].">".$rows['descripcion']."</option>";
+														}
+													?>
+												</select>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Género:</label>
+								                <div class="radios">
+													<input type="radio" name="sexo_representante" id="sexo_representante" value="F" checked="checked" required /> Femenino
+													<input type="radio" name="sexo_representante" id="sexo_representante" value="M" required /> Masculino
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Fecha de Nacimiento del Representante:</label>
+								                <input class="span12" title="Ingrese la fecha de nacimiento del representante" name="fecha_nacimiento_representante" id="fecha_nacimiento_representante" type="text" readonly />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Primer Nombre del Representante:</label>
+								                <input class="span12" title="Ingrese el primer nombre del representante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_nombre_representante" id="primer_nombre_representante" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Segundo Nombre del Representante:</label>
+								                <input class="span12" title="Ingrese el segundo nombre del representante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_nombre_representante" id="segundo_nombre_representante" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Primer Apellido del Representante:</label>
+								                <input class="span12" title="Ingrese el primer apellido del representante" onKeyUp="this.value=this.value.toUpperCase()" name="primer_apellido_representante" id="primer_apellido_representante" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Segundo Apellido del Representante:</label>
+								                <input class="span12" title="Ingrese el segundo apellido del representante" onKeyUp="this.value=this.value.toUpperCase()" name="segundo_apellido_representante" id="segundo_apellido_representante" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Lugar de Nacimiento del <br>Representante:</label>
+								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_representante' id='lugar_nacimiento_representante' >
+													<option value=0>Seleccione el Lugar de Nacimiento</option>
+													<?php
+														$pgsql = new Conexion();
+														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$query = $pgsql->Ejecutar($sql);
+														while($rows=$pgsql->Respuesta($query)){
+															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+														}
+													?>
+												</select>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Dirección:</label>
+								            	<textarea class="span12" title="Ingrese la dirección del Representante" onKeyUp="this.value=this.value.toUpperCase()" name="direccion_representante" id="direccion_representante" ></textarea>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Teléfono Local del Representante:</label>
+								                <input class="span12" title="Ingrese el número de teléfono local del representante" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_local_representante" id="telefono_local_representante" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Teléfono Móvil del Representante:</label>
+								                <input class="span12" title="Ingrese el número de teléfono movil del representante" maxlength=11 onKeyPress="return isNumberKey(event)" name="telefono_movil_representante" id="telefono_movil_representante" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Profesión del Representante:</label>
+								                <input class="span12" title="Ingrese la profesión del representante" onKeyUp="this.value=this.value.toUpperCase()" name="profesion_representante" id="profesion_representante" type="text" />
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Grado de Instrucción del Representante:</label>
+								                <input class="span12" title="Ingrese el grado de instrucción del representante" onKeyUp="this.value=this.value.toUpperCase()" name="grado_instruccion_representante" id="grado_instruccion_representante" type="text" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="control-group">  
+									<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+								</div>  
+								<div class="form-actions">
+									<button type="button" id="btnGuardar4" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+									<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+								</div>
+							</div> 
+						</fieldset>
+					</form>
+			    </div>
+				<div class="tab-pane" id="tab-integracionec">
+					<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form5"> 
+						<fieldset>
+							<div id="paginador" class="enjoy-css">
+								<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso5">
+								<?php
+									$pgsql = new Conexion();
+									$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
+									FROM educacion.tproceso_inscripcion pi 
+									INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
+									WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
+									$query = $pgsql->Ejecutar($sql);
+									$rows=$pgsql->Respuesta($query);
+					      		?>
+					      		<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Cédula Estudiante:</label>
+								                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
+								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Nombre y Apellido:</label>
+								                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">En que podría usted aportar para <br>la Integración Escuela-Comunidad, <br>a fin de participar en bienestar <br>de la Institución:</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="1" checked="checked" required /> Educativo
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="2" required /> Plomería <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" required /> Electricidad
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" required /> Albañilería <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" required /> Peluquería 
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="6" required /> Ambientación <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="7" required /> Manualidades
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="8" required /> Bisutería <br>
+													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="9" required /> Otros
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Especifique:</label>
+												<input class="span12" type="text" title="Especifique en que puede aportar" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_integracion" id="especifique_integracion" />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="control-group">  
+									<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+								</div>  
+								<div class="form-actions">
+									<button type="button" id="btnGuardar5" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+									<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+								</div>
+							</div> 
+						</fieldset>
+					</form>
+			    </div>
+			</div>	
+		</div>
+		<?php
+			}
+		?>
+	</fieldset>
 	<?php
 		if(isset($_SESSION['datos']['procesado']) && $_SESSION['datos']['procesado']=="Y"){
 			echo '<script language="javascript">
@@ -1013,8 +1036,9 @@
 		$query = $pgsql->Ejecutar($sql);
 		$fila=$pgsql->Respuesta($query);
 	?>
-	<fieldset>
+	<fieldset id="PInscripcion">
 	<legend><center>PROCESO DE INSCRIPCIÓN</center></legend>
+	<!-- Remover aqui para activar validación para limitar el formulario cuando haya finalizado el periodo de inscripción
 	<?php
 		if($fila['dias_restantes']>0){
 	?>	
@@ -1027,6 +1051,7 @@
 	<?php
 		}else{
 	?>
+	Remover aqui	-->
 	<div id="rootwizard" class="tabbable tabs-left">
 		<ul class="nav nav-tabs">
 		  	<li class="active"><a href="#tab-datosestudiantes" data-toggle="tab" id="tab1">Datos del <br>Estudiante</a></li>
@@ -1034,7 +1059,6 @@
 			<li><a href="#tab-antecedentesfamiliares" data-toggle="tab" id="tab3">Antecedentes <br>Familiares</a></li>
 			<li><a href="#tab-datosrepresentante" data-toggle="tab" id="tab4">Datos Rep. Legal</a></li>
 			<li><a href="#tab-integracionec" data-toggle="tab" id="tab5">Integración <br>Escuela-Comunidad</a></li>
-			<li><a href="#tab-inscripcion" data-toggle="tab" id="tab6">Inscripción</a></li>
 		</ul>
 		<div class="tab-content">
 		    <div class="tab-pane" id="tab-datosestudiantes">
@@ -1194,11 +1218,13 @@
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Coordinación Pedagógica N°:</label>
+							                <div class="radios">
 												<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="1" <?php if($rows['coordinacion_pedagogica']=="1"){echo "checked='checked'"; } ?> required /> 1
 												<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="2" <?php if($rows['coordinacion_pedagogica']=="2"){echo "checked='checked'"; } ?> required /> 2
 												<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="3" <?php if($rows['coordinacion_pedagogica']=="3"){echo "checked='checked'"; } ?> required /> 3
 												<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="4" <?php if($rows['coordinacion_pedagogica']=="4"){echo "checked='checked'"; } ?> required /> 4
 												<input type="radio" name="coordinacion_pedagogica" id="coordinacion_pedagogica" value="5" <?php if($rows['coordinacion_pedagogica']=="5"){echo "checked='checked'"; } ?> required /> 5
+											</div>
 							            </div>
 							        </div>
 							    </div>
@@ -1222,8 +1248,9 @@
 			      		<?php
 							$pgsql=new Conexion();
 							$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,pi.estado_salud,
-							pi.alergico,pi.impedimento_deporte,pi.especifique_deporte,pi.practica_deporte,pi.cual_deporte,pi.tiene_beca,pi.organismo,pi.tiene_hermanos,
-							pi.cuantas_hembras,pi.cuantos_varones,pi.estudian_aca,pi.que_anio,pi.peso,pi.talla,pi.indice,pi.tiene_talento,pi.cual_talento 
+							pi.alergico,pi.impedimento_deporte,pi.especifique_deporte,pi.materia_pendiente,pi.cual_materia,pi.practica_deporte,pi.cual_deporte,
+							pi.tiene_beca,pi.organismo,pi.tiene_hermanos,pi.cuantas_hembras,pi.cuantos_varones,pi.estudian_aca,pi.que_anio,pi.peso,pi.talla,
+							pi.indice,pi.tiene_talento,pi.cual_talento 
 							FROM educacion.tproceso_inscripcion pi 
 							INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
 							WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
@@ -1259,8 +1286,10 @@
 						            </div>
 						            <div class="span6">
 						                <label class="control-label">¿Es Alérgico(a)?</label>
+						                <div class="radios">
 											<input type="radio" name="alergico" id="alergico" value="Y" <?php if($rows['alergico']=="Y"){echo "checked='checked'"; } ?> required /> Sí
 											<input type="radio" name="alergico" id="alergico" value="N" <?php if($rows['alergico']=="N"){echo "checked='checked'"; } ?> required /> No
+										</div>
 						            </div>
 						        </div>
 						    </div>
@@ -1278,6 +1307,23 @@
 						            <div class="span6">
 						                <label class="control-label">Especifique:</label>
 										<textarea class="span12" title="Ingrese su impedimento deportivo" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_deporte" id="especifique_deporte"><?php echo $rows['especifique_deporte'];?></textarea>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+						<div class="row">
+						    <div class="span6">
+						        <div class="row-fluid">
+						            <div class="span6">
+						                <label class="control-label">¿Tiene Materia Pendiente?</label>
+						                <div class="radios">
+											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="Y" <?php if($rows['materia_pendiente']=="Y"){echo "checked='checked'"; } ?> required /> Sí
+											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="N" <?php if($rows['materia_pendiente']=="N"){echo "checked='checked'"; } ?> required /> No
+										</div>
+						            </div>
+						            <div class="span6">
+						                <label class="control-label">¿Cuál?</label>
+										<input class="span12" type="text" title="Ingrese el nombre de las materias que tiene pendiente" onKeyUp="this.value=this.value.toUpperCase()" name="cual_materia" id="cual_materia" value="<?=$rows['cual_materia']?>" />
 						            </div>
 						        </div>
 						    </div>

@@ -110,6 +110,11 @@ function init(){
 			alert("¡Debe seleccionar un Área!");
 			send = false;
 		}
+
+		else if($('#lugar_prestamo').val()==""){
+			alert("¡Debe seleccionar un Lugar!");
+			send = false;
+		}
 	
 		else if($('#fecha_salida').val()==""){
 			alert("¡Debe Seleccionar la fecha de salida!");
@@ -119,6 +124,7 @@ function init(){
 			alert("¡Debe seleccionar la Fecha de Entrada!");
 			send = false;
 		}
+
 		else if(ejemplar && ubicacion){
 			arregloI = new Array();
 			arregloU = new Array();

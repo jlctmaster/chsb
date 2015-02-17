@@ -145,8 +145,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<table id='tablaDetAdquisicion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Item</label></td>
-							<td><label class="control-label" >Cantidad</label></td>
 							<td><label class="control-label" >Ubicación</label></td>
+							<td><label class="control-label" >Cantidad</label></td>
 							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 					</table>
@@ -172,7 +172,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+			$sql = "SELECT e.codigo_ejemplar AS codigo_item, e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS nombre_item 
 			FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 			WHERE e.estatus = '1' 
 			ORDER BY codigo_ejemplar ASC";
@@ -183,9 +183,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			}
 			?>
 			"</select>"+
-			"</td>"+
-			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
@@ -201,6 +198,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			}
 			?>
 			"</select>"+
+			"</td>"+
+			"<td>"+
+			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
@@ -345,8 +345,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<table id='tablaDetAdquisicion' class="table-bordered zebra-striped">
 						<tr>
 							<td><label class="control-label" >Item</label></td>
-							<td><label class="control-label" >Cantidad</label></td>
 							<td><label class="control-label" >Ubicación</label></td>
+							<td><label class="control-label" >Cantidad</label></td>
 							<td><button type="button" onclick="agrega_campos()" class="btn btn-primary"><i class="icon-plus"></i></button></td>
 						</tr>
 						<?php
@@ -361,7 +361,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 								          <select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Item' >
 								          <option value='0'>Seleccione un Item</option>";
-								          $sqlx = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+								          $sqlx = "SELECT e.codigo_ejemplar AS codigo_item,e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS nombre_item 
 										  FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 										  WHERE e.estatus = '1' 
 										  ORDER BY codigo_ejemplar ASC";
@@ -370,13 +370,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								            if($rows['codigo_item']==$row['codigo_item']){
 								              echo "<option value='".$rows['codigo_item']."' selected>".$rows['nombre_item']."</option>";
 								            }else{
-								              echo "<option value='".$rows['codigo_item']."'>".$rows['codigo_item']."</option>";
+								              echo "<option value='".$rows['codigo_item']."'>".$rows['nombre_item']."</option>";
 								            }
 								          }
 								          echo "</select>
-								        </td>
-								        <td>
-								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
 								        </td>
 								        <td>
 								        <select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_".$con."' title='Seleccione un Item' >
@@ -393,6 +390,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								            }
 								          }
 								        echo "</select>
+								        </td>
+								        <td>
+								        <input type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
 								        </td>
 								        <td>
 								          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
@@ -442,7 +442,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un items'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT e.codigo_ejemplar AS codigo_item, e.numero_edicion||' '||l.titulo AS nombre_item 
+			$sql = "SELECT e.codigo_ejemplar AS codigo_item,e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS nombre_item 
 			FROM biblioteca.tejemplar e INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 			WHERE e.estatus = '1' 
 			ORDER BY codigo_ejemplar ASC";
@@ -453,9 +453,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			}
 			?>
 			"</select>"+
-			"</td>"+
-			"<td>"+
-			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
@@ -471,6 +468,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			}
 			?>
 			"</select>"+
+			"</td>"+
+			"<td>"+
+			"<input type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
 			"<td>"+
 			"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
@@ -502,7 +502,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$sql = "SELECT a.codigo_adquisicion,TO_CHAR(a.fecha_adquisicion,'DD/MM/YYYY') AS fecha_adquisicion,
 	CASE a.tipo_adquisicion WHEN '1' THEN 'DONACIÓN' WHEN '2' THEN 'COMPRA' WHEN '3' THEN 'RECURSOS DEL MINISTERIO' ELSE 'OTROS' END AS tipo_adquisicion, 
 	o.rif_organizacion||' - '||o.nombre AS organizacion, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
-	CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_isbn_libro||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
+	CASE a.sonlibros WHEN 'N' THEN b.nro_serial||' '||b.nombre WHEN 'Y' THEN e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo ELSE null END AS item,
 	da.cantidad 
 	FROM inventario.tadquisicion a 
 	INNER JOIN general.torganizacion o ON a.rif_organizacion = o.rif_organizacion 

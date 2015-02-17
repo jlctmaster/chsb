@@ -2,9 +2,9 @@
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
 	$sql = "SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-  a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,a.cota,
-  TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
+  a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area, CASE a.lugar_prestamo WHEN 'S' THEN 'SALA' ELSE 'AULA' END AS lugar_prestamo,
+  TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,a.observacion,
+   b.codigo_cra||' - '||b.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad,
    CASE a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM biblioteca.tprestamo a 
   INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
@@ -33,9 +33,9 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Prestaciones";
-	$titulosColumnas = array('Código', 'Responsable', 'Estudiante', 'Área', 'Cota.', 'Fecha Salida', 'Fecha Entrada', 'Ejemplar', 'Cantidad', 'Estatus');
+	$titulosColumnas = array('Código', 'Responsable', 'Estudiante', 'Área', 'Lugar Préstamo', 'Fecha Salida', 'Fecha Entrada', 'Ejemplar', 'Cantidad','Observación', 'Estatus');
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:J1')->mergeCells('A2:J2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:K1')->mergeCells('A2:K2');
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A1', $tituloReporte)
@@ -48,7 +48,8 @@
 				->setCellValue('G3', $titulosColumnas[6])
 				->setCellValue('H3', $titulosColumnas[7])
 				->setCellValue('I3', $titulosColumnas[8])
-				->setCellValue('J3', $titulosColumnas[9]);
+				->setCellValue('J3', $titulosColumnas[9])
+				->setCellValue('K3', $titulosColumnas[10]);
 	
 	//Se agregan los datos de los alumnos
 	$i = 4;
@@ -58,12 +59,13 @@
 		->setCellValue('B'.$i, $row['responsable'])
 		->setCellValue('C'.$i, $row['persona'])
 		->setCellValue('D'.$i, $row['area'])
-		->setCellValue('E'.$i, $row['cota'])
+		->setCellValue('E'.$i, $row['lugar_prestamo'])
 		->setCellValue('F'.$i, $row['fecha_salida'])
 		->setCellValue('G'.$i, $row['fecha_entrada'])
 		->setCellValue('H'.$i, $row['ejemplar'])
 		->setCellValue('I'.$i, $row['cantidad'])
-		->setCellValue('J'.$i, $row['estatus']);
+		->setCellValue('J'.$i, $row['observacion'])
+		->setCellValue('K'.$i, $row['estatus']);
 		$i++;
 	}
 	
@@ -157,8 +159,8 @@
 	 
 	$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
 	$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle('A3:K3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:K".($i-1));
 			
 	for($i = 'A'; $i <= 'E'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);

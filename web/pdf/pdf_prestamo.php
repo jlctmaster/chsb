@@ -18,22 +18,23 @@ require_once("../librerias/fpdf/fpdf.php");
     
     
      $this->SetFillColor(0,0,140); 
-         $avnzar=2;
+         $avnzar=1;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
-         $this->SetFont('Arial','B',10);
+         $this->SetFont('Arial','B',9);
          $this->SetTextColor(0,0,0);
                 $this->Cell($avnzar); 
-      $this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
+      $this->Cell($anchura*1+5,$altura,'CÓDIGO',1,0,'L',$color_fondo); 
       $this->Cell($anchura*3,$altura,'RESPONSABLE',1,0,'L',$color_fondo);  
       $this->Cell($anchura*3,$altura,'ESTUDIANTE',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2+5,$altura,'ÁREA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*2,$altura,'Nº COTA',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2,$altura,'ÁREA',1,0,'L',$color_fondo);
+      $this->Cell($anchura*2,$altura,'LUGAR',1,0,'L',$color_fondo);
       $this->Cell($anchura*3,$altura,'FECHA SALIDA',1,0,'L',$color_fondo);
       $this->Cell($anchura*3+2,$altura,'FECHA ENTRADA',1,0,'L',$color_fondo);
-      $this->Cell($anchura*5,$altura,'EJEMPLAR',1,0,'L',$color_fondo);
+      $this->Cell($anchura*3,$altura,'EJEMPLAR',1,0,'L',$color_fondo);
       $this->Cell($anchura*2,$altura,'CANTIDAD',1,0,'L',$color_fondo);
+      $this->Cell($anchura*3+5,$altura,'OBSERVACIÓN',1,0,'L',$color_fondo);
       $this->Cell($anchura*2,$altura,'ESTATUS',1,1,'L',$color_fondo); 
       
                   $this->Cell($avnzar); 
@@ -186,14 +187,15 @@ function NbLines($w,$txt)
 
    $lobjPdf->SetFont("arial","B",8);
    
-    $lobjPdf->SetFont('Arial','',12);
+    $lobjPdf->SetFont('Arial','',10);
    //Table with 20 rows and 5 columns
-      $lobjPdf->SetWidths(array(20,30,30,25,20,30,32,50,20,20));
+      $lobjPdf->SetWidths(array(15,30,30,20,20,30,32,30,20,35,20));
   $pgsql=new Conexion();
     $sql="SELECT a.codigo_prestamo,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-  a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area,a.cota,
-  TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
+  a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,ar.descripcion AS area, 
+  CASE a.lugar_prestamo WHEN 'S' THEN 'SALA' ELSE 'AULA' END AS lugar_prestamo,
+  TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida, TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada, a.observacion,
+   b.codigo_cra||' - '||b.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad,
    CASE a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM biblioteca.tprestamo a 
   INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
@@ -207,7 +209,7 @@ function NbLines($w,$txt)
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=2;
+         $avnzar=1;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -223,11 +225,12 @@ function NbLines($w,$txt)
          ucwords($tperfil['responsable']),
          ucwords($tperfil['persona']),
          ucwords($tperfil['area']),
-         ucwords($tperfil['cota']),
+         ucwords($tperfil['lugar_prestamo']),
          ucwords($tperfil['fecha_salida']),
          ucwords($tperfil['fecha_entrada']),
          ucwords($tperfil['ejemplar']),
          ucwords($tperfil['cantidad']),
+         ucwords($tperfil['observacion']),
          ucwords($tperfil['estatus'])));
           $lobjPdf->Cell($avnzar);         
          }

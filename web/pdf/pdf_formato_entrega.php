@@ -258,14 +258,13 @@ $lobjPdf->AddPage("P");
 $lobjPdf->AliasNbPages();
 $lobjPdf->Ln(15);
 //Table with 20 rows and 5 columns
-$lobjPdf->SetWidths(array(80,50,20));
+$lobjPdf->SetWidths(array(50,80,20));
 $pgsql=new Conexion();
 $sql="SELECT a.codigo_entrega,a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,p.telefono_movil,
   a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
   b.fecha_entrada||' .'||a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
   TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-   da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
-   u.codigo_ubicacion||' '||u.descripcion AS ubicacion
+   e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad,a.observacion 
   FROM biblioteca.tentrega a 
   INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
   INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
@@ -273,7 +272,6 @@ $sql="SELECT a.codigo_entrega,a.cedula_responsable||' '||r.primer_nombre||' '||r
   LEFT JOIN biblioteca.tprestamo b ON a.codigo_prestamo = b.codigo_prestamo 
   LEFT JOIN biblioteca.tejemplar e ON da.codigo_ejemplar = e.codigo_ejemplar 
   INNER JOIN biblioteca.tlibro l on e.codigo_isbn_libro=l.codigo_isbn_libro 
-  INNER JOIN inventario.tubicacion u ON da.codigo_ubicacion = u.codigo_ubicacion
   WHERE a.codigo_entrega =".$pgsql->comillas_inteligentes($_GET['p1']);
 $i=-1;
 $data=$pgsql->Ejecutar($sql);
@@ -288,8 +286,7 @@ if($pgsql->Total_Filas($data)!=0){
 		$filas['fecha_entrada'][]=$rows['fecha_entrada'];
 		$filas['ejemplar'][]=$rows['ejemplar'];
 		$filas['cantidad'][]=$rows['cantidad'];
-		//$filas['almacen'][]=$rows['almacen'];
-		$filas['ubicacion'][]=$rows['ubicacion'];
+		$filas['observacion'][]=$rows['observacion'];
 	}
 	$lobjPdf->SetFillColor(0,0,140); 
 	$avnzar=18;
@@ -315,7 +312,7 @@ if($pgsql->Total_Filas($data)!=0){
 	$lobjPdf->Ln(20);
 	$lobjPdf->Cell($avnzar);
 	$lobjPdf->SetFont("arial","B",10);
-	$lobjPdf->Row(array('Ubicación','Ejemplar','Cantidad'),false);
+	$lobjPdf->Row(array('Ejemplar','Observación','Cantidad'),false);
 	$lobjPdf->SetFont("arial","",10);
 	$lobjPdf->Cell($avnzar);
 	$lobjPdf->aligns[2]='R';
@@ -323,8 +320,8 @@ if($pgsql->Total_Filas($data)!=0){
 	for($i=0;$i<count($filas['codigo_entrega']);$i++){
 		$total+=$filas['cantidad'][$i];
 		$lobjPdf->Row(array(
-		$filas['ubicacion'][$i],
 		$filas['ejemplar'][$i],
+		$filas['observacion'][$i],
 		$filas['cantidad'][$i]),false);
 		$lobjPdf->Cell($avnzar);
 	}

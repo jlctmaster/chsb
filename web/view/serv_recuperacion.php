@@ -138,6 +138,19 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
+							<?php
+								$pgsql = new Conexion();
+								$sql = "SELECT i.codigo_item,i.item 
+								FROM inventario.vw_inventario i 
+								INNER JOIN bienes_nacionales.tbien b ON i.codigo_item = b.codigo_bien 
+								INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
+								WHERE i.sonlibros = 'N' AND b.esconfigurable='Y' AND u.itemsdefectuoso = 'Y' 
+								ORDER BY i.codigo_item ASC";
+								$query = $pgsql->Ejecutar($sql);
+								while($row=$pgsql->Respuesta($query)){
+									echo "<option value=".$row['codigo_item'].">".$row['item']."</option>";
+								}
+							?>
 						</select>
 					</div>  
 				</div>
@@ -272,20 +285,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
-								LEFT JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item 
-								WHERE i.codigo_ubicacion = ".$row['codigo_ubicacion']." OR i.codigo_ubicacion IS NULL 
-								ORDER BY b.codigo_bien ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if((isset($rows['codigo_ubicacion']) && $row['codigo_ubicacion']==$rows['codigo_ubicacion'] && $row['codigo_bien'] == $rows['codigo_bien']) || ($row['codigo_bien'] == $rows['codigo_bien']))
-										echo "<option value=".$rows['codigo_bien']." selected>".$rows['item']."</option>";
-									else
-										echo "<option value=".$rows['codigo_bien']." >".$rows['item']."</option>";
-								}
-							?>
+					
 						</select>
 					</div>  
 				</div>

@@ -1,12 +1,11 @@
 <?php
 	require_once("../class/class_bd.php");
 	$mysql = new Conexion();
-	$sql = "SELECT a.codigo_entrega,a.cedula_persona||' -'||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
+	$sql = "SELECT a.codigo_entrega,b.fecha_entrada||' - '||a.cedula_persona||' - '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo,
 	a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
     a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
-    b.cota||', '||b.fecha_entrada||' .'||
     TO_CHAR(a.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,
-    da.codigo_ejemplar||' - '||l.codigo_isbn_libro||' '||l.titulo AS ejemplar,da.cantidad,
+    b.codigo_cra||' - '||b.numero_edicion||' '||l.titulo AS ejemplar,da.cantidad,
    CASE a.estatus when '1' then 'ACTIVO' when '0' then 'DESACTIVADO' end as estatus
   FROM biblioteca.tentrega a 
   INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
@@ -153,10 +152,10 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A3:H3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:H".($i-1));
 			
 	for($i = 'A'; $i <= 'E'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);

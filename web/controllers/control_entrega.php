@@ -25,12 +25,16 @@ if(isset($_POST['cedula_persona']))
 if(isset($_POST['fecha_entrada']))
   $fecha_entrada=trim($_POST['fecha_entrada']);
 
+if(isset($_POST['observacion']))
+  $observacion=trim($_POST['observacion']);
+
 if($lOpt=='Registrar'){
   $entrega->codigo_entrega($codigo_entrega);
   $entrega->codigo_prestamo($codigo_prestamo);
   $entrega->cedula_responsable($cedula_responsable);
   $entrega->cedula_persona($cedula_persona);
   $entrega->fecha_entrada($fecha_entrada);
+  $entrega->observacion($observacion);
   $confirmacion=false;
   $entrega->Transaccion('iniciando');
   if($entrega->Registrar($_SESSION['user_name'])){
@@ -91,6 +95,7 @@ if($lOpt=='Modificar'){
   $entrega->cedula_responsable($cedula_responsable);
   $entrega->cedula_persona($cedula_persona);
   $entrega->fecha_entrada($fecha_entrada);
+  $entrega->observacion($observacion);
   $confirmacion=false;
   $entrega->Transaccion('iniciando');
   if($entrega->Actualizar($_SESSION['user_name'])){

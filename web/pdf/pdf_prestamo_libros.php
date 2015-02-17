@@ -8,13 +8,13 @@ class clsFpdf extends FPDF {
   var $aligns;
   //Cabecera de página
   public function Header(){
-    $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/project/web/");   
+    $this->Image("../images/cintillo.jpg" , 25 ,15, 250 , 40, "JPG" ,$_SERVER['HTTP_HOST']."/CHSB/web/");   
     $this->Ln(55);  
     $this->SetFont('Arial','B',12);
     $this->Cell(0,6,'REPORTE DE PRÉSTAMO DE LIBROS',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
-    $avnzar=15;
+    $avnzar=10;
     $altura=7;
     $anchura=10;
     $color_fondo=false;
@@ -36,8 +36,8 @@ class clsFpdf extends FPDF {
     $this->Cell($avnzar);
     $this->Cell($anchura*5,$altura,'RESPONSABLE',1,0,'C',$color_fondo); 
     $this->Cell($anchura*5,$altura,'ESTUDIANTE',1,0,'C',$color_fondo);
-    $this->Cell($anchura*3,$altura,'AREA',1,0,'C',$color_fondo);
-    $this->Cell($anchura*2,$altura,'COTA',1,0,'C',$color_fondo); 
+    $this->Cell($anchura*3,$altura,'ÁREA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*4,$altura,'LUGAR PRÉSTAMO',1,0,'C',$color_fondo); 
     $this->Cell($anchura*2,$altura,'FECHA',1,0,'C',$color_fondo); 
     $this->Cell($anchura*6,$altura,'EJEMPLAR',1,0,'C',$color_fondo); 
     $this->Cell($anchura*2,$altura,'CANTIDAD',1,1,'C',$color_fondo); 
@@ -173,16 +173,16 @@ setlocale(LC_ALL,"es_VE.UTF8");
 $lobjPdf=new clsFpdf();
 $lobjPdf->AddPage("L");
 $lobjPdf->AliasNbPages();
-$avnzar=15;
+$avnzar=10;
 $altura=7;
 $anchura=10;
 $color_fondo=false;
-$lobjPdf->SetWidths(array($anchura*5,$anchura*5,$anchura*3,$anchura*2,$anchura*2,$anchura*6,$anchura*2));
+$lobjPdf->SetWidths(array($anchura*5,$anchura*5,$anchura*3,$anchura*4,$anchura*2,$anchura*6,$anchura*2));
 $pgsql=new Conexion();
 $sql="SELECT p.cedula_responsable||' '||resp.primer_nombre||' '||resp.primer_apellido AS responsable,
       p.cedula_persona||' '||est.primer_nombre||' '||est.primer_apellido AS estudiante,a.descripcion AS area,
-      p.cota,TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,
-      e.codigo_isbn_libro||' '||l.titulo AS libro,dp.cantidad 
+      CASE p.lugar_prestamo WHEN 'S' THEN 'SALA' ELSE 'AULA' END AS lugar_prestamo,TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,
+      e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS libro,dp.cantidad 
       FROM biblioteca.tprestamo p 
       INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = dp.codigo_prestamo 
       INNER JOIN general.tpersona resp ON p.cedula_responsable = resp.cedula_persona 
@@ -200,7 +200,7 @@ if($pgsql->Total_Filas($data)!=0){
     $lobjPdf->Row(array($prestamo['responsable'],
     $prestamo['estudiante'],
     $prestamo['area'],
-    $prestamo['cota'],
+    $prestamo['lugar_prestamo'],
     $prestamo['fecha_salida'],
     $prestamo['libro'],
     $prestamo['cantidad']));
@@ -208,7 +208,7 @@ if($pgsql->Total_Filas($data)!=0){
     $lobjPdf->Cell($avnzar);         
   }
   $lobjPdf->SetFont('Arial','B',9);
-  $lobjPdf->Cell($anchura*23,$altura,"TOTAL PRESTAMOS:",1,0,"R",$color_fondo);
+  $lobjPdf->Cell($anchura*25,$altura,"TOTAL PRESTAMOS:",1,0,"R",$color_fondo);
   $lobjPdf->Cell($anchura*2,$altura,$total,1,1,"R",$color_fondo);
   $lobjPdf->Output('documento',"I");
 }else{
