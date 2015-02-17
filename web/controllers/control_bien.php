@@ -96,22 +96,26 @@ if($lOpt=='Modificar'){
   $bien->esconfigurable(comprobarCheckBox($esconfigurable));
   $confirmacion=false;
   $bien->Transaccion('iniciando');
-  if($bien->Actualizar($_SESSION['user_name'])){
-    if($bien->EliminarBienes()){
-      if(isset($_POST['items']) && isset($_POST['cantidades'])){
-        if($bien->InsertarBienes($_SESSION['user_name'],$_POST['items'],$_POST['cantidades'],$_POST['item_base']))
-          $confirmacion=1;
+  if(!$bien->Comprobar()){
+    if($bien->Actualizar($_SESSION['user_name'])){
+      if($bien->EliminarBienes()){
+        if(isset($_POST['items']) && isset($_POST['cantidades'])){
+          if($bien->InsertarBienes($_SESSION['user_name'],$_POST['items'],$_POST['cantidades'],$_POST['item_base']))
+            $confirmacion=1;
+          else
+            $confirmacion=0;
+        }
         else
-          $confirmacion=0;
+          $confirmacion=1;
       }
       else
-        $confirmacion=1;
+        $confirmacion=0;
     }
     else
-      $confirmacion=0;
-  }
-  else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
+
   if($confirmacion==1){
     $bien->Transaccion('finalizado');
     $_SESSION['datos']['mensaje']="¡El Bien ha sido modificado con éxito!";

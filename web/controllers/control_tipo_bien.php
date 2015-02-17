@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $tipo_bien->codigo_tipo_bien($codigo_tipo_bien);
   $tipo_bien->descripcion($descripcion);
-  if($tipo_bien->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$tipo_bien->Comprobar()){
+    if($tipo_bien->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Tipo de Bien Nacional ha sido modificado con éxito!";

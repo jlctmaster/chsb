@@ -55,9 +55,12 @@ if($lOpt=='Modificar'){
   $servicio->url($url);
   $servicio->orden($orden);
   $servicio->codigo_modulo($codigo_modulo);
-  if($servicio->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$servicio->Comprobar()){
+    if($servicio->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Servicio ha sido modificado con exito!";

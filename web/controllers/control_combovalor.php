@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $combovalor->nid_combovalor($nid_combovalor);
   $combovalor->ctabla($ctabla);
   $combovalor->cdescripcion($cdescripcion);
-  if($combovalor->Actualizar())
-    $confirmacion=1;
-  else
+  if(!$combovalor->Comprobar()){
+    if($combovalor->Actualizar())
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El valor del combo ha sido modificado con exito!";

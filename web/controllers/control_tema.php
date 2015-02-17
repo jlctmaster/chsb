@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $tema->codigo_tema($codigo_tema);
   $tema->descripcion($descripcion);
-  if($tema->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$tema->Comprobar()){
+    if($tema->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Tema ha sido modificada con éxito!";

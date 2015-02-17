@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $area->codigo_area($codigo_area);
   $area->descripcion($descripcion);
   $area->codigo_departamento($codigo_departamento);
-  if($area->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$area->Comprobar()){
+    if($area->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Área ha sido modificada con éxito!";

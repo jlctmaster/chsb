@@ -55,10 +55,13 @@ if($lOpt=='Modificar'){
   $opcion->accion($accion);
   $opcion->orden($orden);
   $opcion->icono($icono);
-  if($opcion->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
-    $confirmacion=-1;
+  if(!$opcion->Comprobar()){
+    if($opcion->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
+    $confirmacion=-1; 
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Botón ha sido modificado con exito!";
     header("Location: ../view/menu_principal.php?botones&Opt=3&codigo_opcion=".$opcion->codigo_opcion());

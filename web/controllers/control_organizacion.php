@@ -63,9 +63,12 @@ if($lOpt=='Modificar'){
   $organizacion->telefono($telefono);
   $organizacion->tipo_organizacion($tipo_organizacion);
   $organizacion->codigo_parroquia($codigo_parroquia);
-  if($organizacion->Actualizar($_SESSION['user_name'],$oldrif))
-    $confirmacion=1;
-  else
+  if(!$organizacion->Comprobar()){
+    if($organizacion->Actualizar($_SESSION['user_name'],$oldrif))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Organización ha sido modificada con éxito!";

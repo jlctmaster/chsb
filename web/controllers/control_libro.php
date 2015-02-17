@@ -65,9 +65,12 @@ if($lOpt=='Modificar'){
   $libro->codigo_tema($codigo_tema);
   $libro->numero_paginas($numero_paginas);
   $libro->fecha_edicion($fecha_edicion);
-  if($libro->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$libro->Comprobar()){
+    if($libro->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Libro ha sido modificado con éxito!";

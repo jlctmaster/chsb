@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $departamento->codigo_departamento($codigo_departamento);
   $departamento->descripcion($descripcion);
-  if($departamento->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$departamento->Comprobar()){
+    if($departamento->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Departamento ha sido modificado con éxito!";

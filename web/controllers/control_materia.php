@@ -50,9 +50,12 @@ if($lOpt=='Modificar'){
   $materia->nombre_materia($nombre_materia); 
   $materia->unidad_credito($unidad_credito);
   $materia->tipo_materia($tipo_materia);
-  if($materia->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$materia->Comprobar()){
+    if($materia->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Materia ha sido modificada con éxito!";

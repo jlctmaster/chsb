@@ -50,9 +50,12 @@ if($lOpt=='Modificar'){
   $modulo->nombre_modulo($nombre_modulo);
   $modulo->icono($icono);
   $modulo->orden($orden);
-  if($modulo->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$modulo->Comprobar()){
+    if($modulo->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Módulo ha sido modificado con exito!";

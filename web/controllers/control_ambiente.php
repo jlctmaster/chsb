@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $ambiente->codigo_ambiente($codigo_ambiente);
   $ambiente->descripcion($descripcion);
   $ambiente->tipo_ambiente($tipo_ambiente);
-  if($ambiente->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$ambiente->Comprobar()){
+    if($ambiente->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Ambiente ha sido modificado con éxito!";

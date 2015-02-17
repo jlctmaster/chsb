@@ -74,16 +74,19 @@ if($lOpt=='Modificar'){
   $seccion->capacidad_max($capacidad_max);  
   $seccion->indice_min($indice_min);
   $seccion->indice_max($indice_max);
-  if($seccion->Actualizar($_SESSION['user_name'],$oldseccion)){
-    $confirmacion=1;
-    if(isset($_POST['materias'])){
-      if($nro_seccion!=$oldseccion)
-        $seccion->seccion($oldseccion); 
-      $seccion->EliminarMaterias();
-      $seccion->InsertarMaterias($_SESSION['user_name'],$_POST['materias']);
+  if(!$seccion->Comprobar()){
+    if($seccion->Actualizar($_SESSION['user_name'],$oldseccion)){
+      $confirmacion=1;
+      if(isset($_POST['materias'])){
+        if($nro_seccion!=$oldseccion)
+          $seccion->seccion($oldseccion); 
+        $seccion->EliminarMaterias();
+        $seccion->InsertarMaterias($_SESSION['user_name'],$_POST['materias']);
+      }
     }
-  }
-  else
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Sección ha sido modificada con éxito!";

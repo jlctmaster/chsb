@@ -53,9 +53,12 @@ if($lOpt=='Modificar'){
   $bloque_hora->hora_inicio($hora_inicio[0]);
   $bloque_hora->hora_fin($hora_fin[0]);
   $bloque_hora->turno($turno);
-  if($bloque_hora->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$bloque_hora->Comprobar()){
+    if($bloque_hora->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Bloque de horas ha sido modificado con éxito!";

@@ -59,9 +59,12 @@ if($lOpt=='Modificar'){
   $periodo->fecha_inicio($fecha_inicio);
   $periodo->fecha_fin($fecha_fin);
   $periodo->codigo_lapso($codigo_lapso);
-  if($periodo->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$periodo->Comprobar()){
+    if($periodo->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Trayecto ha sido modificado con éxito!";

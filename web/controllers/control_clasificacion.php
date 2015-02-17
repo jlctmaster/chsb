@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $clasificacion->codigo_clasificacion($codigo_clasificacion);
   $clasificacion->descripcion($descripcion);
-  if($clasificacion->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$clasificacion->Comprobar()){
+    if($clasificacion->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Clasificación ha sido modificada con éxito!";

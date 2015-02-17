@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $pais->codigo_pais($codigo_pais);
   $pais->descripcion($descripcion);
-  if($pais->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$pais->Comprobar()){
+    if($pais->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El País ha sido modificado con exito!";

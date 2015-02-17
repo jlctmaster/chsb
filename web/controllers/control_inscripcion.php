@@ -73,9 +73,12 @@ if($lOpt=='Modificar'){
   $inscripcion->fecha_cierre($fecha_cierre);
   $inscripcion->cerrado(comprobarCheckBox($cerrado));
   $inscripcion->Cerrar($_SESSION['user_name']);
-  if($inscripcion->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$inscripcion->Comprobar()){
+    if($inscripcion->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Período de Inscripción ha sido modificado con éxito!";

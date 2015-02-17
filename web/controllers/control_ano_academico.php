@@ -54,10 +54,14 @@ if($lOpt=='Modificar'){
   $ano_academico->ano($ano);
   $ano_academico->cerrado(comprobarCheckBox($cerrado));
   $ano_academico->Cerrar($_SESSION['user_name']);
-  if($ano_academico->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$ano_academico->Comprobar()){
+    if($ano_academico->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
+  
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Año Académico ha sido modificado con éxito!";
     header("Location: ../view/menu_principal.php?ano_academico&Opt=3&codigo_ano_academico=".$ano_academico->codigo_ano_academico());

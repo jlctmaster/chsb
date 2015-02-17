@@ -53,9 +53,12 @@ if($lOpt=='Modificar'){
   $tipo_persona->codigo_tipopersona($codigo_tipopersona);
   $tipo_persona->descripcion($descripcion);
   $tipo_persona->es_usuariosistema(comprobarCheckBox($es_usuariosistema));
-  if($tipo_persona->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$tipo_persona->Comprobar()){
+    if($tipo_persona->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Tipo de Persona ha sido modificado con éxito!";

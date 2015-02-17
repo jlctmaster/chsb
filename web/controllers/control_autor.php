@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $autor->codigo_autor($codigo_autor);
   $autor->nombre($nombre);
-  if($autor->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$autor->Comprobar()){
+    if($autor->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El autor ha sido modificado con éxito!";

@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $estado->codigo_estado($codigo_estado);
   $estado->descripcion($descripcion);
   $estado->codigo_pais($codigo_pais);
-  if($estado->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$estado->Comprobar()){
+    if($estado->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Estado ha sido modificado con exito!";

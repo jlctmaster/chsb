@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $lapso->codigo_lapso($codigo_lapso);
   $lapso->lapso($nombre_lapso);
   $lapso->codigo_ano_academico($codigo_ano_academico);
-  if($lapso->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$lapso->Comprobar()){
+    if($lapso->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El lapso ha sido modificado con éxito!";

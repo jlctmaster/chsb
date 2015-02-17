@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $parentesco->codigo_parentesco($codigo_parentesco);
   $parentesco->descripcion($descripcion);
-  if($parentesco->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$parentesco->Comprobar()){
+    if($parentesco->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Parentesco ha sido modificado con éxito!";

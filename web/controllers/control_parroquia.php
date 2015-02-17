@@ -45,9 +45,12 @@ if($lOpt=='Modificar'){
   $parroquia->codigo_parroquia($codigo_parroquia);
   $parroquia->descripcion($descripcion);
   $parroquia->codigo_municipio($codigo_municipio);
-  if($parroquia->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$parroquia->Comprobar()){
+    if($parroquia->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Parroquia ha sido modificada con éxito!";

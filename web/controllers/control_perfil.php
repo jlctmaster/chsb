@@ -48,14 +48,17 @@ if($lOpt=='Modificar'){
   $perfil->codigo_perfil($codigo_perfil);
   $perfil->codigo_configuracion($codigo_configuracion);
   $perfil->nombre_perfil($nombre_perfil);
-  if($perfil->Actualizar($_SESSION['user_name'])){
-    $confirmacion=1;
-    if(isset($_POST['modulos']) && isset($_POST['servicios']) && isset($_POST['opciones'])){
-      $perfil->ELIMINAR_OPCION_SERVICIO_PERFIL();
-      $perfil->INSERTAR_OPCION_SERVICIO_PERFIL($_SESSION['user_name'],$_POST['modulos'],$_POST['servicios'],$_POST['opciones']);
+  if(!$perfil->Comprobar()){
+    if($perfil->Actualizar($_SESSION['user_name'])){
+      $confirmacion=1;
+      if(isset($_POST['modulos']) && isset($_POST['servicios']) && isset($_POST['opciones'])){
+        $perfil->ELIMINAR_OPCION_SERVICIO_PERFIL();
+        $perfil->INSERTAR_OPCION_SERVICIO_PERFIL($_SESSION['user_name'],$_POST['modulos'],$_POST['servicios'],$_POST['opciones']);
+      }
     }
-  }
-  else
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Perfil ha sido modificado con éxito!";

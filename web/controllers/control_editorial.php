@@ -40,9 +40,12 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $editorial->codigo_editorial($codigo_editorial);
   $editorial->nombre($nombre);
-  if($editorial->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
-  else
+  if(!$editorial->Comprobar()){
+    if($editorial->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡El Editorial ha sido modificado con éxito!";
