@@ -34,9 +34,11 @@ class clsFpdf extends FPDF {
     $this->Ln(4);    
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar);
-    $this->Cell($anchura*10,$altura,'RESPONSABLE',1,0,'C',$color_fondo); 
-    $this->Cell($anchura*8,$altura,'ITEM',1,0,'C',$color_fondo);
-    $this->Cell($anchura*4,$altura,'FECHA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*7,$altura,'RESPONSABLE',1,0,'C',$color_fondo); 
+    $this->Cell($anchura*3,$altura,'ITEM',1,0,'C',$color_fondo);
+    $this->Cell($anchura*5,$altura,'UBICACIÓN DESDE',1,0,'C',$color_fondo);
+    $this->Cell($anchura*5,$altura,'UBICACIÓN HASTA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*2,$altura,'FECHA',1,0,'C',$color_fondo);
     $this->Cell($anchura*2,$altura,'CANTIDAD',1,1,'C',$color_fondo); 
     $this->Cell($avnzar); 
   }
@@ -174,14 +176,18 @@ $avnzar=15;
 $altura=7;
 $anchura=10;
 $color_fondo=false;
-$lobjPdf->SetWidths(array($anchura*10,$anchura*8,$anchura*4,$anchura*2));
+$lobjPdf->SetWidths(array($anchura*7,$anchura*3,$anchura*5,$anchura*5,$anchura*2,$anchura*2));
 $pgsql=new Conexion();
 $sql="SELECT TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion, p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
-  b.nro_serial||' '||b.nombre AS item,da.cantidad
+  b.nro_serial||' '||b.nombre AS item,da.cantidad, 
+  u.codigo_ubicacion||'- '||u.descripcion AS ubicacion,da.codigo_ubicacion_hasta||'- '||uh.descripcion AS ubicacion_hasta
   FROM bienes_nacionales.tasignacion a 
   INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
   INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion 
   LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien
+  INNER JOIN inventario.tubicacion u ON da.codigo_ubicacion = u.codigo_ubicacion
+  INNER JOIN inventario.tubicacion uh ON da.codigo_ubicacion_hasta = uh.codigo_ubicacion
+
   WHERE fecha_asignacion BETWEEN ".$pgsql->comillas_inteligentes($_POST['fecha_inicio'])." AND ".$pgsql->comillas_inteligentes($_POST['fecha_fin'])."";
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
@@ -190,6 +196,8 @@ if($pgsql->Total_Filas($data)!=0){
  while($prestamo=$pgsql->Respuesta($data)){
     $lobjPdf->Row(array($prestamo['responsable'],
     $prestamo['item'],
+    $prestamo['ubicacion'],
+    $prestamo['ubicacion_hasta'],
     $prestamo['fecha_asignacion'],
     $prestamo['cantidad']));
     $total+=$prestamo['cantidad'];

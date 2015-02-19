@@ -277,14 +277,14 @@ function init(){
 					send = false;
 				}
 			
-				else if($('#profesion_padre').val()==""){
+				/*else if($('#profesion_padre').val()==""){
 					alert("¡Debe ingresar la profesión del padre!");
 					send = false;
 				}
 				else if($('#grado_instruccion_padre').val()==""){
 					alert("¡Debe ingresar el grado de instrucción del padre!");
 					send = false;
-				}
+				}*/
 			}
 			else if($('#cedula_madre').val()!=""){
 				if($('#cedula_madre').val()==""){
@@ -311,7 +311,7 @@ function init(){
 					alert("¡Debe ingresar la dirección de la madre del estudiante!");
 					send = false;
 				}
-			
+			/*
 				else if($('#profesion_madre').val()==""){
 					alert("¡Debe ingresar la profesión de la madre!");
 					send = false;
@@ -319,7 +319,7 @@ function init(){
 				else if($('#grado_instruccion_madre').val()==""){
 					alert("¡Debe ingresar el grado de instrucción de la madre!");
 					send = false;
-				}
+				}*/
 			}
 			else{
 				send = true;
@@ -366,7 +366,7 @@ function init(){
 				alert("¡Debe ingresar la dirección del representante del estudiante!");
 				send = false;
 			}
-		
+		/*
 			else if($('#profesion_representante').val()==""){
 				alert("¡Debe ingresar la profesión del representante!");
 				send = false;
@@ -374,7 +374,7 @@ function init(){
 			else if($('#grado_instruccion_representante').val()==""){
 				alert("¡Debe ingresar el grado de instrucción del representante!");
 				send = false;
-			}
+			}*/
 
 			//Comprobamos si el elemento estatus existe para luego verificar su valor.
 			if(document.getElementById("estatus")){
