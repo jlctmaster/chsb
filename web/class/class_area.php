@@ -100,20 +100,20 @@ class area {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tarea WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tarea=$this->pgsql->Respuesta($query);
-			$this->codigo_area($tarea['codigo_area']);
-			$this->descripcion($tarea['descripcion']);
-			$this->codigo_departamento($tarea['codigo_departamento']);
-			$this->estatus($tarea['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.tarea WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tarea=$this->pgsql->Respuesta($query);
+				$this->estatus($tarea['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $departamento=new departamento();
 if($lOpt=='Registrar'){
   $departamento->codigo_departamento($codigo_departamento);
   $departamento->descripcion($descripcion);
-  if(!$departamento->Comprobar()){
+  if(!$departamento->Comprobar($comprobar)){
     if($departamento->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $departamento->codigo_departamento($codigo_departamento);
   $departamento->descripcion($descripcion);
-  if(!$departamento->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$departamento->Comprobar($comprobar)){
     if($departamento->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

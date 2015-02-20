@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldmateria']))
+  $oldmateria=trim($_POST['oldmateria']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -23,7 +32,7 @@ if($lOpt=='Registrar'){
   $materia->nombre_materia($nombre_materia);
   $materia->unidad_credito($unidad_credito);
   $materia->tipo_materia($tipo_materia);
-  if(!$materia->Comprobar()){
+  if(!$materia->Comprobar($comprobar)){
     if($materia->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -50,8 +59,10 @@ if($lOpt=='Modificar'){
   $materia->nombre_materia($nombre_materia); 
   $materia->unidad_credito($unidad_credito);
   $materia->tipo_materia($tipo_materia);
-  if(!$materia->Comprobar()){
-    if($materia->Actualizar($_SESSION['user_name']))
+  if($oldmateria==$codigo_materia)
+    $comprobar=false;
+  if(!$materia->Comprobar($comprobar)){
+    if($materia->Actualizar($_SESSION['user_name'],$oldmateria))
       $confirmacion=1;
     else
       $confirmacion=-1;
@@ -62,7 +73,7 @@ if($lOpt=='Modificar'){
     header("Location: ../view/menu_principal.php?materia&Opt=3&codigo_materia=".$materia->codigo_materia());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Materia!";
-    header("Location: ../view/menu_principal.php?materia&Opt=3&codigo_materia=".$materia->codigo_materia());
+    header("Location: ../view/menu_principal.php?materia&Opt=3&codigo_materia=".$oldmateria);
   }
 }
 

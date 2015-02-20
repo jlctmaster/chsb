@@ -119,6 +119,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">País:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>"> 
 						<input class="input-xlarge" title="Ingrese el nombre del pais" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   

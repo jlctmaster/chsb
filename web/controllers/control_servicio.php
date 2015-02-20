@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldservicio']))
+  $oldservicio=trim($_POST['oldservicio']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -27,7 +36,7 @@ if($lOpt=='Registrar'){
   $servicio->url($url);
   $servicio->orden($orden);
   $servicio->codigo_modulo($codigo_modulo);
-  if(!$servicio->Comprobar()){
+  if(!$servicio->Comprobar($comprobar)){
     if($servicio->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -55,7 +64,9 @@ if($lOpt=='Modificar'){
   $servicio->url($url);
   $servicio->orden($orden);
   $servicio->codigo_modulo($codigo_modulo);
-  if(!$servicio->Comprobar()){
+  if($oldservicio==$nombre_servicio)
+    $comprobar=false;
+  if(!$servicio->Comprobar($comprobar)){
     if($servicio->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

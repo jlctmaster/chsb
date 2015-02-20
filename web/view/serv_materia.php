@@ -133,12 +133,13 @@ else if($_GET['Opt']=="3"){
 					<label class="control-label" for="codigo_materia">Codigo Materia:</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar"> 
+						<input type="hidden" id="oldmateria" name="oldmateria" value="<?=$row['codigo_materia']?>">
 						<input class="input-xlarge" title="Ingrese el Código de la materia" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 name="codigo_materia" id="codigo_materia" type="text" value="<?=$row['codigo_materia']?>" required /> 
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="nombre_materia">Materia:</label>  
-					<div class="controls">  
+					<div class="controls">   
 						<input class="input-xlarge" title="Ingrese el nombre de la materia del materia" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_materia" id="nombre_materia" type="text" value="<?=$row['nombre_materia']?>" required />
 					</div>  
 				</div>   

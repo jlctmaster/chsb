@@ -1,6 +1,18 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldlapso']))
+  $oldlapso=trim($_POST['oldlapso']);
+
+if(isset($_POST['oldcaa']))
+  $oldcaa=trim($_POST['oldcaa']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -19,7 +31,7 @@ if($lOpt=='Registrar'){
   $lapso->codigo_lapso($codigo_lapso);
   $lapso->lapso($nombre_lapso);
   $lapso->codigo_ano_academico($codigo_ano_academico);
-  if(!$lapso->Comprobar()){
+  if(!$lapso->Comprobar($comprobar)){
     if($lapso->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -45,7 +57,7 @@ if($lOpt=='Modificar'){
   $lapso->codigo_lapso($codigo_lapso);
   $lapso->lapso($nombre_lapso);
   $lapso->codigo_ano_academico($codigo_ano_academico);
-  if(!$lapso->Comprobar()){
+  if(!$lapso->Comprobar($comprobar)){
     if($lapso->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

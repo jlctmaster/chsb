@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldopcion']))
+  $oldopcion=trim($_POST['oldopcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -27,7 +36,7 @@ if($lOpt=='Registrar'){
   $opcion->accion($accion);
   $opcion->orden($orden);
   $opcion->icono($icono);
-  if(!$opcion->Comprobar()){
+  if(!$opcion->Comprobar($comprobar)){
     if($opcion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -55,7 +64,9 @@ if($lOpt=='Modificar'){
   $opcion->accion($accion);
   $opcion->orden($orden);
   $opcion->icono($icono);
-  if(!$opcion->Comprobar()){
+  if($oldopcion==$nombre_opcion)
+    $comprobar=false;
+  if(!$opcion->Comprobar($comprobar)){
     if($opcion->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

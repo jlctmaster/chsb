@@ -1,5 +1,6 @@
 <script type="text/javascript" src="js/chsb_lapso.js"></script>
 <?php
+require_once('../class/class_bd.php'); 
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
@@ -8,7 +9,9 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT l.codigo_lapso,l.lapso, a.ano FROM educacion.tlapso l
+	$sql = "SELECT l.codigo_lapso,l.lapso, a.ano,
+	CASE a.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado 
+	FROM educacion.tlapso l
 	INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
@@ -20,9 +23,10 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 					<thead>
 						<tr>
-							<th>Código:</th>
-							<th>Lapso:</th>
-							<th>Año Académico:</th>
+							<th>Código</th>
+							<th>Lapso</th>
+							<th>Año Académico</th>
+							<th>¿Cerrado?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -39,6 +43,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['codigo_lapso'].'</td>';
 							echo '<td>'.$filas['lapso'].'</td>';
 							echo '<td>'.$filas['ano'].'</td>';
+							echo '<td>'.$filas['cerrado'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?lapso&Opt=3&codigo_lapso='.$filas['codigo_lapso'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -102,7 +107,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
 							<option value=0>Seleccione un Año</option>
 							<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N' ORDER BY ano ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -126,9 +130,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	<?php
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT codigo_lapso,trim(lapso) as lapso,codigo_ano_academico,estatus FROM educacion.tlapso WHERE codigo_lapso =".$pgsql->comillas_inteligentes($_GET['codigo_lapso']);
+	$sql = "SELECT codigo_lapso,trim(lapso) as lapso,codigo_ano_academico,estatus 
+	FROM educacion.tlapso WHERE codigo_lapso =".$pgsql->comillas_inteligentes($_GET['codigo_lapso']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -146,6 +150,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="lapso">Lapso:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldlapso" name="oldlapso" value="<?=$row['lapso']?>"> 
 						<select class="selectpicker" data-live-search="true" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
 							<option value=0>Seleccione un Lapso </option>
 							<option value="1er" <?php if($row['lapso']=="1er") {echo "selected";} ?> >I Lapso</option>
@@ -157,12 +162,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ano_academico">Año Académico:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldcaa" name="oldcaa" value="<?=$row['codigo_ano_academico']?>"> 
 						<select class="selectpicker" data-live-search="true" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
 							<option value=0>Seleccione un Año</option>
 							<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM educacion.tano_academico WHERE estatus='1' AND cerrado = 'N' ORDER BY ano ASC";
+							$sql = "SELECT codigo_ano_academico,ano FROM educacion.tano_academico 
+							WHERE estatus='1' AND cerrado = 'N'
+							UNION ALL 
+							SELECT a.codigo_ano_academico,a.ano FROM educacion.tano_academico a 
+							INNER JOIN educacion.tlapso l ON a.codigo_ano_academico=l.codigo_ano_academico 
+							WHERE l.codigo_lapso = ".$pgsql->comillas_inteligentes($_GET['codigo_lapso']);
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_ano_academico']==$row['codigo_ano_academico'])
@@ -205,9 +215,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT l.codigo_lapso,l.lapso, a.ano FROM educacion.tlapso l
+	$sql = "SELECT l.codigo_lapso,l.lapso, a.ano,
+	CASE a.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado
+	FROM educacion.tlapso l
 	INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
 	WHERE l.codigo_lapso =".$pgsql->comillas_inteligentes($_GET['codigo_lapso']);
 	$query = $pgsql->Ejecutar($sql);
@@ -241,6 +252,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row['ano']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Cerrado:</label>
+						</td>
+						<td>
+							<label><?=$row['cerrado']?></label>
 						</td>
 					</tr>
 				</table>

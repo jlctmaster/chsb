@@ -1,6 +1,18 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldbien']))
+  $oldbien=trim($_POST['oldbien']);
+
+if(isset($_POST['oldserial']))
+  $oldserial=trim($_POST['oldserial']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -37,7 +49,7 @@ if($lOpt=='Registrar'){
   $bien->esconfigurable(comprobarCheckBox($esconfigurable));
   $confirmacion=false;
   $bien->Transaccion('iniciando');
-  if(!$bien->Comprobar()){
+  if(!$bien->Comprobar($comprobar)){
     if($bien->Registrar($_SESSION['user_name'])){
       if($bien->EliminarBienes()){
         if(isset($_POST['items']) && isset($_POST['cantidades'])){
@@ -94,9 +106,11 @@ if($lOpt=='Modificar'){
   $bien->nro_serial($nro_serial);
   $bien->codigo_tipo_bien($codigo_tipo_bien);
   $bien->esconfigurable(comprobarCheckBox($esconfigurable));
+  if($oldbien==$nombre && $oldserial==$nro_serial)
+    $comprobar=false;
   $confirmacion=false;
   $bien->Transaccion('iniciando');
-  if(!$bien->Comprobar()){
+  if(!$bien->Comprobar($comprobar)){
     if($bien->Actualizar($_SESSION['user_name'])){
       if($bien->EliminarBienes()){
         if(isset($_POST['items']) && isset($_POST['cantidades'])){

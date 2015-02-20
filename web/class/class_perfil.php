@@ -276,22 +276,21 @@
      }
      return $x;   
    }
-   
-   
-   public function Comprobar(){
-    $sql="SELECT * FROM seguridad.tperfil WHERE nombre_perfil='$this->nombre_perfil'";
-	$query=$this->pgsql->Ejecutar($sql);
-    if($this->pgsql->Total_Filas($query)!=0){
-	$tperfil=$this->pgsql->Respuesta($query);
-	$this->codigo_perfil($tperfil['codigo_perfil']);
-  $this->codigo_configuracion($tperfil['codigo_configuracion']);
-	$this->nombre_perfil($tperfil['nombre_perfil']);
-	$this->estatus($tperfil['estatus']);
-	return true;
-	}
-	else{
-	return false;
-	}
-   }
+
+  public function Comprobar($comprobar){
+    if($comprobar==true){
+      $sql="SELECT * FROM seguridad.tperfil WHERE nombre_perfil='$this->nombre_perfil'";
+      $query=$this->pgsql->Ejecutar($sql);
+      if($this->pgsql->Total_Filas($query)!=0){
+        $tperfil=$this->pgsql->Respuesta($query);
+        $this->estatus($tperfil['estatus']);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }else
+      return false;
+  }
 }
 ?>

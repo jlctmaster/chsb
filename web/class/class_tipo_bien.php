@@ -89,19 +89,20 @@ class tipobien {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM bienes_nacionales.ttipo_bien WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$ttipo_bien=$this->pgsql->Respuesta($query);
-			$this->codigo_tipo_bien($ttipo_bien['codigo_tipo_bien']);
-			$this->descripcion($ttipo_bien['descripcion']);
-			$this->estatus($ttipo_bien['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM bienes_nacionales.ttipo_bien WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$ttipo_bien=$this->pgsql->Respuesta($query);
+				$this->estatus($ttipo_bien['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

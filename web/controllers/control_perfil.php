@@ -1,5 +1,15 @@
 <?php
 session_start();
+
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldperfil']))
+  $oldperfil=trim($_POST['oldperfil']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -18,7 +28,7 @@ if($lOpt=='Registrar'){
   $perfil->codigo_perfil($codigo_perfil);
   $perfil->codigo_configuracion($codigo_configuracion);
   $perfil->nombre_perfil($nombre_perfil);
-  if(!$perfil->Comprobar()){
+  if(!$perfil->Comprobar($comprobar)){
     if($perfil->Registrar($_SESSION['user_name'])){
       $confirmacion=1;
       if(isset($_POST['modulos']) && isset($_POST['servicios']) && isset($_POST['opciones'])){
@@ -48,7 +58,9 @@ if($lOpt=='Modificar'){
   $perfil->codigo_perfil($codigo_perfil);
   $perfil->codigo_configuracion($codigo_configuracion);
   $perfil->nombre_perfil($nombre_perfil);
-  if(!$perfil->Comprobar()){
+  if($oldperfil==$nombre_perfil)
+    $comprobar=false;
+  if(!$perfil->Comprobar($comprobar)){
     if($perfil->Actualizar($_SESSION['user_name'])){
       $confirmacion=1;
       if(isset($_POST['modulos']) && isset($_POST['servicios']) && isset($_POST['opciones'])){

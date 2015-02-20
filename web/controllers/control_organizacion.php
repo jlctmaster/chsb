@@ -1,11 +1,17 @@
 <?php
 session_start();
 
-if(isset($_POST['lOpt']))
-  $lOpt=trim($_POST['lOpt']);
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
 
 if(isset($_POST['oldrif']))
   $oldrif=trim($_POST['oldrif']);
+
+//  Fin
+
+if(isset($_POST['lOpt']))
+  $lOpt=trim($_POST['lOpt']);
 
 if(isset($_POST['rif_organizacion']))
   $rif_organizacion=trim($_POST['rif_organizacion']);
@@ -34,7 +40,7 @@ if($lOpt=='Registrar'){
   $organizacion->telefono($telefono);
   $organizacion->tipo_organizacion($tipo_organizacion);
   $organizacion->codigo_parroquia($codigo_parroquia);
-  if(!$organizacion->Comprobar()){
+  if(!$organizacion->Comprobar($comprobar)){
     if($organizacion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -63,7 +69,9 @@ if($lOpt=='Modificar'){
   $organizacion->telefono($telefono);
   $organizacion->tipo_organizacion($tipo_organizacion);
   $organizacion->codigo_parroquia($codigo_parroquia);
-  if(!$organizacion->Comprobar()){
+  if($oldrif==$rif_organizacion)
+    $comprobar=false;
+  if(!$organizacion->Comprobar($comprobar)){
     if($organizacion->Actualizar($_SESSION['user_name'],$oldrif))
       $confirmacion=1;
     else
@@ -75,7 +83,7 @@ if($lOpt=='Modificar'){
     header("Location: ../view/menu_principal.php?organizacion&Opt=3&rif_organizacion=".$organizacion->rif_organizacion());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Organización!";
-    header("Location: ../view/menu_principal.php?organizacion&Opt=3&rif_organizacion=".$organizacion->rif_organizacion());
+    header("Location: ../view/menu_principal.php?organizacion&Opt=3&rif_organizacion=".$oldrif);
   }
 }
 

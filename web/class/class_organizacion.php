@@ -123,10 +123,11 @@ class organizacion {
    	}
 
    
-    public function Actualizar($user){
+    public function Actualizar($user,$oldrif){
 	    $sql="UPDATE general.torganizacion SET rif_organizacion='$this->rif_organizacion',nombre='$this->nombre',
 	    direccion='$this->direccion',telefono='$this->telefono',tipo_organizacion='$this->tipo_organizacion',
-	    codigo_parroquia='$this->codigo_parroquia',modificado_por='$user', fecha_modificacion=NOW()  WHERE rif_organizacion='$this->rif_organizacion'";
+	    codigo_parroquia='$this->codigo_parroquia',modificado_por='$user', fecha_modificacion=NOW() 
+	    WHERE rif_organizacion='$oldrif'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 
 			return true;
@@ -134,23 +135,20 @@ class organizacion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.torganizacion WHERE nombre='$this->nombre'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$organizacion=$this->pgsql->Respuesta($query);
-			$this->rif_organizacion($organizacion['rif_organizacion']);
-			$this->nombre($organizacion['nombre']);
-			$this->direccion($organizacion['direccion']);
-			$this->telefono($organizacion['telefono']);
-			$this->tipo_organizacion($organizacion['tipo_organizacion']);
-			$this->codigo_parroquia($organizacion['codigo_parroquia']);
-			$this->estatus($organizacion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM general.torganizacion WHERE rif_organizacion='$this->rif_organizacion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$organizacion=$this->pgsql->Respuesta($query);
+				$this->estatus($organizacion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

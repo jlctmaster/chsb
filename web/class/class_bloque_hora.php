@@ -111,22 +111,21 @@ class bloque_hora {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tbloque_hora WHERE (hora_inicio='$this->hora_inicio' AND turno ='$this->turno')
-	    OR (hora_fin='$this->hora_fin' AND turno ='$this->turno')";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tbloque_hora=$this->pgsql->Respuesta($query);
-			$this->codigo_bloque_hora($tbloque_hora['codigo_bloque_hora']);
-			$this->hora_inicio($tbloque_hora['hora_inicio']);
-			$this->hora_fin($tbloque_hora['hora_fin']);
-			$this->turno($tbloque_hora['turno']);
-			$this->estatus($tbloque_hora['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tbloque_hora WHERE (hora_inicio='$this->hora_inicio' AND turno ='$this->turno')
+		    OR (hora_fin='$this->hora_fin' AND turno ='$this->turno')";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tbloque_hora=$this->pgsql->Respuesta($query);
+				$this->estatus($tbloque_hora['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

@@ -99,20 +99,20 @@ class tipopersona {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.ttipo_persona WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$ttipo_persona=$this->pgsql->Respuesta($query);
-			$this->codigo_tipopersona($ttipo_persona['codigo_tipopersona']);
-			$this->descripcion($ttipo_persona['descripcion']);
-			$this->es_usuariosistema($ttipo_persona['es_usuariosistema']);
-			$this->estatus($ttipo_persona['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.ttipo_persona WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$ttipo_persona=$this->pgsql->Respuesta($query);
+				$this->estatus($ttipo_persona['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 
    	public function BuscarCodigo($value){

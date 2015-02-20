@@ -1,6 +1,24 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+if(isset($_POST['oldfi']))
+  $oldfi=trim($_POST['oldfi']);
+
+if(isset($_POST['oldff']))
+  $oldff=trim($_POST['oldff']);
+
+if(isset($_POST['oldfc']))
+  $oldfc=trim($_POST['oldfc']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -41,7 +59,7 @@ if($lOpt=='Registrar'){
   $inscripcion->fecha_inicio($fecha_inicio);
   $inscripcion->fecha_fin($fecha_fin);
   $inscripcion->fecha_cierre($fecha_cierre);
-  if(!$inscripcion->Comprobar()){
+  if(!$inscripcion->Comprobar($comprobar)){
     $inscripcion->Cerrar($_SESSION['user_name']);
     if($inscripcion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -72,8 +90,10 @@ if($lOpt=='Modificar'){
   $inscripcion->fecha_fin($fecha_fin);
   $inscripcion->fecha_cierre($fecha_cierre);
   $inscripcion->cerrado(comprobarCheckBox($cerrado));
-  $inscripcion->Cerrar($_SESSION['user_name']);
-  if(!$inscripcion->Comprobar()){
+  if($olddescripcion==$descripcion && $oldfi==$fecha_inicio && $oldff==$fecha_fin && $oldfc==$fecha_cierre)
+    $comprobar=false;
+  if(!$inscripcion->Comprobar($comprobar)){
+    $inscripcion->Cerrar($_SESSION['user_name']);
     if($inscripcion->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

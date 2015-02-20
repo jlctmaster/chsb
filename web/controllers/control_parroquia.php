@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -19,7 +28,7 @@ if($lOpt=='Registrar'){
   $parroquia->codigo_parroquia($codigo_parroquia);
   $parroquia->descripcion($descripcion);
   $parroquia->codigo_municipio($codigo_municipio);
-  if(!$parroquia->Comprobar()){
+  if(!$parroquia->Comprobar($comprobar)){
     if($parroquia->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -45,7 +54,9 @@ if($lOpt=='Modificar'){
   $parroquia->codigo_parroquia($codigo_parroquia);
   $parroquia->descripcion($descripcion);
   $parroquia->codigo_municipio($codigo_municipio);
-  if(!$parroquia->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$parroquia->Comprobar($comprobar)){
     if($parroquia->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

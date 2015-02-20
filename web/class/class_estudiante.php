@@ -324,10 +324,12 @@ class estudiante {
 			return false;
 	    }
     	$sql="INSERT INTO educacion.tproceso_inscripcion (codigo_inscripcion,fecha_inscripcion,codigo_ano_academico,cedula_responsable,cedula_persona,
-    	anio_a_cursar,coordinacion_pedagogica,peso,talla,indice,cedula_representante,codigo_parentesco,procesado,creado_por,fecha_creacion) VALUES 
+    	anio_a_cursar,coordinacion_pedagogica,peso,talla,indice,cedula_representante,codigo_parentesco,seccion,observacion,procesado,creado_por,fecha_creacion) VALUES 
 		($this->codigo_inscripcion,'$this->fecha_inscripcion','$this->codigo_ano_academico','$this->cedula_responsable','$this->cedula_persona',
 		'$this->anio_a_cursar','$this->coordinacion_pedagogica','$this->peso','$this->talla','$this->indice','$this->cedula_representante',
-		'$this->codigo_parentesco','Y','$user',NOW())";
+		'$this->codigo_parentesco',(SELECT s.seccion FROM educacion.tseccion s LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion 
+		WHERE $this->indice BETWEEN s.indice_min AND s.indice_max GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),
+		'ASIGNADO POR $user SEGÚN TABULADOR','Y','$user',NOW())";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else{
@@ -353,11 +355,8 @@ class estudiante {
     	$sql="UPDATE educacion.tproceso_inscripcion SET codigo_inscripcion=$this->codigo_inscripcion,fecha_inscripcion='$this->fecha_inscripcion',
     	codigo_ano_academico=$this->codigo_ano_academico,cedula_responsable='$this->cedula_responsable',cedula_persona='$this->cedula_persona',
     	anio_a_cursar='$this->anio_a_cursar',coordinacion_pedagogica='$this->coordinacion_pedagogica',peso='$this->peso',talla='$this->talla',
-    	indice='$this->indice',cedula_representante='$this->cedula_representante',codigo_parentesco=$this->codigo_parentesco,seccion=(SELECT s.seccion 
-    	FROM educacion.tseccion s LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
-   		WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.cedula_persona='$this->cedula_persona') 
-   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),observacion='$this->observacion',
-   		modificado_por='$user',fecha_modificacion=NOW() 
+    	indice='$this->indice',cedula_representante='$this->cedula_representante',codigo_parentesco=$this->codigo_parentesco,seccion='$this->seccion',
+    	observacion='$this->observacion',modificado_por='$user',fecha_modificacion=NOW() 
 		WHERE codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
@@ -443,29 +442,21 @@ class estudiante {
 		}
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tpersona WHERE cedula_persona='$this->cedula_persona'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tpersona=$this->pgsql->Respuesta($query);
-			$this->cedula_persona($tpersona['cedula_persona']);
-			$this->primer_nombre($tpersona['primer_nombre']);
-			$this->segundo_nombre($tpersona['segundo_nombre']);
-			$this->primer_apellido($tpersona['primer_apellido']);
-			$this->segundo_apellido($tpersona['segundo_apellido']);
-			$this->sexo($tpersona['sexo']);
-			$this->fecha_nacimiento($tpersona['fecha_nacimiento']);
-			$this->lugar_nacimiento($tpersona['lugar_nacimiento']);
-			$this->direccion($tpersona['direccion']);
-			$this->telefono_local($tpersona['telefono_local']);
-			$this->telefono_movil($tpersona['telefono_movil']);
-			$this->estatus($tpersona['estatus']);
-			return true;
-		}
-		else{
-			$this->error(pg_last_error());
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.tpersona WHERE cedula_persona='$this->cedula_persona'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tpersona=$this->pgsql->Respuesta($query);
+				$this->estatus($tpersona['estatus']);
+				return true;
+			}
+			else{
+				$this->error(pg_last_error());
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

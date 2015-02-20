@@ -121,7 +121,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM general.tambiente WHERE codigo_ambiente =".$pgsql->comillas_inteligentes($_GET['codigo_ambiente']);
+	$sql = "SELECT * FROM general.tambiente 
+	WHERE codigo_ambiente =".$pgsql->comillas_inteligentes($_GET['codigo_ambiente']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -132,13 +133,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ambiente">Código:</label>  
 					<div class="controls">
-						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
+						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">
 						<input class="input-xlarge" title="el Código del Ambiente es generado por el sistema" name="codigo_ambiente" id="codigo_ambiente" type="text" value="<?=$row['codigo_ambiente']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Ambiente:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del ambiente" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   

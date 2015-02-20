@@ -183,24 +183,20 @@ class Seccion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tseccion WHERE nombre_seccion='$this->nombre_seccion'";
-		$query=$this->pgsql->Ejecutar($sql);
-		if($this->pgsql->Total_Filas($query)!=0){
-			$tseccion=$this->pgsql->Respuesta($query);
-			$this->seccion($tseccion['seccion']);
-			$this->nombre_seccion($tseccion['nombre_seccion']);
-			$this->turno($tseccion['turno']);
-			$this->capacidad_min($tseccion['capacidad_min']);
-			$this->capacidad_max($tseccion['capacidad_max']);
-			$this->indice_min($tseccion['indice_min']);
-			$this->indice_max($tseccion['indice_max']);
-			$this->estatus($tseccion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tseccion WHERE seccion='$this->seccion'";
+			$query=$this->pgsql->Ejecutar($sql);
+			if($this->pgsql->Total_Filas($query)!=0){
+				$tseccion=$this->pgsql->Respuesta($query);
+				$this->estatus($tseccion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    }
 }
 ?>

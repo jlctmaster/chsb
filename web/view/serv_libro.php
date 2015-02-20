@@ -1,14 +1,16 @@
 <script type="text/javascript" src="js/chsb_libro.js"></script>
 <?php
+require_once('../class/class_bd.php'); 
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('libro');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM biblioteca.tlibro";
+	$sql = "SELECT l.codigo_isbn_libro,l.titulo,l.numero_paginas,t.descripcion as tema  
+	FROM biblioteca.tlibro l 
+	INNER JOIN biblioteca.ttema t ON l.codigo_tema = t.codigo_tema";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>
 <fieldset>
@@ -18,9 +20,10 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 			<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 				<thead>
 					<tr>
-						<th>Código</th>
-						<th>Título</th>
-						<th>Número de Páginas</th>
+						<th>Código ISBN</th>
+						<th>Título del Libro</th>
+						<th>Nro Páginas</th>
+						<th>Tema del Libro</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -37,6 +40,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						echo '<td>'.$filas['codigo_isbn_libro'].'</td>';
 						echo '<td>'.$filas['titulo'].'</td>';
 						echo '<td>'.$filas['numero_paginas'].'</td>';
+						echo '<td>'.$filas['tema'].'</td>';
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 								echo '<td><a href="?libro&Opt=3&codigo_isbn_libro='.$filas['codigo_isbn_libro'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -93,7 +97,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' required >
 						<option value=0>Seleccione un Editorial</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.teditorial ORDER BY nombre ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -110,7 +113,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' required >
 						<option value=0>Seleccione un Autor</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tautor ORDER BY nombre ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -127,7 +129,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' required >
 						<option value=0>Seleccione un Tema</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.ttema ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -163,7 +164,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 <?php
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT * FROM biblioteca.tlibro 
 	WHERE codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);	
@@ -178,6 +178,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<label class="control-label" for="codigo_isbn_libro">ISBN DEL LIBRO</label> 
 				<div class="controls">
 					<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
+						<input type="hidden" id="oldcl" name="oldcl" value="<?=$row['codigo_isbn_libro']?>"> 
 					<input class="input-xlarge"  title="el Código del Libro es generado por el sistema" onKeyPress="return isNumberKey(event)"  maxlenght=13 name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" value="<?=$row['codigo_isbn_libro']?>" /> 
 				</div>  
 			</div>
@@ -193,7 +194,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' value="<?=$row['codigo_editorial']?>" required >
 						<option value=0>Seleccione un Editorial</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 									$sql = "SELECT * FROM biblioteca.teditorial ORDER BY nombre ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -213,7 +213,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' value="<?=$row['codigo_autor']?>" required >
 						<option value=0>Seleccione un Autor</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tautor ORDER BY nombre ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -233,7 +232,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' value="<?=$row['codigo_tema']?>" required >
 						<option value=0>Seleccione un Tema</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.ttema ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -290,7 +288,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 <?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT l.codigo_isbn_libro, l.titulo, l.codigo_autor, a.nombre AS autor, l.codigo_editorial, e.nombre, l.codigo_tema, t.descripcion, l.numero_paginas, 
 			TO_CHAR (l.fecha_edicion, 'DD/MM/YYYY') AS fecha

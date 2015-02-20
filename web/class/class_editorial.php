@@ -86,19 +86,20 @@ require_once("class_bd.php");
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.teditorial WHERE nombre='$this->nombre'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$editorial=$this->pgsql->Respuesta($query);
-			$this->codigo_editorial($editorial['codigo_editorial']);
-			$this->nombre($editorial['nombre']);
-			$this->estatus($editorial['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM biblioteca.teditorial WHERE nombre='$this->nombre'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$editorial=$this->pgsql->Respuesta($query);
+				$this->estatus($editorial['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

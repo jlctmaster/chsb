@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $tipo_bien=new tipobien();
 if($lOpt=='Registrar'){
   $tipo_bien->codigo_tipo_bien($codigo_tipo_bien);
   $tipo_bien->descripcion($descripcion);
-  if(!$tipo_bien->Comprobar()){
+  if(!$tipo_bien->Comprobar($comprobar)){
     if($tipo_bien->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $tipo_bien->codigo_tipo_bien($codigo_tipo_bien);
   $tipo_bien->descripcion($descripcion);
-  if(!$tipo_bien->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$tipo_bien->Comprobar($comprobar)){
     if($tipo_bien->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

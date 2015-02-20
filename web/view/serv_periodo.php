@@ -8,9 +8,11 @@ $perfil->url('periodo');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
-	$sql = "SELECT *, TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin 
+	$sql = "SELECT *, TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,
+	CASE a.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado 
 	FROM educacion.tperiodo p 
-	INNER JOIN educacion.tlapso l ON p.codigo_lapso = l.codigo_lapso
+	INNER JOIN educacion.tlapso l ON p.codigo_lapso = l.codigo_lapso 
+	INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
 	WHERE esinscripcion='N'";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
@@ -21,9 +23,10 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 					<thead>
 						<tr>
-							<th>Código:</th>
-							<th>Trayecto:</th>
-							<th>Lapso:</th>
+							<th>Código</th>
+							<th>Período</th>
+							<th>Lapso</th>
+							<th>¿Cerrado?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -40,6 +43,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['codigo_periodo'].'</td>';
 							echo '<td>'.$filas['descripcion'].'</td>';
 							echo '<td>'.$filas['lapso'].'</td>';
+							echo '<td>'.$filas['cerrado'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?periodo&Opt=3&codigo_periodo='.$filas['codigo_periodo'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -82,25 +86,25 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="codigo_periodo">Código:</label>  
 					<div class="controls">  
 						<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-						<input class="input-xlarge" title="el Código del trayecto es generado por el sistema" name="codigo_periodo" id="codigo_periodo" type="text" readonly /> 
+						<input class="input-xlarge" title="el Código del período es generado por el sistema" name="codigo_periodo" id="codigo_periodo" type="text" readonly /> 
 					</div>  
 				</div>   
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">Trayecto:</label>  
+					<label class="control-label" for="descripcion">Período:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el nombre del trayecto" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
+						<input class="input-xlarge" title="Ingrese el nombre del período" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inicio">Fecha de Inicio:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha inicial del trayecto"  name="fecha_inicio" id="fecha_inicio" type="text" size="50" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha inicial del período"  name="fecha_inicio" id="fecha_inicio" type="text" size="50" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha de Culminación:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha final nombre del trayecto" name="fecha_fin" id="fecha_fin" type="text" size="50" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha final nombre del período" name="fecha_fin" id="fecha_fin" type="text" size="50" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -154,25 +158,26 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_periodo">Código</label>  
 					<div class="controls">
 						<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
-						<input class="input-xlarge" title="el Código del trayecto es generado por el sistema" name="codigo_periodo" id="codigo_periodo" type="text" value="<?=$row['codigo_periodo']?>" readonly /> 
+						<input class="input-xlarge" title="el Código del período es generado por el sistema" name="codigo_periodo" id="codigo_periodo" type="text" value="<?=$row['codigo_periodo']?>" readonly /> 
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="descripcion">Trayecto:</label>  
+					<label class="control-label" for="descripcion">Período:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese el nombre del trayecto" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
+						<input class="input-xlarge" title="Ingrese el nombre del período" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inicio">Fecha de Inicio:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha inicial del trayecto" name="fecha_inicio" id="fecha_inicio" type="text" size="50" value="<?=$row['fecha_inicio']?>" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha inicial del período" name="fecha_inicio" id="fecha_inicio" type="text" size="50" value="<?=$row['fecha_inicio']?>" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha de Culminación:</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha de culminación del trayecto" name="fecha_fin" id="fecha_fin" type="text" size="50" value="<?=$row['fecha_fin']?>" readonly required />
+						<input class="input-xlarge" title="Ingrese la fecha de culminación del período" name="fecha_fin" id="fecha_fin" type="text" size="50" value="<?=$row['fecha_fin']?>" readonly required />
 					</div>  
 				</div>   
 				<div class="control-group">  
@@ -186,7 +191,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							$sql = "SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
 							FROM educacion.tlapso l 
 							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
-							ORDER BY l.lapso ASC";
+							WHERE a.cerrado='N' 
+							UNION ALL 
+							SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
+							FROM educacion.tperiodo p 
+							INNER JOIN educacion.tlapso l ON l.codigo_lapso = p.codigo_lapso 
+							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
+							WHERE p.codigo_periodo = ".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." AND p.esinscripcion = 'N'";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_lapso']==$row['codigo_lapso'])
@@ -231,9 +242,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT *, TO_CHAR(fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(fecha_fin,'DD/MM/YYYY') as fecha_fin
+	$sql = "SELECT *, TO_CHAR(fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(fecha_fin,'DD/MM/YYYY') as fecha_fin,
+	CASE a.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado 
 	FROM educacion.tperiodo p 
 	INNER JOIN educacion.tlapso l ON p.codigo_lapso = l.codigo_lapso 
+	INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
 	WHERE p.codigo_periodo =".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." AND esinscripcion='N'";
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
@@ -254,7 +267,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					</tr>
 					<tr>
 						<td>
-							<label>Trayecto:</label>
+							<label>Período:</label>
 						</td>
 						<td>
 							<label><?=$row['descripcion']?></label>
@@ -282,6 +295,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row['lapso']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Cerrado:</label>
+						</td>
+						<td>
+							<label><?=$row['cerrado']?></label>
 						</td>
 					</tr>
 				</table>

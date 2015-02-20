@@ -21,7 +21,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>RIf organización</th>
-							<th>Organización</th>
+							<th>Razón Social de la Organización</th>
 							<th>Parroquia</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -76,75 +76,77 @@ else if($_GET['Opt']=="2"){
 // Ventana de Registro
 	?>
 	<form class="form-horizontal" action="../controllers/control_organizacion.php" method="post" id="form1">  
-		<fieldset>  
-			<H3 align="center">ORGANIZACIÓN</H3> 
-			<div class="control-group">  
-				<label class="control-label" for="rif_organizacion">RIF Organización</label>  
-				<div class="controls">
-					<input type="hidden" id="lOpt" name="lOpt" value="Registrar"> 
-					<input class="input-xlarge" title="Ingrese el RIF de la organización" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength="10" name="rif_organizacion" id="rif_organizacion" type="text" required /> 
+		<fieldset>
+			<legend><center>Vista: ORGANIZACIÓN</center></legend>		
+			<div id="paginador" class="enjoy-css">
+				<div class="control-group">  
+					<label class="control-label" for="rif_organizacion">RIF Organización</label>  
+					<div class="controls">
+						<input type="hidden" id="lOpt" name="lOpt" value="Registrar"> 
+						<input class="input-xlarge" title="Ingrese el RIF de la organización" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength="10" name="rif_organizacion" id="rif_organizacion" type="text" required /> 
+					</div>  
+				</div>
+				<div class="control-group">  
+					<label class="control-label" for="nombre">Organización</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el nombre del organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" required />
+					</div>  
 				</div>  
+				<div class="control-group">  
+					<label class="control-label" for="telefono">Teléfono</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" required />
+					</div>  
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="direccion">Dirección</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" required /></textarea>
+					</div>  
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required /> 
+							<option value=0>Seleccione un Tipo de Organización</option>
+							<option value="1" >PÚBLICA</option>
+							<option value="2" >PRIVADA</option>
+							<option value="3" >GUBERNAMENTAL</option>		
+						</select>
+					</div>
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
+							<option value=0>Seleccione una Parroquia</option>
+							<?php
+							require_once('../class/class_bd.php');
+							$pgsql = new Conexion();
+							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+							FROM general.tparroquia p 
+							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+							ORDER BY p.descripcion ASC";
+							$query = $pgsql->Ejecutar($sql);
+							while($rows=$pgsql->Respuesta($query)){
+								echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+							}
+							?>
+						</select>
+					</div>  
+				</div> 
+				<center>
+					<div class="control-group">  
+						<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+					</div>  
+					<div class="form-actions">
+						<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+						<a href="?organizacion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+					</div>  
+				</center>
 			</div>
-			<div class="control-group">  
-				<label class="control-label" for="nombre">Organización</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el nombre del organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" required />
-				</div>  
-			</div>  
-
-			<div class="control-group">  
-				<label class="control-label" for="telefono">Teléfono</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" required />
-				</div>  
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="direccion">Dirección</label>  
-				<div class="controls">  
-					<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" required /></textarea>
-				</div>  
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required /> 
-					<option value=0>Seleccione un Tipo de Organización</option>
-					<option value="1" >PÚBLICA</option>
-					<option value="2" >PRIVADA</option>
-					<option value="3" >GUBERNAMENTAL</option>		
-				</select>
-			</div>
-		</div>   
-		<div class="control-group">  
-			<label class="control-label" for="codigo_parroquia">Parroquia</label>  
-			<div class="controls">  
-				<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-					<option value=0>Seleccione una Parroquia</option>
-					<?php
-					require_once('../class/class_bd.php');
-					$pgsql = new Conexion();
-					$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-					$query = $pgsql->Ejecutar($sql);
-					while($rows=$pgsql->Respuesta($query)){
-						echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-					}
-					?>
-				</select>
-			</div>  
-		</div> 
-		<center>
-			<div class="control-group">  
-				<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-			</div>  
-			<div class="form-actions">
-			
-				<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-				<a href="?organizacion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
-			
-			</div>  
-		</center>
-	</fieldset>  
-</form>
+		</fieldset>  
+	</form>
 <?php
 }// Ventana de Registro
 else if($_GET['Opt']=="3"){ 
@@ -157,95 +159,101 @@ else if($_GET['Opt']=="3"){
 	?>
 	<form class="form-horizontal" action="../controllers/control_organizacion.php" method="post" id="form1">  
 		<fieldset>  
-			<H3 align="center">ORGANIZACIÓN</H3> 
-			<div class="control-group">  
-				<label class="control-label" for="rif_organizacion">RIF Organización</label>  
-				<div class="controls">
-					<input type="hidden" id="lOpt" name="lOpt" value="Modificar"> 
-					<input class="input-xlarge" title="Ingrese el RIF de la organización" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 name="rif_organizacion" id="rif_organizacion" type="text" value="<?=$row['rif_organizacion']?>" required /> 
-				</div>  
-			</div>
-			<div class="control-group">  
-				<label class="control-label" for="nombre">Organización</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el nombre de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" required />
-				</div>  
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="telefono">Teléfono</label>  
-				<div class="controls">  
-					<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" value="<?=$row['telefono']?>" required />
-				</div>  
-			</div>   
-			<div class="control-group">  
-				<label class="control-label" for="direccion">Dirección</label>  
-				<div class="controls">  
-					<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" value required /><?php echo $row['direccion']; ?></textarea>
-				</div>  
-			</div>  
-			<div class="control-group">  
-				<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required/> 
-						<option value=0>Seleccione un Tipo de Organización </option>
-						<option value="1" <?php if($row['tipo_organizacion']=="1") {echo "selected";} ?> >PÚBLICA</option>
-						<option value="2" <?php if($row['tipo_organizacion']=="2") {echo "selected";} ?> >PRIVADA</option>
-						<option value="3" <?php if($row['tipo_organizacion']=="3") {echo "selected";} ?> >GUBERNAMENTAL</option>		
-					</select>
+			<legend><center>Vista: ORGANIZACIÓN</center></legend>		
+			<div id="paginador" class="enjoy-css">
+				<div class="control-group">  
+					<label class="control-label" for="rif_organizacion">RIF Organización</label>  
+					<div class="controls">
+						<input type="hidden" id="lOpt" name="lOpt" value="Modificar"> 
+						<input type="hidden" id="oldrif" name="oldrif" value="<?=$row['rif_organizacion']?>"> 
+						<input class="input-xlarge" title="Ingrese el RIF de la organización" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 name="rif_organizacion" id="rif_organizacion" type="text" value="<?=$row['rif_organizacion']?>" required /> 
+					</div>  
 				</div>
-			</div>   
-			<div class="control-group">  
-			<label class="control-label" for="codigo_parroquia">Parroquia</label>  
-			<div class="controls">  
-				<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
-					<option value=0>Seleccione una Parroquia</option>
-					<?php
-					require_once('../class/class_bd.php');
-					$pgsql = new Conexion();
-					$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-					$query = $pgsql->Ejecutar($sql);
-					while($rows=$pgsql->Respuesta($query)){
-						if($rows['codigo_parroquia']==$row['codigo_parroquia'])
-							echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-						else
-							echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-					}
-					?>
-					</select>
-				</div>
-			</div>
-		<center>
-		<div class="control-group">  
-			<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{
-
-				echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
-			</div>  
-			<div class="control-group">  
-				<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
-			</div>  
-			<div class="form-actions">
-				<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
-				<?php
-				for($x=0;$x<count($a);$x++)
-					if($a[$x]['orden']=='3'){
-						if($row['estatus']=='1')
-							echo '<button type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
-						else
-							echo '<button disabled type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
-
-					}else if($a[$x]['orden']=='4'){
-						if($row['estatus']=='1')
-							echo '<button disabled type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
-						else
-							echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
-					}
-					?>
-					<a href="?organizacion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+				<div class="control-group">  
+					<label class="control-label" for="nombre">Organización</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el nombre de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" required />
+					</div>  
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="telefono">Teléfono</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el número de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="telefono" id="telefono" type="text" value="<?=$row['telefono']?>" required />
+					</div>  
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="direccion">Dirección</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese la direccion de la organización" onKeyUp="this.value=this.value.toUpperCase()" name="direccion" id="direccion" type="text" value required /><?php echo $row['direccion']; ?></textarea>
+					</div>  
 				</div>  
-		</center>
-			</fieldset>  
-		</form>
-		<?php
+				<div class="control-group">  
+					<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required/> 
+							<option value=0>Seleccione un Tipo de Organización </option>
+							<option value="1" <?php if($row['tipo_organizacion']=="1") {echo "selected";} ?> >PÚBLICA</option>
+							<option value="2" <?php if($row['tipo_organizacion']=="2") {echo "selected";} ?> >PRIVADA</option>
+							<option value="3" <?php if($row['tipo_organizacion']=="3") {echo "selected";} ?> >GUBERNAMENTAL</option>		
+						</select>
+					</div>
+				</div>   
+				<div class="control-group">  
+					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
+					<div class="controls">  
+						<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
+							<option value=0>Seleccione una Parroquia</option>
+							<?php
+							require_once('../class/class_bd.php');
+							$pgsql = new Conexion();
+							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+							FROM general.tparroquia p 
+							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+							ORDER BY p.descripcion ASC";
+							$query = $pgsql->Ejecutar($sql);
+							while($rows=$pgsql->Respuesta($query)){
+								if($rows['codigo_parroquia']==$row['codigo_parroquia'])
+									echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
+								else
+									echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
+							}
+							?>
+						</select>
+					</div>
+				</div>
+				<center>
+					<div class="control-group">  
+					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{
+
+						echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
+					</div>  
+					<div class="control-group">  
+						<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+					</div>  
+					<div class="form-actions">
+						<button type="button" id="btnGuardar" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+						<?php
+						for($x=0;$x<count($a);$x++)
+							if($a[$x]['orden']=='3'){
+								if($row['estatus']=='1')
+									echo '<button type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
+								else
+									echo '<button disabled type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
+
+							}else if($a[$x]['orden']=='4'){
+								if($row['estatus']=='1')
+									echo '<button disabled type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
+								else
+									echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
+							}
+							?>
+						<a href="?organizacion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+					</div>  
+				</center>
+			</div>
+		</fieldset>  
+	</form>
+	<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	require_once('../class/class_bd.php'); 

@@ -8,7 +8,8 @@ $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del men�
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT codigo_tipopersona, descripcion, CASE es_usuariosistema WHEN 'Y' THEN 'SÍ' ELSE 'NO' END es_usuariosistema FROM general.ttipo_persona";
+	$sql = "SELECT codigo_tipopersona, descripcion, CASE es_usuariosistema WHEN 'Y' THEN 'SÍ' ELSE 'NO' END es_usuariosistema 
+	FROM general.ttipo_persona";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>
@@ -131,6 +132,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Tipo Persona:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del tipo persona" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   

@@ -198,7 +198,7 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE TABLE general.torganizacion
 (
 	rif_organizacion char(10) not null,
-	nombre varchar(50) not null,
+	nombre varchar(120) not null,
 	direccion varchar(255) not null,
 	telefono varchar(15) not null,
 	tipo_organizacion char(1) not null default '0',

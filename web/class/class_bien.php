@@ -211,22 +211,20 @@ class bien {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM bienes_nacionales.tbien WHERE nombre='$this->nombre' AND nro_serial='$this->nro_serial'";
-	   		$query=$this->pgsql->Ejecutar($sql);
-	    	if($this->pgsql->Total_Filas($query)!=0){
-			$tbien=$this->pgsql->Respuesta($query);
-			$this->codigo_bien($tbien['codigo_bien']);
-			$this->nombre($tbien['nombre']);
-			$this->nro_serial($tbien['nro_serial']);
-			$this->codigo_tipo_bien($tbien['codigo_tipo_bien']);
-			$this->esconfigurable($tbien['esconfigurable']);
-			$this->estatus($tbien['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM bienes_nacionales.tbien WHERE nombre='$this->nombre' AND nro_serial='$this->nro_serial'";
+		   		$query=$this->pgsql->Ejecutar($sql);
+		    	if($this->pgsql->Total_Filas($query)!=0){
+				$tbien=$this->pgsql->Respuesta($query);
+				$this->estatus($tbien['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

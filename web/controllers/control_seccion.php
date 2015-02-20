@@ -1,13 +1,17 @@
 <?php
 session_start();
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
 
-if(isset($_POST['lOpt']))
-  $lOpt=trim($_POST['lOpt']);
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
 
 if(isset($_POST['oldseccion']))
   $oldseccion=trim($_POST['oldseccion']);
+
+//  Fin
+
+if(isset($_POST['lOpt']))
+  $lOpt=trim($_POST['lOpt']);
 
 if(isset($_POST['seccion']))
   $nro_seccion=trim($_POST['seccion']);
@@ -40,7 +44,7 @@ if($lOpt=='Registrar'){
   $seccion->capacidad_max($capacidad_max);
   $seccion->indice_min($indice_min);
   $seccion->indice_max($indice_max);
-  if(!$seccion->Comprobar()){
+  if(!$seccion->Comprobar($comprobar)){
     if($seccion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
       if(isset($_POST['materias'])){
@@ -74,7 +78,9 @@ if($lOpt=='Modificar'){
   $seccion->capacidad_max($capacidad_max);  
   $seccion->indice_min($indice_min);
   $seccion->indice_max($indice_max);
-  if(!$seccion->Comprobar()){
+  if($oldseccion==$nro_seccion)
+    $comprobar=false;
+  if(!$seccion->Comprobar($comprobar)){
     if($seccion->Actualizar($_SESSION['user_name'],$oldseccion)){
       $confirmacion=1;
       if(isset($_POST['materias'])){
@@ -93,7 +99,7 @@ if($lOpt=='Modificar'){
     header("Location: ../view/menu_principal.php?seccion&Opt=3&seccion=".$seccion->seccion());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Sección!";
-    header("Location: ../view/menu_principal.php?seccion&Opt=3&seccion=".$seccion->seccion());
+    header("Location: ../view/menu_principal.php?seccion&Opt=3&seccion=".$oldseccion);
   }
 }
 

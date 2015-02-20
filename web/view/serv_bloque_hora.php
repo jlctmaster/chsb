@@ -134,16 +134,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="hora_inicio">Hora de Inicio:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldhi" name="oldhi" value="<?=$row['hora_inicio']?>">  
 						<input class="input-xlarge" title="Seleccione la hora de inicio" name="hora_inicio" id="hora_inicio" type="text" value="<?=$row['hora_inicio']?>" required />
 					</div>  
 				</div>   
 				<div class="control-group">  
 					<label class="control-label" for="hora_fin">Hora de Culminación:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldhf" name="oldhf" value="<?=$row['hora_fin']?>">  
 						<input class="input-xlarge" title="Seleccione la hora de culminación"  name="hora_fin" id="hora_fin" type="text" value="<?=$row['hora_fin']?>" required />
 					</div>  
 				</div> 
-
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}
 					else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>

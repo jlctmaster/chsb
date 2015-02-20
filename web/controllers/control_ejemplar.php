@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldcodcra']))
+  $oldcodcra=trim($_POST['oldcodcra']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -27,7 +36,7 @@ if($lOpt=='Registrar'){
   $ejemplar->codigo_clasificacion($codigo_clasificacion);
   $ejemplar->numero_edicion($numero_edicion);
   $ejemplar->codigo_isbn_libro($codigo_isbn_libro);
-  if(!$ejemplar->Comprobar()){
+  if(!$ejemplar->Comprobar($comprobar)){
     if($ejemplar->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -55,8 +64,14 @@ if($lOpt=='Modificar'){
   $ejemplar->codigo_clasificacion($codigo_clasificacion); 
   $ejemplar->numero_edicion($numero_edicion);
   $ejemplar->codigo_isbn_libro($codigo_isbn_libro);
-  if($ejemplar->Actualizar($_SESSION['user_name']))
-    $confirmacion=1;
+  if($oldcodcra==$codigo_cra)
+    $comprobar=false;
+  if(!$ejemplar->Comprobar($comprobar)){
+    if($ejemplar->Actualizar($_SESSION['user_name']))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }
   else
     $confirmacion=-1;
   if($confirmacion==1){

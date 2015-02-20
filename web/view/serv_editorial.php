@@ -120,6 +120,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="nombre">Nombre</label>  
 				<div class="controls">  
+						<input type="hidden" id="oldnombre" name="oldnombre" value="<?=$row['nombre']?>"> 
 					<input class="input-xlarge" onKeyUp="this.value=this.value.toUpperCase()" title="Ingrese el Nombre del Editorial" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" />
 				</div>  
 			</div>

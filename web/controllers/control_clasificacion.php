@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $clasificacion=new clasificacion();
 if($lOpt=='Registrar'){
   $clasificacion->codigo_clasificacion($codigo_clasificacion);
   $clasificacion->descripcion($descripcion);
-  if(!$clasificacion->Comprobar()){
+  if(!$clasificacion->Comprobar($comprobar)){
     if($clasificacion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $clasificacion->codigo_clasificacion($codigo_clasificacion);
   $clasificacion->descripcion($descripcion);
-  if(!$clasificacion->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$clasificacion->Comprobar($comprobar)){
     if($clasificacion->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

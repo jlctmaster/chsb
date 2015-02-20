@@ -1,15 +1,16 @@
 <script type="text/javascript" src="js/chsb_inscripcion.js"></script>
 <?php
+require_once('../class/class_bd.php'); 
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('inscripcion');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,
-	TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre 
+	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,
+	TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,
+	CASE i.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado  
 	FROM educacion.tinscripcion i 
 	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
 	WHERE p.esinscripcion='Y'";
@@ -22,10 +23,11 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 					<thead>
 						<tr>
-							<th>Código:</th>
-							<th>Descripción:</th>
-							<th>Fecha Inicio:</th>
-							<th>Fecha Cierre:</th>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th>Fecha Inicio</th>
+							<th>Fecha Cierre</th>
+							<th>¿Cerrado?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -43,6 +45,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['descripcion'].'</td>';
 							echo '<td>'.$filas['fecha_inicio'].'</td>';
 							echo '<td>'.$filas['fecha_cierre'].'</td>';
+							echo '<td>'.$filas['cerrado'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?inscripcion&Opt=3&codigo_inscripcion='.$filas['codigo_inscripcion'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -125,7 +128,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	<?php
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,
 	TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,i.estatus,i.cerrado,i.codigo_periodo 
@@ -150,24 +152,28 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="descripcion">Descripción:</label>  
 					<div class="controls">  
 						<input name="codigo_periodo" id="codigo_periodo" type="hidden" value="<?=$row['codigo_periodo']?>"/>
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>"> 
 						<input class="input-xlarge" title="Ingrese el nombre o descripción para el período de inscripción" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" size="50" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_inicio">Fecha de Inicio:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldfi" name="oldfi" value="<?=$row['fecha_inicio']?>"> 
 						<input class="input-xlarge" title="Ingrese la fecha inicial del período de inscripción"  name="fecha_inicio" id="fecha_inicio" type="text" size="50" value="<?=$row['fecha_inicio']?>" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha de Culminación:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldff" name="oldff" value="<?=$row['fecha_fin']?>"> 
 						<input class="input-xlarge" title="Ingrese la fecha final del período de inscripción" name="fecha_fin" id="fecha_fin" type="text" size="50" value="<?=$row['fecha_fin']?>" readonly required />
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_fin">Fecha de Cierre:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldfc" name="oldfc" value="<?=$row['fecha_cierre']?>"> 
 						<input class="input-xlarge" title="Ingrese la fecha de cierre del período de inscripción" name="fecha_cierre" id="fecha_cierre" type="text" size="50" value="<?=$row['fecha_cierre']?>" readonly required />
 					</div>  
 				</div>
@@ -210,10 +216,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,
-	TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,i.estatus  
+	$sql = "SELECT i.codigo_inscripcion,p.descripcion,TO_CHAR(p.fecha_inicio,'DD/MM/YYYY') as fecha_inicio,
+	TO_CHAR(p.fecha_fin,'DD/MM/YYYY') as fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') as fecha_cierre,
+	CASE i.cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado,i.estatus 
 	FROM educacion.tinscripcion i 
 	INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
 	WHERE p.esinscripcion='Y' AND codigo_inscripcion = '".$_GET['codigo_inscripcion']."'";
@@ -264,6 +270,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row['fecha_cierre']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Cerrado:</label>
+						</td>
+						<td>
+							<label><?=$row['cerrado']?></label>
 						</td>
 					</tr>
 				</table>

@@ -111,21 +111,20 @@ class modulo {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM seguridad.tmodulo WHERE nombre_modulo='$this->nombre_modulo'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tmodulo=$this->pgsql->Respuesta($query);
-			$this->codigo_modulo($tmodulo['codigo_modulo']);
-			$this->nombre_modulo($tmodulo['nombre_modulo']);
-			$this->icono($tmodulo['icono']);
-			$this->orden($tmodulo['orden']);
-			$this->estatus($tmodulo['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM seguridad.tmodulo WHERE nombre_modulo='$this->nombre_modulo'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tmodulo=$this->pgsql->Respuesta($query);
+				$this->estatus($tmodulo['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

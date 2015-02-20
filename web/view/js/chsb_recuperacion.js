@@ -251,16 +251,6 @@ function init(){
 		var cantidad_max = document.getElementsByName('cantidad_max[]');
 		var ubicacion = document.getElementsByName('ubicacion[]');
 
-		//Comprobamos si el elemento estatus existe para luego verificar su valor.
-		if(document.getElementById("estatus")){
-			if($.trim($('#estatus').text())=="Activo"){
-				send = true;
-			}else{
-				alert("¡El registro no se puede modificar ya que está desactivado!");
-				send = false;
-			}
-		}
-
 		if($('#fecha').val()==""){
 			alert("¡Debe Seleccionar la fecha de recuperación!");
 			send = false;
@@ -293,6 +283,16 @@ function init(){
 					alert('¡La cantidad del item '+$('#name_items_'+i+'').val()+' debe ser menor o igual a '+CantMax+'!');
 					send = false;
 				}
+			}
+		}
+
+		//Comprobamos si el elemento estatus existe para luego verificar su valor.
+		if(document.getElementById("estatus") && send!=false){
+			if($.trim($('#estatus').text())=="Activo"){
+				send = true;
+			}else{
+				alert("¡El registro no se puede modificar ya que está desactivado!");
+				send = false;
 			}
 		}
 

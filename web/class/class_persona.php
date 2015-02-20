@@ -229,31 +229,20 @@ public function segundo_nombre(){
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tpersona WHERE cedula_persona='$this->cedula_persona'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tpersona=$this->pgsql->Respuesta($query);
-			$this->cedula_persona($tpersona['cedula_persona']);
-			$this->primer_nombre($tpersona['primer_nombre']);
-			$this->segundo_nombre($tpersona['segundo_nombre']);
-			$this->primer_apellido($tpersona['primer_apellido']);
-			$this->segundo_apellido($tpersona['segundo_apellido']);
-			$this->sexo($tpersona['sexo']);
-			$this->fecha_nacimiento($tpersona['fecha_nacimiento']);
-			$this->lugar_nacimiento($tpersona['lugar_nacimiento']);
-			$this->direccion($tpersona['direccion']);
-			$this->telefono_local($tpersona['telefono_local']);
-			$this->telefono_movil($tpersona['telefono_movil']);
-			$this->codigo_tipopersona($tpersona['codigo_tipopersona']);
-			$this->profesion($tpersona['profesion']);
-			$this->grado_instruccion($tpersona['grado_instruccion']);
-			$this->estatus($tpersona['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.tpersona WHERE cedula_persona='$this->cedula_persona'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tpersona=$this->pgsql->Respuesta($query);
+				$this->estatus($tpersona['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 
    	public function BuscarDatosRepresentante($representante){

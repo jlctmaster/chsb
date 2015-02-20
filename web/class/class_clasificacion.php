@@ -85,19 +85,20 @@ class clasificacion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.tclasificacion WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tclasificacion=$this->pgsql->Respuesta($query);
-			$this->codigo_clasificacion($tclasificacion['codigo_clasificacion']);
-			$this->descripcion($tclasificacion['descripcion']);
-			$this->estatus($tclasificacion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM biblioteca.tclasificacion WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tclasificacion=$this->pgsql->Respuesta($query);
+				$this->estatus($tclasificacion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

@@ -1,14 +1,20 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldci']))
+  $oldci=trim($_POST['oldci']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
 if(isset($_POST['filtro']))
   $filtro=$_POST['filtro'];
-
-if(isset($_POST['oldci']))
-  $oldci=trim($_POST['oldci']);
 
 if(isset($_POST['cedula_persona']))
   $cedula_persona=trim($_POST['cedula_persona']);
@@ -61,7 +67,7 @@ if($lOpt=='Registrar'){
   $persona->telefono_local($telefono_local);
   $persona->telefono_movil($telefono_movil);
   $persona->codigo_tipopersona($codigo_tipopersona);
-  if(!$persona->Comprobar()){
+  if(!$persona->Comprobar($comprobar)){
     if($persona->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -96,16 +102,21 @@ if($lOpt=='Modificar'){
   $persona->telefono_local($telefono_local);
   $persona->telefono_movil($telefono_movil);
   $persona->codigo_tipopersona($codigo_tipopersona);
-  if($persona->Actualizar($_SESSION['user_name'],$oldci))
-    $confirmacion=1;
-  else
+  if($oldci==$cedula_persona)
+    $comprobar=false;
+  if(!$persona->Comprobar($comprobar)){
+    if($persona->Actualizar($_SESSION['user_name'],$oldci))
+      $confirmacion=1;
+    else
+      $confirmacion=-1;
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡La Persona ha sido modificada con éxito!";
     header("Location: ../view/menu_principal.php?persona&Opt=3&cedula_persona=".$persona->cedula_persona());
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Persona!";
-    header("Location: ../view/menu_principal.php?persona&Opt=3&cedula_persona=".$persona->cedula_persona());
+    header("Location: ../view/menu_principal.php?persona&Opt=3&cedula_persona=".$oldci);
   }
 }
 

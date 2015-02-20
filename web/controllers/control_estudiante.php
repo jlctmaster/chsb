@@ -2,6 +2,15 @@
 session_start();
 include_once("../class/class_estudiante.php");
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldci']))
+  $oldci=trim($_POST['oldci']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -19,9 +28,6 @@ if(isset($_POST['codigo_ano_academico']))
 
 if(isset($_POST['cedula_responsable']))
   $cedula_responsable=trim($_POST['cedula_responsable']);
-
-if(isset($_POST['oldci']))
-  $oldci=trim($_POST['oldci']);
 
 if(isset($_POST['cedula_persona']))
   $cedula_persona=trim($_POST['cedula_persona']);
@@ -104,7 +110,7 @@ if($lOpt=='Registrar'){
   $estudiante->codigo_parentesco($codigo_parentesco);
   $confirmacion=false;
   $estudiante->Transaccion('iniciando');
-  if(!$estudiante->Comprobar()){
+  if(!$estudiante->Comprobar($comprobar)){
     if($estudiante->Registrar($_SESSION['user_name'])){
       if($estudiante->Inscribir($_SESSION['user_name'])){
         $confirmacion=1;
@@ -163,14 +169,19 @@ if($lOpt=='Modificar'){
   $estudiante->seccion($seccion);
   $estudiante->observacion($observacion);
   $confirmacion=false;
+  if($oldci==$cedula_persona)
+    $comprobar=false;
   $estudiante->Transaccion('iniciando');
-  if($estudiante->Actualizar($_SESSION['user_name'],$oldci)){
-    if($estudiante->ActualizarInscripcion($_SESSION['user_name']))
-      $confirmacion=1;
+  if(!$estudiante->Comprobar($comprobar)){
+    if($estudiante->Actualizar($_SESSION['user_name'],$oldci)){
+      if($estudiante->ActualizarInscripcion($_SESSION['user_name']))
+        $confirmacion=1;
+      else
+        $confirmacion=-1;
+    }
     else
       $confirmacion=-1;
-  }
-  else
+  }else
     $confirmacion=-1;
   if($confirmacion==1){
     $estudiante->Transaccion('finalizado');

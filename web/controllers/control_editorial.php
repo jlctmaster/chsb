@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldnombre']))
+  $oldnombre=trim($_POST['oldnombre']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $editorial= new editorial();
 if($lOpt=='Registrar'){
   $editorial->codigo_editorial($codigo_editorial);
   $editorial->nombre($nombre);
-  if(!$editorial->Comprobar()){
+  if(!$editorial->Comprobar($comprobar)){
     if($editorial->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $editorial->codigo_editorial($codigo_editorial);
   $editorial->nombre($nombre);
-  if(!$editorial->Comprobar()){
+  if($oldnombre==$nombre)
+    $comprobar=false;
+  if(!$editorial->Comprobar($comprobar)){
     if($editorial->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

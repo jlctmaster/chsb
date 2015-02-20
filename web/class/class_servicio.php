@@ -125,22 +125,20 @@ class servicio {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM seguridad.tservicio WHERE nombre_servicio='$this->nombre_servicio'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tservicio=$this->pgsql->Respuesta($query);
-			$this->codigo_servicio($tservicio['codigo_servicio']);
-			$this->nombre_servicio($tservicio['nombre_servicio']);
-			$this->url($tservicio['url']);
-			$this->orden($tservicio['orden']);
-			$this->codigo_modulo($tservicio['codigo_modulo']);
-			$this->estatus($tservicio['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM seguridad.tservicio WHERE nombre_servicio='$this->nombre_servicio'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tservicio=$this->pgsql->Respuesta($query);
+				$this->estatus($tservicio['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

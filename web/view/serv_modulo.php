@@ -134,6 +134,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="nombre_modulo">Módulo:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldmodulo" name="oldmodulo" value="<?=$row['nombre_modulo']?>"> 
 						<input class="input-xlarge" title="Ingrese el nombre del modulo" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_modulo" id="nombre_modulo" type="text" value="<?=$row['nombre_modulo']?>" required />
 					</div>  
 				</div>   
@@ -147,15 +148,15 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="icono">Icono:</label>  
 					<div class="controls">  
 						<div class="radios">
-							<input name="icono" id="icono" type="radio" value="icon-home" title="Seleccionar icono de casa" <? if($row['icono']=="icon-home"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-home" title="Seleccionar icono de casa" <?php if($row['icono']=="icon-home"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-home" title="Icono de casa"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-list" title="Seleccionar icono de lista" <? if($row['icono']=="icon-list"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-list" title="Seleccionar icono de lista" <?php if($row['icono']=="icon-list"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-list" title="Icono de lista"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-list-alt" title="Seleccionar icono de lista alternativa" <? if($row['icono']=="icon-list-alt"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-list-alt" title="Seleccionar icono de lista alternativa" <?php if($row['icono']=="icon-list-alt"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-list-alt" title="Icono de lista alternativa"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-cog" title="Seleccionar icono de configuraci&oacute;n" <? if($row['icono']=="icon-cog"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-cog" title="Seleccionar icono de configuraci&oacute;n" <?php if($row['icono']=="icon-cog"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-cog" title="Icono de configuraci&oacute;n"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-lock" title="Seleccionar icono de seguridad" <? if($row['icono']=="icon-lock"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-lock" title="Seleccionar icono de seguridad" <?php if($row['icono']=="icon-lock"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-lock" title="Icono de seguridad"></span> 
 						</div>
 					</div>  

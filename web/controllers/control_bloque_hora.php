@@ -1,6 +1,24 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldhi']))
+  $oldhi=trim($_POST['oldhi']);
+
+if(isset($_POST['oldhf']))
+  $oldhf=trim($_POST['oldhf']);
+
+if(trim($hora_inicio[0])<'12:00'){
+  $oldturno = 'M';
+}else{
+  $oldturno = 'T';
+}
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -26,7 +44,7 @@ if($lOpt=='Registrar'){
   $bloque_hora->hora_inicio($hora_inicio[0]);
   $bloque_hora->hora_fin($hora_fin[0]);
   $bloque_hora->turno($turno);
-  if(!$bloque_hora->Comprobar()){
+  if(!$bloque_hora->Comprobar($comprobar)){
     if($bloque_hora->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -53,7 +71,9 @@ if($lOpt=='Modificar'){
   $bloque_hora->hora_inicio($hora_inicio[0]);
   $bloque_hora->hora_fin($hora_fin[0]);
   $bloque_hora->turno($turno);
-  if(!$bloque_hora->Comprobar()){
+  if(($oldhi==$hora_inicio && $oldturno==$turno) || ($oldhf==$hora_fin && $oldturno==$turno))
+    $comprobar=false;
+  if(!$bloque_hora->Comprobar($comprobar)){
     if($bloque_hora->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

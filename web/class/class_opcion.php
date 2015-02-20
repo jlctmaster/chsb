@@ -122,22 +122,20 @@ class opcion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM seguridad.topcion WHERE nombre_opcion='$this->nombre_opcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$topcion=$this->pgsql->Respuesta($query);
-			$this->codigo_opcion($topcion['codigo_opcion']);
-			$this->nombre_opcion($topcion['nombre_opcion']);
-			$this->icono($topcion['icono']);
-			$this->orden($topcion['orden']);
-			$this->accion($topcion['accion']);
-			$this->estatus($topcion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM seguridad.topcion WHERE nombre_opcion='$this->nombre_opcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$topcion=$this->pgsql->Respuesta($query);
+				$this->estatus($topcion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

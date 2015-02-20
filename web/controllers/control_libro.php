@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldcl']))
+  $oldcl=trim($_POST['oldcl']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);      
 
@@ -35,7 +44,7 @@ if($lOpt=='Registrar'){
   $libro->codigo_tema($codigo_tema);
   $libro->numero_paginas($numero_paginas);
   $libro->fecha_edicion($fecha_edicion);
-  if(!$libro->Comprobar()){
+  if(!$libro->Comprobar($comprobar)){
     if($libro->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -65,7 +74,9 @@ if($lOpt=='Modificar'){
   $libro->codigo_tema($codigo_tema);
   $libro->numero_paginas($numero_paginas);
   $libro->fecha_edicion($fecha_edicion);
-  if(!$libro->Comprobar()){
+  if($oldcl==$codigo_isbn_libro)
+    $comprobar=false;
+  if(!$libro->Comprobar($comprobar)){
     if($libro->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

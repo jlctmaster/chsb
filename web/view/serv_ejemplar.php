@@ -1,12 +1,12 @@
 <script type="text/javascript" src="js/chsb_ejemplar.js"></script>
 <?php
+require_once('../class/class_bd.php');
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('ejemplar');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT e.*,c.descripcion AS clasificacion,l.titulo As libro 
 	FROM biblioteca.tejemplar e
@@ -23,8 +23,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<tr>
 						<th>Código CRA</th>
 						<th>Clasificación</th>
-						<th>Número Edición</th>
-						<th>Libro</th>
+						<th>Título del Libro</th>
+						<th>Edición</th>
 						<?php
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -40,9 +40,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						echo '<tr>';
 						echo '<td>'.$filas['codigo_cra'].'</td>';
 						echo '<td>'.$filas['clasificacion'].'</td>';
-						echo '<td>'.$filas['numero_edicion'].'</td>';
 						echo '<td>'.$filas['libro'].'</td>';
-						
+						echo '<td>'.$filas['numero_edicion'].'</td>';
 						for($x=0;$x<count($a);$x++){
 							if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 								echo '<td><a href="?ejemplar&Opt=3&codigo_ejemplar='.$filas['codigo_ejemplar'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -94,7 +93,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' required />
 						<option value=0>Seleccione una Clasificación</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tclasificacion ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -117,7 +115,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<select class="selectpicker" data-live-search="true" title="Seleccione un Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' required />
 						<option value=0>Seleccione el Libro</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tlibro ORDER BY codigo_isbn_libro ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -156,6 +153,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="controls">
 					<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
 					<input type="hidden" name="codigo_ejemplar" id="codigo_ejemplar" value="<?=$row['codigo_ejemplar']?>" /> 
+					<input type="hidden" name="oldcodcra" id="oldcodcra" value="<?=$row['codigo_cra']?>" /> 
 					<input class="input-xlarge" title="Ingrese Código C.R.A. del ejemplar" maxlength=20 name="codigo_cra" id="codigo_cra" type="text" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$row['codigo_cra']?>" required /> 
 				</div>  
 			</div>
@@ -165,7 +163,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' value="<?=$row['codigo_clasificacion']?>" required >
 						<option value=0>Seleccione una Clasificación</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tclasificacion ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -191,7 +188,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<select class="selectpicker" data-live-search="true" title="Seleccione el Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' value="<?=$row['codigo_isbn_libro']?>" required />
 						<option value=0>Seleccione el Libro</option>
 						<?php
-							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
 							$sql = "SELECT * FROM biblioteca.tlibro ORDER BY titulo ASC";
 							$query = $pgsql->Ejecutar($sql);
@@ -237,7 +233,6 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 <?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT *, c.descripcion as clasificacion,L.codigo_isbn_libro||' -'||l.titulo as libro
 	FROM biblioteca.tejemplar e

@@ -116,21 +116,21 @@ function init(){
 				var Cant=$('#cantidades_'+i).val();
 				if(Cant<=0){
 					alert('¡La cantidad del componente '+$('#items_'+i+' option:selected').text()+' debe ser mayor a 0!');
-					send = false;	
+					send = false;
 				}
 			}
 			if(contarRepetidos(arregloI)>0){
 				alert('¡No puede haber bienes repetidos!')
 				send = false;
 			}
-			else if(contarRepetidos(arregloIB)>0){
+			if(contarRepetidos(arregloIB)>0){
 				alert('¡Solo puede haber un componente base!')
 				send = false;
 			}
 		}
 
 		//Comprobamos si el elemento estatus existe para luego verificar su valor.
-		if(document.getElementById("estatus")){
+		if(document.getElementById("estatus") && send!=false){
 			if($.trim($('#estatus').text())=="Activo"){
 				send = true;
 			}else{

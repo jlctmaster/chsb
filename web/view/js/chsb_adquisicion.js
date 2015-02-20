@@ -132,7 +132,7 @@ function init(){
 		}
 
 		//Comprobamos si el elemento estatus existe para luego verificar su valor.
-		if(document.getElementById("estatus")){
+		if(document.getElementById("estatus") && send!=false){
 			if($.trim($('#estatus').text())=="Activo"){
 				send = true;
 			}else{

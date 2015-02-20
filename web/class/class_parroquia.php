@@ -102,20 +102,20 @@ class parroquia {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tparroquia WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tparroquia=$this->pgsql->Respuesta($query);
-			$this->codigo_parroquia($tparroquia['codigo_parroquia']);
-			$this->descripcion($tparroquia['descripcion']);
-			$this->codigo_municipio($tparroquia['codigo_municipio']);
-			$this->estatus($tparroquia['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM general.tparroquia WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tparroquia=$this->pgsql->Respuesta($query);
+				$this->estatus($tparroquia['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

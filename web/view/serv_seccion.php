@@ -174,6 +174,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		"</center>"+
 		"</td>"+
 		"</tr>");
+		//	Modificamos el width de la cantidad para este elemento
+	    $('#materia_'+contador).css("width","auto");
 		contador++;
 	}
 
@@ -295,6 +297,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						</center>
 						</td>
 						</tr>";
+						echo "<script>$('#materia_'+".$con.").css('width','auto');</script>";
 						$con++;
 					}
 					?>
@@ -356,6 +359,8 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		"</center>"+
 		"</td>"+
 		"</tr>");
+		//	Modificamos el width de la cantidad para este elemento
+	    $('#materia_'+contador).css("width","auto");
 		contador++;
 	}
 

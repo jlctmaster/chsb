@@ -1,14 +1,14 @@
 <script type="text/javascript" src="js/chsb_ano_academico.js"></script>
 <?php
+require_once('../class/class_bd.php'); 
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
 $perfil->url('ano_academico');
 $a=$perfil->IMPRIMIR_OPCIONES(); // el arreglo $a contiene las opciones del menú. 
 if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tano_academico";
+	$sql = "SELECT *,CASE cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado FROM educacion.tano_academico";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>
@@ -20,6 +20,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 						<tr>
 							<th>Código</th>
 							<th>Año Académico</th>
+							<th>¿Cerrado?</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -35,6 +36,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<tr>';
 							echo '<td>'.$filas['codigo_ano_academico'].'</td>';
 							echo '<td>'.$filas['ano'].'</td>';
+							echo '<td>'.$filas['cerrado'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?ano_academico&Opt=3&codigo_ano_academico='.$filas['codigo_ano_academico'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -103,7 +105,6 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	<?php
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
 	$sql = "SELECT * FROM educacion.tano_academico 
 	WHERE codigo_ano_academico =".$pgsql->comillas_inteligentes($_GET['codigo_ano_academico']);
@@ -124,6 +125,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="ano">Año Académico:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldano" name="oldano" value="<?=$row['ano']?>"> 
 						<input class="input-xlarge" title="Ingrese el año académico" onKeyUp="this.value=this.value.toUpperCase()" name="ano" id="ano" type="text" value="<?=$row['ano']?>" required />
 					</div>  
 				</div>   
@@ -166,9 +168,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		<?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM educacion.tano_academico WHERE codigo_ano_academico =".$pgsql->comillas_inteligentes($_GET['codigo_ano_academico']);
+	$sql = "SELECT *,CASE cerrado WHEN 'Y' THEN 'SÍ' ELSE 'NO' END AS cerrado 
+	FROM educacion.tano_academico 
+	WHERE codigo_ano_academico =".$pgsql->comillas_inteligentes($_GET['codigo_ano_academico']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -194,7 +197,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 							<label><?=$row['ano']?></label>
 						</td>
 					</tr>
-
+					<tr>
+						<td>
+							<label>Cerrado:</label>
+						</td>
+						<td>
+							<label><?=$row['cerrado']?></label>
+						</td>
+					</tr>
 				</table>
 				<center>
 					<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>

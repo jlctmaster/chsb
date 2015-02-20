@@ -89,19 +89,20 @@ class pais {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tpais WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tpais=$this->pgsql->Respuesta($query);
-			$this->codigo_pais($tpais['codigo_pais']);
-			$this->descripcion($tpais['descripcion']);
-			$this->estatus($tpais['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM general.tpais WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tpais=$this->pgsql->Respuesta($query);
+				$this->estatus($tpais['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

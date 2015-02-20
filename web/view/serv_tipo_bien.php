@@ -119,10 +119,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Tipo de Bien Nacional:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del Tipo de Bien Nacional" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   
-
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>  

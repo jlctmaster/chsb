@@ -172,6 +172,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="nombre_opcion">Botón:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldopcion" name="oldopcion" value="<?=$row['nombre_opcion']?>"> 
 						<input class="input-xlarge" title="Ingrese el nombre del opcion" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_opcion" id="nombre_opcion" type="text" value="<?=$row['nombre_opcion']?>" required />
 					</div>  
 				</div>   
@@ -199,37 +200,37 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="icono">Icono:</label>  
 					<div class="controls">  
 						<div class="radios">
-							<input name="icono" id="icono" type="radio" value="ninguno" title="Ningún Icono" <? if($row['icono']=="ninguno"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="ninguno" title="Ningún Icono" <?php if($row['icono']=="ninguno"){ echo "checked='checked'"; } ?> required/>
 							<span>Ninguno</span> <br>
-							<input name="icono" id="icono" type="radio" value="icon-pencil" title="Seleccionar icono de registro" <? if($row['icono']=="icon-pencil"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-pencil" title="Seleccionar icono de registro" <?php if($row['icono']=="icon-pencil"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-pencil" title="Icono de registro"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-edit" title="Seleccionar icono de editar" <? if($row['icono']=="icon-edit"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-edit" title="Seleccionar icono de editar" <?php if($row['icono']=="icon-edit"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-edit" title="Icono de editar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-eye-close" title="Seleccionar icono de no visible" <? if($row['icono']=="icon-eye-close"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-eye-close" title="Seleccionar icono de no visible" <?php if($row['icono']=="icon-eye-close"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-eye-close" title="Icono de no visible"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-eye-open" title="Seleccionar icono de visible" <? if($row['icono']=="icon-eye-open"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-eye-open" title="Seleccionar icono de visible" <?php if($row['icono']=="icon-eye-open"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-eye-open" title="Icono de visible"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-search" title="Seleccionar icono de buscar" <? if($row['icono']=="icon-search"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-search" title="Seleccionar icono de buscar" <?php if($row['icono']=="icon-search"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-search" title="Icono de buscar"></span> <br>
-							<input name="icono" id="icono" type="radio" value="icon-plus" title="Seleccionar icono de agregar" <? if($row['icono']=="icon-plus"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-plus" title="Seleccionar icono de agregar" <?php if($row['icono']=="icon-plus"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-plus" title="Icono de agregar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-refresh" title="Seleccionar icono de actualizar" <? if($row['icono']=="icon-refresh"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-refresh" title="Seleccionar icono de actualizar" <?php if($row['icono']=="icon-refresh"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-refresh" title="Icono de actualizar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-remove" title="Seleccionar icono de remover" <? if($row['icono']=="icon-remove"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-remove" title="Seleccionar icono de remover" <?php if($row['icono']=="icon-remove"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-remove" title="Icono de remover"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-ok" title="Seleccionar icono habilitar" <? if($row['icono']=="icon-ok"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-ok" title="Seleccionar icono habilitar" <?php if($row['icono']=="icon-ok"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-ok" title="Icono de habilitar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-zoom-in" title="Seleccionar icono de acercar" <? if($row['icono']=="icon-zoom-in"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-zoom-in" title="Seleccionar icono de acercar" <?php if($row['icono']=="icon-zoom-in"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-zoom-in" title="Icono de acercar"></span> <br>
-							<input name="icono" id="icono" type="radio" value="icon-ok-circle" title="Seleccionar icono de añadir" <? if($row['icono']=="icon-ok-circle"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-ok-circle" title="Seleccionar icono de añadir" <?php if($row['icono']=="icon-ok-circle"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-ok-circle" title="Icono de añadir"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-check" title="Seleccionar icono de comprobar" <? if($row['icono']=="icon-check"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-check" title="Seleccionar icono de comprobar" <?php if($row['icono']=="icon-check"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-check" title="Icono de comprobar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-trash" title="Seleccionar icono de eliminar" <? if($row['icono']=="icon-trash"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-trash" title="Seleccionar icono de eliminar" <?php if($row['icono']=="icon-trash"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-trash" title="Icono de eliminar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-heart" title="Seleccionar icono salvar" <? if($row['icono']=="icon-heart"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-heart" title="Seleccionar icono salvar" <?php if($row['icono']=="icon-heart"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-heart" title="Icono de salvar"></span> 
-							<input name="icono" id="icono" type="radio" value="icon-download" title="Seleccionar icono de descargar" <? if($row['icono']=="icon-download"){ echo "checked='checked'"; } ?> required/>
+							<input name="icono" id="icono" type="radio" value="icon-download" title="Seleccionar icono de descargar" <?php if($row['icono']=="icon-download"){ echo "checked='checked'"; } ?> required/>
 							<span class="icon-download" title="Icono de descargar"></span> 
 						</div>
 					</div>  
@@ -245,13 +246,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<?php
 					for($x=0;$x<count($a);$x++)
 						if($a[$x]['orden']=='3'){
-							if($row['estatus']=='Activo')
+							if($row['estatus']=='1')
 								echo '<button type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
 							else
 								echo '<button disabled type="button" id="btnDesactivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>&nbsp;';
 
 						}else if($a[$x]['orden']=='4'){
-							if($row['estatus']=='Activo')
+							if($row['estatus']=='1')
 								echo '<button disabled type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';
 							else
 								echo '<button type="button" id="btnActivar" class="btn btn-large btn-primary"><i class="'.$a[$x]['icono'].'"></i>&nbsp;'.$a[$x]['nombre_opcion'].'</button>';

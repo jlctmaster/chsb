@@ -102,33 +102,30 @@ class materia {
 			return false;
    	}
 
-   
-    public function Actualizar($user){
-	    $sql="UPDATE educacion.tmateria SET nombre_materia='$this->nombre_materia',
+    public function Actualizar($user,$oldmateria){
+	    $sql="UPDATE educacion.tmateria SET codigo_materia='$this->codigo_materia',nombre_materia='$this->nombre_materia',
 	    unidad_credito='$this->unidad_credito',tipo_materia='$this->tipo_materia',
-	    modificado_por='$user', fecha_modificacion=NOW()  WHERE codigo_materia='$this->codigo_materia'";
+	    modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_materia='$oldmateria'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
-
 			return true;
 		else
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tmateria WHERE nombre_materia='$this->nombre_materia'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$materia=$this->pgsql->Respuesta($query);
-			$this->codigo_materia($materia['codigo_materia']);
-			$this->nombre_materia($materia['nombre_materia']);
-			$this->unidad_credito($materia['unidad_credito']);
-			$this->tipo_materia($materia['tipo_materia']);
-			$this->estatus($materia['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tmateria WHERE codigo_materia='$this->codigo_materia'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$materia=$this->pgsql->Respuesta($query);
+				$this->estatus($materia['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

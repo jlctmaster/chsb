@@ -89,19 +89,20 @@ class parentesco {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tparentesco WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tparentesco=$this->pgsql->Respuesta($query);
-			$this->codigo_parentesco($tparentesco['codigo_parentesco']);
-			$this->descripcion($tparentesco['descripcion']);
-			$this->estatus($tparentesco['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM general.tparentesco WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tparentesco=$this->pgsql->Respuesta($query);
+				$this->estatus($tparentesco['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 
    	public function BuscarCodigo($value){

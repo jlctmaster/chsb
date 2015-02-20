@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -35,7 +44,7 @@ if($lOpt=='Registrar'){
   $ubicacion->codigo_ambiente($codigo_ambiente);
   $ubicacion->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
   $ubicacion->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
-  if(!$ubicacion->Comprobar()){
+  if(!$ubicacion->Comprobar($comprobar)){
     if($ubicacion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -63,7 +72,9 @@ if($lOpt=='Modificar'){
   $ubicacion->codigo_ambiente($codigo_ambiente);
   $ubicacion->ubicacionprincipal(comprobarCheckBox($ubicacionprincipal));
   $ubicacion->itemsdefectuoso(comprobarCheckBox($itemsdefectuoso));
-  if(!$ubicacion->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$ubicacion->Comprobar($comprobar)){
     if($ubicacion->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

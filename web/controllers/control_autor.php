@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldautor']))
+  $oldautor=trim($_POST['oldautor']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $autor=new autor();
 if($lOpt=='Registrar'){
   $autor->codigo_autor($codigo_autor);
   $autor->nombre($nombre);
-  if(!$autor->Comprobar()){
+  if(!$autor->Comprobar($comprobar)){
     if($autor->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $autor->codigo_autor($codigo_autor);
   $autor->nombre($nombre);
-  if(!$autor->Comprobar()){
+  if($oldautor==$nombre)
+    $comprobar=false;
+  if(!$autor->Comprobar($comprobar)){
     if($autor->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

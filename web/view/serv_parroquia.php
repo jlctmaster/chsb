@@ -99,7 +99,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tmunicipio ORDER BY descripcion ASC";
+							$sql = "SELECT codigo_municipio,m.descripcion||' ('||e.descripcion||')' AS descripcion 
+							FROM general.tmunicipio m 
+							INNER JOIN general.testado e ON m.codigo_estado = e.codigo_estado 
+							ORDER BY m.descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_municipio'].">".$row['descripcion']."</option>";
@@ -141,6 +144,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">Parroquia:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del parroquia" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   
@@ -152,7 +156,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tmunicipio ORDER BY descripcion ASC";
+							$sql = "SELECT codigo_municipio,m.descripcion||' ('||e.descripcion||')' AS descripcion 
+							FROM general.tmunicipio m 
+							INNER JOIN general.testado e ON m.codigo_estado = e.codigo_estado 
+							ORDER BY m.descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_municipio']==$row['codigo_municipio'])

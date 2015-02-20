@@ -99,20 +99,20 @@ class tlapso {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tlapso WHERE lapso='$this->lapso' AND codigo_ano_academico = '$this->codigo_ano_academico'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$lapso=$this->pgsql->Respuesta($query);
-			$this->codigo_lapso($lapso['codigo_lapso']);
-			$this->lapso($lapso['lapso']);
-			$this->codigo_ano_academico($lapso['codigo_ano_academico']);
-			$this->estatus($lapso['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tlapso WHERE lapso='$this->lapso' AND codigo_ano_academico = '$this->codigo_ano_academico'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$lapso=$this->pgsql->Respuesta($query);
+				$this->estatus($lapso['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    }
 }
 ?>

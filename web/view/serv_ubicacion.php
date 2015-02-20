@@ -23,8 +23,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Ubicación</th>
-							<th>Ambiente</th>
+							<th>Descrip. de la Ubicación</th>
+							<th>Descrip. del Ambiente</th>
 							<th>¿Es la Ub. Principal?</th>
 							<th>¿Es para Items Defect.?</th>
 							<?php
@@ -105,7 +105,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tambiente ORDER BY descripcion ASC";
+							$sql = "SELECT * FROM general.tambiente 
+							WHERE estatus = '1' 
+							ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_ambiente'].">".$row['descripcion']."</option>";
@@ -163,6 +165,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="descripcion">ubicación:</label>  
 					<div class="controls">  
+						<input type="hidden" id="olddescripcion" name="olddescripcion" value="<?=$row['descripcion']?>">
 						<input class="input-xlarge" title="Ingrese el nombre de la ubicación" onKeyUp="this.value=this.value.toUpperCase()" name="descripcion" id="descripcion" type="text" value="<?=$row['descripcion']?>" required />
 					</div>  
 				</div>   
@@ -174,7 +177,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tambiente ORDER BY descripcion ASC";
+							$sql = "SELECT * FROM general.tambiente 
+							WHERE estatus = '1' 
+							ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_ambiente']==$row['codigo_ambiente'])

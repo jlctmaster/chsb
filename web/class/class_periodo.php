@@ -129,29 +129,26 @@ class periodo {
 	    $sql="UPDATE educacion.tperiodo SET descripcion='$this->descripcion',fecha_inicio='$this->fecha_inicio',
 	    fecha_fin='$this->fecha_fin',codigo_lapso=$this->codigo_lapso,
 	    modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_periodo='$this->codigo_periodo' AND esinscripcion='N'";
-	    //echo $sql; die();
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tperiodo WHERE descripcion='$this->descripcion' AND esinscripcion='N'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tperiodo=$this->pgsql->Respuesta($query);
-			$this->codigo_periodo($tperiodo['codigo_periodo']);
-			$this->descripcion($tperiodo['descripcion']);
-			$this->descripcion($tperiodo['descripcion']);
-			$this->fecha_inicio($tperiodo['fecha_inicio']);
-			$this->codigo_lapso($tperiodo['codigo_lapso']);
-			$this->estatus($tperiodo['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tperiodo WHERE descripcion='$this->descripcion' AND esinscripcion='N'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tperiodo=$this->pgsql->Respuesta($query);
+				$this->estatus($tperiodo['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

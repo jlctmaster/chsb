@@ -87,19 +87,20 @@ class departamento {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tdepartamento WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tdepartamento=$this->pgsql->Respuesta($query);
-			$this->codigo_departamento($tdepartamento['codigo_departamento']);
-			$this->descripcion($tdepartamento['descripcion']);
-			$this->estatus($tdepartamento['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.tdepartamento WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tdepartamento=$this->pgsql->Respuesta($query);
+				$this->estatus($tdepartamento['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

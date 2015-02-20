@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $parentesco=new parentesco();
 if($lOpt=='Registrar'){
   $parentesco->codigo_parentesco($codigo_parentesco);
   $parentesco->descripcion($descripcion);
-  if(!$parentesco->Comprobar()){
+  if(!$parentesco->Comprobar($comprobar)){
     if($parentesco->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $parentesco->codigo_parentesco($codigo_parentesco);
   $parentesco->descripcion($descripcion);
-  if(!$parentesco->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$parentesco->Comprobar($comprobar)){
     if($parentesco->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

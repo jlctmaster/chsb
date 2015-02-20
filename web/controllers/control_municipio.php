@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -19,7 +28,7 @@ if($lOpt=='Registrar'){
   $municipio->codigo_municipio($codigo_municipio);
   $municipio->descripcion($descripcion);
   $municipio->codigo_estado($codigo_estado);
-  if(!$municipio->Comprobar()){
+  if(!$municipio->Comprobar($comprobar)){
     if($municipio->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -45,7 +54,9 @@ if($lOpt=='Modificar'){
   $municipio->codigo_municipio($codigo_municipio);
   $municipio->descripcion($descripcion);
   $municipio->codigo_estado($codigo_estado);
-  if(!$municipio->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$municipio->Comprobar($comprobar)){
     if($municipio->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

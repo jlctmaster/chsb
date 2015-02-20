@@ -89,19 +89,20 @@ class tema {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.ttema WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$ttema=$this->pgsql->Respuesta($query);
-			$this->codigo_tema($ttema['codigo_tema']);
-			$this->descripcion($ttema['descripcion']);
-			$this->estatus($ttema['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM biblioteca.ttema WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$ttema=$this->pgsql->Respuesta($query);
+				$this->estatus($ttema['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

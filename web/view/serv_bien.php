@@ -1,5 +1,6 @@
 <script type="text/javascript" src="js/chsb_bien.js"></script>
 <?php
+require_once('../class/class_bd.php'); 
 require_once("../class/class_perfil.php");
 $perfil=new Perfil();
 $perfil->codigo_perfil($_SESSION['user_codigo_perfil']);
@@ -105,7 +106,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<?php
 					require_once('../class/class_bd.php');
 					$pgsql = new Conexion();
-					$sql = "SELECT * FROM bienes_nacionales.ttipo_bien ORDER BY descripcion ASC";
+					$sql = "SELECT * FROM bienes_nacionales.ttipo_bien 
+					WHERE estatus = '1'
+					ORDER BY descripcion ASC";
 					$query = $pgsql->Ejecutar($sql);
 					while($row=$pgsql->Respuesta($query)){
 						echo "<option value=".$row['codigo_tipo_bien'].">".$row['descripcion']."</option>";
@@ -154,12 +157,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		<?php
 		require_once("../class/class_bd.php");
 		$pgsql=new Conexion();
-		$sql = "SELECT b.codigo_bien,b.nombre 
+		$sql = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
  		FROM bienes_nacionales.ttipo_bien tb
  		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
- 		WHERE tb.descripcion NOT LIKE '%PRODUCTO TERMINADO%'
+ 		WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
 		AND b.estatus = '1'
-		ORDER BY codigo_bien ASC";
+		ORDER BY b.codigo_bien ASC";
 		$query = $pgsql->Ejecutar($sql);
 		$comillasimple=chr(34);
 		while ($rows = $pgsql->Respuesta($query)){
@@ -178,6 +181,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		"<button type='button' class='btn btn-primary' onclick='elimina_me("+contador+")'><i class='icon-minus'></i></button>"+
 		"</td>"+
 		"</tr>");
+		//	Modificamos el width de la cantidad para este elemento
+	    $('#items_'+contador).css("width","auto");
+	    $('#cantidades_'+contador).css("width","80px");
 		contador++;
 	}
 
@@ -218,12 +224,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	<div class="control-group">  
 		<label class="control-label" for="nombre">Nombre del Bien</label>  
 		<div class="controls">  
+			<input type="hidden" id="oldbien" name="oldbien" value="<?=$row['nombre']?>"> 
 			<input class="input-xlarge" title="Ingrese el nombre del bien" onKeyUp="this.value=this.value.toUpperCase()" name="nombre" id="nombre" type="text" value="<?=$row['nombre']?>" required />
 		</div>  
 	</div>
 		<div class="control-group">  
 		<label class="control-label" for="nro_serial">Código Externo del Bien</label>  
 		<div class="controls">  
+			<input type="hidden" id="oldserial" name="oldserial" value="<?=$row['nro_serial']?>"> 
 			<input class="input-xlarge" title="Ingrese el código externo del Bien" onKeyUp="this.value=this.value.toUpperCase()" name="nro_serial" id="nro_serial" type="text" value="<?=$row['nro_serial']?>" required />
 		</div>  
 	</div>      
@@ -235,7 +243,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<?php
 					require_once('../class/class_bd.php');
 					$pgsql = new Conexion();
-					$sql = "SELECT * FROM bienes_nacionales.ttipo_bien ORDER BY descripcion ASC";
+					$sql = "SELECT * FROM bienes_nacionales.ttipo_bien 
+					WHERE estatus = '1' 
+					ORDER BY descripcion ASC";
 					$query = $pgsql->Ejecutar($sql);
 					while($rows=$pgsql->Respuesta($query)){
 						if($rows['codigo_tipo_bien']==$row['codigo_tipo_bien'])
@@ -277,9 +287,14 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				while ($row = $pgsql->Respuesta($query)){
 					echo "<tr id='".$con."'>
 					        <td>
-					          <select class='bootstrap-select form-control' name='items[]' id='items".$con."' title='Seleccione un Componente' >
+					          <select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Componente' >
 					          <option value='0'>Seleccione un Componente</option>";
-					          $sqlx = "SELECT codigo_bien,nombre FROM bienes_nacionales.tbien WHERE estatus = '1' ORDER BY codigo_bien ASC";
+					          $sqlx = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
+						 		FROM bienes_nacionales.ttipo_bien tb
+						 		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
+ 								WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
+								AND b.estatus = '1'
+								ORDER BY b.codigo_bien ASC";
 					          $querys = $pgsql->Ejecutar($sqlx);
 					          while ($rows = $pgsql->Respuesta($querys)){
 					            if($rows['codigo_bien']==$row['codigo_item']){
@@ -300,6 +315,10 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					          <button type='button' class='btn btn-primary' onclick='elimina_me('".$con."')'><i class='icon-minus'></i></button>
 					        </td>
 					      </tr>";
+					echo "<script>
+						$('#items_'+".$con.").css('width','auto');
+						$('#cantidades_'+".$con.").css('width','80px');
+						</script>";
 					$con++;
 				}
             ?>
@@ -343,12 +362,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		<?php
 		require_once("../class/class_bd.php");
 		$pgsql=new Conexion();
-		$sql = "SELECT codigo_bien,nombre 
+		$sql = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
  		FROM bienes_nacionales.ttipo_bien tb
  		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
- 		WHERE tb.descripcion NOT LIKE '%PRODUCTO TERMINADO%'
+ 		WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
 		AND b.estatus = '1'
-		ORDER BY codigo_bien ASC";
+		ORDER BY b.codigo_bien ASC";
 		$query = $pgsql->Ejecutar($sql);
 		$comillasimple=chr(34);
 		while ($rows = $pgsql->Respuesta($query)){
@@ -370,6 +389,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 		"</center>"+
 		"</td>"+
 		"</tr>");
+		//	Modificamos el width de la cantidad para este elemento
+	    $('#items_'+contador).css("width","auto");
+	    $('#cantidades_'+contador).css("width","80px");
 		contador++;
 	}
 
@@ -390,14 +412,18 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 <?php
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
-	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT b.codigo_bien, b.nombre,b.nro_serial, tb.descripcion AS tipo_bien 
+	$sql = "SELECT b.codigo_bien, b.nombre,b.nro_serial, b.esconfigurable, tb.descripcion AS tipo_bien, 
+	i.nro_serial||' - '||i.nombre AS item, cb.cantidad, CASE cb.item_base WHEN 'Y' THEN 'SÍ' ELSE 'NO' END as item_base 
 	FROM bienes_nacionales.tbien b 
 	INNER JOIN bienes_nacionales.ttipo_bien tb ON b.codigo_tipo_bien = tb.codigo_tipo_bien 
+	LEFT JOIN bienes_nacionales.tconfiguracion_bien cb ON cb.codigo_bien = b.codigo_bien 
+	LEFT JOIN bienes_nacionales.tbien i ON cb.codigo_item = i.codigo_bien 
 	WHERE b.codigo_bien =".$_GET['codigo_bien'];
 	$query = $pgsql->Ejecutar($sql);
-	$row=$pgsql->Respuesta($query);
+	while($obj=$pgsql->Respuesta($query)){
+		$row[]=$obj;
+	}
 ?>
 <link rel="STYLESHEET" type="text/css" href="css/print.css" media="print" />
 <fieldset>
@@ -410,7 +436,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					<label class="control-label">Código:</label>
 				</td>
 				<td>
-					<label><?=$row['codigo_bien']?></label>
+					<label><?=$row[0]['codigo_bien']?></label>
 				</td>
 			</tr>
 			<tr>
@@ -418,7 +444,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					<label class="control-label">Nombre del Bien Nacional:</label>
 				</td>
 				<td>
-					<label><?=$row['nombre']?></label>
+					<label><?=$row[0]['nombre']?></label>
 				</td>
 			</tr>
 				<tr>
@@ -426,7 +452,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					<label class="control-label">Código Externo del Bien:</label>
 				</td>
 				<td>
-					<label><?=$row['nro_serial']?></label>
+					<label><?=$row[0]['nro_serial']?></label>
 				</td>
 			</tr>
 			<tr>
@@ -434,9 +460,43 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 					<label class="control-label">Tipo Bien Nacional:</label>
 				</td>
 				<td>
-					<label class="control-label"><?=$row['tipo_bien']?></label>
+					<label><?=$row[0]['tipo_bien']?></label>
 				</td>
 			</tr>
+		</table>
+		<?php
+		if($row[0]['esconfigurable']=="Y"){
+		?>
+		<table class="bordered-table zebra-striped" >
+			<tr>
+				<td>
+					<label>Item:</label>
+				</td>
+				<td>
+					<label>Cantidad:</label>
+				</td>
+				<td>
+					<label>Item Base:</label>
+				</td>
+			</tr>
+			<?php
+			for ($i=0; $i < count($row); $i++) { 
+			?>
+			<tr>
+				<td>
+					<label><?=$row[$i]['item']?></label>
+				</td>
+				<td>
+					<label><?=$row[$i]['cantidad']?></label>
+				</td>
+				<td>
+					<label><?=$row[$i]['item_base']?></label>
+				</td>
+			</tr>
+		<?php
+			}
+		}
+		?>
 		</table>
 		<center>
 			<button id="btnPrint" type="button" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir</button>

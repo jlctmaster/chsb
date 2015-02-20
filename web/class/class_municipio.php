@@ -99,20 +99,20 @@ class municipio {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tmunicipio WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tmunicipio=$this->pgsql->Respuesta($query);
-			$this->codigo_municipio($tmunicipio['codigo_municipio']);
-			$this->descripcion($tmunicipio['descripcion']);
-			$this->codigo_estado($tmunicipio['codigo_estado']);
-			$this->estatus($tmunicipio['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+	public function Comprobar($comprobar){
+	    if($comprobar==true){
+		    $sql="SELECT * FROM general.tmunicipio WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tmunicipio=$this->pgsql->Respuesta($query);
+				$this->estatus($tmunicipio['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

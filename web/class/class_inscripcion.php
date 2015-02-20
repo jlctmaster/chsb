@@ -177,26 +177,24 @@ class inscripcion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT i.codigo_inscripcion,p.descripcion,p.fecha_inicio,p.fecha_fin,i.fecha_cierre,i.estatus 
-	    FROM educacion.tinscripcion i 
-	    INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
-	    WHERE p.descripcion='$this->descripcion' AND p.fecha_inicio = '$this->fecha_inicio'
-	    AND p.fecha_fin = '$this->fecha_fin' AND i.fecha_cierre = '$this->fecha_cierre' AND p.esinscripcion = 'Y'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tinscripcion=$this->pgsql->Respuesta($query);
-			$this->codigo_inscripcion($tinscripcion['codigo_inscripcion']);
-			$this->descripcion($tinscripcion['descripcion']);
-			$this->fecha_inicio($tinscripcion['fecha_inicio']);
-			$this->fecha_fin($tinscripcion['fecha_fin']);
-			$this->fecha_cierre($tinscripcion['fecha_cierre']);
-			$this->estatus($tinscripcion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT i.codigo_inscripcion,p.descripcion,p.fecha_inicio,p.fecha_fin,i.fecha_cierre,i.estatus 
+		    FROM educacion.tinscripcion i 
+		    INNER JOIN educacion.tperiodo p ON i.codigo_periodo = p.codigo_periodo 
+		    WHERE p.descripcion='$this->descripcion' AND p.fecha_inicio = '$this->fecha_inicio'
+		    AND p.fecha_fin = '$this->fecha_fin' AND i.fecha_cierre = '$this->fecha_cierre' AND p.esinscripcion = 'Y'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tinscripcion=$this->pgsql->Respuesta($query);
+				$this->estatus($tinscripcion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

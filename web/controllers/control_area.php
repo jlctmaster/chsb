@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['oldarea']))
+  $oldarea=trim($_POST['oldarea']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -19,7 +28,7 @@ if($lOpt=='Registrar'){
   $area->codigo_area($codigo_area);
   $area->descripcion($descripcion);
   $area->codigo_departamento($codigo_departamento);
-  if(!$area->Comprobar()){
+  if(!$area->Comprobar($comprobar)){
     if($area->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -45,7 +54,9 @@ if($lOpt=='Modificar'){
   $area->codigo_area($codigo_area);
   $area->descripcion($descripcion);
   $area->codigo_departamento($codigo_departamento);
-  if(!$area->Comprobar()){
+  if($oldarea==$area)
+    $comprobar=false;
+  if(!$area->Comprobar($comprobar)){
     if($area->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

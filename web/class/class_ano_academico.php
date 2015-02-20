@@ -60,7 +60,8 @@ class ano_academico {
     }
 
     public function Cerrar($user){
-    	$sql="UPDATE educacion.tano_academico SET cerrado='Y',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_ano_academico='$this->codigo_ano_academico'";
+    	$sql="UPDATE educacion.tano_academico SET cerrado='Y',modificado_por='$user',fecha_modificacion=NOW() 
+    	WHERE codigo_ano_academico<>'$this->codigo_ano_academico'";
     	if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -107,19 +108,20 @@ class ano_academico {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM educacion.tano_academico WHERE ano='$this->ano'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tano_academico=$this->pgsql->Respuesta($query);
-			$this->codigo_ano_academico($tano_academico['codigo_ano_academico']);
-			$this->ano($tano_academico['ano']);
-			$this->estatus($tano_academico['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM educacion.tano_academico WHERE ano='$this->ano'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tano_academico=$this->pgsql->Respuesta($query);
+				$this->estatus($tano_academico['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

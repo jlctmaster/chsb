@@ -98,20 +98,20 @@ class estado {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.testado WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$testado=$this->pgsql->Respuesta($query);
-			$this->codigo_estado($testado['codigo_estado']);
-			$this->descripcion($testado['descripcion']);
-			$this->codigo_pais($testado['codigo_pais']);
-			$this->estatus($testado['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.testado WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$testado=$this->pgsql->Respuesta($query);
+				$this->estatus($testado['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

@@ -100,20 +100,21 @@ class ambiente {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM general.tambiente WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tambiente=$this->pgsql->Respuesta($query);
-			$this->codigo_ambiente($tambiente['codigo_ambiente']);
-			$this->descripcion($tambiente['descripcion']);
-			$this->tipo_ambiente($tambiente['tipo_ambiente']);
-			$this->estatus($tambiente['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM general.tambiente WHERE descripcion='$this->descripcion'";
+		    echo $sql;
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tambiente=$this->pgsql->Respuesta($query);
+				$this->estatus($tambiente['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}	
+   		}else
+   			return false;
    	}
 }
 ?>

@@ -185,7 +185,7 @@ class configuracion {
 	    cantidad_caracteresespeciales,cantidad_numeros,dias_vigenciaclave,numero_ultimasclaves,dias_aviso,intentos_fallidos,numero_preguntas,numero_preguntasaresponder,creado_por,fecha_creacion) VALUES 
 	    ('$this->descripcion',$this->longitud_minclave,$this->longitud_maxclave,$this->cantidad_letrasmayusculas,$this->cantidad_letrasminusculas
 	    ,$this->cantidad_caracteresespeciales,$this->cantidad_numeros,$this->dias_vigenciaclave,$this->numero_ultimasclaves,$this->dias_aviso
-	    ,$this->intentos_fallidos,$this->numero_preguntas,$this->numero_preguntasaresponder,'$user',NOW()";
+	    ,$this->intentos_fallidos,$this->numero_preguntas,$this->numero_preguntasaresponder,'$user',NOW())";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -229,31 +229,20 @@ class configuracion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM seguridad.tconfiguracion WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tconfiguracion=$this->pgsql->Respuesta($query);
-			$this->codigo_configuracion($tconfiguracion['codigo_configuracion']);
-			$this->descripcion($tconfiguracion['descripcion']);
-			$this->longitud_minclave($tconfiguracion['longitud_minclave']);
-			$this->longitud_maxclave($tconfiguracion['longitud_maxclave']);
-			$this->cantidad_letrasmayusculas($tconfiguracion['cantidad_letrasmayusculas']);
-			$this->cantidad_letrasminusculas($tconfiguracion['cantidad_letrasminusculas']);
-			$this->cantidad_caracteresespeciales($tconfiguracion['cantidad_caracteresespeciales']);
-			$this->cantidad_numeros($tconfiguracion['cantidad_numeros']);
-			$this->dias_vigenciaclave($tconfiguracion['dias_vigenciaclave']);
-			$this->numero_ultimasclaves($tconfiguracion['numero_ultimasclaves']);
-			$this->dias_aviso($tconfiguracion['dias_aviso']);
-			$this->intentos_fallidos($tconfiguracion['intentos_fallidos']);
-			$this->numero_preguntas($tconfiguracion['numero_preguntas']);
-			$this->numero_preguntasaresponder($tconfiguracion['numero_preguntasaresponder']);
-			$this->estatus($tconfiguracion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM seguridad.tconfiguracion WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tconfiguracion=$this->pgsql->Respuesta($query);
+				$this->estatus($tconfiguracion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

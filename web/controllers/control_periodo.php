@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -31,7 +40,7 @@ if($lOpt=='Registrar'){
   $periodo->fecha_inicio($fecha_inicio);
   $periodo->fecha_fin($fecha_fin);
   $periodo->codigo_lapso($codigo_lapso);
-  if(!$periodo->Comprobar()){
+  if(!$periodo->Comprobar($comprobar)){
     if($periodo->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -45,10 +54,10 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Trayecto ha sido registrado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Período ha sido registrado con éxito!";
     header("Location: ../view/menu_principal.php?periodo&Opt=2");
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Trayecto!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el Período!";
     header("Location: ../view/menu_principal.php?periodo&Opt=2");
   }
 }
@@ -59,7 +68,9 @@ if($lOpt=='Modificar'){
   $periodo->fecha_inicio($fecha_inicio);
   $periodo->fecha_fin($fecha_fin);
   $periodo->codigo_lapso($codigo_lapso);
-  if(!$periodo->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$periodo->Comprobar($comprobar)){
     if($periodo->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -67,10 +78,10 @@ if($lOpt=='Modificar'){
   }else
     $confirmacion=-1;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Trayecto ha sido modificado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Período ha sido modificado con éxito!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Trayecto!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar el Período!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }
 }
@@ -82,10 +93,10 @@ if($lOpt=='Desactivar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Trayecto ha sido desactivado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Período ha sido desactivado con éxito!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Trayecto!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al desactivar el Período!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }
 }
@@ -97,10 +108,10 @@ if($lOpt=='Activar'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡El Trayecto ha sido activado con éxito!";
+    $_SESSION['datos']['mensaje']="¡El Período ha sido activado con éxito!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Trayecto!";
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al activar el Período!";
     header("Location: ../view/menu_principal.php?periodo&Opt=3&codigo_periodo=".$periodo->codigo_periodo());
   }
 }   

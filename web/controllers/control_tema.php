@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//  Variables para indicar si hace la comprobación del registro
+
+$comprobar=true;
+
+if(isset($_POST['olddescripcion']))
+  $olddescripcion=trim($_POST['olddescripcion']);
+
+//  Fin
+
 if(isset($_POST['lOpt']))
   $lOpt=trim($_POST['lOpt']);
 
@@ -15,7 +24,7 @@ $tema=new tema();
 if($lOpt=='Registrar'){
   $tema->codigo_tema($codigo_tema);
   $tema->descripcion($descripcion);
-  if(!$tema->Comprobar()){
+  if(!$tema->Comprobar($comprobar)){
     if($tema->Registrar($_SESSION['user_name']))
       $confirmacion=1;
     else
@@ -40,7 +49,9 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $tema->codigo_tema($codigo_tema);
   $tema->descripcion($descripcion);
-  if(!$tema->Comprobar()){
+  if($olddescripcion==$descripcion)
+    $comprobar=false;
+  if(!$tema->Comprobar($comprobar)){
     if($tema->Actualizar($_SESSION['user_name']))
       $confirmacion=1;
     else

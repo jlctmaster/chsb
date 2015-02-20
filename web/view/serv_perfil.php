@@ -20,7 +20,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 					<thead>
 						<tr>
 							<th>Código:</th>
-							<th>Perfil:</th>
+							<th>Perfil de Usuarios:</th>
 							<th>Conf. de Sistema:</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -85,7 +85,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<label class="control-label" for="codigo_configuracion">Configuración del Sistema:</label>  
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
-							<option value=0>Seleccione una Configuración del Sistema</option>
+							<option value=0>Seleccione una Configuración</option>
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
@@ -136,6 +136,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="nombre_perfil">Perfil</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldperfil" name="oldperfil" value="<?=$row['nombre_perfil']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del perfil" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_perfil" id="nombre_perfil" type="text" value="<?=$row['nombre_perfil']?>" required />
 					</div>  
 				</div>   
@@ -143,7 +144,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_configuracion">Configuración del Sistema</label>  
 					<div class="controls">  
 						<select class="selectpicker" data-live-search="true" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
-							<option value=0>Seleccione una Configuración del Sistema</option>
+							<option value=0>Seleccione una Configuración</option>
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();

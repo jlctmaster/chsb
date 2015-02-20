@@ -129,22 +129,20 @@ class ubicacion {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM inventario.tubicacion WHERE descripcion='$this->descripcion'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tubicacion=$this->pgsql->Respuesta($query);
-			$this->codigo_ubicacion($tubicacion['codigo_ubicacion']);
-			$this->descripcion($tubicacion['descripcion']);
-			$this->codigo_ambiente($tubicacion['codigo_ambiente']);
-			$this->ubicacionprincipal($tubicacion['ubicacionprincipal']);
-			$this->itemsdefectuoso($tubicacion['itemsdefectuoso']);
-			$this->estatus($tubicacion['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM inventario.tubicacion WHERE descripcion='$this->descripcion'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tubicacion=$this->pgsql->Respuesta($query);
+				$this->estatus($tubicacion['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+	    }else
+	      return false;
    	}
 }
 ?>

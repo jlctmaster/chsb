@@ -145,24 +145,20 @@ require_once("class_bd.php");
       return false;
   }
 
-  public function Comprobar(){
-    $sql="SELECT * FROM biblioteca.tlibro WHERE titulo='$this->titulo'";
-    $query=$this->pgsql->Ejecutar($sql);
-    if($this->pgsql->Total_Filas($query)!=0){
-      $libro=$this->pgsql->Respuesta($query);
-      $this->codigo_isbn_libro($libro['codigo_isbn_libro']);
-      $this->titulo($libro['titulo']);
-      $this->codigo_editorial($libro['codigo_editorial']);
-      $this->codigo_autor($libro['codigo_autor']);
-      $this->codigo_tema($libro['codigo_tema']);
-      $this->numero_paginas($libro['numero_paginas']);
-      $this->fecha_edicion($libro['fecha_edicion']);
-      $this->estatus($libro['estatus']);
-      return true;
-    }
-    else{
+  public function Comprobar($comprobar){
+    if($comprobar==true){
+      $sql="SELECT * FROM biblioteca.tlibro WHERE codigo_isbn_libro='$this->codigo_isbn_libro'";
+      $query=$this->pgsql->Ejecutar($sql);
+      if($this->pgsql->Total_Filas($query)!=0){
+        $libro=$this->pgsql->Respuesta($query);
+        $this->estatus($libro['estatus']);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }else
       return false;
-    }
   }
 }
 ?>

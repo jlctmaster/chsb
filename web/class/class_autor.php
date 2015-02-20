@@ -88,19 +88,20 @@ class autor {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.tautor WHERE nombre='$this->nombre'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tautor=$this->pgsql->Respuesta($query);
-			$this->codigo_autor($tautor['codigo_autor']);
-			$this->nombre($tautor['nombre']);
-			$this->estatus($tautor['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM biblioteca.tautor WHERE nombre='$this->nombre'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tautor=$this->pgsql->Respuesta($query);
+				$this->estatus($tautor['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>

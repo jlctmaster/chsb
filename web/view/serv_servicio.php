@@ -103,7 +103,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM seguridad.tmodulo ORDER BY orden ASC";
+							$sql = "SELECT * FROM seguridad.tmodulo 
+							WHERE estatus = '1' 
+							ORDER BY orden ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
 								echo "<option value=".$row['codigo_modulo'].">".$row['nombre_modulo']."</option>";
@@ -145,6 +147,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="nombre_servicio">Servicio:</label>  
 					<div class="controls">  
+						<input type="hidden" id="oldservicio" name="oldservicio" value="<?=$row['nombre_servicio']?>">
 						<input class="input-xlarge" title="Ingrese el nombre del servicio" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_servicio" id="nombre_servicio" type="text" value="<?=$row['nombre_servicio']?>" required />
 					</div>  
 				</div>   
@@ -168,7 +171,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM seguridad.tmodulo ORDER BY orden ASC";
+							$sql = "SELECT * FROM seguridad.tmodulo 
+							WHERE estatus = '1' 
+							ORDER BY orden ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($row['codigo_modulo']==$rows['codigo_modulo'])

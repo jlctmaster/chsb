@@ -120,21 +120,21 @@ class ejemplar {
 			return false;
    	}
 
-   	public function Comprobar(){
-	    $sql="SELECT * FROM biblioteca.tejemplar WHERE numero_edicion = '$this->numero_edicion' AND codigo_isbn_libro = '$this->codigo_isbn_libro'";
-		$query=$this->pgsql->Ejecutar($sql);
-	    if($this->pgsql->Total_Filas($query)!=0){
-			$tejemplar=$this->pgsql->Respuesta($query);
-			$this->codigo_ejemplar($tejemplar['codigo_ejemplar']);
-			$this->codigo_clasificacion($tejemplar['codigo_clasificacion']);
-			$this->numero_edicion($tejemplar['numero_edicion']);
-			$this->codigo_isbn_libro($tejemplar['codigo_isbn_libro']);
-			$this->estatus($tejemplar['estatus']);
-			return true;
-		}
-		else{
-			return false;
-		}
+   	public function Comprobar($comprobar){
+   		if($comprobar==true){
+		    $sql="SELECT * FROM biblioteca.tejemplar 
+		    WHERE codigo_cra = '$this->codigo_cra'";
+			$query=$this->pgsql->Ejecutar($sql);
+		    if($this->pgsql->Total_Filas($query)!=0){
+				$tejemplar=$this->pgsql->Respuesta($query);
+				$this->estatus($tejemplar['estatus']);
+				return true;
+			}
+			else{
+				return false;
+			}
+   		}else
+   			return false;
    	}
 }
 ?>
