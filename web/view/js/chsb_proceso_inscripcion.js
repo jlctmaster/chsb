@@ -413,10 +413,6 @@ function init(){
 
 		if(form.attr("id")=="form6"){
 			var send = true;
-			if($('#seccion').val()==""){
-				alert("¡Debe seleccionar una sección!");
-				send = false;
-			}
 			
 			//Comprobamos si el elemento estatus existe para luego verificar su valor.
 			if(document.getElementById("estatus")){

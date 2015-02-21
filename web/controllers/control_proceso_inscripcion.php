@@ -266,11 +266,41 @@ if(isset($_POST['especifique_integracion']))
 
 /** Campos de la 6ta Pestaña */
 
-if(isset($_POST['seccion']))
-  $seccion=trim($_POST['seccion']);
+if(isset($_POST['fotocopia_ci']))
+  $fotocopia_ci=trim($_POST['fotocopia_ci']);
 
-if(isset($_POST['observacion']))
-  $observacion=trim($_POST['observacion']);
+if(isset($_POST['partida_nacimiento']))
+  $partida_nacimiento=trim($_POST['partida_nacimiento']);
+
+if(isset($_POST['boleta_promocion']))
+  $boleta_promocion=trim($_POST['boleta_promocion']);
+
+if(isset($_POST['certificado_calificaciones']))
+  $certificado_calificaciones=trim($_POST['certificado_calificaciones']);
+
+if(isset($_POST['constancia_buenaconducta']))
+  $constancia_buenaconducta=trim($_POST['constancia_buenaconducta']);
+
+if(isset($_POST['fotos_estudiante']))
+  $fotos_estudiante=trim($_POST['fotos_estudiante']);
+
+if(isset($_POST['boleta_zonificacion']))
+  $boleta_zonificacion=trim($_POST['boleta_zonificacion']);
+
+if(isset($_POST['fotocopia_ci_representante']))
+  $fotocopia_ci_representante=trim($_POST['fotocopia_ci_representante']);
+
+if(isset($_POST['fotos_representante']))
+  $fotos_representante=trim($_POST['fotos_representante']);
+
+if(isset($_POST['otro_documento']))
+  $otro_documento=trim($_POST['otro_documento']);
+
+if(isset($_POST['cual_documento']))
+  $cual_documento=trim($_POST['cual_documento']);
+
+if(isset($_POST['observacion_documentos']))
+  $observacion_documentos=trim($_POST['observacion_documentos']);
 
 /** Fin 6ta Pestaña */
 
@@ -425,13 +455,43 @@ if($lOpt=='Registrar_Paso5'){
     $confirmacion=0;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡Se han registrado los datos de la integración escuela-comunidad en el proceso de inscripción con exito!";
-    $_SESSION['datos']['procesado']="Y";
     $_SESSION['datos']['codigo_proceso_inscripcion']=$proceso_inscripcion->codigo_proceso_inscripcion();
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2#tab-datosestudiantes");
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los datos de la integración escuela-comunidad en el proceso de inscripción!";
     $_SESSION['datos']['error']=$proceso_inscripcion->error();
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-integracionec");
+  }
+}
+
+if($lOpt=='Registrar_Paso6'){
+  $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
+  $proceso_inscripcion->cedula_persona($cedula_persona);
+  $proceso_inscripcion->fotocopia_ci($fotocopia_ci);
+  $proceso_inscripcion->partida_nacimiento($partida_nacimiento);
+  $proceso_inscripcion->boleta_promocion($boleta_promocion);
+  $proceso_inscripcion->certificado_calificaciones($certificado_calificaciones);
+  $proceso_inscripcion->constancia_buenaconducta($constancia_buenaconducta);
+  $proceso_inscripcion->fotos_estudiante($fotos_estudiante);
+  $proceso_inscripcion->boleta_zonificacion($boleta_zonificacion);
+  $proceso_inscripcion->fotocopia_ci_representante($fotocopia_ci_representante);
+  $proceso_inscripcion->fotos_representante($fotos_representante);
+  $proceso_inscripcion->otro_documento($otro_documento);
+  $proceso_inscripcion->cual_documento($cual_documento);
+  $proceso_inscripcion->observacion_documentos($observacion_documentos);
+  if($proceso_inscripcion->Registrar_Paso6($_SESSION['user_name']))
+    $confirmacion=1;
+  else
+    $confirmacion=0;
+  if($confirmacion==1){
+    $_SESSION['datos']['mensaje']="¡Se han registrado los datos de los documentos consignados en el proceso de inscripción con exito!";
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_proceso_inscripcion']=$proceso_inscripcion->codigo_proceso_inscripcion();
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2#tab-datosestudiantes");
+  }else{
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los datos de los documentos consignados en el proceso de inscripción!";
+    $_SESSION['datos']['error']=$proceso_inscripcion->error();
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }
 }
 
@@ -595,19 +655,28 @@ if($lOpt=='Modificar_Paso5'){
 if($lOpt=='Modificar_Paso6'){
   $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
   $proceso_inscripcion->cedula_persona($cedula_persona);
-  $proceso_inscripcion->seccion($seccion);
-  $proceso_inscripcion->observacion($observacion);
-  if($proceso_inscripcion->Actualizar_Paso6($_SESSION['user_name'],$_POST['oldseccion']))
+  $proceso_inscripcion->fotocopia_ci($fotocopia_ci);
+  $proceso_inscripcion->partida_nacimiento($partida_nacimiento);
+  $proceso_inscripcion->boleta_promocion($boleta_promocion);
+  $proceso_inscripcion->certificado_calificaciones($certificado_calificaciones);
+  $proceso_inscripcion->constancia_buenaconducta($constancia_buenaconducta);
+  $proceso_inscripcion->fotos_estudiante($fotos_estudiante);
+  $proceso_inscripcion->boleta_zonificacion($boleta_zonificacion);
+  $proceso_inscripcion->fotocopia_ci_representante($fotocopia_ci_representante);
+  $proceso_inscripcion->fotos_representante($fotos_representante);
+  $proceso_inscripcion->otro_documento($otro_documento);
+  $proceso_inscripcion->cual_documento($cual_documento);
+  $proceso_inscripcion->observacion_documentos($observacion_documentos);
+  if($proceso_inscripcion->Actualizar_Paso6($_SESSION['user_name']))
     $confirmacion=1;
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha modificado la asignación del estudiante en una sección en el proceso de inscripción con exito!";
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-inscripcion");
+    $_SESSION['datos']['mensaje']="¡Se han modificado los datos de los documentos consignados en el proceso de inscripción con exito!";
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }else{
-    $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la asignación del estudiante en una sección en el proceso de inscripción!";
-    $_SESSION['datos']['error']=$proceso_inscripcion->error();
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-inscripcion");
+    $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los datos de los documentos consignados en el proceso de inscripción!";
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }
 }
 

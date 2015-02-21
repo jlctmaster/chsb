@@ -171,7 +171,8 @@ class clsFpdf extends FPDF {
   WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido END AS representante,
   TO_CHAR(rep.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,SUBSTR(rep.cedula_persona,2,LENGTH(rep.cedula_persona)) AS cedula_representante,SUBSTR(rep.cedula_persona,1,1) AS nacionalidad_representante,
   rep.profesion AS profesion_representante,rep.grado_instruccion AS grado_instruccion_representante,rep.direccion AS direccion_representante,rep.telefono_local AS telefono_local_representante,
-  paren.descripcion AS parentesco,ps.integracion_escuela_comunidad,ps.especifique_integracion,sec.nombre_seccion,ps.observacion 
+  paren.descripcion AS parentesco,ps.integracion_escuela_comunidad,ps.especifique_integracion,sec.nombre_seccion,ps.observacion,ps.fotocopia_ci,ps.partida_nacimiento,ps.boleta_promocion,ps.certificado_calificaciones,
+  ps.constancia_buenaconducta,ps.fotos_estudiante,ps.boleta_zonificacion,ps.fotocopia_ci_representante,ps.fotos_representante,ps.otro_documento,ps.cual_documento,ps.observacion_documentos 
   FROM educacion.tproceso_inscripcion ps 
   INNER JOIN educacion.tano_academico aa ON ps.codigo_ano_academico = aa.codigo_ano_academico 
   LEFT JOIN general.tpersona rp ON ps.cedula_responsable = rp.cedula_persona 
@@ -261,6 +262,18 @@ class clsFpdf extends FPDF {
       $arr['especifique_integracion'][$ind]=$sacar_datos['especifique_integracion'];
       $arr['nombre_seccion'][$ind]=$sacar_datos['nombre_seccion'];
       $arr['observacion'][$ind]=$sacar_datos['observacion'];
+      $arr['fotocopia_ci'][$ind]=$sacar_datos['fotocopia_ci'];
+      $arr['partida_nacimiento'][$ind]=$sacar_datos['partida_nacimiento'];  
+      $arr['boleta_promocion'][$ind]=$sacar_datos['boleta_promocion'];
+      $arr['certificado_calificaciones'][$ind]=$sacar_datos['certificado_calificaciones'];
+      $arr['constancia_buenaconducta'][$ind]=$sacar_datos['constancia_buenaconducta'];
+      $arr['fotos_estudiante'][$ind]=$sacar_datos['fotos_estudiante'];
+      $arr['boleta_zonificacion'][$ind]=$sacar_datos['boleta_zonificacion'];
+      $arr['fotocopia_ci_representante'][$ind]=$sacar_datos['fotocopia_ci_representante'];
+      $arr['fotos_representante'][$ind]=$sacar_datos['fotos_representante'];
+      $arr['otro_documento'][$ind]=$sacar_datos['otro_documento'];
+      $arr['cual_documento'][$ind]=$sacar_datos['cual_documento'];
+      $arr['observacion_documentos'][$ind]=$sacar_datos['observacion_documentos'];
     }
 
     $lobjPdf->SetFont('Arial','',8);
@@ -445,17 +458,17 @@ class clsFpdf extends FPDF {
     $lobjPdf->SetFont('Arial','B',10);
     $lobjPdf->Cell(190,5,'VI.- DOCUMENTOS CONSIGNADOS',1,1);
     $lobjPdf->SetFont('Arial','',8);
-    $lobjPdf->Cell(95,5,'(     ) Fotocopia C.I. Estudiante',1,0);
-    $lobjPdf->Cell(95,5,'(     ) 4 Fotos Estudiante',1,1);
-    $lobjPdf->Cell(95,5,'(     ) Partida de Nacimiento Original  y Copia',1,0);
-    $lobjPdf->Cell(95,5,'(     ) Boleta de Zonificación',1,1);
-    $lobjPdf->Cell(95,5,'(     ) Boleta de Promoción',1,0);
-    $lobjPdf->Cell(95,5,'(     ) Fotocopia C.I. Representante',1,1);
-    $lobjPdf->Cell(95,5,'(     ) Certificado de Calificaciones',1,0);
-    $lobjPdf->Cell(95,5,'(     ) 2 Fotos Representante',1,1);
-    $lobjPdf->Cell(95,5,'(     ) Constancia de Buena Conducta',1,0);
-    $lobjPdf->Cell(95,5,'(     ) Otro ¿Cuál?',1,1);
-    $lobjPdf->Cell(190,5,'Observación:',1,1);
+    $lobjPdf->Cell(95,5,$arr['fotocopia_ci'][0]=="Y" ? '(  X  ) Fotocopia C.I. Estudiante' :  '(     ) Fotocopia C.I. Estudiante',1,0);
+    $lobjPdf->Cell(95,5,$arr['fotos_estudiante'][0]=="Y" ? '(  X  ) 4 Fotos Estudiante' : '(     ) 4 Fotos Estudiante',1,1);
+    $lobjPdf->Cell(95,5,$arr['partida_nacimiento'][0]=="Y" ? '(  X  ) Partida de Nacimiento Original  y Copia' : '(     ) Partida de Nacimiento Original  y Copia',1,0);
+    $lobjPdf->Cell(95,5,$arr['boleta_zonificacion'][0]=="Y" ? '(  X  ) Boleta de Zonificación' : '(     ) Boleta de Zonificación',1,1);
+    $lobjPdf->Cell(95,5,$arr['boleta_promocion'][0]=="Y" ? '(  X  ) Boleta de Promoción' : '(     ) Boleta de Promoción',1,0);
+    $lobjPdf->Cell(95,5,$arr['fotocopia_ci_representante'][0]=="Y" ? '(  X  ) Fotocopia C.I. Representante' : '(     ) Fotocopia C.I. Representante',1,1);
+    $lobjPdf->Cell(95,5,$arr['certificado_calificaciones'][0]=="Y" ? '(  X  ) Certificado de Calificaciones' : '(     ) Certificado de Calificaciones',1,0);
+    $lobjPdf->Cell(95,5,$arr['fotos_representante'][0]=="Y" ? '(  X  ) 2 Fotos Representante' : '(     ) 2 Fotos Representante',1,1);
+    $lobjPdf->Cell(95,5,$arr['constancia_buenaconducta'][0]=="Y" ? '(  X  ) Constancia de Buena Conducta' : '(     ) Constancia de Buena Conducta',1,0);
+    $lobjPdf->Cell(95,5,$arr['otro_documento'][0]=="Y" ? '(  X  ) Otro ¿Cuál? '.$arr['cual_documento'][0] : '(     ) Otro ¿Cuál?',1,1);
+    $lobjPdf->Cell(190,5,'Observación: '.$arr['observacion_documentos'][0],1,1);
     $lobjPdf->SetFont('Arial','B',10);
     $lobjPdf->Cell(190,5,'VII.- INSCRIPICIÓN',1,1);
     $lobjPdf->SetFont('Arial','',8);

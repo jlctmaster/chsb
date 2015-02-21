@@ -114,6 +114,7 @@
 				<li><a href="#tab-antecedentesfamiliares" data-toggle="tab" id="tab3">Antecedentes <br>Familiares</a></li>
 				<li><a href="#tab-datosrepresentante" data-toggle="tab" id="tab4">Datos Rep. Legal</a></li>
 				<li><a href="#tab-integracionec" data-toggle="tab" id="tab5">Integración <br>Escuela-Comunidad</a></li>
+				<li><a href="#tab-documentos" data-toggle="tab" id="tab5">Documentos Consignados</a></li>
 			</ul>
 			<div class="tab-content">
 			    <div class="tab-pane active in" id="tab-datosestudiantes">
@@ -947,6 +948,160 @@
 						</fieldset>
 					</form>
 			    </div>
+				<div class="tab-pane" id="tab-documentos">
+					<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form6"> 
+						<fieldset>
+							<div id="paginador" class="enjoy-css">
+								<input type="hidden" name="lOpt" id="lOpt" value="Registrar_Paso6">
+								<?php
+									$pgsql = new Conexion();
+									$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre
+									FROM educacion.tproceso_inscripcion pi 
+									INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
+									WHERE pi.codigo_proceso_inscripcion = ".$_GET['codigo_proceso_inscripcion'];
+									$query = $pgsql->Ejecutar($sql);
+									$rows=$pgsql->Respuesta($query);
+					      		?>
+					      		<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Cédula Estudiante:</label>
+								                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
+								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Nombre y Apellido:</label>
+								                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Fotocopia C.I. Estudiante <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="S" required /> Sí
+													<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Partida de Nacimiento <br> Original y Copia <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" required /> Sí
+													<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Boleta Promoción <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="boleta_promocion" id="boleta_promocion" value="S" required /> Sí
+													<input type="radio" name="boleta_promocion" id="boleta_promocion" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" required /> Sí
+													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="S" required /> Sí
+													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" required /> Sí
+													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="S" required /> Sí
+													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Fotocopia C.I. Representante <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" required /> Sí
+													<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">¿Otro Documento?</label>
+								                <div class="radios">
+													<input type="radio" name="otro_documento" id="otro_documento" value="Y" required /> Sí
+													<input type="radio" name="otro_documento" id="otro_documento" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">2 Fotos Representante <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="fotos_representante" id="fotos_representante" value="Y" required /> Sí
+													<input type="radio" name="fotos_representante" id="fotos_representante" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								                <label class="control-label">Especifique:</label>
+												<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" />
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Observación</label>
+								                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /></textarea>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="control-group">  
+									<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+								</div>  
+								<div class="form-actions">
+									<button type="button" id="btnGuardar6" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+									<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+								</div>
+							</div> 
+						</fieldset>
+					</form>
+			    </div>
 			</div>	
 		</div>
 		<?php
@@ -1059,6 +1214,7 @@
 			<li><a href="#tab-antecedentesfamiliares" data-toggle="tab" id="tab3">Antecedentes <br>Familiares</a></li>
 			<li><a href="#tab-datosrepresentante" data-toggle="tab" id="tab4">Datos Rep. Legal</a></li>
 			<li><a href="#tab-integracionec" data-toggle="tab" id="tab5">Integración <br>Escuela-Comunidad</a></li>
+			<li><a href="#tab-documentos" data-toggle="tab" id="tab5">Documentos <br>Consignados</a></li>
 		</ul>
 		<div class="tab-content">
 		    <div class="tab-pane" id="tab-datosestudiantes">
@@ -1869,7 +2025,7 @@
 							<?php
 								$pgsql=new Conexion();
 								$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,
-								pi.integracion_escuela_comunidad,pi.especifique_integracion,pi.procesado 
+								pi.integracion_escuela_comunidad,pi.especifique_integracion  
 								FROM educacion.tproceso_inscripcion pi 
 								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
 								WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
@@ -1921,6 +2077,163 @@
 							</div>  
 							<div class="form-actions">
 								<button type="button" id="btnGuardar5" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
+								<a href="?proceso_inscripcion"><button type="button" class="btn btn-large btn-primary"/><i class="icon-repeat"></i>&nbsp;Volver</button></a>
+							</div>
+						</div> 
+					</fieldset>
+				</form>
+		    </div>
+			<div class="tab-pane" id="tab-documentos">
+				<form class="form-horizontal" action="../controllers/control_proceso_inscripcion.php" method="post" id="form6"> 
+					<fieldset>
+						<div id="paginador" class="enjoy-css">
+							<input type="hidden" name="lOpt" id="lOpt" value="Modificar_Paso6">
+							<?php
+								$pgsql = new Conexion();
+								$sql="SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,
+								pi.fotocopia_ci,pi.partida_nacimiento,pi.boleta_promocion,pi.certificado_calificaciones,pi.constancia_buenaconducta,
+								pi.fotos_estudiante,pi.boleta_zonificacion,pi.fotocopia_ci_representante,pi.fotos_representante,pi.otro_documento,
+								pi.cual_documento,pi.observacion_documentos,pi.procesado 
+								FROM educacion.tproceso_inscripcion pi 
+								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
+								WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
+								$query = $pgsql->Ejecutar($sql);
+								$rows=$pgsql->Respuesta($query);
+				      		?>
+				      		<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Cédula Estudiante:</label>
+							                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" />
+							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" value="<?=$rows['cedula_persona']?>" readonly /> 
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Nombre y Apellido:</label>
+							                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Fotocopia C.I. Estudiante <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="S" <?php if($rows['fotocopia_ci']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="N" <?php if($rows['fotocopia_ci']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Partida de Nacimiento <br> Original y Copia <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" <?php if($rows['partida_nacimiento']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="N" <?php if($rows['partida_nacimiento']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Boleta Promoción <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="boleta_promocion" id="boleta_promocion" value="S" <?php if($rows['boleta_promocion']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="boleta_promocion" id="boleta_promocion" value="N" <?php if($rows['boleta_promocion']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" <?php if($rows['certificado_calificaciones']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" <?php if($rows['certificado_calificaciones']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="S" <?php if($rows['constancia_buenaconducta']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" <?php if($rows['constancia_buenaconducta']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" <?php if($rows['fotos_estudiante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" <?php if($rows['fotos_estudiante']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="S" <?php if($rows['boleta_zonificacion']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" <?php if($rows['boleta_zonificacion']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Fotocopia C.I. Representante <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" <?php if($rows['fotocopia_ci_representante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="N" <?php if($rows['fotocopia_ci_representante']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							            	<label class="control-label">¿Otro Documento?</label>
+							                <div class="radios">
+												<input type="radio" name="otro_documento" id="otro_documento" value="Y" <?php if($rows['otro_documento']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="otro_documento" id="otro_documento" value="N" <?php if($rows['otro_documento']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">2 Fotos Representante <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="fotos_representante" id="fotos_representante" value="Y" <?php if($rows['fotos_representante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotos_representante" id="fotos_representante" value="N" <?php if($rows['fotos_representante']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Especifique:</label>
+											<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" value="<?=$rows['cual_documento']?>" />
+							            </div>
+							            <div class="span6">
+							            	<label class="control-label">Observación</label>
+							                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /><?php echo $row['observacion_documentos']; ?></textarea>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="control-group">  
+								<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
+							</div>  
+							<div class="form-actions">
+								<button type="button" id="btnGuardar6" class="btn btn-large btn-primary"><i class="icon-hdd"></i>&nbsp;Guardar</button>
 								<?php
 									if($rows['procesado']=="Y")
 										echo '<button type="button" id="btnPrintReport" class="btn btn-large btn-primary"><i class="icon-print"></i>&nbsp;Imprimir Ficha</button>';

@@ -86,6 +86,18 @@ class proceso_inscripcion {
 	private $especifique_integracion;
 	private $seccion;
 	private $observacion;
+	private $fotocopia_ci;
+	private $partida_nacimiento;
+	private $boleta_promocion;
+	private $certificado_calificaciones;
+	private $constancia_buenaconducta;
+	private $fotos_estudiante;
+	private $boleta_zonificacion;
+	private $fotocopia_ci_representante;
+	private $fotos_representante;
+	private $otro_documento;
+	private $cual_documento;
+	private $observacion_documentos;
 	private $estatus;
 	private $error; 
 	private $pgsql; 
@@ -171,6 +183,18 @@ class proceso_inscripcion {
 		$this->especifique_integracion=null;
 		$this->seccion=null;
 		$this->observacion=null;
+		$this->fotocopia_ci=null;
+		$this->partida_nacimiento=null;
+		$this->boleta_promocion=null;
+		$this->certificado_calificaciones=null;
+		$this->constancia_buenaconducta=null;
+		$this->fotos_estudiante=null;
+		$this->boleta_zonificacion=null;
+		$this->fotocopia_ci_representante=null;
+		$this->fotos_representante=null;
+		$this->otro_documento=null;
+		$this->cual_documento=null;
+		$this->observacion_documentos=null;
 		$this->estatus=null;
 		$this->pgsql=new Conexion();
 	}
@@ -903,6 +927,114 @@ class proceso_inscripcion {
 		}
     }
 
+    public function fotocopia_ci(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->fotocopia_ci;
+
+		if($Num_Parametro>0){
+			$this->fotocopia_ci=func_get_arg(0);
+		}
+    }
+
+    public function partida_nacimiento(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->partida_nacimiento;
+
+		if($Num_Parametro>0){
+			$this->partida_nacimiento=func_get_arg(0);
+		}
+    }
+
+    public function boleta_promocion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->boleta_promocion;
+
+		if($Num_Parametro>0){
+			$this->boleta_promocion=func_get_arg(0);
+		}
+    }
+
+    public function certificado_calificaciones(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->certificado_calificaciones;
+     
+		if($Num_Parametro>0){
+	   		$this->certificado_calificaciones=func_get_arg(0);
+	 	}
+    }
+
+    public function constancia_buenaconducta(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->constancia_buenaconducta;
+
+		if($Num_Parametro>0){
+			$this->constancia_buenaconducta=func_get_arg(0);
+		}
+    }
+
+    public function fotos_estudiante(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->fotos_estudiante;
+     
+		if($Num_Parametro>0){
+	   		$this->fotos_estudiante=func_get_arg(0);
+	 	}
+    }
+
+    public function boleta_zonificacion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->boleta_zonificacion;
+
+		if($Num_Parametro>0){
+			$this->boleta_zonificacion=func_get_arg(0);
+		}
+    }
+
+    public function fotocopia_ci_representante(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->fotocopia_ci_representante;
+
+		if($Num_Parametro>0){
+			$this->fotocopia_ci_representante=func_get_arg(0);
+		}
+    }
+
+    public function fotos_representante(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->fotos_representante;
+
+		if($Num_Parametro>0){
+			$this->fotos_representante=func_get_arg(0);
+		}
+    }
+
+    public function otro_documento(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->otro_documento;
+
+		if($Num_Parametro>0){
+			$this->otro_documento=func_get_arg(0);
+		}
+    }
+
+    public function cual_documento(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->cual_documento;
+     
+		if($Num_Parametro>0){
+	   		$this->cual_documento=func_get_arg(0);
+	 	}
+    }
+
+    public function observacion_documentos(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->observacion_documentos;
+
+		if($Num_Parametro>0){
+			$this->observacion_documentos=func_get_arg(0);
+		}
+    }
+
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -1304,6 +1436,31 @@ class proceso_inscripcion {
 			return false;
 		}
    	}
+
+   	public function Registrar_Paso6($user){
+   		$ok=true;
+	   	$this->Transaccion('iniciando');
+   		$sql="UPDATE educacion.tproceso_inscripcion SET fotocopia_ci='$this->fotocopia_ci',partida_nacimiento='$this->partida_nacimiento',boleta_promocion='$this->boleta_promocion',
+   		certificado_calificaciones='$this->certificado_calificaciones',constancia_buenaconducta='$this->constancia_buenaconducta',fotos_estudiante='$this->fotos_estudiante',
+   		boleta_zonificacion='$this->boleta_zonificacion',fotocopia_ci_representante='$this->fotocopia_ci_representante',fotos_representante='$this->fotos_representante',
+   		otro_documento='$this->otro_documento',cual_documento='$this->cual_documento',observacion_documentos='$this->observacion_documentos',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+	    if($this->pgsql->Ejecutar($sql)!=null)
+			$ok=true;
+		else{
+	    	$this->error(pg_last_error());
+			$ok=false;
+	    }
+
+		if($ok==true){
+			$this->Transaccion('finalizado');
+			return true;
+		}
+		else{
+			$this->Transaccion('cancelado');
+			return false;
+		}
+   	}
    
     public function Actualizar_Paso1($user,$oldci){
 	    $ok=true;
@@ -1585,31 +1742,20 @@ class proceso_inscripcion {
 	    }
    	}
 
-   	public function Actualizar_Paso6($user,$oldseccion){
+   	public function Actualizar_Paso6($user){
    		$ok=true;
 	   	$this->Transaccion('iniciando');
-   		$sql="UPDATE educacion.tproceso_inscripcion SET seccion='$this->seccion',observacion='$this->observacion',procesado='Y',modificado_por='$user',
-   		fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-	    if($this->pgsql->Ejecutar($sql)!=null){
-	    	if($this->seccion!="0"){
-	    		$sqlx="DELETE FROM educacion.tinscrito_seccion WHERE cedula_persona = '$this->cedula_persona' AND seccion = '$oldseccion'";
-	    		$this->pgsql->Ejecutar($sqlx);
-		    	$sqlx1="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ('$this->cedula_persona','$this->seccion','$user',NOW())";
-		    	if($this->pgsql->Ejecutar($sqlx1)!=null)
-		    		$ok= true;
-		    	else{
-			    	$this->error(pg_last_error());
-					$ok=false;
-			    }
-	    	}else{
-		    	$this->error(pg_last_error());
-				$ok=false;
-		    }
-	    }
+   		$sql="UPDATE educacion.tproceso_inscripcion SET fotocopia_ci='$this->fotocopia_ci',partida_nacimiento='$this->partida_nacimiento',boleta_promocion='$this->boleta_promocion',
+   		certificado_calificaciones='$this->certificado_calificaciones',constancia_buenaconducta='$this->constancia_buenaconducta',fotos_estudiante='$this->fotos_estudiante',
+   		boleta_zonificacion='$this->boleta_zonificacion',fotocopia_ci_representante='$this->fotocopia_ci_representante',fotos_representante='$this->fotos_representante',
+   		otro_documento='$this->otro_documento',cual_documento='$this->cual_documento',observacion_documentos='$this->observacion_documentos',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+	    if($this->pgsql->Ejecutar($sql)!=null)
+			$ok=true;
 		else{
-			$this->error(pg_last_error());
-			$ok= false;
-		}
+	    	$this->error(pg_last_error());
+			$ok=false;
+	    }
 
 		if($ok==true){
 			$this->Transaccion('finalizado');

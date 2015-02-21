@@ -812,7 +812,19 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	codigo_parentesco numeric null,
  	integracion_escuela_comunidad char(1) not null default '9',
  	especifique_integracion varchar(60) default null,
- 	seccion char(5) null,
+ 	fotocopia_ci char(1) not null default 'N',
+ 	partida_nacimiento char(1) not null default 'N',
+ 	boleta_promocion char(1) not null default 'N',
+ 	certificado_calificaciones char(1) not null default 'N',
+ 	constancia_buenaconducta char(1) not null default 'N',
+ 	fotos_estudiante char(1) not null default 'N',
+ 	boleta_zonificacion char(1) not null default 'N',
+ 	fotocopia_ci_representante char(1) not null default 'N',
+ 	fotos_representante char(1) not null default 'N',
+ 	otro_documento char(1) not null default 'N',
+ 	cual_documento varchar(60) default null, 	
+ 	observacion_documentos varchar(255) default null,
+ 	seccion char(5) default null,
  	observacion varchar(255) default null,
  	estatus char(1) not null default '1',
 	procesado char(1) NOT NULL default 'N',
@@ -1094,8 +1106,7 @@ CREATE TABLE biblioteca.teditorial
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-	constraint pk_editorial primary key(codigo_editorial),
-	constraint fk_editorial_parroquia foreign key(codigo_parroquia) references general.tparroquia(codigo_parroquia) on delete restrict on update cascade
+	constraint pk_editorial primary key(codigo_editorial)
 );
 
 CREATE TRIGGER auditoria_registros
