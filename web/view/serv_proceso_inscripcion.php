@@ -24,7 +24,7 @@
 					<thead>
 						<tr>
 							<th>Código</th>
-							<th>Cédula</th>
+							<th>Cédula Estudiante</th>
 							<th>Nombre y Apellido</th>
 							<th>Fecha Inscripción</th>
 							<th>Grado Académico</th>
@@ -983,7 +983,7 @@
 								            <div class="span6">
 								                <label class="control-label">Fotocopia C.I. Estudiante <br> ¿Entregado?</label>
 								                <div class="radios">
-													<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="S" required /> Sí
+													<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="Y" required /> Sí
 													<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="N" checked="checked" required /> No
 												</div>
 								            </div>
@@ -1003,7 +1003,7 @@
 								            <div class="span6">
 								                <label class="control-label">Boleta Promoción <br> ¿Entregado?</label>
 								                <div class="radios">
-													<input type="radio" name="boleta_promocion" id="boleta_promocion" value="S" required /> Sí
+													<input type="radio" name="boleta_promocion" id="boleta_promocion" value="Y" required /> Sí
 													<input type="radio" name="boleta_promocion" id="boleta_promocion" value="N" checked="checked" required /> No
 												</div>
 								            </div>
@@ -1023,7 +1023,7 @@
 								            <div class="span6">
 								                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
 								                <div class="radios">
-													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="S" required /> Sí
+													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" required /> Sí
 													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" checked="checked" required /> No
 												</div>
 								            </div>
@@ -1043,7 +1043,7 @@
 								            <div class="span6">
 								                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
 								                <div class="radios">
-													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="S" required /> Sí
+													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" required /> Sí
 													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" checked="checked" required /> No
 												</div>
 								            </div>
@@ -2121,14 +2121,14 @@
 							            <div class="span6">
 							                <label class="control-label">Fotocopia C.I. Estudiante <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="S" <?php if($rows['fotocopia_ci']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="Y" <?php if($rows['fotocopia_ci']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="fotocopia_ci" id="fotocopia_ci" value="N" <?php if($rows['fotocopia_ci']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Partida de Nacimiento <br> Original y Copia <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" <?php if($rows['partida_nacimiento']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" <?php if($rows['partida_nacimiento']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="N" <?php if($rows['partida_nacimiento']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
@@ -2141,14 +2141,14 @@
 							            <div class="span6">
 							                <label class="control-label">Boleta Promoción <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="boleta_promocion" id="boleta_promocion" value="S" <?php if($rows['boleta_promocion']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="boleta_promocion" id="boleta_promocion" value="Y" <?php if($rows['boleta_promocion']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="boleta_promocion" id="boleta_promocion" value="N" <?php if($rows['boleta_promocion']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" <?php if($rows['certificado_calificaciones']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" <?php if($rows['certificado_calificaciones']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" <?php if($rows['certificado_calificaciones']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
@@ -2161,14 +2161,14 @@
 							            <div class="span6">
 							                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="S" <?php if($rows['constancia_buenaconducta']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" <?php if($rows['constancia_buenaconducta']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" <?php if($rows['constancia_buenaconducta']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" <?php if($rows['fotos_estudiante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" <?php if($rows['fotos_estudiante']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" <?php if($rows['fotos_estudiante']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
@@ -2181,14 +2181,14 @@
 							            <div class="span6">
 							                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="S" <?php if($rows['boleta_zonificacion']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" <?php if($rows['boleta_zonificacion']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" <?php if($rows['boleta_zonificacion']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Fotocopia C.I. Representante <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" <?php if($rows['fotocopia_ci_representante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" <?php if($rows['fotocopia_ci_representante']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="N" <?php if($rows['fotocopia_ci_representante']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
@@ -2201,14 +2201,14 @@
 							            <div class="span6">
 							            	<label class="control-label">¿Otro Documento?</label>
 							                <div class="radios">
-												<input type="radio" name="otro_documento" id="otro_documento" value="Y" <?php if($rows['otro_documento']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="otro_documento" id="otro_documento" value="Y" <?php if($rows['otro_documento']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="otro_documento" id="otro_documento" value="N" <?php if($rows['otro_documento']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">2 Fotos Representante <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="fotos_representante" id="fotos_representante" value="Y" <?php if($rows['fotos_representante']=="S"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotos_representante" id="fotos_representante" value="Y" <?php if($rows['fotos_representante']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="fotos_representante" id="fotos_representante" value="N" <?php if($rows['fotos_representante']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
@@ -2224,7 +2224,7 @@
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Observación</label>
-							                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /><?php echo $row['observacion_documentos']; ?></textarea>
+							                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /><?php echo $rows['observacion_documentos']; ?></textarea>
 							            </div>
 							        </div>
 							    </div>

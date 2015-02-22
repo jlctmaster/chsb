@@ -15,6 +15,7 @@ class persona {
 	private $codigo_tipopersona; 
 	private $profesion;
 	private $grado_instruccion;
+	private $maxhoras;
 	private $estatus; 
 	private $pgsql; 
 	 
@@ -33,6 +34,7 @@ class persona {
 		$this->codigo_tipopersona=null;
 		$this->profesion=null;
 		$this->grado_instruccion=null;
+		$this->maxhoras=0;
 		$this->pgsql=new Conexion();
 	}
    
@@ -62,7 +64,7 @@ class persona {
 	 	}
     }
 
-public function segundo_nombre(){
+	public function segundo_nombre(){
     	$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->segundo_nombre;
      
@@ -163,6 +165,14 @@ public function segundo_nombre(){
 			$this->grado_instruccion=func_get_arg(0);
 		}
     }
+    public function maxhoras(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->maxhoras;
+
+		if($Num_Parametro>0){
+			$this->maxhoras=func_get_arg(0);
+		}
+    }
 
     public function estatus(){
 		$Num_Parametro=func_num_args();
@@ -175,10 +185,11 @@ public function segundo_nombre(){
    
    	public function Registrar($user){
 	    $sql="INSERT INTO general.tpersona (cedula_persona,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,sexo,
-	    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,profesion,grado_instruccion,creado_por,fecha_creacion) VALUES 
+	    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,profesion,grado_instruccion,
+	    maxhoras,creado_por,fecha_creacion) VALUES 
 	    ('$this->cedula_persona','$this->primer_nombre','$this->segundo_nombre','$this->primer_apellido','$this->segundo_apellido',
-	    	'$this->sexo','$this->fecha_nacimiento','$this->lugar_nacimiento','$this->direccion','$this->telefono_local',
-	    	'$this->telefono_movil',$this->codigo_tipopersona,'$this->profesion','$this->grado_instruccion','$user',NOW())";
+	    '$this->sexo','$this->fecha_nacimiento','$this->lugar_nacimiento','$this->direccion','$this->telefono_local','$this->telefono_movil',
+	    $this->codigo_tipopersona,'$this->profesion','$this->grado_instruccion','$this->maxhoras','$user',NOW())";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -221,7 +232,7 @@ public function segundo_nombre(){
 	    segundo_nombre='$this->segundo_nombre',primer_apellido='$this->primer_apellido',segundo_apellido='$this->segundo_apellido',sexo='$this->sexo',
 	    fecha_nacimiento='$this->fecha_nacimiento',lugar_nacimiento='$this->lugar_nacimiento',direccion='$this->direccion',
 	    telefono_local='$this->telefono_local',telefono_movil='$this->telefono_movil',codigo_tipopersona=$this->codigo_tipopersona,
-	    profesion='$this->profesion',grado_instruccion='$this->grado_instruccion',modificado_por='$user',fecha_modificacion=NOW()
+	    profesion='$this->profesion',grado_instruccion='$this->grado_instruccion',maxhoras='$this->maxhoras',modificado_por='$user',fecha_modificacion=NOW() 
 	    WHERE cedula_persona='$oldci'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

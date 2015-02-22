@@ -52,6 +52,9 @@ if(isset($_POST['telefono_movil']))
 if(isset($_POST['codigo_tipopersona']))
   $codigo_tipopersona=trim($_POST['codigo_tipopersona']);
 
+if(isset($_POST['maxhoras']))
+  $maxhoras=trim($_POST['maxhoras']);
+
 include_once("../class/class_persona.php");
 $persona=new persona();
 if($lOpt=='Registrar'){
@@ -67,6 +70,7 @@ if($lOpt=='Registrar'){
   $persona->telefono_local($telefono_local);
   $persona->telefono_movil($telefono_movil);
   $persona->codigo_tipopersona($codigo_tipopersona);
+  $persona->maxhoras($maxhoras);
   if(!$persona->Comprobar($comprobar)){
     if($persona->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -102,6 +106,7 @@ if($lOpt=='Modificar'){
   $persona->telefono_local($telefono_local);
   $persona->telefono_movil($telefono_movil);
   $persona->codigo_tipopersona($codigo_tipopersona);
+  $persona->maxhoras($maxhoras);
   if($oldci==$cedula_persona)
     $comprobar=false;
   if(!$persona->Comprobar($comprobar)){

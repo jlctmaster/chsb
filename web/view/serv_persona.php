@@ -184,6 +184,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
+					<label class="control-label" for="maxhoras">Horas Máximas Administrativas</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el número máximo de horas administrativas" maxlength=3 onKeyPress="return isNumberKey(event)" name="maxhoras" id="maxhoras" type="text" value="0" />
+					</div>  
+				</div> 
+				<div class="control-group">  
 					<p class="help-block"> Los campos resaltados en rojo son obligatorios </p>  
 				</div>  
 				<div class="form-actions">
@@ -198,7 +204,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento FROM general.tpersona WHERE cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
+	$sql = "SELECT *,TO_CHAR(fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento 
+	FROM general.tpersona 
+	WHERE cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -316,6 +324,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 						</select>
 					</div>  
 				</div>
+				<div class="control-group">  
+					<label class="control-label" for="maxhoras">Horas Máximas Administrativas</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Ingrese el número máximo de horas administrativas" maxlength=3 onKeyPress="return isNumberKey(event)" name="maxhoras" id="maxhoras" type="text" value="<?=$row['maxhoras']?>" />
+					</div>  
+				</div> 
 				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{
 

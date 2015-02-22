@@ -14,7 +14,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 		<div id="paginador" class="enjoy-css">
 			<div id="bitacora" class="container">
 				<div class="scrollBitacora">
-					<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
+					<table border="0" class="bordered-table zebra-striped" id="registro">
 						<thead>
 							<tr>
 								<th>Código:</th>
@@ -23,9 +23,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 								<th>Entidad:</th>
 								<th>Proceso:</th>
 								<th>ID Entidad:</th>
+								<th>Fecha Op.:</th>
 								<th>Valor Nuevo:</th>
 								<th>Valor Anterior:</th>
-								<th>Fecha Op.:</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -39,19 +39,18 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 								echo '<td>'.$filas['nombre_tabla'].'</td>';
 								echo '<td>'.$filas['proceso'].'</td>';
 								echo '<td>'.$filas['identificador_tabla'].'</td>';
+								echo '<td>'.$filas['fecha_operacion'].'</td>';
 								echo '<td>'.$filas['valor_nuevo'].'</td>';
 								echo '<td>'.$filas['valor_anterior'].'</td>';
-								echo '<td>'.$filas['fecha_operacion'].'</td>';
 								echo "</tr>";
 							}
 							?>
-							<tbody>
-							</table>
-						</div>
-					</div>
+						<tbody>
+					</table>
 				</div>
 			</div>
-		</fieldset>
-		<?php
+		</div>
+	</fieldset>
+<?php
 } // Fin Ventana Principal
 ?>

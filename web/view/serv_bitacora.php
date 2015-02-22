@@ -47,13 +47,12 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 								echo "</tr>";
 							}
 							?>
-							<tbody>
-							</table>
-						</div>
-					</div>
+						</tbody>
+					</table>
 				</div>
 			</div>
-		</fieldset>
+		</div>
+	</fieldset>
 		<?php
 } // Fin Ventana Principal
 ?>

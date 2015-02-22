@@ -673,10 +673,10 @@ if($lOpt=='Modificar_Paso6'){
     $confirmacion=0;
   if($confirmacion==1){
     $_SESSION['datos']['mensaje']="¡Se han modificado los datos de los documentos consignados en el proceso de inscripción con exito!";
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los datos de los documentos consignados en el proceso de inscripción!";
-    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
+    header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }
 }
 

@@ -1,10 +1,9 @@
 <?php
 session_start();
-
 if(isset($_POST['ambiente']) && $_POST['ambiente']=="1"){
    $file = fopen("../class/conf.php", "w");
    fwrite($file, "<?php" . PHP_EOL);
-   fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+   fwrite($file, "define('SERVER','127.0.0.1');" . PHP_EOL);
    fwrite($file, "define('PORT','5432');" . PHP_EOL);
    fwrite($file, "define('USER','admin');" . PHP_EOL);
    fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
@@ -15,10 +14,10 @@ if(isset($_POST['ambiente']) && $_POST['ambiente']=="1"){
 }else if(isset($_POST['ambiente']) && $_POST['ambiente']=="2"){
    $file = fopen("../class/conf.php", "w");
    fwrite($file, "<?php" . PHP_EOL);
-   fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+   fwrite($file, "define('SERVER','127.0.0.1');" . PHP_EOL);
    fwrite($file, "define('PORT','5432');" . PHP_EOL);
-   fwrite($file, "define('USER','admin');" . PHP_EOL);
-   fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+   fwrite($file, "define('USER','postgres');" . PHP_EOL);
+   fwrite($file, "define('PASSWORD','postgres');" . PHP_EOL);
    fwrite($file, "define('BD','bdchsb');" . PHP_EOL);
    fwrite($file, "?>" . PHP_EOL);
    fclose($file);
