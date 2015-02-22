@@ -113,6 +113,34 @@ if(isset($_POST['lOpt']) and $_POST['lOpt']=='Modificar'){
 }
 
 if(isset($_POST['cambiar_clave_sin_logeo'])){	
+
+  if(isset($_POST['ambiente']) && $_POST['ambiente']=="1"){
+     $file = fopen("../class/conf.php", "w");
+     fwrite($file, "<?php" . PHP_EOL);
+     fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+     fwrite($file, "define('PORT','5432');" . PHP_EOL);
+     fwrite($file, "define('USER','admin');" . PHP_EOL);
+     fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+     fwrite($file, "define('BD','chsbdb');" . PHP_EOL);
+     fwrite($file, "?>" . PHP_EOL);
+     fclose($file);
+     $ambiente=$_POST['ambiente'];
+  }else if(isset($_POST['ambiente']) && $_POST['ambiente']=="2"){
+     $file = fopen("../class/conf.php", "w");
+     fwrite($file, "<?php" . PHP_EOL);
+     fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+     fwrite($file, "define('PORT','5432');" . PHP_EOL);
+     fwrite($file, "define('USER','admin');" . PHP_EOL);
+     fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+     fwrite($file, "define('BD','bdchsb');" . PHP_EOL);
+     fwrite($file, "?>" . PHP_EOL);
+     fclose($file);
+     $ambiente=$_POST['ambiente'];
+  }else{
+     $_SESSION['datos']['mensaje']="¡No se ha definido una conexión al servidor para el ambiente para el sistema!";
+     header("Location: ../../#intranet");
+  }
+
   if($_POST['nueva_contrasena']!=$_POST['confirmar_contrasena']){
     $_SESSION['datos']['mensaje']="Las contraseñas no coeciden!";
     header("Location: ../view/intranet.php?p=cambiar-contrasena");
@@ -129,9 +157,10 @@ if(isset($_POST['cambiar_clave_sin_logeo'])){
       }
       else{
         $_SESSION['datos']['mensaje']="¡Ocurrió un error al cambiar tu contraseña!";
-        header("Location: ../../");
+        header("Location: ../../#intranet");
       }
     }else{
+      $_SESSION['ambiente']=$ambiente;
       $_SESSION['pregunta_respuesta']=4;
       $_SESSION['datos']['mensaje']="¡Esta contraseña ha sido usado anteriormente, usa una contraseña nueva!";
       header("Location: ../../?p=cambiar-contrasena#intranet");

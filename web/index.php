@@ -63,10 +63,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<div class="control-group"> 
 							<div class="controls">
 								<div class="input-prepend">
+									<span class="add-on"><i class="icon-globe"></i></span>
+									<select name="ambiente" id="ambiente" title="Conexión al servidor Ambiente de Producción / Pruebas" required >
+										<option value="0">Conexión al Servidor</option>
+										<option value="1">Producción</option>
+										<option value="2">Pruebas</option>
+									</select>
+								</div>
+								<br />
+								<div class="input-prepend">
 									<span class="add-on"><i class="icon-user"></i></span>
 									<input type="text" onKeyUp="this.value=this.value.toUpperCase()" name="usuario" id="usuario" placeholder="Introduce tu usuario"  title="Por favor coloque su nombre de usuario" required />
 								</div>
-								<br />
 								<div class="input-prepend">
 									<span class="add-on"><i class="icon-lock"></i></span>
 									<input type="password" name="contrasena" id="contrasena" placeholder="Contraseña"  title="Por favor coloque su contraseña" required />
@@ -77,8 +85,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<!-- END AUTHENTICATION!-->
 						<!-- USER IDENTIFY!-->
 						<?php if(!empty($_GET['p']) and $_GET['p']=='olvidar-clave'){?>
-						<div class="control-group"> 
-							<div class="controls">
+						<div class="control-group">
+							<div class="controls"> 
+								<div class="input-prepend">
+									<span class="add-on"><i class="icon-globe"></i></span>
+									<select name="ambiente" id="ambiente" title="Conexión al servidor Ambiente de Producción / Pruebas" required >
+										<option value="0">Conexión al Servidor</option>
+										<option value="1">Producción</option>
+										<option value="2">Pruebas</option>
+									</select>
+								</div>
+								<br />
 								<div class="input-prepend">
 									<span class="add-on"><i class="icon-user"></i></span>
 									<input type="text" onKeyUp="this.value=this.value.toUpperCase()" name="user_name" id="user_name" placeholder="Introduce tu usuario" title="Por favor coloque su nombre de usuario" required>
@@ -89,8 +106,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<!-- END USER IDENTIFY!-->
 						<!-- SECRET QUESTION ANSWER!-->
 						<?php if(!empty($_GET['p']) and $_GET['p']=='pregunta-seguridad'){?>    
-						<div class="control-group"> 
-							<div class="controls">
+						<div class="control-group">
+							<div class="controls"> 
+								<div class="input-prepend">
+									<span class="add-on"><i class="icon-globe"></i></span>
+									<select name="ambiente" id="ambiente" title="Conexión al servidor Ambiente de Producción / Pruebas" readonly required >
+										<option value="0" <?php if($_SESSION['ambiente']=="0"){echo "selected";}?>>Conexión al Servidor</option>
+										<option value="1" <?php if($_SESSION['ambiente']=="1"){echo "selected";}?>>Producción</option>
+										<option value="2" <?php if($_SESSION['ambiente']=="2"){echo "selected";}?>>Pruebas</option>
+									</select>
+								</div>
+								<br />
 								<input type='hidden' value="<?php echo $_SESSION['pregunta_respuesta'];?>" name="accion" />
 								<?php
 								if(isset($_SESSION['pregunta_respuesta'])){
@@ -133,6 +159,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<div class="control-group"> 
 								<div class="controls">
 									<div class="input-prepend">
+										<span class="add-on"><i class="icon-globe"></i></span>
+										<select name="ambiente" id="ambiente" title="Conexión al servidor Ambiente de Producción / Pruebas" readonly required >
+											<option value="0" <?php if($_SESSION['ambiente']=="0"){echo "selected";}?>>Conexión al Servidor</option>
+											<option value="1" <?php if($_SESSION['ambiente']=="1"){echo "selected";}?>>Producción</option>
+											<option value="2" <?php if($_SESSION['ambiente']=="2"){echo "selected";}?>>Pruebas</option>
+										</select>
+									</div>
+									<br />
+									<div class="input-prepend">
 										<span class="add-on"><i class="icon-lock"></i></span>
 										<input type="password" name="contrasena_actual" id="contrasena_actual" title="Contraseña actual" value="<?php echo $_SESSION['user_passwd'];?>" readonly required />
 									</div>
@@ -153,6 +188,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<!-- END CHANGE TO PASSWORD!-->
 							<div class="">							
 								<input type="submit" value="Enviar" class="btn btn-primary btn-large">
+								<a href="./"><button type="button" class="btn btn-primary btn-large"/>Cancelar</button></a>
 							</div>
 							<br />
 							<?php if(empty($_GET['p'])){?> 

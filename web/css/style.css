@@ -550,6 +550,21 @@ input[type="color"],
 	border-radius: 4px;
 	vertical-align: middle;
 }
+
+select {
+	display: inline-block;
+	height: 40px;
+	padding: 4px 6px;
+	margin-bottom: 10px;
+	font-size: 14px;
+	line-height: 20px;
+	color: #555555;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	vertical-align: middle;
+}
+
 .input-append .add-on, .input-prepend .add-on {
 	display: inline-block;
 	width: auto;

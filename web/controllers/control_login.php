@@ -1,5 +1,34 @@
 <?php
 session_start();
+
+if(isset($_POST['ambiente']) && $_POST['ambiente']=="1"){
+   $file = fopen("../class/conf.php", "w");
+   fwrite($file, "<?php" . PHP_EOL);
+   fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+   fwrite($file, "define('PORT','5432');" . PHP_EOL);
+   fwrite($file, "define('USER','admin');" . PHP_EOL);
+   fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+   fwrite($file, "define('BD','chsbdb');" . PHP_EOL);
+   fwrite($file, "?>" . PHP_EOL);
+   fclose($file);
+   $ambiente="Producción";
+}else if(isset($_POST['ambiente']) && $_POST['ambiente']=="2"){
+   $file = fopen("../class/conf.php", "w");
+   fwrite($file, "<?php" . PHP_EOL);
+   fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+   fwrite($file, "define('PORT','5432');" . PHP_EOL);
+   fwrite($file, "define('USER','admin');" . PHP_EOL);
+   fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+   fwrite($file, "define('BD','bdchsb');" . PHP_EOL);
+   fwrite($file, "?>" . PHP_EOL);
+   fclose($file);
+   $ambiente="Prueba";
+}else{
+   $_SESSION['datos']['mensaje']="¡No se ha definido una conexión al servidor para el ambiente para el sistema!";
+   header("Location: ../../#intranet");
+   exit;
+}
+
 include("../class/class_usuario.php");
 $preguntas=null;
 $respuestas=null;
@@ -12,6 +41,7 @@ if($res!=null){
       $_SESSION['datos']['mensaje']="Usuario bloqueado, contacte al administrador!";
       header("Location: ../../#intranet");
    }else{
+      $_SESSION['ambiente']=$ambiente;
       $_SESSION['user_name']=$res[0]['name'];
       $_SESSION['fullname_user']=$res[0]['fullname_user'];
       $_SESSION['user_cedula']=$res[0]['cedula'];

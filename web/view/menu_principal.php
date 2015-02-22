@@ -100,6 +100,7 @@ if(isset($_SESSION['user_estado'])){
         <div class="pull-right">                         
           <a href="../manuales/Manual_Sistema.pdf" title="" class="btn btn-large" target="_blank"><i class="icon icon-question-sign"></i> <span>Manual de Usuario</span></a>
           <a href="?perfil" title="" class="btn btn-large"><i class="icon icon-user"></i> <span>Perfil</span></a>
+          <a href="#" title="" class="btn btn-large"><i class="icon icon-globe"></i> <span><?php echo $_SESSION['ambiente'];?></span></a>
           <a onclick="salir()"  title="Salir" class="btn btn-large btn-danger"><i class="icon-off"></i></a>
         </div>
       </h1>

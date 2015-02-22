@@ -10,7 +10,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
 	$sql = "SELECT e.cedula_persona, e.primer_nombre,e.primer_apellido,t.descripcion AS tipo_persona 
 	FROM general.tpersona e
-	INNER JOIN general.ttipo_persona t ON e.codigo_tipopersona=t.codigo_tipopersona";
+	INNER JOIN general.ttipo_persona t ON e.codigo_tipopersona=t.codigo_tipopersona 
+	WHERE t.descripcion NOT LIKE '%ESTUDIANTE%'";
 	$consulta = $pgsql->Ejecutar($sql);
 	?>
 	<fieldset>

@@ -1,6 +1,35 @@
 <?php
 //Verificar Inicio de Session.
 session_start(); 
+
+if(isset($_POST['ambiente']) && $_POST['ambiente']=="1"){
+  $file = fopen("../class/conf.php", "w");
+  fwrite($file, "<?php" . PHP_EOL);
+  fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+  fwrite($file, "define('PORT','5432');" . PHP_EOL);
+  fwrite($file, "define('USER','admin');" . PHP_EOL);
+  fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+  fwrite($file, "define('BD','chsbdb');" . PHP_EOL);
+  fwrite($file, "?>" . PHP_EOL);
+  fclose($file);
+  $ambiente=$_POST['ambiente'];
+}else if(isset($_POST['ambiente']) && $_POST['ambiente']=="2"){
+  $file = fopen("../class/conf.php", "w");
+  fwrite($file, "<?php" . PHP_EOL);
+  fwrite($file, "define('SERVER','localhost');" . PHP_EOL);
+  fwrite($file, "define('PORT','5432');" . PHP_EOL);
+  fwrite($file, "define('USER','admin');" . PHP_EOL);
+  fwrite($file, "define('PASSWORD','4dm1n12tr4t0r');" . PHP_EOL);
+  fwrite($file, "define('BD','bdchsb');" . PHP_EOL);
+  fwrite($file, "?>" . PHP_EOL);
+  fclose($file);
+  $ambiente=$_POST['ambiente'];
+}else{
+  $_SESSION['datos']['mensaje']="¡No se ha definido una conexión al servidor para el ambiente para el sistema!";
+  header("Location: ../../?p=olvidar-clave#intranet");
+  exit;
+}
+
 if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
    include("../class/class_usuario.php");
    $Usuario=new Usuario();
@@ -23,7 +52,7 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
          $Usuario->nombre_usuario($_SESSION['user_name']);
          $res=$Usuario->Buscar_1();
          if($res!=null){
-            for($i=0;$i<$res[0]['nnumero_preguntas'];$i++){
+            for($i=0;$i<$res[0]['numero_preguntas'];$i++){
                $preguntas[]=$res[$i]['preguntas'];
                $respuestas[]=$res[$i]['respuestas'];
             }
@@ -55,7 +84,7 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
          $Usuario->nombre_usuario($_SESSION['user_name']);
          $res=$Usuario->Buscar_1();
          if($res!=null){
-            for($i=0;$i<$res[0]['nnumero_preguntas'];$i++){
+            for($i=0;$i<$res[0]['numero_preguntas'];$i++){
                $preguntas[]=$res[$i]['preguntas'];
                $respuestas[]=$res[$i]['respuestas'];
             }
@@ -93,10 +122,12 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
       $_SESSION['pregunta_respuesta']=0;
       if($res!=null){
          if($res[0]['estado_clave']==4){
+            $_SESSION['ambiente']=$ambiente;
             $_SESSION['datos']['mensaje']="¡Usuario bloqueado, contacte al administrador!";
             header("Location: ../../?p=olvidar-clave#intranet");
          }
          else{
+            $_SESSION['ambiente']=$ambiente;
             $_SESSION['user_name']=$_POST['user_name'];
             $_SESSION['user_passwd']=$res[0]['password'];
             $_SESSION['user_numero_preguntas']=$res[0]['numero_preguntas'];
