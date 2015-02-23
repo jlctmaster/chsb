@@ -1526,11 +1526,11 @@ ON seguridad.tusuario
 FOR EACH ROW
 EXECUTE PROCEDURE auditoria_general();
 
-CREATE SEQUENCE seguridad.seq_constrasena;
+CREATE SEQUENCE seguridad.seq_contrasena;
 
 CREATE TABLE seguridad.tcontrasena
 (
-	codigo_constrasena numeric not null default nextval('seguridad.seq_constrasena'),
+	codigo_contrasena numeric not null default nextval('seguridad.seq_contrasena'),
 	nombre_usuario char(15) not null,
 	contrasena varchar(60) not null,
 	estado numeric not null default 0,
@@ -1539,7 +1539,7 @@ CREATE TABLE seguridad.tcontrasena
 	fecha_creacion timestamp,
 	modificado_por char(15),
 	fecha_modificacion timestamp default current_timestamp,
-	constraint pk_contrasena primary key(codigo_constrasena),
+	constraint pk_contrasena primary key(codigo_contrasena),
 	constraint fk_contrasena_usuario foreign key(nombre_usuario) references seguridad.tusuario(nombre_usuario) on delete restrict on update cascade
 );
 

@@ -268,10 +268,7 @@ function init(){
 					alert("¡Debe ingresar el primer apellido del padre del estudiante!");
 					send = false;
 				}
-				else if($('#lugar_nacimiento_padre').val()==0){
-					alert("¡Debe seleccionar el lugar de nacimiento del padre del estudiante!");
-					send = false;
-				}
+				
 				else if($('#direccion_padre').val()==""){
 					alert("¡Debe ingresar la dirección del padre del estudiante!");
 					send = false;
@@ -303,10 +300,7 @@ function init(){
 					alert("¡Debe ingresar el primer apellido de la madre del estudiante!");
 					send = false;
 				}
-				else if($('#lugar_nacimiento_madre').val()==0){
-					alert("¡Debe seleccionar el lugar de nacimiento de la madre del estudiante!");
-					send = false;
-				}
+			
 				else if($('#direccion_madre').val()==""){
 					alert("¡Debe ingresar la dirección de la madre del estudiante!");
 					send = false;
@@ -358,10 +352,7 @@ function init(){
 				alert("¡Debe ingresar el primer apellido del representante del estudiante!");
 				send = false;
 			}
-			else if($('#lugar_nacimiento_representante').val()==0){
-				alert("¡Debe seleccionar el lugar de nacimiento del representante del estudiante!");
-				send = false;
-			}
+			
 			else if($('#direccion_representante').val()==""){
 				alert("¡Debe ingresar la dirección del representante del estudiante!");
 				send = false;
