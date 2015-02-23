@@ -511,11 +511,11 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_asignacion_libro,TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion,
 	p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,
-	b.nro_serial||' '||b.nombre AS item,da.cantidad 
+	e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item,da.cantidad,a.motivo  
 	FROM biblioteca.tasignacion_libro a 
 	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
 	INNER JOIN biblioteca.tdetalle_asignacion_libro da ON a.codigo_asignacion_libro = da.codigo_asignacion_libro 
-	INNER JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
+	INNER JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar 
 	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 	WHERE a.codigo_asignacion_libro =".$pgsql->comillas_inteligentes($_GET['codigo_asignacion_libro']);
 	$query = $pgsql->Ejecutar($sql);

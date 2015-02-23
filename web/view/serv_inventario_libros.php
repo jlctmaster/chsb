@@ -4,7 +4,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
 	$sql = "SELECT item,ubicacion,existencia   
 	FROM inventario.vw_inventario 
-	WHERE sonlibros='Y' 
+	WHERE sonlibros='Y' AND existencia <> 0 
 	ORDER BY ubicacion,item ASC ";
 	$consulta = $pgsql->Ejecutar($sql);
 ?>

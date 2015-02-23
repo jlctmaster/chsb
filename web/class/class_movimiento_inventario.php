@@ -349,15 +349,18 @@ class movimiento_inventario {
     public function BuscarConfiguracion($item,$cantidad){
         $sql="SELECT i.codigo_item,i.item,cb.codigo_item AS codigo_item_recuperado,
         b.nro_serial||' '||b.nombre AS item_recuperado,b.esconfigurable,
-        u.codigo_ubicacion,u.descripcion AS ubicacion,
+        u.codigo_ubicacion,u.ubicacion,
         MAX($cantidad) AS cantidad_a_recuperar,MAX($cantidad*cb.cantidad) AS cantidad_recuperada
         FROM inventario.vw_inventario i 
         INNER JOIN bienes_nacionales.tconfiguracion_bien cb ON i.codigo_item = cb.codigo_bien 
         INNER JOIN bienes_nacionales.tbien b ON cb.codigo_item = b.codigo_bien,
-        inventario.tubicacion u 
-        WHERE i.codigo_item = $item AND i.sonlibros='N' AND u.ubicacionprincipal = 'Y'
+        (SELECT u.codigo_ubicacion,u.descripcion AS ubicacion 
+        FROM inventario.tubicacion u 
+        INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+        WHERE u.ubicacionprincipal = 'Y' AND u.itemsdefectuoso = 'N' AND a.tipo_ambiente = '3') u 
+        WHERE i.codigo_item = $item AND i.sonlibros='N'  
         GROUP BY i.codigo_item,i.item,cb.codigo_item,b.nro_serial,b.nombre,b.esconfigurable,cb.item_base,
-        u.codigo_ubicacion,u.descripcion 
+        u.codigo_ubicacion,u.ubicacion 
         ORDER BY cb.item_base DESC";
         $query = $this->pgsql->Ejecutar($sql);
         while($Obj=$this->pgsql->Respuesta_assoc($query)){

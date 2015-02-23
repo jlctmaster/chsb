@@ -87,8 +87,9 @@ INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('EDITORIAL','EDITORIAL',6,4,'postgres',NOW());
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('LIBRO','LIBRO',6,5,'postgres',NOW());
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('EJEMPLAR','EJEMPLAR',6,6,'postgres',NOW());
-INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('PRÉSTAMO','prestamo',6,7,'postgres',NOW());
-INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('ENTREGA','ENTREGA',6,10,'postgres',NOW());
+INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('PRÉSTAMO','PRESTAMO',6,7,'postgres',NOW());
+INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('ENTREGA','ENTREGA',6,8,'postgres',NOW());
+INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('ASIGNACIÓN DE LIBROS','ASIGNACION_LIBRO',6,9,'postgres',NOW());
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('HORARIO DE CLASES','HORARIO_CLASES',7,1,'postgres',NOW());
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('HORARIO PROFESOR','HORARIO_PROFESOR',7,2,'postgres',NOW());
 INSERT INTO seguridad.tservicio (nombre_servicio,url,codigo_modulo,orden,creado_por,fecha_creacion) VALUES ('HISTÓRICO DE INSCRIPCIÓN','HISTORICO_INSCRIPCION',7,3,'postgres',NOW());
@@ -460,6 +461,11 @@ INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opci
 INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,3,67,'postgres',NOW());
 INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,4,67,'postgres',NOW());
 INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,5,67,'postgres',NOW());
+INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,1,68,'postgres',NOW());
+INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,2,68,'postgres',NOW());
+INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,3,68,'postgres',NOW());
+INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,4,68,'postgres',NOW());
+INSERT INTO seguridad.tdetalle_servicio_perfil_opcion (codigo_perfil,codigo_opcion,codigo_servicio,creado_por,fecha_creacion) VALUES (1,5,68,'postgres',NOW());
 
 -- Created First User Admin
 

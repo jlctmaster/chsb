@@ -101,7 +101,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione un tipo de adquisición" required /> 
+						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione un tipo de adquisición" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
 								$pgsql = new Conexion();
@@ -120,7 +120,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ubicacion">Ubicación Origen</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
+						<select class="bootstrap-select form-control" title="Seleccione una ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
@@ -140,21 +140,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_bien">Bien Nacional a Recuperar</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT i.codigo_item,i.item 
-								FROM inventario.vw_inventario i 
-								INNER JOIN bienes_nacionales.tbien b ON i.codigo_item = b.codigo_bien 
-								INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
-								WHERE i.sonlibros = 'N' AND b.esconfigurable='Y' AND u.itemsdefectuoso = 'Y' 
-								ORDER BY i.codigo_item ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['codigo_item'].">".$row['item']."</option>";
-								}
-							?>
 						</select>
 					</div>  
 				</div>
@@ -246,7 +233,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la recuperación" required /> 
+						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la recuperación" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
 								$pgsql = new Conexion();
@@ -268,7 +255,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ubicacion">Ubicación Origen</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
+						<select class="bootstrap-select form-control" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
@@ -291,9 +278,19 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_bien">Bien Nacional a Recuperar</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Recuperar</option>
-					
+							<?php
+								$pgsql = new Conexion();
+								$sql = "SELECT b.codigo_bien,b.nro_serial||' '||b.nombre AS item 
+								FROM bienes_nacionales.tbien b  
+								WHERE b.codigo_bien = ".$row['codigo_bien']." 
+								ORDER BY b.codigo_bien ASC";
+								$query = $pgsql->Ejecutar($sql);
+								while($rows=$pgsql->Respuesta($query)){
+									echo "<option value=".$rows['codigo_bien']." selected>".$rows['item']."</option>";
+								}
+							?>
 						</select>
 					</div>  
 				</div>

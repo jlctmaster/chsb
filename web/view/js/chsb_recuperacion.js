@@ -65,14 +65,7 @@ function init(){
 	        dataType: "json",
 	        success: function(resp){
 	        	for(var contador=0;contador<resp.length;contador++){
-	        		dataOriginal = contador+parseInt(1);
 	        		$("#codigo_bien").append("<option value='"+resp[contador].codigo_item+"'>"+resp[contador].item+"</option>");
-	        		$("ul.dropdown-menu.inner.selectpicker").append("<li data-original-index='"+dataOriginal+"'>"+
-	        			"<a tabindex='0' class >"+
-	        			"<span class='text'>"+resp[contador].item+"</span>"+
-	        			"<span class='glyphicon glyphicon-ok check-mark'></span>"+
-	        			"</a>"+
-	        			"</li>");
 	        	}
 	        },
 	        error: function(jqXHR, textStatus, errorThrown){

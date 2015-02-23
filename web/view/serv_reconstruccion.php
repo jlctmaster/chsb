@@ -124,7 +124,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'N' ORDER BY codigo_ubicacion ASC";
+								$sql = "SELECT u.* 
+								FROM inventario.tubicacion u 
+								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+								WHERE u.itemsdefectuoso = 'N' AND a.tipo_ambiente <> '5' 
+								ORDER BY u.codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
 								while($row=$pgsql->Respuesta($query)){
 									echo "<option value=".$row['codigo_ubicacion'].">".$row['descripcion']."</option>";
@@ -140,7 +144,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<option value=0>Seleccione un Bien a Recuperar</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT i.codigo_item,i.item 
+								$sql = "SELECT DISTINCT i.codigo_item,i.item 
 								FROM inventario.vw_inventario i 
 								INNER JOIN bienes_nacionales.tbien b ON i.codigo_item = b.codigo_bien 
 								INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
@@ -242,7 +246,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
+						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
 			              <option value=0>Seleccione un Responsable</option>
 			              <?php
 								$pgsql = new Conexion();
@@ -264,11 +268,15 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ubicacion">Ubicación Destino</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
+						<select class="bootstrap-select form-control" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'N' ORDER BY codigo_ubicacion ASC";
+								$sql = "SELECT u.* 
+								FROM inventario.tubicacion u 
+								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+								WHERE u.itemsdefectuoso = 'N' AND a.tipo_ambiente <> '5' 
+								ORDER BY u.codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($row['codigo_ubicacion']==$rows['codigo_ubicacion'])
@@ -283,11 +291,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_bien">Bien Nacional a Reconstruir</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Item a Reconstruir" name='codigo_bien' id='codigo_bien' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Item a Reconstruir" name='codigo_bien' id='codigo_bien' required >
 							<option value=0>Seleccione un Bien a Reconstruir</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
+								$sql = "SELECT DISTINCT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
 								LEFT JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item 
 								WHERE i.codigo_ubicacion = ".$row['codigo_ubicacion']." OR i.codigo_ubicacion IS NULL 
 								ORDER BY b.codigo_bien ASC";
