@@ -110,7 +110,7 @@ $turno='todos';
 									<tr>
 										<td>
 										<?php  
-											$hora=$get_hora['hora_inicio'][$i]."-".$get_hora['hora_fin'][$i]; 
+											$hora=$get_hora['hora_inicio'][$i]."<br>".$get_hora['hora_fin'][$i]; 
 											echo $hora;
 											$x=trim($get_hora['id'][$i]);
 										?>
@@ -178,15 +178,15 @@ $turno='todos';
 										<td>Total</td>
 									</tr>
 									<tr>
-										<td id="celdaasignado" class=""><?php  // echo count(@$id_celda);?> </td>
+										<td id="celdaasignado" class=""><?php  //echo count(@$id_celda);?> </td>
 										<td id="celdalibre" class=""><?php //echo (@$_SESSION['datos']['hora_ad']-count(@$id_celda));?></td> 
-										<td id="celdatotal" class=""><?php //cho @$_SESSION['datos']['hora_ad'];?></td>
+										<td id="celdatotal" class=""><?php //echo @$_SESSION['datos']['hora_ad'];?></td>
 									</tr>
 									<tr>
 										<td colspan=3><?php echo "Turno: ".ucwords(str_replace("manana","mañana",$turno));?></td>
 									</tr>
 								</table>
-								<input  type="hidden" value="12<?php //echo @$_SESSION['datos']['hora_ad'];?>" id="T"/>
+								<input  type="hidden" value="0<?php //echo @$_SESSION['datos']['hora_ad'];?>" id="T"/>
 								<input  type="hidden" value="0<?php //echo (@$_SESSION['datos']['hora_ad']-count(@$id_celda));?>" id="L"/>
 								<input  type="hidden" value="0<?php //echo count(@$id_celda);?>" id="A"/>
 							</fieldset>

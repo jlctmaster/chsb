@@ -11,14 +11,14 @@ class clsFpdf extends FPDF {
 		$this->Image("../images/logo.jpg" ,75,85,75,90, "JPG");
 		$this->Ln(25);
 		$pgsql=new Conexion();
-		$sql="SELECT DISTINCT TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') as fecha,codigo_asignacion		
-		FROM bienes_nacionales.tasignacion a
-		WHERE a.codigo_asignacion =".$pgsql->comillas_inteligentes($_GET['p1'])."";	
+		$sql="SELECT DISTINCT TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') as fecha,codigo_asignacion_libro		
+		FROM biblioteca.tasignacion_libro a
+		WHERE a.codigo_asignacion_libro =".$pgsql->comillas_inteligentes($_GET['p1'])."";	
 		$data=$pgsql->Ejecutar($sql);
 		$fila=array();
 		while ($row=$pgsql->Respuesta($data)){
 			$fila['fecha'][]=$row['fecha'];
-			$fila['codigo_asignacion'][]=$row['codigo_asignacion'];
+			$fila['codigo_asignacion_libro'][]=$row['codigo_asignacion_libro'];
 		}
 		$r1  = $this->w - 81;
 		$r2  = $r1 + 60;
@@ -60,11 +60,11 @@ class clsFpdf extends FPDF {
 		$this->SetXY( $r1 + ($r2-$r1)/2 - 26, $y1+16 );
 		$this->SetFont('Arial','B',10);
 		$this->SetTextColor(0,0,0);
-		$this->Cell($anchura*2,$altura,'Cód. Adquisición: ',0,1,'L',$color_fondo);
+		$this->Cell($anchura*2,$altura,'Cód. Asignación: ',0,1,'L',$color_fondo);
 		$this->SetXY( $r1 + ($r2-$r1)/1.5, $y1+16 );
 		$this->SetFont('Arial','',10);
 		$this->SetTextColor(0,0,0);
-		$this->Cell($anchura*2,$altura,$fila['codigo_asignacion'][0],0,1,'L',$color_fondo);
+		$this->Cell($anchura*2,$altura,$fila['codigo_asignacion_libro'][0],0,1,'L',$color_fondo);
 		$this->Ln(5);
 		$this->SetFont('Arial','BU',12);
 		$this->SetTextColor(0,0,0);
@@ -77,11 +77,11 @@ class clsFpdf extends FPDF {
 		$pgsql=new Conexion();
 		$sql="SELECT e.primer_nombre||' '||e.primer_apellido AS elaborado_por,
 		r.primer_nombre||' '||r.primer_apellido AS recibido_por
-		FROM bienes_nacionales.tasignacion a 
+		FROM biblioteca.tasignacion_libro a 
 		INNER JOIN seguridad.tusuario u ON a.creado_por = u.nombre_usuario 
 		INNER JOIN general.tpersona e ON u.cedula_persona = e.cedula_persona 
 		INNER JOIN general.tpersona r ON a.cedula_persona = r.cedula_persona 
-		WHERE a.codigo_asignacion =".$pgsql->comillas_inteligentes($_GET['p1'])."";
+		WHERE a.codigo_asignacion_libro =".$pgsql->comillas_inteligentes($_GET['p1'])."";
 		$data=$pgsql->Ejecutar($sql);
 		$fila=array();
 		while ($row=$pgsql->Respuesta($data)){
@@ -268,30 +268,30 @@ $lobjPdf->AddPage("P");
 $lobjPdf->AliasNbPages();
 $lobjPdf->Ln(15);
 //Table with 20 rows and 5 columns
-$lobjPdf->SetWidths(array(30,70,70,20));
+$lobjPdf->SetWidths(array(50,60,60,20));
 $pgsql=new Conexion();
-$sql="SELECT a.codigo_asignacion,TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion,
+$sql="SELECT a.codigo_asignacion_libro,TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion,
 p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,p.telefono_movil,
 u.codigo_ubicacion||' '||u.descripcion AS ubicacion,da.codigo_ubicacion_hasta||' '||uh.descripcion AS ubicacion_hasta,
-b.nro_serial||' '||b.nombre AS item, da.cantidad
-FROM bienes_nacionales.tasignacion a 
+e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item, da.cantidad
+FROM biblioteca.tasignacion_libro a 
 INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 
-INNER JOIN bienes_nacionales.tdetalle_asignacion da ON a.codigo_asignacion = da.codigo_asignacion
-LEFT JOIN bienes_nacionales.tbien b ON da.codigo_item = b.codigo_bien  
+INNER JOIN biblioteca.tdetalle_asignacion_libro da ON a.codigo_asignacion_libro = da.codigo_asignacion_libro
+LEFT JOIN biblioteca.tejemplar e ON da.codigo_item = e.codigo_ejemplar 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 INNER JOIN inventario.tubicacion u ON da.codigo_ubicacion = u.codigo_ubicacion
 INNER JOIN inventario.tubicacion uh ON da.codigo_ubicacion_hasta = uh.codigo_ubicacion 
-WHERE a.codigo_asignacion =".$pgsql->comillas_inteligentes($_GET['p1']);
+WHERE a.codigo_asignacion_libro =".$pgsql->comillas_inteligentes($_GET['p1']);
 $i=-1;
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
 	$filas=array();
 	while($rows=$pgsql->Respuesta($data)){
-		$filas['codigo_asignacion'][]=$rows['codigo_asignacion'];
+		$filas['codigo_asignacion_libro'][]=$rows['codigo_asignacion_libro'];
 		$filas['fecha_asignacion'][]=$rows['fecha_asignacion'];
 		$filas['responsable'][]=$rows['responsable'];
 		$filas['telefono_movil'][]=$rows['telefono_movil'];
 		$filas['item'][]=$rows['item'];
-		//$filas['almacen'][]=$rows['almacen'];
 		$filas['ubicacion'][]=$rows['ubicacion'];
 		$filas['ubicacion_hasta'][]=$rows['ubicacion_hasta'];
 		$filas['cantidad'][]=$rows['cantidad'];
@@ -323,9 +323,9 @@ if($pgsql->Total_Filas($data)!=0){
 	$lobjPdf->Row(array('Item','Ubicación Desde','Ubicación Hasta','Cantidad'),false);
 	$lobjPdf->SetFont("arial","",9);
 	$lobjPdf->Cell($avnzar);
-	$lobjPdf->aligns[2]='R';
+	$lobjPdf->aligns[3]='R';
 	$total=0;
-	for($i=0;$i<count($filas['codigo_asignacion']);$i++){
+	for($i=0;$i<count($filas['codigo_asignacion_libro']);$i++){
 		$total+=$filas['cantidad'][$i];
 		$lobjPdf->Row(array(
 		$filas['item'][$i],

@@ -933,6 +933,7 @@ CREATE TABLE bienes_nacionales.tasignacion
 	codigo_asignacion numeric not null default nextval('bienes_nacionales.seq_asignacion'),
 	fecha_asignacion date not null,
 	cedula_persona char(10) not null,
+	motivo varchar(255) default null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
 	fecha_creacion timestamp,
@@ -1274,6 +1275,51 @@ AFTER INSERT OR UPDATE OR DELETE
 ON biblioteca.tdetalle_entrega
 FOR EACH ROW
 EXECUTE PROCEDURE auditoria_general();
+
+CREATE SEQUENCE biblioteca.seq_asignacion_libro;
+
+CREATE TABLE biblioteca.tasignacion_libro
+(
+	codigo_asignacion_libro numeric not null default nextval('biblioteca.seq_asignacion_libro'),
+	fecha_asignacion date not null,
+	cedula_persona char(10) not null,
+	motivo varchar(255) default null,
+	estatus char(1) not null default '1',
+	creado_por char(15) not null,
+	fecha_creacion timestamp,
+	modificado_por char(15),
+	fecha_modificacion timestamp default current_timestamp,
+	constraint pk_asignacion_libro primary key(codigo_asignacion_libro),
+	constraint fk_asignacion_libro_persona foreign key(cedula_persona) references general.tpersona(cedula_persona) on delete restrict on update cascade
+);
+
+CREATE TRIGGER auditoria_registros
+AFTER INSERT OR UPDATE OR DELETE
+ON biblioteca.tasignacion_libro
+FOR EACH ROW
+EXECUTE PROCEDURE auditoria_general();
+
+CREATE SEQUENCE biblioteca.seq_det_asignacion_libro;
+
+CREATE TABLE biblioteca.tdetalle_asignacion_libro
+(
+	codigo_detalle_asignacion_libro numeric not null default nextval('biblioteca.seq_det_asignacion_libro'),
+	codigo_asignacion_libro numeric not null,
+	codigo_ubicacion numeric not null,
+	codigo_ubicacion_hasta numeric not null,
+	codigo_item numeric not null,
+	cantidad numeric not null,
+	estatus char(1) not null default '1',
+	creado_por char(15) not null,
+	fecha_creacion timestamp,
+	modificado_por char(15),
+	fecha_modificacion timestamp default current_timestamp,
+	constraint pk_det_asig_libro primary key(codigo_detalle_asignacion_libro),
+	constraint fk_det_asig_libro_asignacion foreign key(codigo_asignacion_libro) references biblioteca.tasignacion_libro(codigo_asignacion_libro) on delete restrict on update cascade,
+	constraint fk_det_asig_libro_ubicacion foreign key(codigo_ubicacion) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade,
+	constraint fk_det_asig_libro_ubicacion_hasta foreign key(codigo_ubicacion_hasta) references inventario.tubicacion(codigo_ubicacion) on delete restrict on update cascade,
+	constraint fk_det_asig_libro_item foreign key(codigo_item) references biblioteca.tejemplar(codigo_ejemplar) on delete restrict on update cascade
+);
 
 -- Fin Biblioteca
 
@@ -1618,6 +1664,18 @@ INNER JOIN biblioteca.tdetalle_entrega de ON ent.codigo_entrega = de.codigo_entr
 INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND de.codigo_ejemplar = dm.codigo_item AND de.codigo_ubicacion = dm.codigo_ubicacion 
 INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
 LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
+LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+UNION ALL 
+-- Movimiento de Inventario por Asignaciones de Libros 
+SELECT DISTINCT m.codigo_movimiento, 'Asignación de Libro No '||a.codigo_asignacion_libro AS nro_documento, m.fecha_movimiento, 
+m.tipo_movimiento,CASE WHEN m.tipo_movimiento='E' THEN 'Entrada' ELSE 'Salida' END AS descrip_tipo_movimiento,
+e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item,dm.codigo_ubicacion,u.descripcion AS ubicacion, dm.cantidad_movimiento, dm.sonlibros  
+FROM inventario.tmovimiento m 
+INNER JOIN biblioteca.tasignacion_libro a ON m.numero_documento = a.codigo_asignacion_libro AND m.tipo_transaccion = 'AL' 
+INNER JOIN biblioteca.tdetalle_asignacion_libro da ON a.codigo_asignacion_libro = da.codigo_asignacion_libro 
+INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento AND da.codigo_item = dm.codigo_item AND (da.codigo_ubicacion = dm.codigo_ubicacion OR da.codigo_ubicacion_hasta = dm.codigo_ubicacion)
+INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar 
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro;
 
 -- View Inventario
@@ -1638,7 +1696,7 @@ LAST(dm.valor_actual) AS existencia
 FROM inventario.tmovimiento m 
 INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
 INNER JOIN inventario.tubicacion u ON dm.codigo_ubicacion = u.codigo_ubicacion 
-LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE')
+LEFT JOIN biblioteca.tejemplar e ON dm.codigo_item = e.codigo_ejemplar AND m.tipo_transaccion IN ('IA','BP','BE','AL')
 LEFT JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
 WHERE dm.sonlibros='Y'
 GROUP BY dm.codigo_ubicacion,u.descripcion,dm.codigo_item,dm.sonlibros,e.codigo_cra,e.numero_edicion,l.titulo;
@@ -1676,7 +1734,8 @@ h.codigo_ano_academico,
 tm.nombre_materia,
 ta.descripcion AS nombre_ambiente,
 (bh.hora_inicio || '-'::text) || bh.hora_fin AS hora,
-s.nombre_seccion
+s.nombre_seccion, 
+pr.maxhoras 
 FROM educacion.thorario h
 LEFT JOIN educacion.thorario_profesor hp ON hp.codigo_horario_profesor = h.codigo_horario_profesor
 LEFT JOIN educacion.tseccion s ON s.seccion = hp.seccion

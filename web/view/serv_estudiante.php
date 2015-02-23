@@ -202,7 +202,10 @@ else if($_GET['Opt']=="2"){
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+							FROM general.tparroquia p 
+							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+							ORDER BY p.descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
@@ -470,7 +473,10 @@ else if($_GET['Opt']=="3"){
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							$pgsql = new Conexion();
-							$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+							FROM general.tparroquia p 
+							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+							ORDER BY p.descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_parroquia']==$row['lugar_nacimiento'])

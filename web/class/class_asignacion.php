@@ -4,6 +4,7 @@ class asignacion {
 	private $codigo_asignacion; 
 	private $fecha_asignacion;
 	private $cedula_persona;
+	private $motivo;
 	private $estatus; 
 	private $error; 
 	private $pgsql; 
@@ -12,6 +13,7 @@ class asignacion {
 		$this->codigo_asignacion=null;
 		$this->fecha_asignacion=null;
 		$this->cedula_persona=null;
+		$this->motivo=null;
 		$this->pgsql=new Conexion();
 	}
    
@@ -47,6 +49,15 @@ class asignacion {
 
 		if($Num_Parametro>0){
 			$this->cedula_persona=func_get_arg(0);
+		}
+    }
+
+    public function motivo(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->motivo;
+
+		if($Num_Parametro>0){
+			$this->motivo=func_get_arg(0);
 		}
     }
 
@@ -94,8 +105,8 @@ class asignacion {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO bienes_nacionales.tasignacion (fecha_asignacion,cedula_persona,creado_por,fecha_creacion) VALUES 
-	    ('$this->fecha_asignacion','$this->cedula_persona','$user',NOW());";
+	    $sql="INSERT INTO bienes_nacionales.tasignacion (fecha_asignacion,cedula_persona,motivo,creado_por,fecha_creacion) VALUES 
+	    ('$this->fecha_asignacion','$this->cedula_persona','$this->motivo','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$sqlx="SELECT codigo_asignacion FROM bienes_nacionales.tasignacion 
 	    	WHERE fecha_asignacion='$this->fecha_asignacion' AND cedula_persona = '$this->cedula_persona' 
@@ -149,7 +160,8 @@ class asignacion {
    
     public function Actualizar($user){
 	    $sql="UPDATE bienes_nacionales.tasignacion SET fecha_asignacion='$this->fecha_asignacion',cedula_persona='$this->cedula_persona',
-	    modificado_por='$user', fecha_modificacion=NOW() WHERE codigo_asignacion='$this->codigo_asignacion'";
+	    motivo='$this->motivo',modificado_por='$user',fecha_modificacion=NOW() 
+	    WHERE codigo_asignacion='$this->codigo_asignacion'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 	    else{

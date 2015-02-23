@@ -6,6 +6,34 @@ var indice_asignado=0;
 
 $(document).on("ready",Principal);
 
+function cargar_hora_maxima(){
+	$('#cedula_persona').on('change',function(){
+		elegido=$(this).val();
+		elegido1=$("#codigo_ano_academico").val();
+		var parametros={"profesor":elegido,"codigo_ano_academico": elegido1,"combo":"horas"};
+		$.ajax({
+			data: 	parametros,
+			url: 	'../controllers/control_ajax2.php',
+			type: 	'post',
+			success: 	function(response){
+				sacar_valor=$.parseJSON(response);
+				//	Campos Visibles
+				$('#celdaasignado').html(sacar_valor[0].asignado);
+				$('#celdalibre').html(sacar_valor[0].libre);
+				$('#celdatotal').html(sacar_valor[0].total);
+				//	Campos Ocultos
+				$('#A').val(sacar_valor[0].asignado);
+				$('#L').val(sacar_valor[0].libre);
+				$('#T').val(sacar_valor[0].total);
+				//	Agregar valor a las variables
+				HoraAsignado=parseInt(document.getElementById("A").value);
+				HoraTotal=parseInt(document.getElementById("T").value);
+				HoraLibre=parseInt(document.getElementById("L").value);
+			}
+		});
+	})
+}
+
 function cargar_datos(){
 	$("#seccion").on('change',function () {
 		elegido=$(this).val();
@@ -91,6 +119,7 @@ function cargar_datos_celda(){
 }
 
 function Principal(){
+	cargar_hora_maxima();
 	cargar_datos();
 	cargar_datos_celda();
 	$("td[id]").live("click",Seleccionar);
@@ -99,9 +128,6 @@ function Principal(){
 	$("td[class=asignado] img").live("click",mostrar_alt);
 	$("#btaceptar").live("click",Enviar);
 	$("#ok").on("click",celdaID);
-	HoraAsignado=parseInt(document.getElementById("A").value);
-	HoraTotal=parseInt(document.getElementById("T").value);
-	HoraLibre=parseInt(document.getElementById("L").value);
 	$("#tb_horario").live("click",function(){
 		indice_asignado=$("td.seleccionado").size();
 	});
@@ -159,15 +185,15 @@ function celdaID(){
 
 function Seleccionar(){
 	if($(this).attr('class')==undefined){
-	// if(HoraTotal>HoraAsignado){
-	// HoraAsignado++;
-	//HoraLibre--;
-	$(this).removeClass($(this).attr('class')).addClass("seleccionado");
-	$("#celdalibre").html(HoraLibre);
-	$("#celdaasignado").html(HoraAsignado);
-	//}else{
-	//alert("<font style='color:red'>No puede selecciona m&#225;s "+indice_asignado+"/"+document.getElementById("L").value+"</font>");
-	//}
+		if(HoraTotal>HoraAsignado){
+			HoraAsignado++;
+			HoraLibre--;
+			$(this).removeClass($(this).attr('class')).addClass("seleccionado");
+			$("#celdalibre").html(HoraLibre);
+			$("#celdaasignado").html(HoraAsignado);
+		}else{
+			alert("<font style='color:red'>No puede selecciona m&#225;s "+indice_asignado+"/"+document.getElementById("L").value+"</font>");
+		}
 	}
 }
 
@@ -260,17 +286,16 @@ function anadir_contenido(celda,valor,datos_img){
 }
 
 function validar(){
-	/*
 	if(HoraLibre==0 && HoraTotal==HoraAsignado && indice_asignado==0){
-	return true;
+		return true;
 	}else if(HoraLibre==0 && indice_asignado>0){
-	if(indice_asignado>1){ pl='as';nv=indice_asignado; }else{ pl='a';nv="";}
-	alert("<font style='color:red'>Debe agregar contenido a l"+pl+" "+nv+" celd"+pl+" seleccionad"+pl+"!</font>");
-	return false;			
+		if(indice_asignado>1){ pl='as';nv=indice_asignado; }else{ pl='a';nv="";}
+		alert("<font style='color:red'>Debe agregar contenido a l"+pl+" "+nv+" celd"+pl+" seleccionad"+pl+"!</font>");
+		return false;			
 	}else{
-	alert("<font style='color:red'>Completar todas las horas! "+HoraAsignado+"/"+HoraTotal+"</font>");
-	return false;
-	}*/
-	return false;
+		alert("<font style='color:red'>Completar todas las horas! "+HoraAsignado+"/"+HoraTotal+"</font>");
+		return false;
+	}
+	//return false;
 }
 

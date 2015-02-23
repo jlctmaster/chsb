@@ -229,7 +229,10 @@
 													<option value=0>Seleccione el Lugar de Nacimiento</option>
 													<?php
 														$pgsql = new Conexion();
-														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 														$query = $pgsql->Ejecutar($sql);
 														while($rows=$pgsql->Respuesta($query)){
 															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
@@ -573,7 +576,10 @@
 													<option value=0>Seleccione el Lugar de Nacimiento</option>
 													<?php
 														$pgsql = new Conexion();
-														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 														$query = $pgsql->Ejecutar($sql);
 														while($rows=$pgsql->Respuesta($query)){
 															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
@@ -667,7 +673,10 @@
 													<option value=0>Seleccione el Lugar de Nacimiento</option>
 													<?php
 														$pgsql = new Conexion();
-														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 														$query = $pgsql->Ejecutar($sql);
 														while($rows=$pgsql->Respuesta($query)){
 															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
@@ -830,7 +839,10 @@
 													<option value=0>Seleccione el Lugar de Nacimiento</option>
 													<?php
 														$pgsql = new Conexion();
-														$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 														$query = $pgsql->Ejecutar($sql);
 														while($rows=$pgsql->Respuesta($query)){
 															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
@@ -1327,7 +1339,10 @@
 												<option value=0>Seleccione el Lugar de Nacimiento</option>
 												<?php
 													$pgsql = new Conexion();
-													$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 													$query = $pgsql->Ejecutar($sql);
 													while($row=$pgsql->Respuesta($query)){
 														if($rows['lugar_nacimiento']==$row['codigo_parroquia'])
@@ -1688,7 +1703,10 @@
 												<option value=0>Seleccione el Lugar de Nacimiento</option>
 												<?php
 													$pgsql = new Conexion();
-													$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 													$query = $pgsql->Ejecutar($sql);
 													while($row=$pgsql->Respuesta($query)){
 														if($rows['lugar_nacimiento_padre']==$row['codigo_parroquia'])
@@ -1786,7 +1804,10 @@
 												<option value=0>Seleccione el Lugar de Nacimiento</option>
 												<?php
 													$pgsql = new Conexion();
-													$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 													$query = $pgsql->Ejecutar($sql);
 													while($row=$pgsql->Respuesta($query)){
 														if($rows['lugar_nacimiento_madre']==$row['codigo_parroquia'])
@@ -1960,7 +1981,10 @@
 												<option value=0>Seleccione el Lugar de Nacimiento</option>
 												<?php
 													$pgsql = new Conexion();
-													$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
+													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
+														FROM general.tparroquia p 
+														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
+														ORDER BY p.descripcion ASC";
 													$query = $pgsql->Ejecutar($sql);
 													while($row=$pgsql->Respuesta($query)){
 														if($rows['lugar_nacimiento_representante']==$row['codigo_parroquia'])

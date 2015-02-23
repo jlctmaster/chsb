@@ -124,7 +124,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'Y' ORDER BY codigo_ubicacion ASC";
+								$sql = "SELECT u.codigo_ubicacion,u.descripcion 
+								FROM inventario.tubicacion u 
+								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+								WHERE u.itemsdefectuoso = 'Y' AND a.tipo_ambiente <> '5' 
+								ORDER BY u.codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
 								while($row=$pgsql->Respuesta($query)){
 									echo "<option value=".$row['codigo_ubicacion'].">".$row['descripcion']."</option>";
@@ -268,7 +272,11 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							<option value=0>Seleccione una Ubicación</option>
 							<?php
 								$pgsql = new Conexion();
-								$sql = "SELECT * FROM inventario.tubicacion WHERE itemsdefectuoso = 'Y' ORDER BY codigo_ubicacion ASC";
+								$sql = "SELECT u.codigo_ubicacion,u.descripcion 
+								FROM inventario.tubicacion u 
+								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+								WHERE u.itemsdefectuoso = 'Y' AND a.tipo_ambiente <> '5' 
+								ORDER BY u.codigo_ubicacion ASC";
 								$query = $pgsql->Ejecutar($sql);
 								while($rows=$pgsql->Respuesta($query)){
 									if($row['codigo_ubicacion']==$rows['codigo_ubicacion'])

@@ -112,6 +112,12 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						</select>
 					</div>  
 				</div>
+				<div class="control-group">  
+					<label class="control-label" for="observacion">Motivo</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese un Motivo de la asignación" onKeyUp="this.value=this.value.toUpperCase()" name="motivo" id="motivo" type="text"/></textarea>
+					</div>  
+				</div>  
 				<div class="table-responsive">
 					<table id='tablaDetAsignacion' class="table-bordered zebra-striped">
 						<tr>
@@ -298,6 +304,12 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					</div>  
 				</div>
 				<div class="control-group">  
+					<label class="control-label" for="observacion">Motivo</label>  
+					<div class="controls">  
+						<textarea class="input-xlarge" title="Ingrese un Motivo de la asignación" onKeyUp="this.value=this.value.toUpperCase()" name="motivo" id="motivo" type="text"/><?php echo $row['motivo']; ?></textarea>
+					</div>  
+				</div> 
+				<div class="control-group">  
 					<?php if($row['estatus']=='1'){echo "<p id='estatus' class='Activo'>Activo </p>";}else{echo "<p id='estatus' class='Desactivado'>Desactivado</p>";} ?>
 				</div>
 				<div class="table-responsive">
@@ -342,7 +354,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <option value='0'>Seleccione un Item</option>";
 								        $sqlz="SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 										FROM inventario.tubicacion u 
-										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
+										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
+										WHERE u.estatus = '1' AND a.tipo_ambiente = '3' AND u.itemsdefectuoso ='N'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
@@ -356,7 +370,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 								        <td>
 								        <select class='bootstrap-select form-control' name='ubicacion_hasta[]' id='ubicacion_hasta_".$con."' title='Seleccione un Ubicación Destino' >
 								        <option value='0'>Seleccione un Item</option>";
-								        $sqlz="SELECT * FROM inventario.tubicacion WHERE estatus = '1'";
+								        $sqlz="SELECT u.* FROM inventario.tubicacion u 
+										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+										WHERE u.estatus = '1' AND a.tipo_ambiente = '3'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion_hasta']){
@@ -435,7 +451,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			$pgsql=new Conexion();
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '3' AND u.itemsdefectuoso ='N'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -448,7 +466,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			"<select class='bootstrap-select form-control' name='ubicacion_hasta[]' id='ubicacion_hasta_"+contador+"' title='Seleccione una Ubicación Destino'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT * FROM inventario.tubicacion WHERE estatus = '1'";
+			$sql = "SELECT u.* FROM inventario.tubicacion u 
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
+			WHERE u.estatus = '1' AND a.tipo_ambiente = '3'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -527,6 +547,14 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row[0]['responsable']?></label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>Motivo:</label>
+						</td>
+						<td>
+							<label><?=$row[0]['motivo']?></label>
 						</td>
 					</tr>
 				</table>

@@ -100,29 +100,30 @@
 		// Funcion que devuelva los bloque por turno.	 
 		public function bloque_hora($x){	    
 			if($x=="manana"){
-				$condicion="turno='M'";
+				$condicion="WHERE turno='M'";
 			}
 			if($x=="tarde"){
-				$condicion="turno='T'";
+				$condicion="WHERE turno='T'";
 			}
 			if($x=="noche"){
-				$condicion="turno='N'";
+				$condicion="WHERE turno='N'";
 			} 
 			if($x=="todos"){
-				$condicion='true';
+				$condicion='WHERE true';
 			}
 			if($x=="manana-tarde"){
-				$condicion="turno='M' or turno='T'";
+				$condicion="WHERE turno='M' or turno='T'";
 			}
 			if($x=="manana-noche"){
-				$condicion="turno='M' or turno='N'";
+				$condicion="WHERE turno='M' or turno='N'";
 			}
 			if($x=="tarde-noche"){
-				$condicion="turno='T' or turno='N'";
+				$condicion="WHERE turno='T' or turno='N'";
 			}
-			$sql="SELECT codigo_bloque_hora,TO_CHAR(hora_inicio,'HH24:MM') AS hora_inicio,
-			TO_CHAR(hora_fin,'HH24:MM') AS hora_fin,turno 
-			FROM educacion.tbloque_hora
+			$sql="SELECT codigo_bloque_hora, CASE turno WHEN 'M' THEN TO_CHAR(hora_inicio,'HH:MI am') ELSE TO_CHAR(hora_inicio,'HH:MI pm') END hora_inicio,
+			CASE turno WHEN 'T' THEN TO_CHAR(hora_fin,'HH:MI pm') ELSE TO_CHAR(hora_fin,'HH:MI am') END hora_fin,turno 
+			FROM educacion.tbloque_hora 
+			$condicion
 			ORDER BY turno,hora_inicio,hora_fin";
 			$query=$this->objBD->Ejecutar($sql);
 			$R['hora']=Array();
@@ -542,6 +543,21 @@
 			$json=json_encode($rows);
 			return $json;
 		}
+
+		public function Resultado_Json_de_Consulta_Horas_Maximas($a,$b){
+			$sql="SELECT COUNT(h.celda) AS asignado, MAX(p.maxhoras)-COUNT(h.celda) AS libre, MAX(p.maxhoras) AS total 
+			FROM general.tpersona p 
+			LEFT JOIN educacion.vhorario h ON p.cedula_persona = h.profesor AND h.codigo_ano_academico = $a 
+			WHERE p.cedula_persona = '$b'";
+			$query=$this->objBD->Ejecutar($sql);
+			$rows = array();
+			while($Actividad=$this->objBD->Respuesta_assoc($query)) {
+				$rows[] = $Actividad;
+			}
+			$json=json_encode($rows);
+			return $json;
+		}
+
 		public function Actualizar(){}
 		public function Desactivar(){}
 		public function Activar(){}

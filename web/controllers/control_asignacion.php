@@ -19,10 +19,14 @@ if(isset($_POST['fecha_asignacion']))
 if(isset($_POST['cedula_persona']))
   $cedula_persona=trim($_POST['cedula_persona']);
 
+if(isset($_POST['motivo']))
+  $motivo=trim($_POST['motivo']);
+
 if($lOpt=='Registrar'){
   $asignacion->codigo_asignacion($codigo_asignacion);
   $asignacion->fecha_asignacion($fecha_asignacion);
   $asignacion->cedula_persona($cedula_persona);
+  $asignacion->motivo($motivo);
   $confirmacion=false;
   $asignacion->Transaccion('iniciando');
   if($asignacion->Registrar($_SESSION['user_name'])){
@@ -106,6 +110,7 @@ if($lOpt=='Modificar'){
   $asignacion->codigo_asignacion($codigo_asignacion);
   $asignacion->fecha_asignacion($fecha_asignacion);
   $asignacion->cedula_persona($cedula_persona);
+  $asignacion->motivo($motivo);
   $confirmacion=false;
   $asignacion->Transaccion('iniciando');
   if($asignacion->Actualizar($_SESSION['user_name'])){
