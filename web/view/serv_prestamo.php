@@ -225,7 +225,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
 			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion 
-			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '1'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){

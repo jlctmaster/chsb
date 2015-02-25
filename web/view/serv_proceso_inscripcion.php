@@ -1580,7 +1580,7 @@
 						            </div>
 						            <div class="span6">
 								                <label class="control-label">Estatura en CM:</label>
-												<input class="span12" type="text" title="Ingrese el número de estatura en centimétros que mide" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla" value="<?=$rows['peso']?>" />
+												<input class="span12" type="text" title="Ingrese el número de estatura en centimétros que mide" maxlength=6 onKeyPress="return isNumberKey(event)" name="talla" id="talla" value="<?=$rows['talla']?>" />
 						            </div>
 						        </div>
 						    </div>

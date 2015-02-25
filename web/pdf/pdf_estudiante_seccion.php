@@ -178,7 +178,7 @@ $anchura=10;
 $color_fondo=false;
 $lobjPdf->SetWidths(array(20,84,20,20,20,20));
 $pgsql=new Conexion();
-$sql="SELECT p.seccion,p.peso, p.talla, p.indice, date_part('year',age( est.fecha_nacimiento )) AS edad,
+$sql="SELECT p.seccion,s.nombre_seccion,p.peso, p.talla, p.indice, date_part('year',age( est.fecha_nacimiento )) AS edad,
       p.cedula_persona||' '||est.primer_nombre||' '||est.segundo_nombre||' '||est.primer_apellido||' '||est.segundo_apellido AS estudiante
       FROM educacion.tproceso_inscripcion p
       INNER JOIN general.tpersona est ON p.cedula_persona = est.cedula_persona
@@ -188,7 +188,7 @@ $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFont('Arial','',9);
  while($estudiante=$pgsql->Respuesta($data)){
-    $lobjPdf->Row(array($estudiante['seccion'],
+    $lobjPdf->Row(array($estudiante['nombre_seccion'],
     $estudiante['estudiante'],
     $estudiante['edad'],
     $estudiante['talla'],

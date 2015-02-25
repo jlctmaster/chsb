@@ -1180,13 +1180,14 @@ class proceso_inscripcion {
 			$padre->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$padre->profesion($this->profesion_padre);
 			$padre->grado_instruccion($this->grado_instruccion_padre);
+			$padre->maxhoras(0);
 			if($this->cedula_padre!=""){
-				if(!$padre->Comprobar()){
+				if(!$padre->Comprobar(true)){
 					if($padre->Registrar($user)){
 						$sql="UPDATE educacion.tproceso_inscripcion SET cedula_padre='$this->cedula_padre',modificado_por='$user',fecha_modificacion=NOW() 
 						WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-					    if($this->pgsql->Ejecutar($sql)!=null)
-							if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_padre,$parentesco->BuscarCodigo('PADRE'),'N',$user)){
+					    if($this->pgsql->Ejecutar($sql)!=null){
+					    	if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_padre,$parentesco->BuscarCodigo('PADRE'),'N',$user)){
 	    						$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 								$ok=true;
 							}
@@ -1194,6 +1195,7 @@ class proceso_inscripcion {
 						    	$this->error(pg_last_error());
 								$ok=false;
 						    }
+					    }
 						else{
 					    	$this->error(pg_last_error());
 							$ok=false;
@@ -1226,10 +1228,7 @@ class proceso_inscripcion {
 						}
 					}
 				}
-			}else{
-		    	$this->error(pg_last_error());
-				$ok=false;
-		    }
+			}
 	   		$madre = new persona();
 			$madre->cedula_persona($this->cedula_madre);
 			$madre->primer_nombre($this->primer_nombre_madre);
@@ -1245,8 +1244,9 @@ class proceso_inscripcion {
 			$madre->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$madre->profesion($this->profesion_madre);
 			$madre->grado_instruccion($this->grado_instruccion_madre);
+			$madre->maxhoras(0);
 			if($this->cedula_madre!=""){
-				if(!$madre->Comprobar()){
+				if(!$madre->Comprobar(true)){
 					if($madre->Registrar($user)){
 						$sql="UPDATE educacion.tproceso_inscripcion SET cedula_madre='$this->cedula_madre',modificado_por='$user',fecha_modificacion=NOW() 
 						WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
@@ -1292,10 +1292,7 @@ class proceso_inscripcion {
 						}
 					}
 				}
-			}else{
-		    	$this->error(pg_last_error());
-				$ok2=false;
-		    }
+			}
 			if($ok==true && $ok2==true){
 				$this->Transaccion('finalizado');
 				return true;
@@ -1329,7 +1326,8 @@ class proceso_inscripcion {
 			$representante->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$representante->profesion($this->profesion_representante);
 			$representante->grado_instruccion($this->grado_instruccion_representante);
-			if(!$representante->Comprobar()){
+			$representante->maxhoras(0);
+			if(!$representante->Comprobar(true)){
 				if($representante->Registrar($user)){
 					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
 					modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
@@ -1554,6 +1552,7 @@ class proceso_inscripcion {
 			$padre->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$padre->profesion($this->profesion_padre);
 			$padre->grado_instruccion($this->grado_instruccion_padre);
+			$padre->maxhoras(0);
 			if($this->cedula_padre!=""){
 				if($padre->Actualizar($user,$oldcip)){
 					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_padre='$this->cedula_padre',modificado_por='$user',fecha_modificacion=NOW() 
@@ -1574,10 +1573,7 @@ class proceso_inscripcion {
 						$ok=false;
 				    }
 				}
-			}else{
-		    	$this->error(pg_last_error());
-				$ok=false;
-		    }
+			}
 	   		$madre = new persona();
 			$madre->cedula_persona($this->cedula_madre);
 			$madre->primer_nombre($this->primer_nombre_madre);
@@ -1593,6 +1589,7 @@ class proceso_inscripcion {
 			$madre->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$madre->profesion($this->profesion_madre);
 			$madre->grado_instruccion($this->grado_instruccion_madre);
+			$madres->maxhoras(0);
 			if($this->cedula_madre!=""){
 				if($madre->Actualizar($user,$oldcim)){
 					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_madre='$this->cedula_madre',modificado_por='$user',fecha_modificacion=NOW() 
@@ -1613,10 +1610,7 @@ class proceso_inscripcion {
 						$ok2=false;
 				    }
 				}
-			}else{
-		    	$this->error(pg_last_error());
-				$ok2=false;
-		    }
+			}
 			if($ok==true && $ok2==true){
 				$this->Transaccion('finalizado');
 				return true;
@@ -1650,7 +1644,8 @@ class proceso_inscripcion {
 			$representante->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$representante->profesion($this->profesion_representante);
 			$representante->grado_instruccion($this->grado_instruccion_representante);
-			if(!$representante->Comprobar()){
+			$representante->maxhoras(0);
+			if(!$representante->Comprobar(true)){
 				if($representante->Registrar($user)){
 					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
 					modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";

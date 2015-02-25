@@ -329,7 +329,7 @@ if($lOpt=='Registrar_Paso1'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha registrado al estudiante en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se ha registrado al estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-condicionestudiante");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar el estudiante en el proceso de inscripción!";
@@ -364,7 +364,7 @@ if($lOpt=='Registrar_Paso2'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha registrado la condición del estudiante en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se ha registrado la condición del estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-antecedentesfamiliares");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la condición del estudiante en el proceso de inscripción!";
@@ -404,7 +404,7 @@ if($lOpt=='Registrar_Paso3'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han registrado los antecedentes familiares en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han registrado los antecedentes familiares en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-datosrepresentante");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los antecedentes familiares en el proceso de inscripción!";
@@ -436,7 +436,7 @@ if($lOpt=='Registrar_Paso4'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha registrado al representante del estudiante en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se ha registrado al representante del estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-integracionec");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar al representante del estudiante en el proceso de inscripción!";
@@ -454,7 +454,7 @@ if($lOpt=='Registrar_Paso5'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han registrado los datos de la integración escuela-comunidad en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han registrado los datos de la integración escuela-comunidad en el proceso de inscripción con éxito!";
     $_SESSION['datos']['codigo_proceso_inscripcion']=$proceso_inscripcion->codigo_proceso_inscripcion();
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }else{
@@ -484,7 +484,7 @@ if($lOpt=='Registrar_Paso6'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han registrado los datos de los documentos consignados en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han registrado los datos de los documentos consignados en el proceso de inscripción con éxito!";
     $_SESSION['datos']['procesado']="Y";
     $_SESSION['datos']['codigo_proceso_inscripcion']=$proceso_inscripcion->codigo_proceso_inscripcion();
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2#tab-datosestudiantes");
@@ -555,7 +555,7 @@ if($lOpt=='Modificar_Paso2'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha modificado la condición del estudiante en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se ha modificado la condición del estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-condicionestudiante");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la condición del estudiante en el proceso de inscripción!";
@@ -595,7 +595,7 @@ if($lOpt=='Modificar_Paso3'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han modificado los antecedentes familiares en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han modificado los antecedentes familiares en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-antecedentesfamiliares");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar los antecedentes familiares en el proceso de inscripción!";
@@ -626,7 +626,7 @@ if($lOpt=='Modificar_Paso4'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se ha modificado al representante del estudiante en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se ha modificado al representante del estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-datosrepresentante");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar al representante del estudiante en el proceso de inscripción!";
@@ -644,7 +644,7 @@ if($lOpt=='Modificar_Paso5'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han modificado los datos de la integración escuela-comunidad en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han modificado los datos de la integración escuela-comunidad en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-integracionec");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar los datos de la integración escuela-comunidad en el proceso de inscripción!";
@@ -672,7 +672,7 @@ if($lOpt=='Modificar_Paso6'){
   else
     $confirmacion=0;
   if($confirmacion==1){
-    $_SESSION['datos']['mensaje']="¡Se han modificado los datos de los documentos consignados en el proceso de inscripción con exito!";
+    $_SESSION['datos']['mensaje']="¡Se han modificado los datos de los documentos consignados en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=3&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-documentos");
   }else{
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar los datos de los documentos consignados en el proceso de inscripción!";
