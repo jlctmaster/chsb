@@ -157,20 +157,8 @@
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Docente Responsable</label>
-								            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
-													<option value=0>Seleccione un Docente</option>
-													<?php
-														$pgsql = new Conexion();
-														$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-														FROM general.tpersona p 
-														INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-														WHERE LOWER(descripcion) LIKE '%docente%'";
-														$query = $pgsql->Ejecutar($sql);
-														while($row=$pgsql->Respuesta($query)){
-															echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-														}
-													?>
-												</select>
+							            		<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
+							            		<input class="span12" type="text" name="profesor" id="profesor" readonly /> 
 								            </div>
 								        </div>
 								    </div>
@@ -331,19 +319,15 @@
 							    <div class="span6">
 							        <div class="row-fluid">
 							            <div class="span6">
-							                <label class="control-label">Estado de Salud:</label>
+							                <label class="control-label">¿Estudiante Regular?</label>
 							                <div class="radios">
-												<input type="radio" name="estado_salud" id="estado_salud" value="1" checked="checked" required /> Excelente
-												<input type="radio" name="estado_salud" id="estado_salud" value="2" required /> Bueno
-												<input type="radio" name="estado_salud" id="estado_salud" value="3" required /> Regular
+												<input type="radio" name="estudiante_regular" id="estudiante_regular" value="Y" checked="checked" required /> Sí
+												<input type="radio" name="estudiante_regular" id="estudiante_regular" value="N" required /> No
 											</div>
 							            </div>
 							            <div class="span6">
-							                <label class="control-label">¿Es Alérgico(a)?</label>
-							                <div class="radios">
-												<input type="radio" name="alergico" id="alergico" value="Y" required /> Sí
-												<input type="radio" name="alergico" id="alergico" value="N" checked="checked" required /> No
-											</div>
+							                <label class="control-label">¿Procedencia?</label>
+											<input class="span12" type="text" title="Ingrese el nombre de la escuela de la cual proviene el estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="procedencia" id="procedencia" />
 							            </div>
 							        </div>
 							    </div>
@@ -361,6 +345,27 @@
 							            <div class="span6">
 							                <label class="control-label">¿Cuál?</label>
 											<input class="span12" type="text" title="Ingrese el nombre de las materias que tiene pendiente" onKeyUp="this.value=this.value.toUpperCase()" name="cual_materia" id="cual_materia" />
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							                <label class="control-label">Estado de Salud:</label>
+							                <div class="radios">
+												<input type="radio" name="estado_salud" id="estado_salud" value="1" checked="checked" required /> Excelente
+												<input type="radio" name="estado_salud" id="estado_salud" value="2" required /> Bueno
+												<input type="radio" name="estado_salud" id="estado_salud" value="3" required /> Regular
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">¿Es Alérgico(a)?</label>
+							                <div class="radios">
+												<input type="radio" name="alergico" id="alergico" value="Y" required /> Sí
+												<input type="radio" name="alergico" id="alergico" value="N" checked="checked" required /> No
+											</div>
 							            </div>
 							        </div>
 							    </div>
@@ -428,11 +433,11 @@
 							            </div>
 							            <div class="span3">
 							                <label class="control-label">¿Cant. Hembras?</label>
-											<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="0" />
+											<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=1 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="0" />
 							            </div>
 							            <div class="span3">
 							                <label class="control-label">¿Cant. Varones?</label>
-											<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="0" />
+											<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=1 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="0" />
 							            </div>
 							        </div>
 							    </div>
@@ -929,17 +934,90 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								            	<label class="control-label">En que podría usted aportar para <br>la Integración Escuela-Comunidad, <br>a fin de participar en bienestar <br>de la Institución:</label>
+								            	<label class="control-label">Integración Educativa, <br>¿Puede Aportar?</label>
 								                <div class="radios">
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="1" checked="checked" required /> Educativo
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="2" required /> Plomería <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" required /> Electricidad
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" required /> Albañilería <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" required /> Peluquería 
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="6" required /> Ambientación <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="7" required /> Manualidades
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="8" required /> Bisutería <br>
-													<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="9" required /> Otros
+													<input type="radio" name="integracion_educativa" id="integracion_educativa" value="Y" required /> Sí
+													<input type="radio" name="integracion_educativa" id="integracion_educativa" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Integración Plomería, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_plomeria" id="integracion_plomeria" value="Y" required /> Sí
+													<input type="radio" name="integracion_plomeria" id="integracion_plomeria" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">Integración Electricidad, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_electricidad" id="integracion_electricidad" value="Y" required /> Sí
+													<input type="radio" name="integracion_electricidad" id="integracion_electricidad" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Integración Albañilería, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_albanileria" id="integracion_albanileria" value="Y" required /> Sí
+													<input type="radio" name="integracion_albanileria" id="integracion_albanileria" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">Integración Peluquería, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_peluqueria" id="integracion_peluqueria" value="Y" required /> Sí
+													<input type="radio" name="integracion_peluqueria" id="integracion_peluqueria" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Integración Ambientación, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_ambientacion" id="integracion_ambientacion" value="Y" required /> Sí
+													<input type="radio" name="integracion_ambientacion" id="integracion_ambientacion" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">Integración Manualidades, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_manualidades" id="integracion_manualidades" value="Y" required /> Sí
+													<input type="radio" name="integracion_manualidades" id="integracion_manualidades" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								            	<label class="control-label">Integración Bisutería, <br>¿Puede Aportar?</label>
+								                <div class="radios">
+													<input type="radio" name="integracion_bisuteria" id="integracion_bisuteria" value="Y" required /> Sí
+													<input type="radio" name="integracion_bisuteria" id="integracion_bisuteria" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
+								            	<label class="control-label">¿Otra Integración?</label>
+								                <div class="radios">
+													<input type="radio" name="otra_integracion" id="otra_integracion" value="Y" required /> Sí
+													<input type="radio" name="otra_integracion" id="otra_integracion" value="N" checked="checked" required /> No
 												</div>
 								            </div>
 								            <div class="span6">
@@ -1000,10 +1078,30 @@
 												</div>
 								            </div>
 								            <div class="span6">
+								                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" required /> Sí
+													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
+								            <div class="span6">
 								                <label class="control-label">Partida de Nacimiento <br> Original y Copia <br> ¿Entregado?</label>
 								                <div class="radios">
 													<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" required /> Sí
 													<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" required /> Sí
+													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" checked="checked" required /> No
 												</div>
 								            </div>
 								        </div>
@@ -1020,46 +1118,6 @@
 												</div>
 								            </div>
 								            <div class="span6">
-								                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
-								                <div class="radios">
-													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" required /> Sí
-													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" checked="checked" required /> No
-												</div>
-								            </div>
-								        </div>
-								    </div>
-								</div>
-								<div class="row">
-								    <div class="span6">
-								        <div class="row-fluid">
-								            <div class="span6">
-								                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
-								                <div class="radios">
-													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" required /> Sí
-													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" checked="checked" required /> No
-												</div>
-								            </div>
-								            <div class="span6">
-								                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
-								                <div class="radios">
-													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" required /> Sí
-													<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" checked="checked" required /> No
-												</div>
-								            </div>
-								        </div>
-								    </div>
-								</div>
-								<div class="row">
-								    <div class="span6">
-								        <div class="row-fluid">
-								            <div class="span6">
-								                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
-								                <div class="radios">
-													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" required /> Sí
-													<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" checked="checked" required /> No
-												</div>
-								            </div>
-								            <div class="span6">
 								                <label class="control-label">Fotocopia C.I. Representante <br> ¿Entregado?</label>
 								                <div class="radios">
 													<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" required /> Sí
@@ -1073,10 +1131,10 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								            	<label class="control-label">¿Otro Documento?</label>
+								                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
 								                <div class="radios">
-													<input type="radio" name="otro_documento" id="otro_documento" value="Y" required /> Sí
-													<input type="radio" name="otro_documento" id="otro_documento" value="N" checked="checked" required /> No
+													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" required /> Sí
+													<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" checked="checked" required /> No
 												</div>
 								            </div>
 								            <div class="span6">
@@ -1093,12 +1151,32 @@
 								    <div class="span6">
 								        <div class="row-fluid">
 								            <div class="span6">
-								                <label class="control-label">Especifique:</label>
-												<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" />
+								                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
+								                <div class="radios">
+													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" required /> Sí
+													<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" checked="checked" required /> No
+												</div>
 								            </div>
+								            <div class="span6">
+								            	<label class="control-label">¿Otro Documento?</label>
+								                <div class="radios">
+													<input type="radio" name="otro_documento" id="otro_documento" value="Y" required /> Sí
+													<input type="radio" name="otro_documento" id="otro_documento" value="N" checked="checked" required /> No
+												</div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<div class="row">
+								    <div class="span6">
+								        <div class="row-fluid">
 								            <div class="span6">
 								            	<label class="control-label">Observación</label>
 								                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /></textarea>
+								            </div>
+								            <div class="span6">
+								                <label class="control-label">Especifique:</label>
+												<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" />
 								            </div>
 								        </div>
 								    </div>
@@ -1181,11 +1259,12 @@
 		pins.cedula_persona,pins.cedula_responsable,p.primer_nombre,p.segundo_nombre,p.primer_apellido,
 		p.segundo_apellido,p.sexo,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,p.lugar_nacimiento,
 		p.direccion,p.telefono_local,p.telefono_movil,pins.anio_a_cursar,pins.coordinacion_pedagogica,aa.ano,
-		i.codigo_inscripcion,INITCAP(per.descripcion) descripcion,TO_CHAR(per.fecha_inicio,'DD/MM/YYYY') fecha_inicio,
-		TO_CHAR(per.fecha_fin,'DD/MM/YYYY') fecha_fin,TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre, 
-		EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes  
+		i.codigo_inscripcion,INITCAP(per.descripcion) descripcion,pro.primer_nombre||' '||pro.primer_apellido AS profesor, 
+		TO_CHAR(per.fecha_inicio,'DD/MM/YYYY') fecha_inicio,TO_CHAR(per.fecha_fin,'DD/MM/YYYY') fecha_fin,
+		TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre,EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes  
 		FROM educacion.tproceso_inscripcion pins 
 		INNER JOIN general.tpersona p ON pins.cedula_persona = p.cedula_persona 
+		INNER JOIN general.tpersona pro ON pins.cedula_responsable = pro.cedula_persona 
 		INNER JOIN educacion.tano_academico aa ON pins.codigo_ano_academico = aa.codigo_ano_academico 
 		INNER JOIN educacion.tinscripcion i ON pins.codigo_inscripcion = i.codigo_inscripcion 
 		LEFT JOIN educacion.tperiodo per ON i.codigo_periodo = per.codigo_periodo AND per.esinscripcion =  'Y' 
@@ -1264,23 +1343,8 @@
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Docente Responsable</label>
-							            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
-												<option value=0>Seleccione un Docente</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-													FROM general.tpersona p 
-													INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-													WHERE LOWER(descripcion) LIKE '%docente%'";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['cedula_responsable']==$row['cedula_persona'])
-															echo "<option value=".$row['cedula_persona']." selected >".$row['cedula_persona']." ".$row['nombre']."</option>";
-														else
-															echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-													}
-												?>
-											</select>
+							            	<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_responsable']?>" /> 
+							            	<input class="span12" type="text" name="profesor" id="profesor" value="<?=$rows['profesor']?>" readonly /> 
 							            </div>
 							        </div>
 							    </div>
@@ -1421,7 +1485,7 @@
 							$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,pi.estado_salud,
 							pi.alergico,pi.impedimento_deporte,pi.especifique_deporte,pi.materia_pendiente,pi.cual_materia,pi.practica_deporte,pi.cual_deporte,
 							pi.tiene_beca,pi.organismo,pi.tiene_hermanos,pi.cuantas_hembras,pi.cuantos_varones,pi.estudian_aca,pi.que_anio,pi.peso,pi.talla,
-							pi.indice,pi.tiene_talento,pi.cual_talento 
+							pi.indice,pi.tiene_talento,pi.cual_talento,pi.estudiante_regular,pi.procedencia  
 							FROM educacion.tproceso_inscripcion pi 
 							INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
 							WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
@@ -1439,6 +1503,40 @@
 						            <div class="span6">
 						                <label class="control-label">Nombre y Apellido:</label>
 						                <input class="span12" name="nombre_apellido" id="nombre_apellido" type="text" value="<?=$rows['nombre']?>" readonly />
+						            </div>
+						        </div>
+						    </div>
+						</div>
+						<div class="row">
+						    <div class="span6">
+						        <div class="row-fluid">
+						            <div class="span6">
+						                <label class="control-label">¿Estudiante Regular?</label>
+						                <div class="radios">
+											<input type="radio" name="estudiante_regular" id="estudiante_regular" value="Y" <?php if($rows['estudiante_regular']=="Y"){echo "checked='checked'"; } ?> required /> Sí
+											<input type="radio" name="estudiante_regular" id="estudiante_regular" value="N" <?php if($rows['estudiante_regular']=="N"){echo "checked='checked'"; } ?> required /> No
+										</div>
+						            </div>
+						            <div class="span6">
+						                <label class="control-label">¿Procedencia?</label>
+										<input class="span12" type="text" title="Ingrese el nombre de la escuela de la cual proviene el estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="procedencia" id="procedencia" value="<?=$rows['procedencia']?>" />
+						            </div>
+						        </div>
+						    </div>
+						</div>
+						<div class="row">
+						    <div class="span6">
+						        <div class="row-fluid">
+						            <div class="span6">
+						                <label class="control-label">¿Tiene Materia Pendiente?</label>
+						                <div class="radios">
+											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="Y" <?php if($rows['materia_pendiente']=="Y"){echo "checked='checked'"; } ?> required /> Sí
+											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="N" <?php if($rows['materia_pendiente']=="N"){echo "checked='checked'"; } ?> required /> No
+										</div>
+						            </div>
+						            <div class="span6">
+						                <label class="control-label">¿Cuál?</label>
+										<input class="span12" type="text" title="Ingrese el nombre de las materias que tiene pendiente" onKeyUp="this.value=this.value.toUpperCase()" name="cual_materia" id="cual_materia" value="<?=$rows['cual_materia']?>" />
 						            </div>
 						        </div>
 						    </div>
@@ -1478,23 +1576,6 @@
 						            <div class="span6">
 						                <label class="control-label">Especifique:</label>
 										<textarea class="span12" title="Ingrese su impedimento deportivo" onKeyUp="this.value=this.value.toUpperCase()" name="especifique_deporte" id="especifique_deporte"><?php echo $rows['especifique_deporte'];?></textarea>
-						            </div>
-						        </div>
-						    </div>
-						</div>
-						<div class="row">
-						    <div class="span6">
-						        <div class="row-fluid">
-						            <div class="span6">
-						                <label class="control-label">¿Tiene Materia Pendiente?</label>
-						                <div class="radios">
-											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="Y" <?php if($rows['materia_pendiente']=="Y"){echo "checked='checked'"; } ?> required /> Sí
-											<input type="radio" name="materia_pendiente" id="materia_pendiente" value="N" <?php if($rows['materia_pendiente']=="N"){echo "checked='checked'"; } ?> required /> No
-										</div>
-						            </div>
-						            <div class="span6">
-						                <label class="control-label">¿Cuál?</label>
-										<input class="span12" type="text" title="Ingrese el nombre de las materias que tiene pendiente" onKeyUp="this.value=this.value.toUpperCase()" name="cual_materia" id="cual_materia" value="<?=$rows['cual_materia']?>" />
 						            </div>
 						        </div>
 						    </div>
@@ -1545,11 +1626,11 @@
 						            </div>
 						            <div class="span3">
 						                <label class="control-label">¿Cuantas Hembras?</label>
-										<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="<?=$rows['cuantas_hembras']?>" />
+										<input class="span4" type="text" title="Ingrese el número de hermanas que tiene" maxlength=1 onKeyPress="return isNumberKey(event)" name="cuantas_hembras" id="cuantas_hembras" value="<?=$rows['cuantas_hembras']?>" />
 						            </div>
 						            <div class="span3">
 						                <label class="control-label">&nbsp;¿Cuantos Varones?</label>
-										<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=2 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="<?=$rows['cuantos_varones']?>" />
+										<input class="span4" type="text" title="Ingrese el número de hermanos que tiene" maxlength=1 onKeyPress="return isNumberKey(event)" name="cuantos_varones" id="cuantos_varones" value="<?=$rows['cuantos_varones']?>" />
 						            </div>
 						        </div>
 						    </div>
@@ -1904,6 +1985,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Cédula del Representante:</label>
+							                <input type="hidden" name="old_cedula_representante" id="old_cedula_representante" value="<?=$rows['cedula_representante']?>" /> 
 							                <input class="span12" type="text" name="cedula_representante" id="cedula_representante" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_representante']?>" /> 
 							            </div>
 							            <div class="span6">
@@ -2049,7 +2131,8 @@
 							<?php
 								$pgsql=new Conexion();
 								$sql = "SELECT pi.codigo_proceso_inscripcion,pi.cedula_persona,p.primer_nombre||' '||p.primer_apellido AS nombre,
-								pi.integracion_escuela_comunidad,pi.especifique_integracion  
+								pi.integracion_educativa,pi.integracion_plomeria,pi.integracion_electricidad,pi.integracion_albanileria,pi.integracion_peluqueria,
+								pi.integracion_ambientacion,pi.integracion_manualidades,pi.integracion_bisuteria,pi.otra_integracion,pi.especifique_integracion  
 								FROM educacion.tproceso_inscripcion pi 
 								INNER JOIN general.tpersona p ON pi.cedula_persona = p.cedula_persona 
 								WHERE pi.codigo_proceso_inscripcion = ".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
@@ -2075,18 +2158,90 @@
 							    <div class="span6">
 							        <div class="row-fluid">
 							            <div class="span6">
-							            	<label class="control-label">En que podría usted aportar para <br>la Integración Escuela-Comunidad, <br>a fin de participar en bienestar <br>de la Institución:</label>
+							            	<label class="control-label">Integración Educativa, <br>¿Puede Aportar?</label>
 							                <div class="radios">
-							                	<input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" /> 
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="1" <?php if($rows['integracion_escuela_comunidad']=="1"){ echo "checked='checked'";}?> required /> Educativo
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="2" <?php if($rows['integracion_escuela_comunidad']=="2"){ echo "checked='checked'";}?> required /> Plomería <br>
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="3" <?php if($rows['integracion_escuela_comunidad']=="3"){ echo "checked='checked'";}?> required /> Electricidad
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="4" <?php if($rows['integracion_escuela_comunidad']=="4"){ echo "checked='checked'";}?> required /> Albañilería <br>
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="5" <?php if($rows['integracion_escuela_comunidad']=="5"){ echo "checked='checked'";}?> required /> Peluquería 
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="6" <?php if($rows['integracion_escuela_comunidad']=="6"){ echo "checked='checked'";}?> required /> Ambientación <br>
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="7" <?php if($rows['integracion_escuela_comunidad']=="7"){ echo "checked='checked'";}?> required /> Manualidades
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="8" <?php if($rows['integracion_escuela_comunidad']=="8"){ echo "checked='checked'";}?> required /> Bisutería <br>
-												<input type="radio" name="integracion_escuela_comunidad" id="integracion_escuela_comunidad" value="9" <?php if($rows['integracion_escuela_comunidad']=="9"){ echo "checked='checked'";}?> required /> Otros
+												<input type="radio" name="integracion_educativa" id="integracion_educativa" value="Y" <?php if($rows['integracion_educativa']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="integracion_educativa" id="integracion_educativa" value="N" <?php if($rows['integracion_educativa']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							            	<label class="control-label">Integración Plomería, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_plomeria" id="integracion_plomeria" value="Y" <?php if($rows['integracion_plomeria']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="integracion_plomeria" id="integracion_plomeria" value="N" <?php if($rows['integracion_plomeria']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							            	<label class="control-label">Integración Electricidad, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_electricidad" id="integracion_electricidad" value="Y" <?php if($rows['integracion_electricidad']=="Y"){ echo "checked='checked'";}?> value="Y" required /> Sí
+												<input type="radio" name="integracion_electricidad" id="integracion_electricidad" value="N" <?php if($rows['integracion_electricidad']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							            	<label class="control-label">Integración Albañilería, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_albanileria" id="integracion_albanileria" value="Y" <?php if($rows['integracion_albanileria']=="Y"){ echo "checked='checked'";}?> value="Y" required /> Sí
+												<input type="radio" name="integracion_albanileria" id="integracion_albanileria" value="N" <?php if($rows['integracion_albanileria']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							            	<label class="control-label">Integración Peluquería, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_peluqueria" id="integracion_peluqueria" value="Y" <?php if($rows['integracion_peluqueria']=="Y"){ echo "checked='checked'";}?> value="Y" required /> Sí
+												<input type="radio" name="integracion_peluqueria" id="integracion_peluqueria" value="N" <?php if($rows['integracion_peluqueria']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							            	<label class="control-label">Integración Ambientación, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_ambientacion" id="integracion_ambientacion" value="Y" <?php if($rows['integracion_ambientacion']=="Y"){ echo "checked='checked'";}?> value="Y" required /> Sí
+												<input type="radio" name="integracion_ambientacion" id="integracion_ambientacion" value="N" <?php if($rows['integracion_ambientacion']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							            	<label class="control-label">Integración Manualidades, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_manualidades" id="integracion_manualidades" value="Y" <?php if($rows['integracion_manualidades']=="Y"){ echo "checked='checked'";}?> value="Y" required /> Sí
+												<input type="radio" name="integracion_manualidades" id="integracion_manualidades" value="N" <?php if($rows['integracion_manualidades']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							            	<label class="control-label">Integración Bisutería, <br>¿Puede Aportar?</label>
+							                <div class="radios">
+												<input type="radio" name="integracion_bisuteria" id="integracion_bisuteria" value="Y" <?php if($rows['integracion_bisuteria']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="integracion_bisuteria" id="integracion_bisuteria" value="N" <?php if($rows['integracion_bisuteria']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
+							            	<label class="control-label">¿Otra Integración?</label>
+							                <div class="radios">
+												<input type="radio" name="otra_integracion" id="otra_integracion" value="Y" <?php if($rows['otra_integracion']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="otra_integracion" id="otra_integracion" value="N" <?php if($rows['otra_integracion']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
@@ -2150,10 +2305,30 @@
 											</div>
 							            </div>
 							            <div class="span6">
+							                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" <?php if($rows['fotos_estudiante']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" <?php if($rows['fotos_estudiante']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
+							            <div class="span6">
 							                <label class="control-label">Partida de Nacimiento <br> Original y Copia <br> ¿Entregado?</label>
 							                <div class="radios">
 												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="Y" <?php if($rows['partida_nacimiento']=="Y"){ echo "checked='checked'";}?> required /> Sí
 												<input type="radio" name="partida_nacimiento" id="partida_nacimiento" value="N" <?php if($rows['partida_nacimiento']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" <?php if($rows['boleta_zonificacion']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" <?php if($rows['boleta_zonificacion']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							        </div>
@@ -2170,46 +2345,6 @@
 											</div>
 							            </div>
 							            <div class="span6">
-							                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
-							                <div class="radios">
-												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" <?php if($rows['certificado_calificaciones']=="Y"){ echo "checked='checked'";}?> required /> Sí
-												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" <?php if($rows['certificado_calificaciones']=="N"){ echo "checked='checked'";}?> required /> No
-											</div>
-							            </div>
-							        </div>
-							    </div>
-							</div>
-							<div class="row">
-							    <div class="span6">
-							        <div class="row-fluid">
-							            <div class="span6">
-							                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
-							                <div class="radios">
-												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" <?php if($rows['constancia_buenaconducta']=="Y"){ echo "checked='checked'";}?> required /> Sí
-												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" <?php if($rows['constancia_buenaconducta']=="N"){ echo "checked='checked'";}?> required /> No
-											</div>
-							            </div>
-							            <div class="span6">
-							                <label class="control-label">4 Fotos Estudiante <br> ¿Entregado?</label>
-							                <div class="radios">
-												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="Y" <?php if($rows['fotos_estudiante']=="Y"){ echo "checked='checked'";}?> required /> Sí
-												<input type="radio" name="fotos_estudiante" id="fotos_estudiante" value="N" <?php if($rows['fotos_estudiante']=="N"){ echo "checked='checked'";}?> required /> No
-											</div>
-							            </div>
-							        </div>
-							    </div>
-							</div>
-							<div class="row">
-							    <div class="span6">
-							        <div class="row-fluid">
-							            <div class="span6">
-							                <label class="control-label">Boleta de Zonificación <br> ¿Entregado?</label>
-							                <div class="radios">
-												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="Y" <?php if($rows['boleta_zonificacion']=="Y"){ echo "checked='checked'";}?> required /> Sí
-												<input type="radio" name="boleta_zonificacion" id="boleta_zonificacion" value="N" <?php if($rows['boleta_zonificacion']=="N"){ echo "checked='checked'";}?> required /> No
-											</div>
-							            </div>
-							            <div class="span6">
 							                <label class="control-label">Fotocopia C.I. Representante <br> ¿Entregado?</label>
 							                <div class="radios">
 												<input type="radio" name="fotocopia_ci_representante" id="fotocopia_ci_representante" value="Y" <?php if($rows['fotocopia_ci_representante']=="Y"){ echo "checked='checked'";}?> required /> Sí
@@ -2223,10 +2358,10 @@
 							    <div class="span6">
 							        <div class="row-fluid">
 							            <div class="span6">
-							            	<label class="control-label">¿Otro Documento?</label>
+							                <label class="control-label">Certificado Calificaciones <br> ¿Entregado?</label>
 							                <div class="radios">
-												<input type="radio" name="otro_documento" id="otro_documento" value="Y" <?php if($rows['otro_documento']=="Y"){ echo "checked='checked'";}?> required /> Sí
-												<input type="radio" name="otro_documento" id="otro_documento" value="N" <?php if($rows['otro_documento']=="N"){ echo "checked='checked'";}?> required /> No
+												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="Y" <?php if($rows['certificado_calificaciones']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="certificado_calificaciones" id="certificado_calificaciones" value="N" <?php if($rows['certificado_calificaciones']=="N"){ echo "checked='checked'";}?> required /> No
 											</div>
 							            </div>
 							            <div class="span6">
@@ -2243,12 +2378,32 @@
 							    <div class="span6">
 							        <div class="row-fluid">
 							            <div class="span6">
-							                <label class="control-label">Especifique:</label>
-											<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" value="<?=$rows['cual_documento']?>" />
+							                <label class="control-label">Constancia Buena Conducta <br> ¿Entregado?</label>
+							                <div class="radios">
+												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="Y" <?php if($rows['constancia_buenaconducta']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="constancia_buenaconducta" id="constancia_buenaconducta" value="N" <?php if($rows['constancia_buenaconducta']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
 							            </div>
+							            <div class="span6">
+							            	<label class="control-label">¿Otro Documento?</label>
+							                <div class="radios">
+												<input type="radio" name="otro_documento" id="otro_documento" value="Y" <?php if($rows['otro_documento']=="Y"){ echo "checked='checked'";}?> required /> Sí
+												<input type="radio" name="otro_documento" id="otro_documento" value="N" <?php if($rows['otro_documento']=="N"){ echo "checked='checked'";}?> required /> No
+											</div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							<div class="row">
+							    <div class="span6">
+							        <div class="row-fluid">
 							            <div class="span6">
 							            	<label class="control-label">Observación</label>
 							                <textarea class="input-xlarge" title="Ingrese alguna observación sobre la consignación de documentos del estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="observacion_documentos" id="observacion_documentos" type="text" /><?php echo $rows['observacion_documentos']; ?></textarea>
+							            </div>
+							            <div class="span6">
+							                <label class="control-label">Especifique:</label>
+											<input class="span12" type="text" title="Especifique que otro documento ha consignado" onKeyUp="this.value=this.value.toUpperCase()" name="cual_documento" id="cual_documento" value="<?=$rows['cual_documento']?>" />
 							            </div>
 							        </div>
 							    </div>

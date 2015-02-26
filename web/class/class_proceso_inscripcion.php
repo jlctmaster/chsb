@@ -24,12 +24,14 @@ class proceso_inscripcion {
 	private $telefono_movil;
 	private $anio_a_cursar;
 	private $coordinacion_pedagogica;
+	private $estudiante_regular; 
+	private $procedencia;
+	private $materia_pendiente; 
+	private $cual_materia;
 	private $estado_salud; 
 	private $alergico;
 	private $impedimento_deporte; 
 	private $especifique_deporte; 
-	private $materia_pendiente; 
-	private $cual_materia;
 	private $practica_deporte; 
 	private $cual_deporte;
 	private $tiene_beca;
@@ -82,7 +84,15 @@ class proceso_inscripcion {
 	private $telefono_movil_representante;
 	private $profesion_representante;
 	private $grado_instruccion_representante;
-	private $integracion_escuela_comunidad;
+	private $integracion_educativa;
+	private $integracion_plomeria;
+	private $integracion_electricidad;
+	private $integracion_albanileria;
+	private $integracion_peluqueria;
+	private $integracion_ambientacion;
+	private $integracion_manualidades;
+	private $integracion_bisuteria;
+	private $otra_integracion;
 	private $especifique_integracion;
 	private $seccion;
 	private $observacion;
@@ -121,12 +131,14 @@ class proceso_inscripcion {
 		$this->telefono_movil=null;
 		$this->anio_a_cursar=null;
 		$this->coordinacion_pedagogica=null;
+		$this->estudiante_regular=null;
+		$this->procedencia=null;
+		$this->materia_pendiente=null;
+		$this->cual_materia=null;
 		$this->estado_salud=null;
 		$this->alergico=null;
 		$this->impedimento_deporte=null;
 		$this->especifique_deporte=null;
-		$this->materia_pendiente=null;
-		$this->cual_materia=null;
 		$this->practica_deporte=null;
 		$this->cual_deporte=null;
 		$this->tiene_beca=null;
@@ -179,7 +191,15 @@ class proceso_inscripcion {
 		$this->telefono_movil_representante=null;
 		$this->profesion_representante=null;
 		$this->grado_instruccion_representante=null;
-		$this->integracion_escuela_comunidad=null;
+		$this->integracion_educativa=null;
+		$this->integracion_plomeria=null;
+		$this->integracion_electricidad=null;
+		$this->integracion_albanileria=null;
+		$this->integracion_peluqueria=null;
+		$this->integracion_ambientacion=null;
+		$this->integracion_manualidades=null;
+		$this->integracion_bisuteria=null;
+		$this->otra_integracion=null;
 		$this->especifique_integracion=null;
 		$this->seccion=null;
 		$this->observacion=null;
@@ -369,6 +389,42 @@ class proceso_inscripcion {
 		}
     }
 
+    public function estudiante_regular(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->estudiante_regular;
+     
+		if($Num_Parametro>0){
+	   		$this->estudiante_regular=func_get_arg(0);
+	 	}
+    }
+
+    public function procedencia(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->procedencia;
+
+		if($Num_Parametro>0){
+			$this->procedencia=func_get_arg(0);
+		}
+    }
+
+    public function materia_pendiente(){
+    	$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->materia_pendiente;
+     
+		if($Num_Parametro>0){
+	   		$this->materia_pendiente=func_get_arg(0);
+	 	}
+    }
+
+    public function cual_materia(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->cual_materia;
+
+		if($Num_Parametro>0){
+			$this->cual_materia=func_get_arg(0);
+		}
+    }
+
     public function estado_salud(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estado_salud;
@@ -402,24 +458,6 @@ class proceso_inscripcion {
 
 		if($Num_Parametro>0){
 			$this->especifique_deporte=func_get_arg(0);
-		}
-    }
-
-    public function materia_pendiente(){
-    	$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->materia_pendiente;
-     
-		if($Num_Parametro>0){
-	   		$this->materia_pendiente=func_get_arg(0);
-	 	}
-    }
-
-    public function cual_materia(){
-		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->cual_materia;
-
-		if($Num_Parametro>0){
-			$this->cual_materia=func_get_arg(0);
 		}
     }
 
@@ -891,12 +929,84 @@ class proceso_inscripcion {
 		}
     }
 
-    public function integracion_escuela_comunidad(){
+    public function integracion_educativa(){
 		$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->integracion_escuela_comunidad;
+		if($Num_Parametro==0) return $this->integracion_educativa;
 
 		if($Num_Parametro>0){
-			$this->integracion_escuela_comunidad=func_get_arg(0);
+			$this->integracion_educativa=func_get_arg(0);
+		}
+    }
+
+    public function integracion_plomeria(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_plomeria;
+
+		if($Num_Parametro>0){
+			$this->integracion_plomeria=func_get_arg(0);
+		}
+    }
+
+    public function integracion_electricidad(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_electricidad;
+
+		if($Num_Parametro>0){
+			$this->integracion_electricidad=func_get_arg(0);
+		}
+    }
+
+    public function integracion_albanileria(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_albanileria;
+
+		if($Num_Parametro>0){
+			$this->integracion_albanileria=func_get_arg(0);
+		}
+    }
+
+    public function integracion_peluqueria(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_peluqueria;
+
+		if($Num_Parametro>0){
+			$this->integracion_peluqueria=func_get_arg(0);
+		}
+    }
+
+    public function integracion_ambientacion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_ambientacion;
+
+		if($Num_Parametro>0){
+			$this->integracion_ambientacion=func_get_arg(0);
+		}
+    }
+
+    public function integracion_manualidades(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_manualidades;
+
+		if($Num_Parametro>0){
+			$this->integracion_manualidades=func_get_arg(0);
+		}
+    }
+
+    public function integracion_bisuteria(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->integracion_bisuteria;
+
+		if($Num_Parametro>0){
+			$this->integracion_bisuteria=func_get_arg(0);
+		}
+    }
+
+    public function otra_integracion(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->otra_integracion;
+
+		if($Num_Parametro>0){
+			$this->otra_integracion=func_get_arg(0);
 		}
     }
 
@@ -1142,11 +1252,13 @@ class proceso_inscripcion {
 	    	$this->error(pg_last_error());
 			return false;
 	    }
-   		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
-   		especifique_deporte='$this->especifique_deporte',materia_pendiente='$this->materia_pendiente',cual_materia='$this->cual_materia',practica_deporte='$this->practica_deporte',
-   		cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',
-   		cuantos_varones='$this->cuantos_varones',estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
-   		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+   		$sql="UPDATE educacion.tproceso_inscripcion SET estudiante_regular='$this->estudiante_regular',procedencia='$this->procedencia',materia_pendiente='$this->materia_pendiente',
+   		cual_materia='$this->cual_materia',estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
+   		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
+   		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
+   		estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
+   		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null){
 	    	$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
 			return true;
@@ -1416,8 +1528,11 @@ class proceso_inscripcion {
    	public function Registrar_Paso5($user){
    		$ok=true;
 	   	$this->Transaccion('iniciando');
-   		$sql="UPDATE educacion.tproceso_inscripcion SET integracion_escuela_comunidad='$this->integracion_escuela_comunidad',especifique_integracion='$this->especifique_integracion',
-   		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+   		$sql="UPDATE educacion.tproceso_inscripcion SET integracion_educativa='$this->integracion_educativa',integracion_plomeria='$this->integracion_plomeria',
+   		integracion_electricidad='$this->integracion_electricidad',integracion_albanileria='$this->integracion_albanileria',integracion_peluqueria='$this->integracion_peluqueria',
+   		integracion_ambientacion='$this->integracion_ambientacion',integracion_manualidades='$this->integracion_manualidades',integracion_bisuteria='$this->integracion_bisuteria',
+   		otra_integracion='$this->otra_integracion',especifique_integracion='$this->especifique_integracion',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			$ok=true;
 		else{
@@ -1516,11 +1631,13 @@ class proceso_inscripcion {
 	    	$this->error(pg_last_error());
 			return false;
 	    }
-   		$sql="UPDATE educacion.tproceso_inscripcion SET estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
-   		especifique_deporte='$this->especifique_deporte',materia_pendiente='$this->materia_pendiente',cual_materia='$this->cual_materia',practica_deporte='$this->practica_deporte',
-   		cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',
-   		cuantos_varones='$this->cuantos_varones',estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
-   		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+   		$sql="UPDATE educacion.tproceso_inscripcion SET estudiante_regular='$this->estudiante_regular',procedencia='$this->procedencia',materia_pendiente='$this->materia_pendiente',
+   		cual_materia='$this->cual_materia',estado_salud='$this->estado_salud',alergico='$this->alergico',impedimento_deporte='$this->impedimento_deporte',
+   		especifique_deporte='$this->especifique_deporte',practica_deporte='$this->practica_deporte',cual_deporte='$this->cual_deporte',tiene_beca='$this->tiene_beca',
+   		organismo='$this->organismo',tiene_hermanos='$this->tiene_hermanos',cuantas_hembras='$this->cuantas_hembras',cuantos_varones='$this->cuantos_varones',
+   		estudian_aca='$this->estudian_aca',que_anio='$this->que_anio',peso='$this->peso',talla='$this->talla',indice='$this->indice',tiene_talento='$this->tiene_talento',
+   		cual_talento='$this->cual_talento',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else{
@@ -1624,7 +1741,7 @@ class proceso_inscripcion {
    		}
    	}
 
-   	public function Actualizar_Paso4($user){
+   	public function Actualizar_Paso4($user,$oldcir){
    		if($this->cedula_representante!=$this->cedula_padre && $this->cedula_representante!=$this->cedula_madre){
 	   		$ok=true;
 	   		$tipo_persona = new tipopersona();
@@ -1645,47 +1762,26 @@ class proceso_inscripcion {
 			$representante->profesion($this->profesion_representante);
 			$representante->grado_instruccion($this->grado_instruccion_representante);
 			$representante->maxhoras(0);
-			if(!$representante->Comprobar(true)){
-				if($representante->Registrar($user)){
-					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
-					modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-				    if($this->pgsql->Ejecutar($sql)!=null)
-						if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user))
-							$ok=true;
-						else{
-					    	$this->error(pg_last_error());
-							$ok=false;
-					    }
+			if($representante->Actualizar($user,$oldcir)){
+				$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
+				modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+			    if($this->pgsql->Ejecutar($sql)!=null)
+					if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user))
+						$ok=true;
 					else{
 				    	$this->error(pg_last_error());
 						$ok=false;
 				    }
-				}
 				else{
 			    	$this->error(pg_last_error());
 					$ok=false;
 			    }
-			}else{
-				if($representante->estatus()==1)
-					$ok=false;
-				else{
-					if($representante->Activar($user)){
-						$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
-						modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-					    if($this->pgsql->Ejecutar($sql)!=null)
-							if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user))
-								$ok=true;
-							else{
-						    	$this->error(pg_last_error());
-								$ok=false;
-						    }
-						else{
-					    	$this->error(pg_last_error());
-							$ok=false;
-					    }
-					}
-				}
 			}
+			else{
+		    	$this->error(pg_last_error());
+				$ok=false;
+		    }
+
 			if($ok==true){
 				$this->Transaccion('finalizado');
 				return true;
@@ -1727,8 +1823,11 @@ class proceso_inscripcion {
    	}
 
    	public function Actualizar_Paso5($user){
-   		$sql="UPDATE educacion.tproceso_inscripcion SET integracion_escuela_comunidad='$this->integracion_escuela_comunidad',especifique_integracion='$this->especifique_integracion',
-   		modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+   		$sql="UPDATE educacion.tproceso_inscripcion SET integracion_educativa='$this->integracion_educativa',integracion_plomeria='$this->integracion_plomeria',
+   		integracion_electricidad='$this->integracion_electricidad',integracion_albanileria='$this->integracion_albanileria',integracion_peluqueria='$this->integracion_peluqueria',
+   		integracion_ambientacion='$this->integracion_ambientacion',integracion_manualidades='$this->integracion_manualidades',integracion_bisuteria='$this->integracion_bisuteria',
+   		otra_integracion='$this->otra_integracion',especifique_integracion='$this->especifique_integracion',modificado_por='$user',fecha_modificacion=NOW() 
+   		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else{

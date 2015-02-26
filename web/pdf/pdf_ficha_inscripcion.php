@@ -171,8 +171,10 @@ class clsFpdf extends FPDF {
   WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido END AS representante,
   TO_CHAR(rep.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,SUBSTR(rep.cedula_persona,2,LENGTH(rep.cedula_persona)) AS cedula_representante,SUBSTR(rep.cedula_persona,1,1) AS nacionalidad_representante,
   rep.profesion AS profesion_representante,rep.grado_instruccion AS grado_instruccion_representante,rep.direccion AS direccion_representante,rep.telefono_local AS telefono_local_representante,
-  paren.descripcion AS parentesco,ps.integracion_escuela_comunidad,ps.especifique_integracion,sec.nombre_seccion,ps.observacion,ps.fotocopia_ci,ps.partida_nacimiento,ps.boleta_promocion,ps.certificado_calificaciones,
-  ps.constancia_buenaconducta,ps.fotos_estudiante,ps.boleta_zonificacion,ps.fotocopia_ci_representante,ps.fotos_representante,ps.otro_documento,ps.cual_documento,ps.observacion_documentos 
+  paren.descripcion AS parentesco,ps.integracion_educativa,ps.integracion_plomeria,ps.integracion_electricidad,ps.integracion_albanileria,ps.integracion_peluqueria,ps.integracion_ambientacion,ps.integracion_manualidades,
+  ps.integracion_bisuteria,ps.otra_integracion,ps.especifique_integracion,sec.nombre_seccion,ps.observacion,ps.fotocopia_ci,ps.partida_nacimiento,ps.boleta_promocion,ps.certificado_calificaciones,
+  ps.constancia_buenaconducta,ps.fotos_estudiante,ps.boleta_zonificacion,ps.fotocopia_ci_representante,ps.fotos_representante,ps.otro_documento,ps.cual_documento,ps.observacion_documentos, 
+  ps.estudiante_regular,ps.procedencia 
   FROM educacion.tproceso_inscripcion ps 
   INNER JOIN educacion.tano_academico aa ON ps.codigo_ano_academico = aa.codigo_ano_academico 
   LEFT JOIN general.tpersona rp ON ps.cedula_responsable = rp.cedula_persona 
@@ -213,12 +215,14 @@ class clsFpdf extends FPDF {
       $arr['anio_a_cursar'][$ind]=$sacar_datos['anio_a_cursar'];   
       $arr['coordinacion_pedagogica'][$ind]=$sacar_datos['coordinacion_pedagogica'];
       $arr['telefono_local'][$ind]=$sacar_datos['telefono_local'];
+      $arr['estudiante_regular'][$ind]=$sacar_datos['estudiante_regular'];
+      $arr['procedencia'][$ind]=$sacar_datos['procedencia'];
+      $arr['materia_pendiente'][$ind]=$sacar_datos['materia_pendiente'];
+      $arr['cual_materia'][$ind]=$sacar_datos['cual_materia'];
       $arr['estado_salud'][$ind]=$sacar_datos['estado_salud'];   
       $arr['alergico'][$ind]=$sacar_datos['alergico'];
       $arr['impedimento_deporte'][$ind]=$sacar_datos['impedimento_deporte'];
       $arr['especifique_deporte'][$ind]=$sacar_datos['especifique_deporte'];
-      $arr['materia_pendiente'][$ind]=$sacar_datos['materia_pendiente'];
-      $arr['cual_materia'][$ind]=$sacar_datos['cual_materia'];
       $arr['practica_deporte'][$ind]=$sacar_datos['practica_deporte'];
       $arr['cual_deporte'][$ind]=$sacar_datos['cual_deporte'];
       $arr['tiene_beca'][$ind]=$sacar_datos['tiene_beca'];
@@ -258,7 +262,15 @@ class clsFpdf extends FPDF {
       $arr['direccion_representante'][$ind]=$sacar_datos['direccion_representante'];
       $arr['telefono_local_representante'][$ind]=$sacar_datos['telefono_local_representante'];
       $arr['parentesco'][$ind]=$sacar_datos['parentesco'];
-      $arr['integracion_escuela_comunidad'][$ind]=$sacar_datos['integracion_escuela_comunidad'];
+      $arr['integracion_educativa'][$ind]=$sacar_datos['integracion_educativa'];
+      $arr['integracion_plomeria'][$ind]=$sacar_datos['integracion_plomeria'];
+      $arr['integracion_electricidad'][$ind]=$sacar_datos['integracion_electricidad'];
+      $arr['integracion_albanileria'][$ind]=$sacar_datos['integracion_albanileria'];
+      $arr['integracion_peluqueria'][$ind]=$sacar_datos['integracion_peluqueria'];
+      $arr['integracion_ambientacion'][$ind]=$sacar_datos['integracion_ambientacion'];
+      $arr['integracion_manualidades'][$ind]=$sacar_datos['integracion_manualidades'];
+      $arr['integracion_bisuteria'][$ind]=$sacar_datos['integracion_bisuteria'];
+      $arr['otra_integracion'][$ind]=$sacar_datos['otra_integracion'];
       $arr['especifique_integracion'][$ind]=$sacar_datos['especifique_integracion'];
       $arr['nombre_seccion'][$ind]=$sacar_datos['nombre_seccion'];
       $arr['observacion'][$ind]=$sacar_datos['observacion'];
@@ -346,16 +358,16 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(20,5,'Reg.',1,0);
     $lobjPdf->Cell(20,5,'Rep.',1,0);
     $lobjPdf->Cell(40,5,'Mat. Pend.',1,1);
-    $lobjPdf->Cell(20,5,'X',1,0,'C');
-    $lobjPdf->Cell(20,5,'',1,0);
+    $lobjPdf->Cell(20,5,$arr['estudiante_regular'][0]=='Y' ? 'X' : '',1,0,'C');
+    $lobjPdf->Cell(20,5,$arr['estudiante_regular'][0]=='N' ? 'X' : '',1,0);
     $lobjPdf->Cell(10,5,'SÍ',1,0);
     $lobjPdf->Cell(10,5,$arr['materia_pendiente'][0]=="Y" ? 'X' : '',1,0);
     $lobjPdf->Cell(10,5,'NO',1,0);
     $lobjPdf->Cell(10,5,$arr['materia_pendiente'][0]=="N" ? 'X' : '',1,0,'C');
     $lobjPdf->SetXY(90,107);
     $lobjPdf->Cell(110,10,'¿Cúal? '.$arr['cual_materia'][0],1,1);
-    $lobjPdf->SetFont('Arial','B',8);
-    $lobjPdf->Cell(140,5,'Procedencia:',1,0);
+    $lobjPdf->SetFont('Arial','',8);
+    $lobjPdf->Cell(140,5,'Procedencia: '.$arr['procedencia'][0],1,0);
     $lobjPdf->SetFont('Arial','',8);
     $lobjPdf->Cell(50,5,'Teléfono: ('.$arr['telefono_local'][0].')',1,1);
     $lobjPdf->Cell(40,5,'Estado de Salud: Excelente',1,0);
@@ -447,8 +459,8 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(190,5,'V.-INTEGRACIÓN ESCUELA - COMUNIDAD',1,1);
     $lobjPdf->SetFont('Arial','',8);
     $lobjPdf->Cell(190,5,'En que podría usted aportar para la Integración Escuela-Comunidad, a fin de participar en bienestar de la Institución:','LTR',1);
-    $lobjPdf->Cell(190,5,'Educativo ('.($arr['integracion_escuela_comunidad'][0]=="1" ? ' X ' : '   ').') Plomería ('.($arr['integracion_escuela_comunidad'][0]=="2" ? ' X ' : '   ').') Electricidad ('.($arr['integracion_escuela_comunidad'][0]=="3" ? ' X ' : '   ').') Albañilería ('.($arr['integracion_escuela_comunidad'][0]=="4" ? ' X ' : '   ').') Peluquería ('.($arr['integracion_escuela_comunidad'][0]=="5" ? ' X ' : '   ').') Ambientación ('.($arr['integracion_escuela_comunidad'][0]=="6" ? ' X ' : '   ').') Manualidades ('.($arr['integracion_escuela_comunidad'][0]=="7" ? ' X ' : '   ').') Bisutería ('.($arr['integracion_escuela_comunidad'][0]=="8" ? ' X ' : '   ').') Otros ('.($arr['integracion_escuela_comunidad'][0]=="9" ? ' X ' : '   ').')','LR',1);
-    if($arr['integracion_escuela_comunidad'][0]=="9"){
+    $lobjPdf->Cell(190,5,'Educativo ('.($arr['integracion_educativa'][0]=="Y" ? ' X ' : '   ').') Plomería ('.($arr['integracion_plomeria'][0]=="Y" ? ' X ' : '   ').') Electricidad ('.($arr['integracion_electricidad'][0]=="Y" ? ' X ' : '   ').') Albañilería ('.($arr['integracion_albanileria'][0]=="Y" ? ' X ' : '   ').') Peluquería ('.($arr['integracion_peluqueria'][0]=="Y" ? ' X ' : '   ').') Ambientación ('.($arr['integracion_ambientacion'][0]=="Y" ? ' X ' : '   ').') Manualidades ('.($arr['integracion_manualidades'][0]=="Y" ? ' X ' : '   ').') Bisutería ('.($arr['integracion_bisuteria'][0]=="Y" ? ' X ' : '   ').') Otros ('.($arr['otra_integracion'][0]=="Y" ? ' X ' : '   ').')','LR',1);
+    if($arr['otra_integracion'][0]=="Y"){
       $lobjPdf->Cell(15,5,'Especifique:','LB',0);
       $lobjPdf->SetFont('Arial','U',8);
       $lobjPdf->Cell(175,5,$arr['especifique_integracion'][0],'BR',1);

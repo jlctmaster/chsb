@@ -67,6 +67,18 @@ if(isset($_POST['coordinacion_pedagogica']))
 
 /** Campos de la 2da Pestaña */
 
+if(isset($_POST['estudiante_regular']))
+  $estudiante_regular=trim($_POST['estudiante_regular']);
+
+if(isset($_POST['procedencia']))
+  $procedencia=trim($_POST['procedencia']);
+
+if(isset($_POST['materia_pendiente']))
+  $materia_pendiente=trim($_POST['materia_pendiente']);
+
+if(isset($_POST['cual_materia']))
+  $cual_materia=trim($_POST['cual_materia']);
+
 if(isset($_POST['estado_salud']))
   $estado_salud=trim($_POST['estado_salud']);
 
@@ -78,12 +90,6 @@ if(isset($_POST['impedimento_deporte']))
 
 if(isset($_POST['especifique_deporte']))
   $especifique_deporte=trim($_POST['especifique_deporte']);
-
-if(isset($_POST['materia_pendiente']))
-  $materia_pendiente=trim($_POST['materia_pendiente']);
-
-if(isset($_POST['cual_materia']))
-  $cual_materia=trim($_POST['cual_materia']);
 
 if(isset($_POST['practica_deporte']))
   $practica_deporte=trim($_POST['practica_deporte']);
@@ -213,6 +219,9 @@ if(isset($_POST['grado_instruccion_madre']))
 if(isset($_POST['codigo_parentesco']))
   $codigo_parentesco=trim($_POST['codigo_parentesco']);
 
+if(isset($_POST['old_cedula_representante']))
+  $old_cedula_representante=trim($_POST['old_cedula_representante']);
+
 if(isset($_POST['cedula_representante']))
   $cedula_representante=trim($_POST['cedula_representante']);
 
@@ -256,8 +265,32 @@ if(isset($_POST['grado_instruccion_representante']))
 
 /** Campos de la 5ta Pestaña */
 
-if(isset($_POST['integracion_escuela_comunidad']))
-  $integracion_escuela_comunidad=trim($_POST['integracion_escuela_comunidad']);
+if(isset($_POST['integracion_educativa']))
+  $integracion_educativa=trim($_POST['integracion_educativa']);
+
+if(isset($_POST['integracion_plomeria']))
+  $integracion_plomeria=trim($_POST['integracion_plomeria']);
+
+if(isset($_POST['integracion_electricidad']))
+  $integracion_electricidad=trim($_POST['integracion_electricidad']);
+
+if(isset($_POST['integracion_albanileria']))
+  $integracion_albanileria=trim($_POST['integracion_albanileria']);
+
+if(isset($_POST['integracion_peluqueria']))
+  $integracion_peluqueria=trim($_POST['integracion_peluqueria']);
+
+if(isset($_POST['integracion_ambientacion']))
+  $integracion_ambientacion=trim($_POST['integracion_ambientacion']);
+
+if(isset($_POST['integracion_manualidades']))
+  $integracion_manualidades=trim($_POST['integracion_manualidades']);
+
+if(isset($_POST['integracion_bisuteria']))
+  $integracion_bisuteria=trim($_POST['integracion_bisuteria']);
+
+if(isset($_POST['otra_integracion']))
+  $otra_integracion=trim($_POST['otra_integracion']);
 
 if(isset($_POST['especifique_integracion']))
   $especifique_integracion=trim($_POST['especifique_integracion']);
@@ -340,12 +373,14 @@ if($lOpt=='Registrar_Paso1'){
 if($lOpt=='Registrar_Paso2'){
   $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
   $proceso_inscripcion->cedula_persona($cedula_persona);
+  $proceso_inscripcion->estudiante_regular($estudiante_regular);
+  $proceso_inscripcion->procedencia($procedencia);
+  $proceso_inscripcion->materia_pendiente($materia_pendiente);
+  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->estado_salud($estado_salud);
   $proceso_inscripcion->alergico($alergico);
   $proceso_inscripcion->impedimento_deporte($impedimento_deporte);
   $proceso_inscripcion->especifique_deporte($especifique_deporte);
-  $proceso_inscripcion->materia_pendiente($materia_pendiente);
-  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->practica_deporte($practica_deporte);
   $proceso_inscripcion->cual_deporte($cual_deporte);
   $proceso_inscripcion->tiene_beca($tiene_beca);
@@ -447,7 +482,15 @@ if($lOpt=='Registrar_Paso4'){
 if($lOpt=='Registrar_Paso5'){
   $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
   $proceso_inscripcion->cedula_persona($cedula_persona);
-  $proceso_inscripcion->integracion_escuela_comunidad($integracion_escuela_comunidad);
+  $proceso_inscripcion->integracion_educativa($integracion_educativa);
+  $proceso_inscripcion->integracion_plomeria($integracion_plomeria);
+  $proceso_inscripcion->integracion_electricidad($integracion_electricidad);
+  $proceso_inscripcion->integracion_albanileria($integracion_albanileria);
+  $proceso_inscripcion->integracion_peluqueria($integracion_peluqueria);
+  $proceso_inscripcion->integracion_ambientacion($integracion_ambientacion);
+  $proceso_inscripcion->integracion_manualidades($integracion_manualidades);
+  $proceso_inscripcion->integracion_bisuteria($integracion_bisuteria);
+  $proceso_inscripcion->otra_integracion($otra_integracion);
   $proceso_inscripcion->especifique_integracion($especifique_integracion);
   if($proceso_inscripcion->Registrar_Paso5($_SESSION['user_name']))
     $confirmacion=1;
@@ -531,12 +574,14 @@ if($lOpt=='Modificar_Paso1'){
 if($lOpt=='Modificar_Paso2'){
   $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
   $proceso_inscripcion->cedula_persona($cedula_persona);
+  $proceso_inscripcion->estudiante_regular($estudiante_regular);
+  $proceso_inscripcion->procedencia($procedencia);
+  $proceso_inscripcion->materia_pendiente($materia_pendiente);
+  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->estado_salud($estado_salud);
   $proceso_inscripcion->alergico($alergico);
   $proceso_inscripcion->impedimento_deporte($impedimento_deporte);
   $proceso_inscripcion->especifique_deporte($especifique_deporte);
-  $proceso_inscripcion->materia_pendiente($materia_pendiente);
-  $proceso_inscripcion->cual_materia($cual_materia);
   $proceso_inscripcion->practica_deporte($practica_deporte);
   $proceso_inscripcion->cual_deporte($cual_deporte);
   $proceso_inscripcion->tiene_beca($tiene_beca);
@@ -621,7 +666,7 @@ if($lOpt=='Modificar_Paso4'){
   $proceso_inscripcion->telefono_movil_representante($telefono_movil_representante);
   $proceso_inscripcion->profesion_representante($profesion_representante);
   $proceso_inscripcion->grado_instruccion_representante($grado_instruccion_representante);
-  if($proceso_inscripcion->Actualizar_Paso4($_SESSION['user_name']))
+  if($proceso_inscripcion->Actualizar_Paso4($_SESSION['user_name'],$old_cedula_representante))
     $confirmacion=1;
   else
     $confirmacion=0;
@@ -637,7 +682,15 @@ if($lOpt=='Modificar_Paso4'){
 if($lOpt=='Modificar_Paso5'){
   $proceso_inscripcion->codigo_proceso_inscripcion($codigo_proceso_inscripcion);
   $proceso_inscripcion->cedula_persona($cedula_persona);
-  $proceso_inscripcion->integracion_escuela_comunidad($integracion_escuela_comunidad);
+  $proceso_inscripcion->integracion_educativa($integracion_educativa);
+  $proceso_inscripcion->integracion_plomeria($integracion_plomeria);
+  $proceso_inscripcion->integracion_electricidad($integracion_electricidad);
+  $proceso_inscripcion->integracion_albanileria($integracion_albanileria);
+  $proceso_inscripcion->integracion_peluqueria($integracion_peluqueria);
+  $proceso_inscripcion->integracion_ambientacion($integracion_ambientacion);
+  $proceso_inscripcion->integracion_manualidades($integracion_manualidades);
+  $proceso_inscripcion->integracion_bisuteria($integracion_bisuteria);
+  $proceso_inscripcion->otra_integracion($otra_integracion);
   $proceso_inscripcion->especifique_integracion($especifique_integracion);
   if($proceso_inscripcion->Actualizar_Paso5($_SESSION['user_name']))
     $confirmacion=1;

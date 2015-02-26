@@ -144,8 +144,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							and isset($_SESSION['pregunta_respuesta']) and $_SESSION['pregunta_respuesta']==4){ 
 							require_once('class/class_bd.php');
 							$conexion = new Conexion();
-							$sql = "SELECT p.codigo_perfil,p.nombre_perfil,c.descripcion AS configuracion 
-							FROM seguridad.tperfil p INNER JOIN seguridad.tconfiguracion c ON p.codigo_configuracion = c.codigo_configuracion";
+							$sql = "SELECT p.codigo_perfil,p.nombre_perfil,c.descripcion AS configuracion, 
+							c.longitud_minclave,c.longitud_maxclave,c.cantidad_letrasmayusculas,c.cantidad_letrasminusculas,
+							c.cantidad_caracteresespeciales,c.cantidad_numeros 
+							FROM seguridad.tusuario u 
+							INNER JOIN seguridad.tperfil p ON p.codigo_perfil = u.codigo_perfil 
+							INNER JOIN seguridad.tconfiguracion c ON p.codigo_configuracion = c.codigo_configuracion 
+							WHERE u.nombre_usuario = '".$_SESSION['user_name']."'";
 							$query=$conexion->Ejecutar($sql);
 							if($Obj=$conexion->Respuesta($query)){
 								echo "<input type='hidden' id='longitud_minclave' value='".$Obj['longitud_minclave']."' />";

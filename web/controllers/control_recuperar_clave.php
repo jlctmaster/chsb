@@ -46,6 +46,7 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
       if($con==$_SESSION['user_preguntas_a_responder']){
          $_SESSION['pregunta_respuesta']=4;
          $_SESSION['user_passwd'];
+         $_SESSION['user_name'];
          header("Location: ../../?p=cambiar-contrasena#intranet");
       }
       else{
@@ -78,6 +79,7 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
       if($con==$_SESSION['user_preguntas_a_responder']){
          $_SESSION['pregunta_respuesta']=4;
          $_SESSION['user_passwd'];
+         $_SESSION['user_name'];
          header("Location: ../../?p=cambiar-contrasena#intranet");
       }
       else{
@@ -110,6 +112,7 @@ if(isset($_POST['user_name']) || isset($_POST['respuesta'])){
       if($con==$_SESSION['user_preguntas_a_responder']){
          $_SESSION['pregunta_respuesta']=4;
          $_SESSION['user_passwd'];
+         $_SESSION['user_name'];
          header("Location: ../../?p=cambiar-contrasena#intranet");
       }
       else{
