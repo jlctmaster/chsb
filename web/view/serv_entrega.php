@@ -136,7 +136,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="fecha_entrada">Fecha de Entrada </label>  
-					<div class="controls">  
+					<div class="controls"> 
 						<input class="input-xlarge" title="Ingrese la fecha de Entrada" name="fecha_entrada" id="fecha_entrada" type="text" readonly required />
 					</div>  
 				</div>

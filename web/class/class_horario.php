@@ -124,7 +124,7 @@
 			CASE turno WHEN 'T' THEN TO_CHAR(hora_fin,'HH:MI pm') ELSE TO_CHAR(hora_fin,'HH:MI am') END hora_fin,turno 
 			FROM educacion.tbloque_hora 
 			$condicion
-			ORDER BY turno,hora_inicio,hora_fin";
+			ORDER BY codigo_bloque_hora ASC,turno ASC,hora_inicio DESC,hora_fin DESC";
 			$query=$this->objBD->Ejecutar($sql);
 			$R['hora']=Array();
 			$i=-1;

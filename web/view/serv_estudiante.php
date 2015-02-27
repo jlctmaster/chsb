@@ -133,7 +133,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="cedula_responsable">Docente Responsable</label>  
 					<div class="controls">  
-		            	<select class="selectpicker" data-live-search="true" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
+		            	<select class="bootstrap-select form-control" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
 							<option value=0>Seleccione un Docente</option>
 							<?php
 								$pgsql = new Conexion();
@@ -198,7 +198,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
+						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							$pgsql = new Conexion();
@@ -271,7 +271,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parentesco">Parentesco</label>  
 					<div class="controls">
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' >
+						<select class="bootstrap-select form-control" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' >
 							<option value=0>Seleccione un Parentesco</option>
 							<?php
 								$pgsql = new Conexion();
@@ -338,10 +338,12 @@ else if($_GET['Opt']=="3"){
 	$sql = "SELECT pins.codigo_proceso_inscripcion,TO_CHAR(pins.fecha_inscripcion,'DD/MM/YYYY') as fecha_inscripcion,pins.cedula_responsable,p.cedula_persona,
 	p.primer_nombre,p.segundo_nombre,p.primer_apellido,p.segundo_apellido,p.sexo,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,
 	p.lugar_nacimiento,p.direccion,p.telefono_local,p.telefono_movil,pins.anio_a_cursar,pins.peso,pins.talla,pins.indice,pins.cedula_representante,
-	r.primer_nombre||' '||r.primer_apellido AS representante,pins.codigo_parentesco,pins.seccion,pins.observacion,pins.procesado,p.estatus
+	r.primer_nombre||' '||r.primer_apellido AS representante,pins.codigo_parentesco,pins.seccion,pins.observacion,pins.procesado,p.estatus,
+	INITCAP(prof.primer_nombre||' '||prof.primer_apellido) profesor 
 	FROM general.tpersona p 
 	INNER JOIN educacion.tproceso_inscripcion pins ON p.cedula_persona = pins.cedula_persona 
-	INNER JOIN general.tpersona r ON pins.cedula_representante = r.cedula_persona 
+	INNER JOIN general.tpersona prof ON pins.cedula_responsable = prof.cedula_persona 
+	LEFT JOIN general.tpersona r ON pins.cedula_representante = r.cedula_persona 
 	WHERE p.cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
@@ -397,27 +399,17 @@ else if($_GET['Opt']=="3"){
 					</div>  
 				</div>
 				<div class="control-group">  
+					<label class="control-label" for="cedula_responsable">Cédula Docente</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Seleccione un Docente" onKeyUp="this.value=this.value.toUpperCase()" name="cedula_responsable" id="cedula_responsable" type="text" value="<?=$row['cedula_responsable']?>" required /> 
+					</div>  
+				</div>  	
+				<div class="control-group">  
 					<label class="control-label" for="cedula_responsable">Docente Responsable</label>  
 					<div class="controls">  
-		            	<select class="selectpicker" data-live-search="true" title="Seleccione un Docente" name='cedula_responsable' id='cedula_responsable' required >
-							<option value=0>Seleccione un Docente</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) LIKE '%docente%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($row['cedula_responsable']==$rows['cedula_persona'])
-										echo "<option value=".$rows['cedula_persona']." selected >".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-									else
-										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" type="text" name="profesor" id="profesor" value="<?=$row['profesor']?>" readonly /> 
 					</div>  
-				</div>  			
+				</div> 		
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Cédula</label>  
 					<div class="controls">
@@ -469,7 +461,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
+						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							$pgsql = new Conexion();
@@ -545,7 +537,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parentesco">Parentesco</label>  
 					<div class="controls">
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Parentesco" name='codigo_parentesco' id='codigo_parentesco' required >
 							<option value=0>Seleccione un Parentesco</option>
 							<?php
 								$pgsql = new Conexion();
@@ -565,7 +557,7 @@ else if($_GET['Opt']=="3"){
 					<label class="control-label" for="seccion">Sección</label>  
 					<div class="controls">
 						<input type="hidden" name="oldseccion" id="oldseccion" value="<?=$row['seccion']?>">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione una Sección" name='seccion' id='seccion' required >
+		                <select class="bootstrap-select form-control" title="Seleccione una Sección" name='seccion' id='seccion' required >
 							<option value=0>Seleccione una Sección</option>
 							<?php
 								$pgsql = new Conexion();

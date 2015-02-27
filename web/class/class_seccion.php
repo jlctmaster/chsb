@@ -10,6 +10,7 @@ class Seccion {
 	private $indice_max;
     private $codigo_materia;
 	private $estatus;
+	private $error;
 	private $pgsql; 
 	 
 	public function __construct(){
@@ -22,15 +23,16 @@ class Seccion {
 		$this->indice_max=null;
 		$this->codigo_materia=null;
 		$this->estatus=null;
+		$this->error=null;
 		$this->pgsql=new Conexion();
 	}
 
  public function __destruct(){}
 
  public function Transaccion($value){
-	 if($value=='iniciando') return $this->mysql->Incializar_Transaccion();
-	 if($value=='cancelado') return $this->mysql->Cancelar_Transaccion();
-	 if($value=='finalizado') return $this->mysql->Finalizar_Transaccion();
+	 if($value=='iniciando') return $this->pgsql->Incializar_Transaccion();
+	 if($value=='cancelado') return $this->pgsql->Cancelar_Transaccion();
+	 if($value=='finalizado') return $this->pgsql->Finalizar_Transaccion();
 	 }
 
     public function nombre_seccion(){
@@ -49,7 +51,6 @@ class Seccion {
 	   $this->seccion=func_get_arg(0);
 	 }
    }
-
 
     public function turno(){
 		$Num_Parametro=func_num_args();
@@ -113,26 +114,39 @@ class Seccion {
 			$this->estatus=func_get_arg(0);
 		}
     }
+    
+    public function error(){
+		$Num_Parametro=func_num_args();
+		if($Num_Parametro==0) return $this->error;
+
+		if($Num_Parametro>0){
+			$this->error=func_get_arg(0);
+		}
+    }
 
 	public function EliminarMaterias(){
 		$sql="DELETE FROM educacion.tmateria_seccion WHERE (seccion='$this->seccion');";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
-			return false;
+		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
 	} 
 
 	public function InsertarMaterias($user,$materias){
-    $sql="INSERT INTO educacion.tmateria_seccion(seccion,codigo_materia,creado_por,fecha_creacion) VALUES ";
-    foreach ($materias as $key => $value) {
-		$sql.="('$this->seccion','$value','$user',NOW()),";
-    }
-    $sql=substr($sql,0,-1);
-    $sql=$sql.";";
-    if($this->pgsql->Ejecutar($sql)!=null)
-      return true;
-    else
-      return false;
+	    $sql="INSERT INTO educacion.tmateria_seccion(seccion,codigo_materia,creado_por,fecha_creacion) VALUES ";
+	    foreach ($materias as $key => $value) {
+			$sql.="('$this->seccion','$value','$user',NOW()),";
+	    }
+	    $sql=substr($sql,0,-1);
+	    $sql=$sql.";";
+	    if($this->pgsql->Ejecutar($sql)!=null)
+	      return true;
+	    else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
     }
    
    	public function Registrar($user){
@@ -142,16 +156,20 @@ class Seccion {
 		'$this->indice_min','$this->indice_max','$user',NOW())";
 		if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
-			return false;
+		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
    	}
 
     public function Activar($user){
 	    $sql="UPDATE educacion.tseccion SET estatus = '1',modificado_por='$user',fecha_modificacion=NOW() WHERE seccion='$this->seccion'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
-			return false;
+		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
    	}
 
     public function Desactivar($user){
@@ -165,11 +183,15 @@ class Seccion {
 	    	$sql="UPDATE educacion.tseccion SET estatus = '0',modificado_por='$user',fecha_modificacion=NOW() WHERE seccion='$this->seccion'";
 		    if($this->pgsql->Ejecutar($sql)!=null)
 				return true;
-			else
-				return false;
+			else{
+		    	$this->error(pg_last_error());
+		    	return false;
+		    }
 		}
-		else
-			return false;
+		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
    	}
    
     public function Actualizar($user,$oldseccion){
@@ -179,8 +201,10 @@ class Seccion {
 	    WHERE seccion='$oldseccion'";
 	  	if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
-		else
-			return false;
+		else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
    	}
 
    	public function Comprobar($comprobar){
@@ -193,10 +217,13 @@ class Seccion {
 				return true;
 			}
 			else{
-				return false;
-			}
-	    }else
-	      return false;
+		    	$this->error(pg_last_error());
+		    	return false;
+		    }
+	    }else{
+	    	$this->error(pg_last_error());
+	    	return false;
+	    }
    }
 }
 ?>

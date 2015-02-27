@@ -330,8 +330,13 @@ class estudiante {
 		'$this->codigo_parentesco',(SELECT s.seccion FROM educacion.tseccion s LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion 
 		WHERE $this->indice BETWEEN s.indice_min AND s.indice_max GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),
 		'ASIGNADO POR $user SEGÚN TABULADOR','Y','$user',NOW())";
-		if($this->pgsql->Ejecutar($sql)!=null)
-			return true;
+		if($this->pgsql->Ejecutar($sql)!=null){
+			$sqlins="INSERT INTO educacion.tinscrito_seccion (seccion,cedula_persona,creado_por,fecha_creacion) VALUES ('$this->seccion','$this->cedula_persona','$user',NOW())";
+	    	if($this->pgsql->Ejecutar($sqlins)!=null)
+	    		return true;
+	    	else
+	    		return false;
+		}
 		else{
 			$this->error(pg_last_error());
 			return false;
@@ -358,8 +363,23 @@ class estudiante {
     	indice='$this->indice',cedula_representante='$this->cedula_representante',codigo_parentesco=$this->codigo_parentesco,seccion='$this->seccion',
     	observacion='$this->observacion',modificado_por='$user',fecha_modificacion=NOW() 
 		WHERE codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
-		if($this->pgsql->Ejecutar($sql)!=null)
-			return true;
+		if($this->pgsql->Ejecutar($sql)!=null){
+			$sqly="SELECT * FROM educacion.tinscrito_seccion WHERE cedula_persona = '$this->cedula_persona'";
+			$queryx=$this->pgsql->Ejecutar($sqly);
+		    if($this->pgsql->Total_Filas($queryx)!=0){
+		    	$sqlins="UPDATE educacion.tinscrito_seccion SET seccion='$this->seccion',modificado_por='$user',fecha_modificacion=NOW() WHERE cedula_persona = '$this->cedula_persona'";
+		    	if($this->pgsql->Ejecutar($sqlins)!=null)
+		    		return true;
+		    	else
+		    		return false;
+		    }else{
+		    	$sqlins="INSERT INTO educacion.tinscrito_seccion (seccion,cedula_persona,creado_por,fecha_creacion) VALUES ('$this->seccion','$this->cedula_persona','$user',NOW())";
+		    	if($this->pgsql->Ejecutar($sqlins)!=null)
+		    		return true;
+		    	else
+		    		return false;
+		    }
+		}
 		else{
 			$this->error(pg_last_error());
 			return false;

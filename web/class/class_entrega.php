@@ -195,7 +195,7 @@ class entrega {
    		TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,dp.codigo_ejemplar,
    		e.codigo_cra||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,dp.cantidad
    		FROM biblioteca.tprestamo p 
-   		INNER JOIN biblioteca.tdetalle_prestamo dp ON p.codigo_prestamo = p.codigo_prestamo 
+   		INNER JOIN biblioteca.tdetalle_prestamo dp ON dp.codigo_prestamo = p.codigo_prestamo 
    		INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
    		INNER JOIN biblioteca.tejemplar e ON dp.codigo_ejemplar = e.codigo_ejemplar 
    		INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 

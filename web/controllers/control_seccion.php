@@ -44,6 +44,8 @@ if($lOpt=='Registrar'){
   $seccion->capacidad_max($capacidad_max);
   $seccion->indice_min($indice_min);
   $seccion->indice_max($indice_max);
+  $confirmacion=false;
+  $seccion->Transaccion('iniciando');
   if(!$seccion->Comprobar($comprobar)){
     if($seccion->Registrar($_SESSION['user_name']))
       $confirmacion=1;
@@ -62,9 +64,11 @@ if($lOpt=='Registrar'){
     }
   }
   if($confirmacion==1){
+    $seccion->Transaccion('finalizado');
     $_SESSION['datos']['mensaje']="¡La Sección ha sido registrada con éxito!";
     header("Location: ../view/menu_principal.php?seccion&Opt=2");
   }else{
+    $seccion->Transaccion('cancelado');
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar La Sección!";
     header("Location: ../view/menu_principal.php?seccion&Opt=2");
   }
@@ -78,6 +82,8 @@ if($lOpt=='Modificar'){
   $seccion->capacidad_max($capacidad_max);  
   $seccion->indice_min($indice_min);
   $seccion->indice_max($indice_max);
+  $confirmacion=false;
+  $seccion->Transaccion('iniciando');
   if($oldseccion==$nro_seccion)
     $comprobar=false;
   if(!$seccion->Comprobar($comprobar)){
@@ -95,9 +101,11 @@ if($lOpt=='Modificar'){
   }else
     $confirmacion=-1;
   if($confirmacion==1){
+    $seccion->Transaccion('finalizado');
     $_SESSION['datos']['mensaje']="¡La Sección ha sido modificada con éxito!";
     header("Location: ../view/menu_principal.php?seccion&Opt=3&seccion=".$seccion->seccion());
   }else{
+    $seccion->Transaccion('cancelado');
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Sección!";
     header("Location: ../view/menu_principal.php?seccion&Opt=3&seccion=".$oldseccion);
   }

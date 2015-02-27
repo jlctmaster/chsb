@@ -95,6 +95,8 @@ if($lOpt=='Registrar'){
   }
   if($confirmacion==1){
     $recuperacion->Transaccion('finalizado');
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_recuperacion']=$recuperacion->codigo_recuperacion();
     $_SESSION['datos']['mensaje']="¡La Recuperación ha sido registrada con éxito!";
     header("Location: ../view/menu_principal.php?recuperacion&Opt=2");
   }else{
@@ -176,6 +178,8 @@ if($lOpt=='Modificar'){
     $confirmacion=-1;
   if($confirmacion==1){
     $recuperacion->Transaccion('finalizado');
+    $_SESSION['datos']['procesado']="Y";
+    $_SESSION['datos']['codigo_recuperacion']=$recuperacion->codigo_recuperacion();
     $_SESSION['datos']['mensaje']="¡La Recuperación ha sido modificada con éxito!";
     header("Location: ../view/menu_principal.php?recuperacion&Opt=3&codigo_recuperacion=".$recuperacion->codigo_recuperacion());
   }else{

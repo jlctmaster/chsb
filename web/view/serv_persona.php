@@ -129,7 +129,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
+						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -167,7 +167,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_tipopersona">Tipo Persona</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el Tipo de persona" name='codigo_tipopersona' id='codigo_tipopersona' required >
+						<select class="bootstrap-select form-control" title="Seleccione el Tipo de persona" name='codigo_tipopersona' id='codigo_tipopersona' required >
 							<option value=0>Seleccione el Tipo Persona</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -264,7 +264,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
+						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
 							<option value=0>Seleccione el Lugar</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -305,7 +305,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_tipopersona">Tipo Persona</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione el Tipo de persona" name='codigo_tipopersona' id='codigo_tipopersona' required >
+						<select class="bootstrap-select form-control" title="Seleccione el Tipo de persona" name='codigo_tipopersona' id='codigo_tipopersona' required >
 							<option value=0>Seleccione el Tipo Persona</option>
 							<?php
 							require_once('../class/class_bd.php');

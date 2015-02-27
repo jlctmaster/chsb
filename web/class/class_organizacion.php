@@ -92,8 +92,8 @@ class organizacion {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO general.torganizacion (rif_organizacion,nombre,direccion,telefono,tipo_organizacion,codigo_parroquia,creado_por) VALUES 
-	    ('$this->rif_organizacion','$this->nombre','$this->direccion','$this->telefono','$this->tipo_organizacion','$this->codigo_parroquia','$user');";
+	    $sql="INSERT INTO general.torganizacion (rif_organizacion,nombre,direccion,telefono,tipo_organizacion,codigo_parroquia,creado_por,fecha_creacion) VALUES 
+	    ('$this->rif_organizacion','$this->nombre','$this->direccion','$this->telefono','$this->tipo_organizacion','$this->codigo_parroquia','$user',NOW());";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else

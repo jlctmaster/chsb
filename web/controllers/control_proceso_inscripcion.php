@@ -656,6 +656,7 @@ if($lOpt=='Modificar_Paso4'){
   $proceso_inscripcion->codigo_parentesco($codigo_parentesco);
   $proceso_inscripcion->cedula_representante($cedula_representante);
   $proceso_inscripcion->fecha_nacimiento_representante($fecha_nacimiento_representante);
+  $proceso_inscripcion->sexo_representante($sexo_representante);
   $proceso_inscripcion->primer_nombre_representante($primer_nombre_representante);
   $proceso_inscripcion->segundo_nombre_representante($segundo_nombre_representante);
   $proceso_inscripcion->primer_apellido_representante($primer_apellido_representante);

@@ -29,7 +29,8 @@ function init(){
 	        success: function(resp){
 	        	$('#cedula_responsable option[value='+resp[0].cedula_responsable+']').attr('selected', 'selected');
 	        	$('#cedula_persona').val(resp[0].cedula_persona);
-	        	$('#estudiante').val(resp[0].estudiante);
+	        	$('#estudiante').val(resp[0].estudiante); 
+	        	$("#fecha_entrada").datepicker("option", "minDate", resp[0].fecha_salida);
 	        	$('#fecha_entrada').val(resp[0].fecha_entrada);
 	        	//	Eliminamos el detalle del elemento tablaDetEntrega para reescribir los valores.
 	        	$('#tablaDetEntrega tr[id]').remove();

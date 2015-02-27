@@ -95,7 +95,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 				<label class="control-label" for="cedula_responsable">Responsable del Préstamo</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
+					<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
 						<option value=0>Seleccione un Responsable</option>
 						<?php
 							$pgsql = new Conexion();
@@ -114,7 +114,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 				<label class="control-label" for="cedula_persona">Solicitante</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
 						<option value=0>Seleccione un Solicitante</option>
 						<?php
 							$pgsql = new Conexion();
@@ -133,7 +133,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="codigo_area">Área:</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
 						<option value=0>Seleccione un Área</option>
 						<?php
 						require_once('../class/class_bd.php');
@@ -150,7 +150,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="lugar_prestamo">Lugar del Préstamo:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un lugar del préstamo" required > 
+						<select class="bootstrap-select form-control" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un lugar del préstamo" required > 
 							<option value=0>Seleccione un Lugar</option>
 							<option value="S" >SALA</option>
 							<option value="A" >AULA</option>
@@ -225,7 +225,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 			FROM inventario.tubicacion u 
 			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion 
-			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '1'";
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){
@@ -316,7 +316,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="cedula_responsable">Responsable del Préstamo</label>  
 						<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
+						<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
 							<option value=0>Seleccione un Responsable</option>
 							<?php
 								$pgsql = new Conexion();
@@ -338,7 +338,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Solicitante</label>  
 						<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
 							<option value=0>Seleccione un Solicitante</option>
 							<?php
 								$pgsql = new Conexion();
@@ -360,7 +360,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_area">Área:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
 							<option value=0>Seleccione un Área</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -380,7 +380,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="lugar_prestamo">Lugar del Préstamo:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un tipo de materia" required > 
+						<select class="bootstrap-select form-control" name="lugar_prestamo" id="lugar_prestamo" title="Seleccione un tipo de materia" required > 
 							<option value=0>Seleccione un Lugar</option>
 							<option value="S" <?php if($row['lugar_prestamo']=="S") {echo "selected";} ?>> SALA</option>
 							<option value="A" <?php if($row['lugar_prestamo']=="A") {echo "selected";} ?>> AULA</option>
@@ -447,7 +447,8 @@ else if($_GET['Opt']=="3"){
 								        <option value='0'>Seleccione una Ubicación</option>";
 								        $sqlz="SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
 										FROM inventario.tubicacion u 
-										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion";
+										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
+										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
 								        $queryz = $pgsql->Ejecutar($sqlz);
 								          while ($rows = $pgsql->Respuesta($queryz)){
 								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
@@ -524,7 +525,10 @@ else if($_GET['Opt']=="3"){
 			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
 			<?php
 			$pgsql=new Conexion();
-			$sql = "SELECT * FROM inventario.tubicacion WHERE estatus = '1'";
+			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
+			FROM inventario.tubicacion u 
+			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
+			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
 			$query = $pgsql->Ejecutar($sql);
 			$comillasimple=chr(34);
 			while ($rows = $pgsql->Respuesta($query)){

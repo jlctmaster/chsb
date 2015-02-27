@@ -130,6 +130,26 @@ function init(){
 		}
 	});
 
+	//Búsquedas del padre por autocompletar.
+	$('#cedula_padre').autocomplete({
+		source:'../autocomplete/padre.php', 
+		minLength:1,
+		select: function (event, ui){
+			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
+			BuscarDatosPadre(Datos);
+		}
+	});
+
+	//Búsquedas de la madre por autocompletar.
+	$('#cedula_madre').autocomplete({
+		source:'../autocomplete/madre.php', 
+		minLength:1,
+		select: function (event, ui){
+			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
+			BuscarDatosMadre(Datos);
+		}
+	});
+
     //Busca los Datos del Responsable seleccionado.
     function BuscarDatosResponsable(value){
         $.ajax({
@@ -170,6 +190,62 @@ function init(){
         	$('#telefono_movil_representante').val(resp[0].telefono_movil);
         	$('#profesion_representante').val(resp[0].profesion);
         	$('#grado_instruccion_representante').val(resp[0].grado_instruccion);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
+        }
+        });
+    }
+
+    //Busca los Datos del Padre seleccionado.
+    function BuscarDatosPadre(value){
+        $.ajax({
+        url: '../controllers/control_persona.php',
+        type: 'POST',
+        async: true,
+        data: value,
+        dataType: "json",
+        success: function(resp){
+        	$('#sexo_padre[value='+resp[0].sexo+']').attr("checked","checked");
+        	$('#fecha_nacimiento_padre').val(resp[0].fecha_nacimiento);
+        	$('#primer_nombre_padre').val(resp[0].primer_nombre);
+        	$('#segundo_nombre_padre').val(resp[0].segundo_nombre);
+        	$('#primer_apellido_padre').val(resp[0].primer_apellido);
+        	$('#segundo_apellido_padre').val(resp[0].segundo_apellido);
+        	$('#lugar_nacimiento_padre').val(resp[0].lugar_nacimiento);
+        	$('#direccion_padre').val(resp[0].direccion);
+        	$('#telefono_local_padre').val(resp[0].telefono_local);
+        	$('#telefono_movil_padre').val(resp[0].telefono_movil);
+        	$('#profesion_padre').val(resp[0].profesion);
+        	$('#grado_instruccion_padre').val(resp[0].grado_instruccion);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
+        }
+        });
+    }
+
+    //Busca los Datos de la Madre seleccionado.
+    function BuscarDatosMadre(value){
+        $.ajax({
+        url: '../controllers/control_persona.php',
+        type: 'POST',
+        async: true,
+        data: value,
+        dataType: "json",
+        success: function(resp){
+        	$('#sexo_madre[value='+resp[0].sexo+']').attr("checked","checked");
+        	$('#fecha_nacimiento_madre').val(resp[0].fecha_nacimiento);
+        	$('#primer_nombre_madre').val(resp[0].primer_nombre);
+        	$('#segundo_nombre_madre').val(resp[0].segundo_nombre);
+        	$('#primer_apellido_madre').val(resp[0].primer_apellido);
+        	$('#segundo_apellido_madre').val(resp[0].segundo_apellido);
+        	$('#lugar_nacimiento_madre').val(resp[0].lugar_nacimiento);
+        	$('#direccion_madre').val(resp[0].direccion);
+        	$('#telefono_local_madre').val(resp[0].telefono_local);
+        	$('#telefono_movil_madre').val(resp[0].telefono_movil);
+        	$('#profesion_madre').val(resp[0].profesion);
+        	$('#grado_instruccion_madre').val(resp[0].grado_instruccion);
         },
         error: function(jqXHR, textStatus, errorThrown){
         	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)

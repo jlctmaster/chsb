@@ -1706,7 +1706,7 @@ class proceso_inscripcion {
 			$madre->codigo_tipopersona($tipo_persona->BuscarCodigo('REPRESENTANTE'));
 			$madre->profesion($this->profesion_madre);
 			$madre->grado_instruccion($this->grado_instruccion_madre);
-			$madres->maxhoras(0);
+			$madre->maxhoras(0);
 			if($this->cedula_madre!=""){
 				if($madre->Actualizar($user,$oldcim)){
 					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_madre='$this->cedula_madre',modificado_por='$user',fecha_modificacion=NOW() 
@@ -1842,7 +1842,8 @@ class proceso_inscripcion {
    		$sql="UPDATE educacion.tproceso_inscripcion SET fotocopia_ci='$this->fotocopia_ci',partida_nacimiento='$this->partida_nacimiento',boleta_promocion='$this->boleta_promocion',
    		certificado_calificaciones='$this->certificado_calificaciones',constancia_buenaconducta='$this->constancia_buenaconducta',fotos_estudiante='$this->fotos_estudiante',
    		boleta_zonificacion='$this->boleta_zonificacion',fotocopia_ci_representante='$this->fotocopia_ci_representante',fotos_representante='$this->fotos_representante',
-   		otro_documento='$this->otro_documento',cual_documento='$this->cual_documento',observacion_documentos='$this->observacion_documentos',modificado_por='$user',fecha_modificacion=NOW() 
+   		otro_documento='$this->otro_documento',cual_documento='$this->cual_documento',observacion_documentos='$this->observacion_documentos',procesado='Y',
+   		modificado_por='$user',fecha_modificacion=NOW() 
    		WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			$ok=true;

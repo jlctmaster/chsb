@@ -69,7 +69,7 @@ class clsFpdf extends FPDF {
 		$this->SetFont('Arial','BU',12);
 		$this->SetTextColor(0,0,0);
 		$this->Cell($avnzar); 
-		$this->Cell($anchura*16,$altura,"Asignación de Bienes",0,1,'C',$color_fondo);
+		$this->Cell($anchura*16,$altura,"Asignación de Libros",0,1,'C',$color_fondo);
 	}
 
 	//Pie de página

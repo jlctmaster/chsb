@@ -107,7 +107,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required /> 
+						<select class="bootstrap-select form-control" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required /> 
 							<option value=0>Seleccione un Tipo de Organización</option>
 							<option value="1" >PÚBLICA</option>
 							<option value="2" >PRIVADA</option>
@@ -118,7 +118,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
+						<select class="bootstrap-select form-control" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
 							<option value=0>Seleccione una Parroquia</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -190,7 +190,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="tipo_organizacion">Tipo de Organización</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required/> 
+						<select class="bootstrap-select form-control" name="tipo_organizacion" id="tipo_organizacion" title="Seleccione un tipo de organizacion" required/> 
 							<option value=0>Seleccione un Tipo de Organización </option>
 							<option value="1" <?php if($row['tipo_organizacion']=="1") {echo "selected";} ?> >PÚBLICA</option>
 							<option value="2" <?php if($row['tipo_organizacion']=="2") {echo "selected";} ?> >PRIVADA</option>
@@ -201,7 +201,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
+						<select class="bootstrap-select form-control" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
 							<option value=0>Seleccione una Parroquia</option>
 							<?php
 							require_once('../class/class_bd.php');

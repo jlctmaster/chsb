@@ -535,7 +535,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Cédula del Padre:</label>
-								                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
+								                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
 								            </div>
 								            <div class="span6">
 								                <label class="control-label">Fecha de Nacimiento del Padre:</label>
@@ -632,7 +632,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Cédula de la Madre:</label>
-								                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
+								                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
 								            </div>
 								            <div class="span6">
 								                <label class="control-label">Fecha de Nacimiento de la Madre:</label>
@@ -1738,7 +1738,7 @@
 							                <label class="control-label">Cédula del Padre:</label>
 							                <input type="hidden" name="codigo_proceso_inscripcion" id="codigo_proceso_inscripcion" value="<?=$rows['codigo_proceso_inscripcion']?>" /> 
 							                <input type="hidden" name="old_cedula_padre" id="old_cedula_padre" value="<?=$rows['cedula_padre']?>" /> 
-							                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_padre']?>" /> 
+							                <input class="span12" type="text" name="cedula_padre" id="cedula_padre" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_padre']?>" /> 
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Fecha de Nacimiento del Padre:</label>
@@ -1839,7 +1839,7 @@
 							            <div class="span6">
 							                <label class="control-label">Cédula de la Madre:</label>
 							                <input type="hidden" name="old_cedula_madre" id="old_cedula_madre" value="<?=$rows['cedula_madre']?>" /> 
-							                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_madre']?>" /> 
+							                <input class="span12" type="text" name="cedula_madre" id="cedula_madre" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_madre']?>" /> 
 							            </div>
 							            <div class="span6">
 							                <label class="control-label">Fecha de Nacimiento de la Madre:</label>
