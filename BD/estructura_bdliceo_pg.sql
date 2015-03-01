@@ -242,13 +242,13 @@ EXECUTE PROCEDURE auditoria_general();
 
 CREATE TABLE general.tpersona
 (
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	primer_nombre varchar(20) not null,
 	segundo_nombre varchar(20),
 	primer_apellido varchar(20) not null,
 	segundo_apellido varchar(20),
 	sexo char(1) not null default 'F',
-	fecha_nacimiento date not null,
+	fecha_nacimiento date,
 	lugar_nacimiento numeric not null,
 	direccion varchar(255) not null,
 	telefono_local varchar(15),
@@ -367,8 +367,8 @@ CREATE SEQUENCE general.seq_det_familiar;
 CREATE TABLE general.tdetalle_familiar
 (
 	codigo_detalle_familiar numeric NOT NULL DEFAULT nextval('general.seq_det_familiar'::regclass),
-	cedula_persona char(10) NOT NULL,
-	cedula_familiar char(10) NOT NULL,
+	cedula_persona char(15) NOT NULL,
+	cedula_familiar char(15) NOT NULL,
 	codigo_parentesco numeric NOT NULL,
 	es_representantelegal char(1) NOT NULL DEFAULT 'N',
 	estatus char(1) NOT NULL DEFAULT '1',
@@ -427,7 +427,7 @@ CREATE TABLE inventario.tadquisicion
 	fecha_adquisicion date not null,
 	tipo_adquisicion char(1) not null,
 	rif_organizacion char(10) not null,
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	sonlibros char(1) not null default 'N',
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -686,7 +686,7 @@ CREATE SEQUENCE educacion.seq_inscrito_seccion;
 
 CREATE TABLE educacion.tinscrito_seccion (
 	codigo_inscrito_seccion numeric not null default nextval('educacion.seq_inscrito_seccion'),
- 	cedula_persona char(10) not null,
+ 	cedula_persona char(15) not null,
  	seccion char(5) not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -730,7 +730,7 @@ CREATE SEQUENCE educacion.seq_horario_profesor;
 CREATE TABLE educacion.thorario_profesor (
  	codigo_horario_profesor numeric not null default nextval('educacion.seq_horario_profesor'),
  	seccion char(5) not null,
- 	cedula_persona char(10) not null,
+ 	cedula_persona char(15) not null,
  	codigo_materia char(7) not null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -782,8 +782,8 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	codigo_inscripcion numeric not null,
  	fecha_inscripcion date not null,
  	codigo_ano_academico numeric not null,
- 	cedula_responsable char(10) not null,
- 	cedula_persona char(10) not null,
+ 	cedula_responsable char(15) not null,
+ 	cedula_persona char(15) not null,
 	anio_a_cursar char(1) NOT NULL default '1',
 	coordinacion_pedagogica char(1) NOT NULL default '1',
  	estudiante_regular char(1) not null default 'Y',
@@ -809,9 +809,9 @@ CREATE TABLE educacion.tproceso_inscripcion (
  	indice numeric not null default 0,
  	tiene_talento char(1) not null default 'N',
  	cual_talento varchar(50) default null,
- 	cedula_padre char(10) default null,
- 	cedula_madre char(10) default null,
- 	cedula_representante char(10) default null,
+ 	cedula_padre char(15) default null,
+ 	cedula_madre char(15) default null,
+ 	cedula_representante char(15) default null,
  	codigo_parentesco numeric null,
  	integracion_educativa char(1) not null default 'N',
  	integracion_plomeria char(1) not null default 'N',
@@ -942,7 +942,7 @@ CREATE TABLE bienes_nacionales.tasignacion
 (
 	codigo_asignacion numeric not null default nextval('bienes_nacionales.seq_asignacion'),
 	fecha_asignacion date not null,
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	motivo varchar(255) default null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -993,7 +993,7 @@ CREATE TABLE bienes_nacionales.trecuperacion
 (
 	codigo_recuperacion numeric not null default nextval('bienes_nacionales.seq_recuperacion'),
 	fecha date not null,
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	codigo_bien numeric not null,
 	codigo_ubicacion numeric not null,
 	cantidad numeric not null,
@@ -1184,8 +1184,8 @@ CREATE SEQUENCE biblioteca.seq_prestamo;
 CREATE TABLE biblioteca.tprestamo
 (
 	codigo_prestamo numeric not null default nextval('biblioteca.seq_prestamo'),
-	cedula_responsable char(10) not null,
-	cedula_persona char(10) not null,
+	cedula_responsable char(15) not null,
+	cedula_persona char(15) not null,
 	codigo_area numeric not null,
 	lugar_prestamo char(1) not null default '0',
 	fecha_salida date not null,
@@ -1239,8 +1239,8 @@ CREATE TABLE biblioteca.tentrega
 (
 	codigo_entrega numeric not null default nextval('biblioteca.seq_entrega'),
 	codigo_prestamo numeric not null,
-	cedula_responsable char(10) not null,
-	cedula_persona char(10) not null,
+	cedula_responsable char(15) not null,
+	cedula_persona char(15) not null,
 	fecha_entrada date not null,
 	observacion varchar(100),
 	estatus char(1) not null default '1',
@@ -1292,7 +1292,7 @@ CREATE TABLE biblioteca.tasignacion_libro
 (
 	codigo_asignacion_libro numeric not null default nextval('biblioteca.seq_asignacion_libro'),
 	fecha_asignacion date not null,
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	motivo varchar(255) default null,
 	estatus char(1) not null default '1',
 	creado_por char(15) not null,
@@ -1518,7 +1518,7 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE TABLE seguridad.tusuario
 (
 	nombre_usuario char(15) not null,
-	cedula_persona char(10) not null,
+	cedula_persona char(15) not null,
 	codigo_perfil numeric not null,
 	intentos_fallidos numeric not null default 0,
 	estatus char(1) not null default '1',

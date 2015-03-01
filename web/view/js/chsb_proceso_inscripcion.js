@@ -359,10 +359,10 @@ function init(){
 					alert("¡Debe ingresar la cédula del padre del estudiante!");
 					send = false;
 				}
-				else if($('#fecha_nacimiento_padre').val()==""){
+				/*else if($('#fecha_nacimiento_padre').val()==""){
 					alert("¡Debe seleccionar la fecha de nacimiento del padre del estudiante!");
 					send = false;
-				}
+				}*/
 				else if($('#primer_nombre_padre').val()==""){
 					alert("¡Debe ingresar el primer nombre del padre del estudiante!");
 					send = false;
@@ -391,10 +391,10 @@ function init(){
 					alert("¡Debe ingresar la cédula de la madre del estudiante!");
 					send = false;
 				}
-				else if($('#fecha_nacimiento_madre').val()==""){
+				/*else if($('#fecha_nacimiento_madre').val()==""){
 					alert("¡Debe seleccionar la fecha de nacimiento de la madre del estudiante!");
 					send = false;
-				}
+				}*/
 				else if($('#primer_nombre_madre').val()==""){
 					alert("¡Debe ingresar el primer nombre de la madre del estudiante!");
 					send = false;
