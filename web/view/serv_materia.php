@@ -19,8 +19,8 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				<table cellpadding="0" cellspacing="5" border="0" class="bordered-table zebra-striped" id="registro">
 					<thead>
 						<tr>
-							<th>Codigo Materia</th>
-							<th>Materia</th>
+							<th>Codigo</th>
+							<th>Nombre de la Materia</th>
 							<th>Tipo de Materia</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
@@ -98,7 +98,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="tipo_materia">Tipo materia:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
+						<select class="bootstrap-select form-control" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value=0>Seleccione Tipo de Materia</option>
 							<option value="N" >Normal</option>
 							<option value="E" >Por Equivalencia</option>
@@ -152,7 +152,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="tipo_materia">Tipo Materia:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
+						<select class="bootstrap-select form-control" name="tipo_materia" id="tipo_materia" title="Seleccione un tipo de materia" required > 
 							<option value=0>Seleccione un Tipo de Materia</option>
 							<option value="N" <?php if($row['tipo_materia']=="N") {echo "selected";} ?>> Normal</option>
 							<option value="E" <?php if($row['tipo_materia']=="E") {echo "selected";} ?>> Por Equivalencia</option>

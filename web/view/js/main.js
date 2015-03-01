@@ -273,12 +273,21 @@ noty({"text": stringUnicode(message),
 
 //Función para escribir solo números.
 function isNumberKey(evt)
-  {
-     var charCode = (evt.which) ? evt.which : event.keyCode
-     if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
         return false;
-     return true;
-  }
+    return true;
+}
+
+//Función que recibe el id del objeto y  la url para ejecutar el llamado de autocompletado
+function ACDataGrid(obj,url){
+    console.log(obj+" => "+url);
+    $('#'+obj).autocomplete({
+        source:'../autocomplete/'+url, 
+        minLength:1
+    });
+}
 
 //Función para escribir solo Rif o Cédulas.
 function isRif(evt,object)

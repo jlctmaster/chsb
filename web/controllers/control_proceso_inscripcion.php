@@ -24,8 +24,10 @@ if(isset($_POST['cedula_persona']))
 
 /** Campos de la 1era Pestaña */
 
-if(isset($_POST['cedula_responsable']))
-  $cedula_responsable=trim($_POST['cedula_responsable']);
+if(isset($_POST['cedula_responsable'])){
+  $responsable=explode('_',trim($_POST['cedula_responsable']));
+  $cedula_responsable=$responsable[0];
+}
 
 if(isset($_POST['primer_nombre']))
   $primer_nombre=trim($_POST['primer_nombre']);
@@ -45,8 +47,10 @@ if(isset($_POST['sexo']))
 if(isset($_POST['fecha_nacimiento_estudiante']))
   $fecha_nacimiento_estudiante=trim($_POST['fecha_nacimiento_estudiante']);
 
-if(isset($_POST['lugar_nacimiento']))
-  $lugar_nacimiento=trim($_POST['lugar_nacimiento']);
+if(isset($_POST['lugar_nacimiento'])){
+  $parroquia=explode("_",trim($_POST['lugar_nacimiento']));
+  $lugar_nacimiento=$parroquia[0];
+}
 
 if(isset($_POST['direccion']))
   $direccion=trim($_POST['direccion']);
@@ -155,8 +159,10 @@ if(isset($_POST['primer_apellido_padre']))
 if(isset($_POST['segundo_apellido_padre']))
   $segundo_apellido_padre=trim($_POST['segundo_apellido_padre']);
 
-if(isset($_POST['lugar_nacimiento_padre']))
-  $lugar_nacimiento_padre=trim($_POST['lugar_nacimiento_padre']);
+if(isset($_POST['lugar_nacimiento_padre'])){
+  $parroquia_padre=explode("_",trim($_POST['lugar_nacimiento_padre']));
+  $lugar_nacimiento_padre=$parroquia_padre[0];
+}
 
 if(isset($_POST['direccion_padre']))
   $direccion_padre=trim($_POST['direccion_padre']);
@@ -194,8 +200,10 @@ if(isset($_POST['primer_apellido_madre']))
 if(isset($_POST['segundo_apellido_madre']))
   $segundo_apellido_madre=trim($_POST['segundo_apellido_madre']);
 
-if(isset($_POST['lugar_nacimiento_madre']))
-  $lugar_nacimiento_madre=trim($_POST['lugar_nacimiento_madre']);
+if(isset($_POST['lugar_nacimiento_madre'])){
+  $parroquia_madre=explode("_",trim($_POST['lugar_nacimiento_madre']));
+  $lugar_nacimiento_madre=$parroquia_madre[0];
+}
 
 if(isset($_POST['direccion_madre']))
   $direccion_madre=trim($_POST['direccion_madre']);
@@ -243,8 +251,10 @@ if(isset($_POST['segundo_apellido_representante']))
 if(isset($_POST['sexo_representante']))
   $sexo_representante=trim($_POST['sexo_representante']);
 
-if(isset($_POST['lugar_nacimiento_representante']))
-  $lugar_nacimiento_representante=trim($_POST['lugar_nacimiento_representante']);
+if(isset($_POST['lugar_nacimiento_representante'])){
+  $parroquia_representante=explode("_",trim($_POST['lugar_nacimiento_representante']));
+  $lugar_nacimiento_representante=$parroquia_representante[0];
+}
 
 if(isset($_POST['direccion_representante']))
   $direccion_representante=trim($_POST['direccion_representante']);
@@ -474,6 +484,7 @@ if($lOpt=='Registrar_Paso4'){
     $_SESSION['datos']['mensaje']="¡Se ha registrado al representante del estudiante en el proceso de inscripción con éxito!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-integracionec");
   }else{
+    $proceso_inscripcion->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar al representante del estudiante en el proceso de inscripción!";
     header("Location: ../view/menu_principal.php?proceso_inscripcion&Opt=2&codigo_proceso_inscripcion=".$proceso_inscripcion->codigo_proceso_inscripcion()."#tab-datosrepresentante");
   }

@@ -93,7 +93,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="lapso">Lapso:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
+						<select class="bootstrap-select form-control" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
 							<option value=0>Seleccione un Lapso</option>
 							<option value="1er" >I Lapso</option>
 							<option value="2do" >II Lapso</option>
@@ -104,7 +104,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ano_academico">Año Académico:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
 							<option value=0>Seleccione un Año</option>
 							<?php
 							$pgsql = new Conexion();
@@ -151,7 +151,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="lapso">Lapso:</label>  
 					<div class="controls">  
 						<input type="hidden" id="oldlapso" name="oldlapso" value="<?=$row['lapso']?>"> 
-						<select class="selectpicker" data-live-search="true" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
+						<select class="bootstrap-select form-control" name="lapso" id="lapso" title="Seleccione un Lapso" required > 
 							<option value=0>Seleccione un Lapso </option>
 							<option value="1er" <?php if($row['lapso']=="1er") {echo "selected";} ?> >I Lapso</option>
 							<option value="2do" <?php if($row['lapso']=="2do") {echo "selected";} ?> >II Lapso</option>
@@ -163,16 +163,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 					<label class="control-label" for="codigo_ano_academico">Año Académico:</label>  
 					<div class="controls">  
 						<input type="hidden" id="oldcaa" name="oldcaa" value="<?=$row['codigo_ano_academico']?>"> 
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Año" name='codigo_ano_academico' id='codigo_ano_academico' required >
 							<option value=0>Seleccione un Año</option>
 							<?php
 							$pgsql = new Conexion();
-							$sql = "SELECT codigo_ano_academico,ano FROM educacion.tano_academico 
+							$sql = "SELECT DISTINCT * FROM 
+							(SELECT codigo_ano_academico,ano FROM educacion.tano_academico 
 							WHERE estatus='1' AND cerrado = 'N'
 							UNION ALL 
 							SELECT a.codigo_ano_academico,a.ano FROM educacion.tano_academico a 
 							INNER JOIN educacion.tlapso l ON a.codigo_ano_academico=l.codigo_ano_academico 
-							WHERE l.codigo_lapso = ".$pgsql->comillas_inteligentes($_GET['codigo_lapso']);
+							WHERE l.codigo_lapso = ".$pgsql->comillas_inteligentes($_GET['codigo_lapso']).") ano_academico";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_ano_academico']==$row['codigo_ano_academico'])

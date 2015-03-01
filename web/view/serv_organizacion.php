@@ -118,21 +118,7 @@ else if($_GET['Opt']=="2"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-							<option value=0>Seleccione una Parroquia</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-							FROM general.tparroquia p 
-							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-							ORDER BY p.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione una Parroquia" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_parroquia" id="codigo_parroquia" type="text" required />
 					</div>  
 				</div> 
 				<center>
@@ -153,7 +139,10 @@ else if($_GET['Opt']=="3"){
 // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM general.torganizacion WHERE rif_organizacion=".$pgsql->comillas_inteligentes($_GET['rif_organizacion']);
+	$sql = "SELECT o.*,o.codigo_parroquia||'_'||p.descripcion AS parroquia 
+	FROM general.torganizacion o 
+	INNER JOIN general.tparroquia p ON o.codigo_parroquia = p.codigo_parroquia
+	WHERE o.rif_organizacion=".$pgsql->comillas_inteligentes($_GET['rif_organizacion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -201,24 +190,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required/>
-							<option value=0>Seleccione una Parroquia</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-							FROM general.tparroquia p 
-							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-							ORDER BY p.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_parroquia']==$row['codigo_parroquia'])
-									echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione una Parroquia" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_parroquia" id="codigo_parroquia" type="text" value="<?=$row['parroquia']?>" required />
 					</div>
 				</div>
 				<center>

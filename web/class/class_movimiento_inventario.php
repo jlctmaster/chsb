@@ -183,19 +183,6 @@ class movimiento_inventario {
         }
     }
 
-    public function ObtenerCodigoDetMovimiento(){
-    	$sql="SELECT codigo_detalle_movimiento FROM inventario.tdetalle_movimiento 
-    	WHERE codigo_movimiento = '$this->codigo_movimiento' AND codigo_item = '$this->codigo_item'";
-    	$query=$this->pgsql->Ejecutar($sql);
-   		if($row=$this->pgsql->Respuesta($query)){
-   			return $row['codigo_detalle_movimiento'];
-   		}
-   		else{
-            $this->error(pg_last_error());
-            return null;
-        }
-    }
-
     public function ObtenerValorAnterior(){
     	$sql="SELECT LAST(CASE WHEN valor_actual IS NULL THEN 0 ELSE valor_actual END) AS valor_anterior 
     	FROM inventario.tdetalle_movimiento 
@@ -227,25 +214,6 @@ class movimiento_inventario {
    		else{
             $this->error(pg_last_error());
             return 0;
-        }
-    }
-
-    public function ObtenerValorActualModificado($cantidad){
-        $sql="SELECT LAST(CASE '".$this->tipo_movimiento()."' 
-        WHEN 'E' THEN (dm.valor_anterior+$cantidad)
-        WHEN 'S' THEN (dm.valor_anterior-$cantidad)
-        ELSE 0 END) AS valor_actual 
-        FROM inventario.tmovimiento m 
-        INNER JOIN inventario.tdetalle_movimiento dm ON m.codigo_movimiento = dm.codigo_movimiento 
-        WHERE dm.codigo_item = '$this->codigo_item' AND dm.codigo_ubicacion = '$this->codigo_ubicacion'
-        GROUP BY dm.codigo_item,dm.codigo_ubicacion";
-        $query=$this->pgsql->Ejecutar($sql);
-        if($row=$this->pgsql->Respuesta($query)){
-            return $row['valor_actual'];
-        }
-        else{
-            $this->error(pg_last_error());
-            return null;
         }
     }
 
@@ -283,13 +251,11 @@ class movimiento_inventario {
         }
     }
 
-    public function ModificarDetalleMovimiento($user){
-    	$sql="UPDATE inventario.tdetalle_movimiento SET codigo_item='$this->codigo_item',codigo_ubicacion='$this->codigo_ubicacion',
-        cantidad_movimiento='$this->cantidad_movimiento',valor_actual='$this->valor_actual',sonlibros='$this->sonlibros',modificado_por='$user',fecha_modificacion=NOW() 
-    	WHERE codigo_detalle_movimiento ='$this->codigo_detalle_movimiento'";
-    	if($this->pgsql->Ejecutar($sql)!=null)
-    		return true;
-    	else{
+    public function EliminarMovimientos(){
+        $sql="DELETE FROM inventario.tdetalle_movimiento WHERE codigo_movimiento='$this->codigo_movimiento'";
+        if($this->pgsql->Ejecutar($sql)!=null)
+            return true;
+        else{
             $this->error(pg_last_error());
             return false;
         }

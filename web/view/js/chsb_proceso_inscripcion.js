@@ -112,22 +112,14 @@ function init(){
 
 	//Búsquedas del representante por autocompletar.
 	$('#cedula_responsable').autocomplete({
-		source:'../autocomplete/profesor.php', 
-		minLength:1,
-		select: function (event, ui){
-			Datos={"lOpt":"BuscarDatosPersona","filtro":ui.item.value};
-			BuscarDatosResponsable(Datos);
-		}
+		source:'../autocomplete/docente_horario.php', 
+		minLength:1
 	});
 
-	//Búsquedas del representante por autocompletar.
-	$('#cedula_representante').autocomplete({
-		source:'../autocomplete/representante.php', 
-		minLength:1,
-		select: function (event, ui){
-			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
-			BuscarDatosRepresentante(Datos);
-		}
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
 	});
 
 	//Búsquedas del padre por autocompletar.
@@ -140,6 +132,12 @@ function init(){
 		}
 	});
 
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento_padre').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
+
 	//Búsquedas de la madre por autocompletar.
 	$('#cedula_madre').autocomplete({
 		source:'../autocomplete/madre.php', 
@@ -148,6 +146,28 @@ function init(){
 			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
 			BuscarDatosMadre(Datos);
 		}
+	});
+
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento_madre').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
+
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_representante').autocomplete({
+		source:'../autocomplete/representante.php', 
+		minLength:1,
+		select: function (event, ui){
+			Datos={"lOpt":"BuscarDatosRepresentante","filtro":ui.item.value};
+			BuscarDatosRepresentante(Datos);
+		}
+	});
+
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento_representante').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
 	});
 
     //Busca los Datos del Responsable seleccionado.

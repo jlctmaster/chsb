@@ -96,7 +96,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="tipo_ambiente">Tipo de Ambiente</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo de organizacion" required /> 
+						<select class="bootstrap-select form-control" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo de organizacion" required /> 
 						<option value=0>Seleccione un Tipo de Ambiente</option>
 						<option value="1" >LABORATORIO</option>
 						<option value="2" >CANCHA</option>
@@ -147,7 +147,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="tipo_ambiente">Tipo de Ambiente:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo_ambiente" required > 
+						<select class="bootstrap-select form-control" name="tipo_ambiente" id="tipo_ambiente" title="Seleccione un tipo_ambiente" required > 
 							<option value=0>Seleccione Tipo de Ambiente </option>
 							<option value="1" <?php if($row['tipo_ambiente']=="1") {echo "selected";} ?>> LABORATORIO</option>
 							<option value="2" <?php if($row['tipo_ambiente']=="2") {echo "selected";} ?>> CANCHA</option>

@@ -129,21 +129,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
-							<option value=0>Seleccione el Lugar</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-							FROM general.tparroquia p 
-							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-							ORDER BY p.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento" id="lugar_nacimiento" type="text" required />
 					</div>  
 				</div>  
 				<div class="control-group">  
@@ -204,9 +190,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento 
-	FROM general.tpersona 
-	WHERE cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
+	$sql = "SELECT p.*,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,
+	p.lugar_nacimiento||'_'||par.descripcion AS lugar_nacimiento 
+	FROM general.tpersona p 
+	INNER JOIN general.tparroquia par ON p.lugar_nacimiento = par.codigo_parroquia 
+	WHERE p.cedula_persona =".$pgsql->comillas_inteligentes($_GET['cedula_persona']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -264,24 +252,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="lugar_nacimiento">Lugar de Nacimiento</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione el lugar" name='lugar_nacimiento' id='lugar_nacimiento' required >
-							<option value=0>Seleccione el Lugar</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-							FROM general.tparroquia p 
-							INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-							ORDER BY p.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_parroquia']==$row['lugar_nacimiento'])
-									echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento" id="lugar_nacimiento" type="text" value="<?=$row['lugar_nacimiento']?>" required />
 					</div>  
 				</div>  
 				<div class="control-group">  

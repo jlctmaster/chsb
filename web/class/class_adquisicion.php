@@ -114,7 +114,13 @@ class adquisicion {
 	public function InsertarAdquisiciones($user,$items,$cantidad,$ubicacion){
 	    $sql="INSERT INTO inventario.tdetalle_adquisicion(codigo_adquisicion,codigo_item,cantidad,codigo_ubicacion,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($items); $i++){
-	    	$sql.="('$this->codigo_adquisicion','".$items[$i]."','".$cantidad[$i]."','".$ubicacion[$i]."','$user',NOW()),";
+	    	//	Extraemos el codigo del item y la ubicacion por cada registro
+	    	$item=explode('_',$items[$i]);
+	    	$codigo_item=$item[0];
+	    	$ubicaciones=explode('_',$ubicacion[$i]);
+	    	$codigo_ubicacion=$ubicaciones[0];
+	    	//	Fin
+	    	$sql.="('$this->codigo_adquisicion','$codigo_item','".$cantidad[$i]."','$codigo_ubicacion','$user',NOW()),";
 	    }
 	    $sql=substr($sql,0,-1);
 	    $sql=$sql.";";

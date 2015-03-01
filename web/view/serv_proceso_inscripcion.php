@@ -153,12 +153,11 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Cédula Estudiante:</label>
-								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 required /> 
+								                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=12 required /> 
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Docente Responsable</label>
-							            		<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
-							            		<input class="span12" type="text" name="profesor" id="profesor" readonly /> 
+							            		<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" /> 
 								            </div>
 								        </div>
 								    </div>
@@ -213,20 +212,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Lugar de Nacimiento:</label>
-								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento' id='lugar_nacimiento' required >
-													<option value=0>Seleccione el Lugar de Nacimiento</option>
-													<?php
-														$pgsql = new Conexion();
-														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-														$query = $pgsql->Ejecutar($sql);
-														while($rows=$pgsql->Respuesta($query)){
-															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-														}
-													?>
-												</select>
+								                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento" id="lugar_nacimiento" type="text" required />
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Dirección:</label>
@@ -577,20 +563,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Lugar de Nacimiento del Padre:</label>
-								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_padre' id='lugar_nacimiento_padre' >
-													<option value=0>Seleccione el Lugar de Nacimiento</option>
-													<?php
-														$pgsql = new Conexion();
-														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-														$query = $pgsql->Ejecutar($sql);
-														while($rows=$pgsql->Respuesta($query)){
-															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-														}
-													?>
-												</select>
+								                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_padre" id="lugar_nacimiento_padre" type="text" required />
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Dirección:</label>
@@ -674,20 +647,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Lugar de Nacimiento de la Madre:</label>
-								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_madre' id='lugar_nacimiento_madre' >
-													<option value=0>Seleccione el Lugar de Nacimiento</option>
-													<?php
-														$pgsql = new Conexion();
-														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-														$query = $pgsql->Ejecutar($sql);
-														while($rows=$pgsql->Respuesta($query)){
-															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-														}
-													?>
-												</select>
+								                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_madre" id="lugar_nacimiento_madre" type="text" required />
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Dirección:</label>
@@ -840,20 +800,7 @@
 								        <div class="row-fluid">
 								            <div class="span6">
 								                <label class="control-label">Lugar de Nacimiento del <br>Representante:</label>
-								                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_representante' id='lugar_nacimiento_representante' >
-													<option value=0>Seleccione el Lugar de Nacimiento</option>
-													<?php
-														$pgsql = new Conexion();
-														$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-														$query = $pgsql->Ejecutar($sql);
-														while($rows=$pgsql->Respuesta($query)){
-															echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-														}
-													?>
-												</select>
+								                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_representante" id="lugar_nacimiento_representante" type="text" required />
 								            </div>
 								            <div class="span6">
 								            	<label class="control-label">Dirección:</label>
@@ -1256,14 +1203,15 @@
 		$pgsql=new Conexion();
 		$sql = "SELECT pins.codigo_proceso_inscripcion,TO_CHAR(pins.fecha_inscripcion,'DD/MM/YYYY') as fecha_inscripcion,
 		(SELECT codigo_ano_academico FROM educacion.tano_academico WHERE estatus = '1' AND cerrado = 'N') AS codigo_ano_academico,
-		pins.cedula_persona,pins.cedula_responsable,p.primer_nombre,p.segundo_nombre,p.primer_apellido,
-		p.segundo_apellido,p.sexo,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,p.lugar_nacimiento,
+		pins.cedula_persona,p.primer_nombre,p.segundo_nombre,p.primer_apellido,
+		p.segundo_apellido,p.sexo,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') as fecha_nacimiento,p.lugar_nacimiento||'_'||par.descripcion AS lugar_nacimiento,
 		p.direccion,p.telefono_local,p.telefono_movil,pins.anio_a_cursar,pins.coordinacion_pedagogica,aa.ano,
-		i.codigo_inscripcion,INITCAP(per.descripcion) descripcion,pro.primer_nombre||' '||pro.primer_apellido AS profesor, 
+		i.codigo_inscripcion,INITCAP(per.descripcion) descripcion,pins.cedula_responsable||'_'||pro.primer_nombre||' '||pro.primer_apellido AS profesor, 
 		TO_CHAR(per.fecha_inicio,'DD/MM/YYYY') fecha_inicio,TO_CHAR(per.fecha_fin,'DD/MM/YYYY') fecha_fin,
 		TO_CHAR(i.fecha_cierre,'DD/MM/YYYY') fecha_cierre,EXTRACT(day from NOW()-i.fecha_cierre) AS dias_restantes  
 		FROM educacion.tproceso_inscripcion pins 
 		INNER JOIN general.tpersona p ON pins.cedula_persona = p.cedula_persona 
+		INNER JOIN general.tparroquia par ON p.lugar_nacimiento = par.codigo_parroquia 
 		INNER JOIN general.tpersona pro ON pins.cedula_responsable = pro.cedula_persona 
 		INNER JOIN educacion.tano_academico aa ON pins.codigo_ano_academico = aa.codigo_ano_academico 
 		INNER JOIN educacion.tinscripcion i ON pins.codigo_inscripcion = i.codigo_inscripcion 
@@ -1339,12 +1287,11 @@
 							            <div class="span6">
 							                <label class="control-label">Cédula Estudiante:</label>
 							                <input type="hidden" name="old_cedula_persona" id="old_cedula_persona" value="<?=$rows['cedula_persona']?>" /> 
-							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_persona']?>" required /> 
+							                <input class="span12" type="text" name="cedula_persona" id="cedula_persona" onKeyPress="return isRif(event,this.value)" onKeyUp="this.value=this.value.toUpperCase()" maxlength=12 value="<?=$rows['cedula_persona']?>" required /> 
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Docente Responsable</label>
-							            	<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 value="<?=$rows['cedula_responsable']?>" /> 
-							            	<input class="span12" type="text" name="profesor" id="profesor" value="<?=$rows['profesor']?>" readonly /> 
+							            	<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$rows['responsable']?>" /> 
 							            </div>
 							        </div>
 							    </div>
@@ -1399,23 +1346,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Lugar de Nacimiento:</label>
-							                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento' id='lugar_nacimiento' required >
-												<option value=0>Seleccione el Lugar de Nacimiento</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['lugar_nacimiento']==$row['codigo_parroquia'])
-															echo "<option value=".$row['codigo_parroquia']." selected>".$row['descripcion']."</option>";
-														else
-															echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-													}
-												?>
-											</select>
+							                <input class="span12" type="text" name="lugar_nacimiento" id="lugar_nacimiento" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$rows['lugar_nacimiento']?>" /> 
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Dirección:</label>
@@ -1703,15 +1634,17 @@
 								$pgsql=new Conexion();
 								$sql = "SELECT pins.codigo_proceso_inscripcion,pins.cedula_persona,per.primer_nombre||' '||per.primer_apellido AS nombre,p.cedula_persona AS cedula_padre,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_padre,
 								p.primer_nombre AS primer_nombre_padre, p.segundo_nombre AS segundo_nombre_padre, p.primer_apellido AS primer_apellido_padre, p.segundo_apellido AS segundo_apellido_padre,
-								p.lugar_nacimiento AS lugar_nacimiento_padre, p.direccion AS direccion_padre,p.telefono_local AS telefono_local_padre, p.telefono_movil AS telefono_movil_padre,
+								p.lugar_nacimiento||'_'||ppar.descripcion AS lugar_nacimiento_padre, p.direccion AS direccion_padre,p.telefono_local AS telefono_local_padre, p.telefono_movil AS telefono_movil_padre,
 								p.profesion AS profesion_padre,p.grado_instruccion AS grado_instruccion_padre,m.cedula_persona AS cedula_madre,TO_CHAR(m.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_madre,
 								m.primer_nombre AS primer_nombre_madre, m.segundo_nombre AS segundo_nombre_madre, m.primer_apellido AS primer_apellido_madre, m.segundo_apellido AS segundo_apellido_madre,
-								m.lugar_nacimiento AS lugar_nacimiento_madre, m.direccion AS direccion_madre,m.telefono_local AS telefono_local_madre, m.telefono_movil AS telefono_movil_madre,
+								m.lugar_nacimiento||'_'||mpar.descripcion AS lugar_nacimiento_madre, m.direccion AS direccion_madre,m.telefono_local AS telefono_local_madre, m.telefono_movil AS telefono_movil_madre,
 								m.profesion AS profesion_madre,m.grado_instruccion AS grado_instruccion_madre
 								FROM educacion.tproceso_inscripcion pins 
 								INNER JOIN general.tpersona per ON pins.cedula_persona = per.cedula_persona 
 								LEFT JOIN general.tpersona p ON pins.cedula_padre = p.cedula_persona 
+								LEFT JOIN general.tparroquia ppar ON p.lugar_nacimiento = ppar.codigo_parroquia 
 								LEFT JOIN general.tpersona m ON pins.cedula_madre = m.cedula_persona 
+								LEFT JOIN general.tparroquia mpar ON m.lugar_nacimiento = mpar.codigo_parroquia 
 								WHERE pins.codigo_proceso_inscripcion =".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
 								$query = $pgsql->Ejecutar($sql);
 								$rows=$pgsql->Respuesta($query);
@@ -1780,23 +1713,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Lugar de Nacimiento del Padre:</label>
-							                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_padre' id='lugar_nacimiento_padre' >
-												<option value=0>Seleccione el Lugar de Nacimiento</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['lugar_nacimiento_padre']==$row['codigo_parroquia'])
-															echo "<option value=".$row['codigo_parroquia']." selected >".$row['descripcion']."</option>";
-														else
-															echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-													}
-												?>
-											</select>
+							                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_padre" id="lugar_nacimiento_padre" type="text" value="<?=$rows['lugar_nacimiento_padre']?>" required />
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Dirección:</label>
@@ -1881,23 +1798,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Lugar de Nacimiento de la Madre:</label>
-							                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_madre' id='lugar_nacimiento_madre' >
-												<option value=0>Seleccione el Lugar de Nacimiento</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['lugar_nacimiento_madre']==$row['codigo_parroquia'])
-															echo "<option value=".$row['codigo_parroquia']." selected >".$row['descripcion']."</option>";
-														else
-															echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-													}
-												?>
-											</select>
+							                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_madre" id="lugar_nacimiento_madre" type="text" value="<?=$rows['lugar_nacimiento_madre']?>" required />
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Dirección:</label>
@@ -1954,11 +1855,12 @@
 								$pgsql=new Conexion();
 								$sql = "SELECT pins.codigo_proceso_inscripcion,pins.cedula_persona,per.primer_nombre||' '||per.primer_apellido AS nombre,p.cedula_persona AS cedula_representante,TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,
 								p.primer_nombre AS primer_nombre_representante, p.segundo_nombre AS segundo_nombre_representante, p.primer_apellido AS primer_apellido_representante, p.segundo_apellido AS segundo_apellido_representante,
-								p.lugar_nacimiento AS lugar_nacimiento_representante, p.direccion AS direccion_representante,p.telefono_local AS telefono_local_representante, p.telefono_movil AS telefono_movil_representante,
+								p.lugar_nacimiento||'_'||par.descripcion AS lugar_nacimiento_representante, p.direccion AS direccion_representante,p.telefono_local AS telefono_local_representante, p.telefono_movil AS telefono_movil_representante,
 								p.profesion AS profesion_representante,p.grado_instruccion AS grado_instruccion_representante,pins.codigo_parentesco,pins.cedula_padre,pins.cedula_madre,p.sexo 
 								FROM educacion.tproceso_inscripcion pins 
 								INNER JOIN general.tpersona per ON pins.cedula_persona = per.cedula_persona 
 								LEFT JOIN general.tpersona p ON pins.cedula_representante = p.cedula_persona 
+								LEFT JOIN general.tparroquia par ON p.lugar_nacimiento = par.codigo_parroquia 
 								WHERE pins.codigo_proceso_inscripcion =".$pgsql->comillas_inteligentes($_GET['codigo_proceso_inscripcion']);
 								$query = $pgsql->Ejecutar($sql);
 								$rows=$pgsql->Respuesta($query);
@@ -2059,23 +1961,7 @@
 							        <div class="row-fluid">
 							            <div class="span6">
 							                <label class="control-label">Lugar de Nacimiento del <br>Representante:</label>
-							                <select class="bootstrap-select form-control" title="Seleccione el lugar de nacimiento" name='lugar_nacimiento_representante' id='lugar_nacimiento_representante' >
-												<option value=0>Seleccione el Lugar de Nacimiento</option>
-												<?php
-													$pgsql = new Conexion();
-													$sql = "SELECT p.codigo_parroquia,p.descripcion||' ('||m.descripcion||')' AS descripcion
-														FROM general.tparroquia p 
-														INNER JOIN general.tmunicipio m ON p.codigo_municipio=m.codigo_municipio 
-														ORDER BY p.descripcion ASC";
-													$query = $pgsql->Ejecutar($sql);
-													while($row=$pgsql->Respuesta($query)){
-														if($rows['lugar_nacimiento_representante']==$row['codigo_parroquia'])
-															echo "<option value=".$row['codigo_parroquia']." selected>".$row['descripcion']."</option>";
-														else
-															echo "<option value=".$row['codigo_parroquia'].">".$row['descripcion']."</option>";
-													}
-												?>
-											</select>
+							                <input class="span12" title="Seleccione el Lugar de Nacimiento" onKeyUp="this.value=this.value.toUpperCase()" name="lugar_nacimiento_representante" id="lugar_nacimiento_representante" type="text" value="<?=$rows['lugar_nacimiento_representante']?>" required />
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Dirección:</label>

@@ -92,11 +92,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="turno">Turno:</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="turno" id="turno" title="Seleccione un turno" placeholder="Seleccione un turno"  required >
+					<select class="bootstrap-select form-control" name="turno" id="turno" title="Seleccione un turno" placeholder="Seleccione un turno"  required >
 						<option value='0'>Seleccione un Turno</option>
 						<option value="M" >Mañana</option>
 						<option value="T" >Tarde</option>
-
 					</select>
 				</div>  
 			</div>
@@ -219,7 +218,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="turno">Turno:</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" name="turno" id="turno" title="Seleccione un turno" placeholder="Seleccione un turno"  required >
+					<select class="bootstrap-select form-control" name="turno" id="turno" title="Seleccione un turno" placeholder="Seleccione un turno"  required >
 						<option value='0'>Seleccione un Turno</option>
 						<option value="M" <?php if($row['turno']=="M") {echo "selected";} ?> >Mañana</option>
 						<option value="T" <?php if($row['turno']=="T") {echo "selected";} ?> >Tarde</option>	

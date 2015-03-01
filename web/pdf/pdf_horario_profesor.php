@@ -9,27 +9,28 @@
     $lapso=trim($_POST['lapso']);
   }
   if(isset($_POST['cedula']) and !empty($_POST['cedula'])){
-    $cedula=trim($_POST['cedula']);
+    $cedula_profesor=explode('_',trim($_POST['cedula']));
+    $cedula=$cedula_profesor[0];
   }
   $horario->cedula_persona($cedula);
   $horario->codigo_ano_academico($lapso);	
   if($horario->Comprobar_existencia_horario_profesor()==true){
     $datos=$horario->Consultar();
     for($i=0;$i<count($datos['cedula']);$i++){
-      $_SESSION['datos']['dia'][$i]=$datos['dia'][$i];
-      $_SESSION['datos']['hora'][$i]=$datos['hora'][$i];
-      $_SESSION['datos']['celda'][$i]=$datos['celda'][$i];
-      $_SESSION['datos']['id_hora'][$i]=$datos['codigo_bloque_hora'][$i];
-      $_SESSION['datos']['lapso'][$i]=$datos['codigo_ano_academico'][$i];
-      $_SESSION['datos']['cedula'][$i]=$datos['cedula'][$i];
-      $_SESSION['datos']['nombre'][$i]=$datos['nombre'][$i];
-      $_SESSION['datos']['apellido'][$i]=$datos['apellido'][$i];
-      $_SESSION['datos']['ambiente'][$i]=$datos['codigo_ambiente'][$i];
-      $_SESSION['datos']['nombre_ambiente'][$i]=$datos['nombre_ambiente'][$i];
-      $_SESSION['datos']['nombre_materia'][$i]=$datos['nombre_materia'][$i];
-      $_SESSION['datos']['materia'][$i]=$datos['materia'][$i];
-      $_SESSION['datos']['seccion'][$i]=$datos['seccion'][$i];
-      $_SESSION['datos']['nombre_seccion'][$i]=$datos['nombre_seccion'][$i];
+      $_SESSION['datos']['dia'][]=$datos['dia'][$i];
+      $_SESSION['datos']['hora'][]=$datos['hora'][$i];
+      $_SESSION['datos']['celda'][]=$datos['celda'][$i];
+      $_SESSION['datos']['id_hora'][]=$datos['codigo_bloque_hora'][$i];
+      $_SESSION['datos']['lapso'][]=$datos['codigo_ano_academico'][$i];
+      $_SESSION['datos']['cedula'][]=$datos['cedula'][$i];
+      $_SESSION['datos']['nombre'][]=$datos['nombre'][$i];
+      $_SESSION['datos']['apellido'][]=$datos['apellido'][$i];
+      $_SESSION['datos']['ambiente'][]=$datos['codigo_ambiente'][$i];
+      $_SESSION['datos']['nombre_ambiente'][]=$datos['nombre_ambiente'][$i];
+      $_SESSION['datos']['nombre_materia'][]=$datos['nombre_materia'][$i];
+      $_SESSION['datos']['materia'][]=$datos['materia'][$i];
+      $_SESSION['datos']['seccion'][]=$datos['seccion'][$i];
+      $_SESSION['datos']['nombre_seccion'][]=$datos['nombre_seccion'][$i];
     }
 
     if(isset($_SESSION['datos']['dia'])){
@@ -40,7 +41,7 @@
   }
   else {
     $_SESSION['datos']['mensaje']="No hay horario para este profesor";
-    header("Location: ../view/");	
+    header("Location: ../view/menu_principal.php");	
   }
   //Defined to Class clsFpdf
   class clsFpdf extends FPDF {
@@ -204,7 +205,6 @@
       $this->Cell(-5,5,utf8_encode("Página ".$this->PageNo()."/{nb}"),0,1,"R");
       $this->Cell(0,4,$tel,0,0,"C");
       //Fecha
-      include_once("../class/class_horario.php");
       $horario=new horario();
       $lcFecha=$horario->FECHA_SISTEMA();
       $this->Cell(-8,3,$lcFecha,0,0,"R");
@@ -234,7 +234,6 @@
   if(isset($_SESSION['datos']['id_hora'])){
     $id_hora=$_SESSION['datos']['id_hora'];
   }
-  include_once("../class/class_horario.php");
   $bloque_horas=new horario();
   $turno=0;
   $get_hora=$bloque_horas->bloque_hora("todos");
@@ -250,29 +249,29 @@
     (in_array($x."-1",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda=' ';
 
     $valor_a_buscar[0]=$datos_celda;
-    if(in_array($x."-2",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}	  
+    if(in_array($x."-2",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-2",$_SESSION['datos']['celda']);}	  
     (in_array($x."-2",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda=' ';
 
     $valor_a_buscar[1]=$datos_celda;
-    if(in_array($x."-3",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}
+    if(in_array($x."-3",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-3",$_SESSION['datos']['celda']);}
     (in_array($x."-3",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda=' ';
 
     $valor_a_buscar[2]=$datos_celda;
-    if(in_array($x."-4",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}	 
+    if(in_array($x."-4",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-4",$_SESSION['datos']['celda']);}	 
     (in_array($x."-4",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda=' ';
 
     $valor_a_buscar[3]=$datos_celda;
-    if(in_array($x."-5",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}
+    if(in_array($x."-5",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-5",$_SESSION['datos']['celda']);}
     (in_array($x."-5",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda=' ';
 
     $valor_a_buscar[4]=$datos_celda;
     if($get_hora['id_turno'][$i]=='2'){
       $lobjPdf->SetFillColor(240,240,240);
-      if(in_array($x."-6",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}
+      if(in_array($x."-6",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-6",$_SESSION['datos']['celda']);}
       (in_array($x."-6",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda='-';
 
       $valor_a_buscar[5]=$datos_celda;
-      if(in_array($x."-0",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-1",$_SESSION['datos']['celda']);}
+      if(in_array($x."-0",$_SESSION['datos']['celda'],true)){$valor=array_search($x."-0",$_SESSION['datos']['celda']);}
       (in_array($x."-0",$_SESSION['datos']['celda'],true)) ? ($datos_celda=$datos_celda="Materia: ".$_SESSION['datos']['nombre_materia'][$valor].' Seccion:'.$_SESSION['datos']['nombre_seccion'][$valor].' Aula: '.$_SESSION['datos']['nombre_ambiente'][$valor]) :  $datos_celda='-';
 
       $valor_a_buscar[6]=$datos_celda;

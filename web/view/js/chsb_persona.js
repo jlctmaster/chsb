@@ -19,6 +19,12 @@ function init(){
 			})
 	}
 
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
+
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),
@@ -102,7 +108,7 @@ function init(){
 			alert("¡Debe ingresar la fecha de nacimiento de la persona!");
 			send = false;
 		}
-		else if($('#lugar-nacimiento').val()==0){
+		else if($('#lugar_nacimiento').val()==0){
 			alert("¡Debe seleccionar el lugar de nacimiento de la persona!");
 			send = false;
 		}

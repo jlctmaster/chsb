@@ -110,7 +110,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_lapso">Lapso:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Lapso" name='codigo_lapso' id='codigo_lapso' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Lapso" name='codigo_lapso' id='codigo_lapso' required >
 							<option value=0>Seleccione un Lapso</option>
 							<?php
 							$pgsql = new Conexion();
@@ -183,12 +183,13 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_lapso">Lapso</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Lapso" name='codigo_lapso' id='codigo_lapso' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Lapso" name='codigo_lapso' id='codigo_lapso' required >
 							<option value=0>Seleccione un Lapso</option>
 							<?php
 							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
+							$sql = "SELECT DISTINCT * FROM 
+							(SELECT l.codigo_lapso,l.lapso||' ('||a.ano||')' AS lapso 
 							FROM educacion.tlapso l 
 							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
 							WHERE a.cerrado='N' 
@@ -197,7 +198,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 							FROM educacion.tperiodo p 
 							INNER JOIN educacion.tlapso l ON l.codigo_lapso = p.codigo_lapso 
 							INNER JOIN educacion.tano_academico a ON l.codigo_ano_academico = a.codigo_ano_academico 
-							WHERE p.codigo_periodo = ".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." AND p.esinscripcion = 'N'";
+							WHERE p.codigo_periodo = ".$pgsql->comillas_inteligentes($_GET['codigo_periodo'])." AND p.esinscripcion = 'N') lapso";
 							$query = $pgsql->Ejecutar($sql);
 							while($rows=$pgsql->Respuesta($query)){
 								if($rows['codigo_lapso']==$row['codigo_lapso'])

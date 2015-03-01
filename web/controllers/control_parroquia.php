@@ -19,8 +19,10 @@ if(isset($_POST['codigo_parroquia']))
 if(isset($_POST['descripcion']))
   $descripcion=trim($_POST['descripcion']);
 
-if(isset($_POST['codigo_municipio']))
-  $codigo_municipio=trim($_POST['codigo_municipio']);
+if(isset($_POST['codigo_municipio'])){
+  $municipio=explode("_",trim($_POST['codigo_municipio']));
+  $codigo_municipio=$municipio[0];
+}
 
 include_once("../class/class_parroquia.php");
 $parroquia=new parroquia();

@@ -19,8 +19,10 @@ if(isset($_POST['tipo_adquisicion']))
 if(isset($_POST['rif_organizacion']))
   $rif_organizacion=trim($_POST['rif_organizacion']);
 
-if(isset($_POST['cedula_persona']))
-  $cedula_persona=trim($_POST['cedula_persona']);
+if(isset($_POST['cedula_persona'])){
+  $persona=explode('_',trim($_POST['cedula_persona']));
+  $cedula_persona=$persona[0];
+}
 
 if(isset($_POST['sonlibros']))
   $sonlibros=trim($_POST['sonlibros']);
@@ -48,8 +50,14 @@ if($lOpt=='Registrar'){
             $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
             $con=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
@@ -108,15 +116,22 @@ if($lOpt=='Modificar'){
           $mov_inventario->tipo_transaccion('IA'); // Siglas para identificar la tabla relacionada al movimiento Inventario Adquisicion (IA)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->EliminarMovimientos();
             $con=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              //  Extraemos el codigo del Item por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
-              $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
               $mov_inventario->sonlibros($sonlibros);
-              if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
+              if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $con++;
             }
             if($con==count($_POST['items']))

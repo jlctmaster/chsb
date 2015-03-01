@@ -20,6 +20,11 @@ function init(){
 			})
 	}
 
+	//Búsquedas del municipio por autocompletar.
+	$('#codigo_municipio').autocomplete({
+		source:'../autocomplete/municipio.php', 
+		minLength:1
+	});
 
 	$('#btnDesactivar').click(function(){
 		noty({

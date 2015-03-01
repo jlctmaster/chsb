@@ -18,6 +18,12 @@ function init(){
 				document.getElementById('Anular').innerHTML="";
 			})
 	}
+
+	//Búsquedas de las parroquias por autocompletar.
+	$('#codigo_parroquia').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
 	
 	$('#btnDesactivar').click(function(){
 		noty({

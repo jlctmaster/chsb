@@ -34,30 +34,9 @@ $(document).ready(init);
 function init(){
 	//Búsquedas del profesor por autocompletar.
 	$('#cedula').autocomplete({
-		source:'../autocomplete/profesor.php', 
-		minLength:1,
-		select: function (event, ui){
-			Datos={"lOpt":"BuscarDatosPersona","filtro":ui.item.value};
-			BuscarDatosPersona(Datos);
-		}
+		source:'../autocomplete/docente_horario.php', 
+		minLength:1
 	});
-
-	//Busca los Datos del Profesor seleccionado.
-    function BuscarDatosPersona(value){
-        $.ajax({
-        url: '../controllers/control_persona.php',
-        type: 'POST',
-        async: true,
-        data: value,
-        dataType: "json",
-        success: function(resp){
-        	$('#cedula').val(resp[0].cedula_persona);
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-        	alert('¡Error al procesar la petición! '+textStatus+" "+errorThrown)
-        }
-        });
-    }	
 }
 </script>
 <?php 

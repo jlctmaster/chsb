@@ -28,8 +28,10 @@ if(isset($_POST['telefono']))
 if(isset($_POST['tipo_organizacion']))
   $tipo_organizacion=trim($_POST['tipo_organizacion']);
 
-if(isset($_POST['codigo_parroquia']))
-  $codigo_parroquia=trim($_POST['codigo_parroquia']);
+if(isset($_POST['codigo_parroquia'])){
+  $parroquia=explode("_",trim($_POST['codigo_parroquia']));
+  $codigo_parroquia=$parroquia[0];
+}
 
 include_once("../class/class_organizacion.php");
 $organizacion=new organizacion();

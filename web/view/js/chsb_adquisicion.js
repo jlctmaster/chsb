@@ -24,11 +24,18 @@ function init(){
 				document.getElementById('Anular').innerHTML="";
 			})
 	}
+
 	//	Muestra la Ficha de Inscripción en una pestaña nueva.
 	$('#btnPrintReport').click(function(){
         url = "../pdf/pdf_formato_adquisicion.php?p1="+$('#codigo_adquisicion').val();
 		window.open(url, '_blank');
 	})
+
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/persona.php', 
+		minLength:1
+	});
 
 	$('#btnDesactivar').click(function(){
 		noty({

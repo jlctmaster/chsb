@@ -37,8 +37,10 @@ if(isset($_POST['sexo']))
 if(isset($_POST['fecha_nacimiento']))
   $fecha_nacimiento=trim($_POST['fecha_nacimiento']);
 
-if(isset($_POST['lugar_nacimiento']))
-  $lugar_nacimiento=trim($_POST['lugar_nacimiento']);
+if(isset($_POST['lugar_nacimiento'])){
+  $parroquia=explode("_",trim($_POST['lugar_nacimiento']));
+  $lugar_nacimiento=$parroquia[0];
+}
 
 if(isset($_POST['direccion']))
   $direccion=trim($_POST['direccion']);

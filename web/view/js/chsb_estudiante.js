@@ -46,6 +46,12 @@ function init(){
 		}
 	});
 
+	//Búsquedas de las parroquias por autocompletar.
+	$('#lugar_nacimiento').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
+
     //Busca los Datos del Responsable seleccionado.
     function BuscarDatosResponsable(value){
         $.ajax({

@@ -92,7 +92,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_estado">Estado:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Estado" name='codigo_estado' id='codigo_estado' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Estado" name='codigo_estado' id='codigo_estado' required >
 							<option value=0>Seleccione un Estado</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -146,7 +146,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_estado">Estado:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Estado" name='codigo_estado' id='codigo_estado' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Estado" name='codigo_estado' id='codigo_estado' required >
 							<option value=0>Seleccione un Estado</option>
 							<?php
 							require_once('../class/class_bd.php');

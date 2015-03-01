@@ -152,24 +152,24 @@ class clsFpdf extends FPDF {
   CASE WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NOT NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido||' '||per.segundo_apellido 
   WHEN per.segundo_nombre IS NULL AND per.segundo_apellido  IS NOT NULL THEN per.primer_nombre||' '||per.primer_apellido||' '||per.segundo_apellido 
   WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido END AS estudiante,
-  per.primer_nombre,per.segundo_nombre,per.primer_apellido,per.segundo_apellido,SUBSTR(ps.cedula_persona,2,LENGTH(ps.cedula_persona)) AS cedula_persona,SUBSTR(ps.cedula_persona,1,1) AS nacionalidad,per.sexo,
+  per.primer_nombre,per.segundo_nombre,per.primer_apellido,per.segundo_apellido,TRIM(SUBSTR(ps.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_persona,SUBSTR(ps.cedula_persona,1,1) AS nacionalidad,per.sexo,
   TO_CHAR(per.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento,extract(year from age(per.fecha_nacimiento)) AS edad,extract(month from age(per.fecha_nacimiento)) AS meses,pa.descripcion AS lugar_nacimiento,e.descripcion AS entidad_federal,
   per.direccion,ps.anio_a_cursar,ps.coordinacion_pedagogica,per.telefono_local,ps.estado_salud,ps.alergico,ps.impedimento_deporte,ps.especifique_deporte,ps.materia_pendiente,ps.cual_materia,ps.practica_deporte,ps.cual_deporte, 
   ps.tiene_beca,ps.organismo,ps.tiene_hermanos,ps.cuantos_varones,ps.cuantas_hembras,ps.estudian_aca,ps.que_anio,ps.peso,ps.talla,ps.indice,ps.tiene_talento,ps.cual_talento,
   CASE WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
   WHEN pad.segundo_nombre IS NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
   WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido END AS padre,
-  TO_CHAR(pad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_padre,SUBSTR(pad.cedula_persona,2,LENGTH(pad.cedula_persona)) AS cedula_padre,SUBSTR(pad.cedula_persona,1,1) AS nacionalidad_padre,
+  TO_CHAR(pad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_padre,TRIM(SUBSTR(pad.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_padre,SUBSTR(pad.cedula_persona,1,1) AS nacionalidad_padre,
   pad.profesion AS profesion_padre,pad.grado_instruccion AS grado_instruccion_padre,pad.direccion AS direccion_padre,pad.telefono_local AS telefono_local_padre,
   CASE WHEN mad.segundo_nombre IS NOT NULL AND mad.segundo_apellido  IS NOT NULL THEN mad.primer_nombre||' '||mad.segundo_nombre||' '||mad.primer_apellido||' '||mad.segundo_apellido 
   WHEN mad.segundo_nombre IS NULL AND mad.segundo_apellido  IS NOT NULL THEN mad.primer_nombre||' '||mad.primer_apellido||' '||mad.segundo_apellido 
   WHEN mad.segundo_nombre IS NOT NULL AND mad.segundo_apellido  IS NULL THEN mad.primer_nombre||' '||mad.segundo_nombre||' '||mad.primer_apellido END AS madre,
-  TO_CHAR(mad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_madre,SUBSTR(mad.cedula_persona,2,LENGTH(mad.cedula_persona)) AS cedula_madre,SUBSTR(mad.cedula_persona,1,1) AS nacionalidad_madre,
+  TO_CHAR(mad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_madre,TRIM(SUBSTR(mad.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_madre,SUBSTR(mad.cedula_persona,1,1) AS nacionalidad_madre,
   mad.profesion AS profesion_madre,mad.grado_instruccion AS grado_instruccion_madre,mad.direccion AS direccion_madre,mad.telefono_local AS telefono_local_madre,
   CASE WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NOT NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido||' '||rep.segundo_apellido 
   WHEN rep.segundo_nombre IS NULL AND rep.segundo_apellido  IS NOT NULL THEN rep.primer_nombre||' '||rep.primer_apellido||' '||rep.segundo_apellido 
   WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido END AS representante,
-  TO_CHAR(rep.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,SUBSTR(rep.cedula_persona,2,LENGTH(rep.cedula_persona)) AS cedula_representante,SUBSTR(rep.cedula_persona,1,1) AS nacionalidad_representante,
+  TO_CHAR(rep.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,TRIM(SUBSTR(rep.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_representante,SUBSTR(rep.cedula_persona,1,1) AS nacionalidad_representante,
   rep.profesion AS profesion_representante,rep.grado_instruccion AS grado_instruccion_representante,rep.direccion AS direccion_representante,rep.telefono_local AS telefono_local_representante,
   paren.descripcion AS parentesco,ps.integracion_educativa,ps.integracion_plomeria,ps.integracion_electricidad,ps.integracion_albanileria,ps.integracion_peluqueria,ps.integracion_ambientacion,ps.integracion_manualidades,
   ps.integracion_bisuteria,ps.otra_integracion,ps.especifique_integracion,sec.nombre_seccion,ps.observacion,ps.fotocopia_ci,ps.partida_nacimiento,ps.boleta_promocion,ps.certificado_calificaciones,
@@ -411,26 +411,26 @@ class clsFpdf extends FPDF {
     $lobjPdf->SetFont('Arial','B',10);
     $lobjPdf->Cell(190,5,'III.-ANTECEDENTES FAMILIARES',1,1);
     $lobjPdf->SetFont('Arial','',8);
-    $lobjPdf->Cell(100,5,'Nombres y Apellidos del Padre: '.$arr['padre'][0],1,0);
-    $lobjPdf->Cell(30,5,'F.N.: '.$arr['fecha_nacimiento_padre'][0],1,0);
-    $lobjPdf->Cell(10,5,'C.I',1,0);
+    $lobjPdf->Cell(115,5,'Nombres y Apellidos del Padre: '.$arr['padre'][0],1,0);
+    $lobjPdf->Cell(25,5,'F.N.: '.$arr['fecha_nacimiento_padre'][0],1,0);
+    $lobjPdf->Cell(5,5,'C.I',1,0);
     $lobjPdf->Cell(5,5,'V',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_padre'][0] != "E" ? 'X' : '',1,0,'C');
     $lobjPdf->Cell(5,5,'E',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_padre'][0] == "E" ? 'X' : '',1,0,'C');
-    $lobjPdf->Cell(30,5,'N°: '.$arr['cedula_padre'][0],1,1);
+    $lobjPdf->Cell(25,5,'N°: '.$arr['cedula_padre'][0],1,1);
     $lobjPdf->Cell(90,5,'Profesión: '.$arr['profesion_padre'][0],1,0);
     $lobjPdf->Cell(100,5,'Grado de Instrucción: '.$arr['grado_instruccion_padre'][0],1,1);
     $lobjPdf->Cell(120,10,'Dirección: '.$arr['direccion_padre'][0],1,0);
     $lobjPdf->Cell(70,10,'Teléfono: ('.$arr['telefono_local_padre'][0].')',1,1);
-    $lobjPdf->Cell(100,5,'Nombres y Apellidos de la Madre: '.$arr['madre'][0],1,0);
-    $lobjPdf->Cell(30,5,'F.N.: '.$arr['fecha_nacimiento_madre'][0],1,0);
-    $lobjPdf->Cell(10,5,'C.I',1,0);
+    $lobjPdf->Cell(115,5,'Nombres y Apellidos de la Madre: '.$arr['madre'][0],1,0);
+    $lobjPdf->Cell(25,5,'F.N.: '.$arr['fecha_nacimiento_madre'][0],1,0);
+    $lobjPdf->Cell(5,5,'C.I',1,0);
     $lobjPdf->Cell(5,5,'V',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_madre'][0] != "E" ? 'X' : '',1,0,'C');
     $lobjPdf->Cell(5,5,'E',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_madre'][0] == "E" ? 'X' : '',1,0,'C');
-    $lobjPdf->Cell(30,5,'N°: '.$arr['cedula_madre'][0],1,1);
+    $lobjPdf->Cell(25,5,'N°: '.$arr['cedula_madre'][0],1,1);
     $lobjPdf->Cell(90,5,'Profesión: '.$arr['profesion_madre'][0],1,0);
     $lobjPdf->Cell(100,5,'Grado de Instrucción: '.$arr['grado_instruccion_madre'][0],1,1);
     $lobjPdf->Cell(120,10,'Dirección: '.$arr['direccion_madre'][0],1,0);
@@ -438,14 +438,14 @@ class clsFpdf extends FPDF {
     $lobjPdf->SetFont('Arial','B',10);
     $lobjPdf->Cell(190,5,'IV.-DATOS DEL REPRESENTANTE LEGAL',1,1);
     $lobjPdf->SetFont('Arial','',8);
-    $lobjPdf->Cell(100,5,'Nombres y Apellidos: '.$arr['representante'][0],1,0);
-    $lobjPdf->Cell(30,5,'F.N.: '.$arr['fecha_nacimiento_representante'][0],1,0);
-    $lobjPdf->Cell(10,5,'C.I',1,0);
+    $lobjPdf->Cell(115,5,'Nombres y Apellidos: '.$arr['representante'][0],1,0);
+    $lobjPdf->Cell(25,5,'F.N.: '.$arr['fecha_nacimiento_representante'][0],1,0);
+    $lobjPdf->Cell(5,5,'C.I',1,0);
     $lobjPdf->Cell(5,5,'V',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_representante'][0] != "E" ? 'X' : '',1,0,'C');
     $lobjPdf->Cell(5,5,'E',1,0);
     $lobjPdf->Cell(5,5,$arr['nacionalidad_representante'][0] == "E" ? 'X' : '',1,0,'C');
-    $lobjPdf->Cell(30,5,'N°: '.$arr['cedula_representante'][0],1,1);
+    $lobjPdf->Cell(25,5,'N°: '.$arr['cedula_representante'][0],1,1);
     $lobjPdf->Cell(90,5,'Profesión: '.$arr['profesion_representante'][0],1,0);
     $lobjPdf->Cell(100,5,'Grado de Instrucción: '.$arr['grado_instruccion_representante'][0],1,1);
     $lobjPdf->Cell(30,5,'Parentesco: ',1,0);
@@ -547,10 +547,11 @@ class clsFpdf extends FPDF {
     $lobjPdf->Cell(10);
     $lobjPdf->Cell(80,5,$arr['estudiante'][0],0,0);
     $lobjPdf->SetFont('Arial','',10);
-    $lobjPdf->Cell(15,5,'C.I.Nº ',0,0);
+    $lobjPdf->Cell(12,5,'C.I.Nº ',0,0);
     $lobjPdf->SetFont('Arial','BU',10);
     $lobjPdf->Cell(20,5,$arr['cedula_persona'][0],0,0);
     $lobjPdf->SetFont('Arial','',10);
+    $lobjPdf->Cell(3);
     $lobjPdf->Cell(15,5,'me comprometo responsablemente,',0,1);
     $lobjPdf->Cell(10);
     $lobjPdf->Cell(15,5,'al momento de la inscripción a cumplir y hacer cumplir a mi representado las normas de convivencias de la',0,1);

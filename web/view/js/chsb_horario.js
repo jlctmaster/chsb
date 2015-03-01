@@ -6,32 +6,29 @@ var indice_asignado=0;
 
 $(document).on("ready",Principal);
 
-function cargar_hora_maxima(){
-	$('#cedula_persona').on('change',function(){
-		elegido=$(this).val();
-		elegido1=$("#codigo_ano_academico").val();
-		var parametros={"profesor":elegido,"codigo_ano_academico": elegido1,"combo":"horas"};
-		$.ajax({
-			data: 	parametros,
-			url: 	'../controllers/control_ajax2.php',
-			type: 	'post',
-			success: 	function(response){
-				sacar_valor=$.parseJSON(response);
-				//	Campos Visibles
-				$('#celdaasignado').html(sacar_valor[0].asignado);
-				$('#celdalibre').html(sacar_valor[0].libre);
-				$('#celdatotal').html(sacar_valor[0].total);
-				//	Campos Ocultos
-				$('#A').val(sacar_valor[0].asignado);
-				$('#L').val(sacar_valor[0].libre);
-				$('#T').val(sacar_valor[0].total);
-				//	Agregar valor a las variables
-				HoraAsignado=parseInt(document.getElementById("A").value);
-				HoraTotal=parseInt(document.getElementById("T").value);
-				HoraLibre=parseInt(document.getElementById("L").value);
-			}
-		});
-	})
+function cargar_hora_maxima(elegido){
+	elegido1=$("#codigo_ano_academico").val();
+	var parametros={"profesor":elegido,"codigo_ano_academico": elegido1,"combo":"horas"};
+	$.ajax({
+		data: 	parametros,
+		url: 	'../controllers/control_ajax2.php',
+		type: 	'post',
+		success: 	function(response){
+			sacar_valor=$.parseJSON(response);
+			//	Campos Visibles
+			$('#celdaasignado').html(sacar_valor[0].asignado);
+			$('#celdalibre').html(sacar_valor[0].libre);
+			$('#celdatotal').html(sacar_valor[0].total);
+			//	Campos Ocultos
+			$('#A').val(sacar_valor[0].asignado);
+			$('#L').val(sacar_valor[0].libre);
+			$('#T').val(sacar_valor[0].total);
+			//	Agregar valor a las variables
+			HoraAsignado=parseInt(document.getElementById("A").value);
+			HoraTotal=parseInt(document.getElementById("T").value);
+			HoraLibre=parseInt(document.getElementById("L").value);
+		}
+	});
 }
 
 function cargar_datos(){
@@ -109,7 +106,7 @@ function cargar_datos_celda(){
 			$("#seccion").prop("disabled","disabled");
 			$("#cedula_persona").prop("disabled","disabled");
 			$("#codigo_materia").prop("disabled","disabled");
-			$("#cedula_persona  > option[value='']").attr("selected",true);
+			$("#cedula_persona").val("");
 			$("#codigo_materia > option[value='']").attr("selected",true); 
 			$("#seccion > option[value='']").attr("selected",true);                    
 			alert('debe seleccionar un Ambiente');
@@ -119,7 +116,6 @@ function cargar_datos_celda(){
 }
 
 function Principal(){
-	cargar_hora_maxima();
 	cargar_datos();
 	cargar_datos_celda();
 	$("td[id]").live("click",Seleccionar);
@@ -160,6 +156,16 @@ function Principal(){
 		}
 	});
 
+	//Búsquedas del docente por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/docente_horario.php', 
+		minLength:1,
+		select: function (event, ui){
+			docente=ui.item.value;
+			docente=docente.split('_');
+			cargar_hora_maxima(docente[0]);
+		}
+	});
 }
 
 function mostrar_alt(){
@@ -241,14 +247,16 @@ function Enviar(){
 			$(this).text("Asignado");
 			$(this).addClass("asignado");
 			$(this).removeClass("seleccionado");
-			datos=$(this).prop("id")+"*"+$("#seccion option:selected").val()+"*"+$("#codigo_ambiente option:selected").val()+"*"+$("#codigo_materia").val()+"*"+$("#cedula_persona").val();				   
+			datos_profesor=$("#cedula_persona").val().split('_');
+			profesor=datos_profesor[0];
+			datos=$(this).prop("id")+"*"+$("#seccion option:selected").val()+"*"+$("#codigo_ambiente option:selected").val()+"*"+$("#codigo_materia").val()+"*"+profesor;				   
 			dia=Array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
 			x=$(this).prop("id").split('-');
 			eldia=dia[x[1]];
 			var iii = $("#codigo_ambiente option:selected").text();
 			datos_img="Dia: "+eldia+"<br>Hora: "+$(this).prop('title')+"<br>Materia: "+ 
-			$("#codigo_materia option:selected").text()+"<br>Prof: "+$("#cedula_persona option:selected").text()+"<br>Aula: "+iii;
-			if(validar_profesor_horario($(this).prop("id"),$("#cedula_persona").val()))				   
+			$("#codigo_materia option:selected").text()+"<br>Prof: "+$("#cedula_persona").val()+"<br>Aula: "+iii;
+			if(validar_profesor_horario($(this).prop("id"),profesor))				   
 				anadir_contenido($(this),datos,datos_img);
 		});
 	}

@@ -25,9 +25,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							<th>Cédula del Estudiante</th>
 							<th>Nombre del Estudiante</th>
 							<th>Edad</th>
-							<th>Índice</th>
 							<th>Peso</th>
 							<th>Estatura</th>
+							<th>Índice</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -41,9 +41,9 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 				            echo "<td>".$filas['cedula_persona']."</td>";
 				            echo "<td>".$filas['nombre']."</td>";
 				            echo "<td>".$filas['edad']."</td>";
-				            echo "<td>".$filas['indice']."</td>";
 				            echo "<td>".$filas['peso']."</td>";
 				            echo "<td>".$filas['estatura']."</td>";
+				            echo "<td>".$filas['indice']."</td>";
 							echo "</tr>";
 						}
 						?>

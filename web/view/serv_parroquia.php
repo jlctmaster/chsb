@@ -94,21 +94,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_municipio">Municipio:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Municipio" name='codigo_municipio' id='codigo_municipio' required >
-							<option value=0>Seleccione un Municipio</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT codigo_municipio,m.descripcion||' ('||e.descripcion||')' AS descripcion 
-							FROM general.tmunicipio m 
-							INNER JOIN general.testado e ON m.codigo_estado = e.codigo_estado 
-							ORDER BY m.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_municipio'].">".$row['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Ingrese el nombre del municipio" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_municipio" id="codigo_municipio" type="text" size="50" required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -126,7 +112,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM general.tparroquia WHERE codigo_parroquia =".$pgsql->comillas_inteligentes($_GET['codigo_parroquia']);
+	$sql = "SELECT p.codigo_parroquia,p.descripcion,p.codigo_municipio||'_'||m.descripcion AS municipio,p.estatus
+	FROM general.tparroquia p 
+	INNER JOIN general.tmunicipio m ON p.codigo_municipio = m.codigo_municipio 
+	WHERE p.codigo_parroquia =".$pgsql->comillas_inteligentes($_GET['codigo_parroquia']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -151,24 +140,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_municipio">Municipio:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Municipio" name='codigo_municipio' id='codigo_municipio' required >
-							<option value=0>Seleccione un Municipio</option>
-							<?php
-							require_once('../class/class_bd.php');
-							$pgsql = new Conexion();
-							$sql = "SELECT codigo_municipio,m.descripcion||' ('||e.descripcion||')' AS descripcion 
-							FROM general.tmunicipio m 
-							INNER JOIN general.testado e ON m.codigo_estado = e.codigo_estado 
-							ORDER BY m.descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_municipio']==$row['codigo_municipio'])
-									echo "<option value=".$rows['codigo_municipio']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$row['codigo_municipio'].">".$row['descripcion']."</option>";
-							}
-							?>
-						</select>
+						<input class="input-xlarge" title="Ingrese el nombre del municipio" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_municipio" id="codigo_municipio" type="text" size="50" value="<?=$row['municipio']?>" required />
 					</div>  
 				</div>
 				<div class="control-group">  

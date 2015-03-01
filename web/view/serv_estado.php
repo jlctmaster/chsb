@@ -93,7 +93,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_pais">País:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un País" name='codigo_pais' id='codigo_pais' required >
+						<select class="bootstrap-select form-control" title="Seleccione un País" name='codigo_pais' id='codigo_pais' required >
 							<option value=0>Seleccione un País</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -148,7 +148,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_pais">País</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un País" name='codigo_pais' id='codigo_pais' required >
+						<select class="bootstrap-select form-control" title="Seleccione un País" name='codigo_pais' id='codigo_pais' required >
 							<option value=0>Seleccione un País</option>
 							<?php
 							require_once('../class/class_bd.php');

@@ -62,21 +62,7 @@ $turno='todos';
 									</tr>
 									<tr> 
 										<td><label>Profesor</label>
-											<select class="bootstrap-select form-control" id="cedula_persona" name="cedula_persona">
-												<?php 
-												include_once("../class/class_html.php");
-												$html=new Html();
-												$id="cedula_persona";
-												$descripcion="nombre";
-												$sql="SELECT p.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS nombre, p.cedula_persona 
-												FROM general.tpersona AS p
-												INNER JOIN general.ttipo_persona AS tp ON tp.codigo_tipopersona = p.codigo_tipopersona
-												AND UPPER(tp.descripcion) LIKE '%DOCENTE%'
-												WHERE p.estatus = '1' ORDER BY p.cedula_persona";
-												$Seleccionado='null';
-												$html->Generar_Opciones($sql,$id,$descripcion,$Seleccionado); 
-												?>
-											</select>
+											<input class="input-xlarge" type="text" name="cedula_persona" id="cedula_persona" onKeyUp="this.value=this.value.toUpperCase()" maxlength=10 /> 
 										</td>
 										<td><label>Materia</label>
 											<select class="bootstrap-select form-control" id="codigo_materia" name="codigo_materia" disabled="">

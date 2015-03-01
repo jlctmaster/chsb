@@ -184,12 +184,21 @@ class persona {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO general.tpersona (cedula_persona,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,sexo,
-	    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,profesion,grado_instruccion,
-	    maxhoras,creado_por,fecha_creacion) VALUES 
-	    ('$this->cedula_persona','$this->primer_nombre','$this->segundo_nombre','$this->primer_apellido','$this->segundo_apellido',
-	    '$this->sexo','$this->fecha_nacimiento','$this->lugar_nacimiento','$this->direccion','$this->telefono_local','$this->telefono_movil',
-	    $this->codigo_tipopersona,'$this->profesion','$this->grado_instruccion','$this->maxhoras','$user',NOW())";
+    	if($this->fecha_nacimiento!=""){
+    		$sql="INSERT INTO general.tpersona (cedula_persona,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,sexo,
+		    fecha_nacimiento,lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,profesion,grado_instruccion,
+		    maxhoras,creado_por,fecha_creacion) VALUES 
+		    ('$this->cedula_persona','$this->primer_nombre','$this->segundo_nombre','$this->primer_apellido','$this->segundo_apellido',
+		    '$this->sexo','$this->fecha_nacimiento','$this->lugar_nacimiento','$this->direccion','$this->telefono_local','$this->telefono_movil',
+		    $this->codigo_tipopersona,'$this->profesion','$this->grado_instruccion','$this->maxhoras','$user',NOW())";
+    	}else{
+    		$sql="INSERT INTO general.tpersona (cedula_persona,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,sexo,
+		    lugar_nacimiento,direccion,telefono_local,telefono_movil,codigo_tipopersona,profesion,grado_instruccion,maxhoras,
+		    creado_por,fecha_creacion) VALUES 
+		    ('$this->cedula_persona','$this->primer_nombre','$this->segundo_nombre','$this->primer_apellido','$this->segundo_apellido',
+		    '$this->sexo','$this->lugar_nacimiento','$this->direccion','$this->telefono_local','$this->telefono_movil',$this->codigo_tipopersona,
+		    '$this->profesion','$this->grado_instruccion','$this->maxhoras','$user',NOW())";
+    	}
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -228,12 +237,21 @@ class persona {
    	}
    
     public function Actualizar($user,$oldci){
-	    $sql="UPDATE general.tpersona SET cedula_persona='$this->cedula_persona',primer_nombre='$this->primer_nombre',
-	    segundo_nombre='$this->segundo_nombre',primer_apellido='$this->primer_apellido',segundo_apellido='$this->segundo_apellido',sexo='$this->sexo',
-	    fecha_nacimiento='$this->fecha_nacimiento',lugar_nacimiento='$this->lugar_nacimiento',direccion='$this->direccion',
-	    telefono_local='$this->telefono_local',telefono_movil='$this->telefono_movil',codigo_tipopersona=$this->codigo_tipopersona,
-	    profesion='$this->profesion',grado_instruccion='$this->grado_instruccion',maxhoras='$this->maxhoras',modificado_por='$user',fecha_modificacion=NOW() 
-	    WHERE cedula_persona='$oldci'";
+    	if($this->fecha_nacimiento!=""){
+    		$sql="UPDATE general.tpersona SET cedula_persona='$this->cedula_persona',primer_nombre='$this->primer_nombre',
+		    segundo_nombre='$this->segundo_nombre',primer_apellido='$this->primer_apellido',segundo_apellido='$this->segundo_apellido',sexo='$this->sexo',
+		    fecha_nacimiento='$this->fecha_nacimiento',lugar_nacimiento='$this->lugar_nacimiento',direccion='$this->direccion',
+		    telefono_local='$this->telefono_local',telefono_movil='$this->telefono_movil',codigo_tipopersona=$this->codigo_tipopersona,
+		    profesion='$this->profesion',grado_instruccion='$this->grado_instruccion',maxhoras='$this->maxhoras',modificado_por='$user',fecha_modificacion=NOW() 
+		    WHERE cedula_persona='$oldci'";
+    	}else{
+    		$sql="UPDATE general.tpersona SET cedula_persona='$this->cedula_persona',primer_nombre='$this->primer_nombre',
+		    segundo_nombre='$this->segundo_nombre',primer_apellido='$this->primer_apellido',segundo_apellido='$this->segundo_apellido',sexo='$this->sexo',
+		    lugar_nacimiento='$this->lugar_nacimiento',direccion='$this->direccion',telefono_local='$this->telefono_local',telefono_movil='$this->telefono_movil',
+		    codigo_tipopersona=$this->codigo_tipopersona,profesion='$this->profesion',grado_instruccion='$this->grado_instruccion',maxhoras='$this->maxhoras',
+		    modificado_por='$user',fecha_modificacion=NOW() 
+		    WHERE cedula_persona='$oldci'";
+    	}
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -258,9 +276,11 @@ class persona {
 
    	public function BuscarDatosRepresentante($representante){
    		$sql="SELECT p.cedula_persona,p.primer_nombre,p.segundo_nombre,p.primer_apellido,p.segundo_apellido,p.sexo,
-   		TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento,p.lugar_nacimiento,p.direccion,p.telefono_local,p.telefono_movil,
-   		p.profesion,p.grado_instruccion,CASE WHEN df.codigo_parentesco IS NOT NULL THEN df.codigo_parentesco ELSE 0 END AS codigo_parentesco 
+   		TO_CHAR(p.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento,p.direccion,p.telefono_local,p.telefono_movil,
+   		p.profesion,p.grado_instruccion,CASE WHEN df.codigo_parentesco IS NOT NULL THEN df.codigo_parentesco ELSE 0 END AS codigo_parentesco, 
+   		p.lugar_nacimiento||'_'||par.descripcion AS lugar_nacimiento 
    		FROM general.tpersona p 
+   		INNER JOIN general.tparroquia par ON p.lugar_nacimiento = par.codigo_parroquia 
    		LEFT JOIN general.tdetalle_familiar df ON p.cedula_persona = df.cedula_familiar 
    		WHERE p.cedula_persona = '$representante'";
 		$query = $this->pgsql->Ejecutar($sql);

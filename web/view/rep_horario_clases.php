@@ -18,7 +18,7 @@
 						<input type="hidden" id="lapso" name="lapso" value="<?php echo $lapso_actual['codigo_ano_academico'][0];?>" required=""/>
 						<?php if(!isset($_GET['horario_completo'])){?>
 							<input type="hidden" id="turno" name="turno" value="todos" />
-							<select class="selectpicker" data-live-search="true" id="seccion" name="seccion" required >
+							<select class="bootstrap-select form-control" id="seccion" name="seccion" required >
 							<?php 
 								include_once("../class/class_html.php");
 								$html=new Html();
