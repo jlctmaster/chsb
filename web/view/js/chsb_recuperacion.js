@@ -1,13 +1,24 @@
 $(document).ready(init);
 function init(){
-	//	Busca los items disponibles en la ubicación seleccionada.
-	$('#codigo_ubicacion').change(function(){
-		var Datos = {"lOpt":"BuscarItems","codigo_ubicacion":$('#codigo_ubicacion').val()};
-		BuscarItems(Datos);
-	})
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/persona.php', 
+		minLength:1
+	});
+	//Búsquedas de la ubicacion por autocompletar.
+	$('#codigo_ubicacion').autocomplete({
+		source:'../autocomplete/ubicacion_nolibros_defectuosos.php', 
+		minLength:1,
+		select: function (event, ui){
+			var ubicacion = ui.item.value.split('_');
+			var Datos = {"lOpt":"BuscarItems","codigo_ubicacion":ubicacion[0]};
+			BuscarItems(Datos);
+		}
+	});
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
 	$('#codigo_bien').change(function(){
-		var Datos = {"lOpt":"BuscarCantidadDisponible","codigo_bien":$('#codigo_bien').val(),"codigo_ubicacion":$('#codigo_ubicacion').val()};
+		var codigo_ubicacion = $('#codigo_ubicacion').val().split('_');
+		var Datos = {"lOpt":"BuscarCantidadDisponible","codigo_bien":$('#codigo_bien').val(),"codigo_ubicacion":codigo_ubicacion[0]};
 		obtenerCantidadDisponible(Datos);
 	})
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.

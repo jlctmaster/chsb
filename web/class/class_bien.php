@@ -149,7 +149,11 @@ class bien {
 	public function InsertarBienes($user,$items,$cantidades,$item_base){
 	    $sql="INSERT INTO bienes_nacionales.tconfiguracion_bien(codigo_bien,codigo_item,cantidad,item_base,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($items); $i++){
-	    	$sql.="('$this->codigo_bien','".$items[$i]."','".$cantidades[$i]."','".$this->comprobarCheckBox($item_base[$i])."','$user',NOW()),";
+	    	//	Extraemos el codigo del item y la ubicacion por cada registro
+	    	$item=explode('_',$items[$i]);
+	    	$codigo_item=$item[0];
+	    	//	Fin
+	    	$sql.="('$this->codigo_bien','".$codigo_item."','".$cantidades[$i]."','".$this->comprobarCheckBox($item_base[$i])."','$user',NOW()),";
 	    }
 	    $sql=substr($sql,0,-1);
 	    $sql=$sql.";";

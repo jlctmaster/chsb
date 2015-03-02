@@ -282,7 +282,6 @@ function isNumberKey(evt)
 
 //Función que recibe el id del objeto y  la url para ejecutar el llamado de autocompletado
 function ACDataGrid(obj,url){
-    console.log(obj+" => "+url);
     $('#'+obj).autocomplete({
         source:'../autocomplete/'+url, 
         minLength:1

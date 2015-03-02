@@ -16,8 +16,10 @@ if(isset($_POST['codigo_asignacion']))
 if(isset($_POST['fecha_asignacion']))
   $fecha_asignacion=trim($_POST['fecha_asignacion']);
 
-if(isset($_POST['cedula_persona']))
-  $cedula_persona=trim($_POST['cedula_persona']);
+if(isset($_POST['cedula_persona'])){
+  $persona=explode('_',trim($_POST['cedula_persona']));
+  $cedula_persona=$persona[0];
+}
 
 if(isset($_POST['motivo']))
   $motivo=trim($_POST['motivo']);
@@ -42,8 +44,14 @@ if($lOpt=='Registrar'){
             $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
             $conS=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
@@ -63,8 +71,14 @@ if($lOpt=='Registrar'){
             $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
             $conE=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion_hasta'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion_hasta'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
               $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
               $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
@@ -124,15 +138,22 @@ if($lOpt=='Modificar'){
           $mov_inventario->tipo_transaccion('BA'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Asignacion (BA)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->EliminarMovimientos();
             $conS=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
-              $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
               $mov_inventario->sonlibros('N');
-              if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
+              if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $conS++;
             }
           }
@@ -145,15 +166,22 @@ if($lOpt=='Modificar'){
           $mov_inventario->tipo_transaccion('BA'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Asignacion (BA)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->EliminarMovimientos();
             $conE=0;
             for($i=0;$i<count($_POST['items']);$i++){
-              $mov_inventario->codigo_item($_POST['items'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion_hasta'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $items=explode('_',$_POST['items'][$i]);
+              $codigo_item=$items[0];
+              $ubicaciones=explode('_',$_POST['ubicacion_hasta'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
-              $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+              $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
               $mov_inventario->sonlibros('N');
-              if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
+              if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $conE++;
             }
           }
@@ -182,7 +210,6 @@ if($lOpt=='Modificar'){
     header("Location: ../view/menu_principal.php?asignacion&Opt=3&codigo_asignacion=".$asignacion->codigo_asignacion());
   }else{
     $asignacion->Transaccion('cancelado');
-    echo $asignacion->error()."<br>".$mov_inventario->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al modificar la Asignación!";
     header("Location: ../view/menu_principal.php?asignacion&Opt=3&codigo_asignacion=".$asignacion->codigo_asignacion());
   }

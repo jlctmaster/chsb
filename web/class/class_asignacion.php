@@ -92,7 +92,15 @@ class asignacion {
 	public function InsertarAsignaciones($user,$items,$cantidad,$ubicacion,$ubicacion_hasta){
 	    $sql="INSERT INTO bienes_nacionales.tdetalle_asignacion(codigo_asignacion,codigo_item,cantidad,codigo_ubicacion,codigo_ubicacion_hasta,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($items); $i++){
-	    	$sql.="('$this->codigo_asignacion','".$items[$i]."','".$cantidad[$i]."','".$ubicacion[$i]."','".$ubicacion_hasta[$i]."','$user',NOW()),";
+	    	//	Extraemos el codigo del item y la ubicacion por cada registro
+	    	$item=explode('_',$items[$i]);
+	    	$codigo_item=$item[0];
+	    	$ubicaciones=explode('_',$ubicacion[$i]);
+	    	$codigo_ubicacion=$ubicaciones[0];
+	    	$ubicaciones_hasta=explode('_',$ubicacion_hasta[$i]);
+	    	$codigo_ubicacion_hasta=$ubicaciones_hasta[0];
+	    	//	Fin
+	    	$sql.="('$this->codigo_asignacion','$codigo_item','".$cantidad[$i]."','$codigo_ubicacion','$codigo_ubicacion_hasta','$user',NOW()),";
 	    }
 	    $sql=substr($sql,0,-1);
 	    $sql=$sql.";";

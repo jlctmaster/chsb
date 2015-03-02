@@ -101,7 +101,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	<div class="control-group">  
 		<label class="control-label" for="codigo_tipo_bien">Tipo del Bien Nacional</label>  
 		<div class="controls">  
-			<select class="selectpicker" data-live-search="true" title="Seleccione un Tipo Bien Nacional" name='codigo_tipo_bien' id='codigo_tipo_bien' required >
+			<select class="bootstrap-select form-control" title="Seleccione un Tipo Bien Nacional" name='codigo_tipo_bien' id='codigo_tipo_bien' required >
 				<option value=0>Seleccione un Tipo Bien Nacional</option>
 				<?php
 					require_once('../class/class_bd.php');
@@ -153,23 +153,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 	function agrega_campos(){
 		$("#tablaBienes").append("<tr id='"+contador+"'>"+
 		"<td>"+
-		"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un componente'>"+
-		<?php
-		require_once("../class/class_bd.php");
-		$pgsql=new Conexion();
-		$sql = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
- 		FROM bienes_nacionales.ttipo_bien tb
- 		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
- 		WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
-		AND b.estatus = '1'
-		ORDER BY b.codigo_bien ASC";
-		$query = $pgsql->Ejecutar($sql);
-		$comillasimple=chr(34);
-		while ($rows = $pgsql->Respuesta($query)){
-			echo $comillasimple."<option value='".$rows['codigo_bien']."'>".$rows['nombre']."</option>".$comillasimple."+";
-		}
-		?>
-		"</select>"+
+		"<input type='text' name='items[]' id='items_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"componentes.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Item'>"+
 		"</td>"+
 		"<td>"+
 		"<input type='text' name='cantidades[]' id='cantidades_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
@@ -238,7 +222,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	<div class="control-group">  
 		<label class="control-label" for="codigo_tipo_bien">Tipo del Bien Nacional</label>  
 		<div class="controls">  
-			<select class="selectpicker" data-live-search="true" title="Seleccione un Tipo Bien Nacional" name='codigo_tipo_bien' id='codigo_tipo_bien' required >
+			<select class="bootstrap-select form-control" title="Seleccione un Tipo Bien Nacional" name='codigo_tipo_bien' id='codigo_tipo_bien' required >
 				<option value=0>Seleccione un Tipo Bien Nacional</option>
 				<?php
 					require_once('../class/class_bd.php');
@@ -279,31 +263,17 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			</tr>
 			<?php
 				$pgsql=new Conexion();
-				$sql = "SELECT cb.codigo_item, cb.cantidad, cb.item_base
-				FROM bienes_nacionales.tconfiguracion_bien cb WHERE cb.codigo_bien = '".$row['codigo_bien']."' 
+				$sql = "SELECT cb.codigo_item||'_'||b.nro_serial||' - '||b.nombre AS item, cb.cantidad, cb.item_base
+				FROM bienes_nacionales.tconfiguracion_bien cb 
+				LEFT JOIN bienes_nacionales.tbien b ON cb.codigo_item = b.codigo_bien 
+				WHERE cb.codigo_bien = '".$row['codigo_bien']."' 
 				ORDER BY cb.codigo_configuracion_bien ASC";
 				$query = $pgsql->Ejecutar($sql);
 				$con=0;
 				while ($row = $pgsql->Respuesta($query)){
 					echo "<tr id='".$con."'>
 					        <td>
-					          <select class='bootstrap-select form-control' name='items[]' id='items_".$con."' title='Seleccione un Componente' >
-					          <option value='0'>Seleccione un Componente</option>";
-					          $sqlx = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
-						 		FROM bienes_nacionales.ttipo_bien tb
-						 		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
- 								WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
-								AND b.estatus = '1'
-								ORDER BY b.codigo_bien ASC";
-					          $querys = $pgsql->Ejecutar($sqlx);
-					          while ($rows = $pgsql->Respuesta($querys)){
-					            if($rows['codigo_bien']==$row['codigo_item']){
-					              echo "<option value='".$rows['codigo_bien']."' selected>".$rows['nombre']."</option>";
-					            }else{
-					              echo "<option value='".$rows['codigo_bien']."'>".$rows['nombre']."</option>";
-					            }
-					          }
-					          echo "</select>
+					        <input type='text' name='items[]' id='items_".$con."' onKeyPress='return ACDataGrid(this.id,\"componentes.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Item' value='".$row['item']."'>
 					        </td>
 					        <td>
 					        <input type='text' name='cantidades[]' id='cantidades_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
@@ -356,26 +326,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	function agrega_campos(){
 		$("#tablaBienes").append("<tr id='"+contador+"'>"+
 		"<td>"+
-		"<center>"+
-		"<select class='bootstrap-select form-control' name='items[]' id='items_"+contador+"' title='Seleccione un componente'>"+
-		"<option value='0'>Seleccione un componente</option>"+
-		<?php
-		require_once("../class/class_bd.php");
-		$pgsql=new Conexion();
-		$sql = "SELECT b.codigo_bien,b.nro_serial||' - '||b.nombre as nombre 
- 		FROM bienes_nacionales.ttipo_bien tb
- 		INNER JOIN bienes_nacionales.tbien b ON tb.codigo_tipo_bien= b.codigo_tipo_bien 
- 		WHERE tb.descripcion NOT LIKE '%ITEM FINAL%'
-		AND b.estatus = '1'
-		ORDER BY b.codigo_bien ASC";
-		$query = $pgsql->Ejecutar($sql);
-		$comillasimple=chr(34);
-		while ($rows = $pgsql->Respuesta($query)){
-			echo $comillasimple."<option value='".$rows['codigo_bien']."'>".$rows['nombre']."</option>".$comillasimple."+";
-		}
-		?>
-		"</select>"+
-		"</center>"+
+		"<input type='text' name='items[]' id='items_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"componentes.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Item'>"+
 		"</td>"+
 		"<td>"+
 		"<input type='text' name='cantidades[]' id='cantidades_"+contador+"' title='Ingrese una cantidad'>"+

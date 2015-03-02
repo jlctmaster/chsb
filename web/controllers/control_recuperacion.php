@@ -10,11 +10,15 @@ if(isset($_POST['codigo_recuperacion']))
 if(isset($_POST['fecha']))
   $fecha=trim($_POST['fecha']);
 
-if(isset($_POST['cedula_persona']))
-  $cedula_persona=trim($_POST['cedula_persona']);
+if(isset($_POST['cedula_persona'])){
+  $persona=explode('_',trim($_POST['cedula_persona']));
+  $cedula_persona=$persona[0];
+}
 
-if(isset($_POST['codigo_ubicacion']))
-  $codigo_ubicacion=trim($_POST['codigo_ubicacion']);
+if(isset($_POST['codigo_ubicacion'])){
+  $ubicacion=explode('_',trim($_POST['codigo_ubicacion']));
+  $codigo_ubicacion=$ubicacion[0];
+}
 
 if(isset($_POST['codigo_bien']))
   $codigo_bien=trim($_POST['codigo_bien']);

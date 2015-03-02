@@ -30,6 +30,12 @@ function init(){
 		window.open(url, '_blank');
 	})
 
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/persona.php', 
+		minLength:1
+	});
+
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),
@@ -115,13 +121,15 @@ function init(){
 				arregloU.push($('#ubicacion_'+i).val());
 				arregloUH.push($('#ubicacion_hasta_'+i).val());
 				var Cant=$('#cantidad_'+i).val();
-				var CantDisponible=obtenerCantidadDisponible($('#items_'+i).val(),$('#ubicacion_'+i).val());
+				var item = $('#items_'+i).val().split('_');
+				var ubicacion = $('#ubicacion_'+i).val().split('_');
+				var CantDisponible=obtenerCantidadDisponible(item[0],ubicacion[0]);
 				if(Cant<=0){
-					alert('¡La cantidad del item '+$('#items_'+i+' option:selected').text()+' debe ser mayor a 0!');
+					alert('¡La cantidad del item '+item[0]+' debe ser mayor a 0!');
 					send = false;	
 				}
 				if(parseInt(CantDisponible) < parseInt(Cant)){
-					alert('¡La cantidad del item '+$('#items_'+i+' option:selected').text()+' en la Ubicación '+$('#ubicacion_'+i+' option:selected').text()+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
+					alert('¡La cantidad del item '+item[0]+' en la Ubicación '+ubicacion[0]+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
 					send = false;
 				}
 			}
