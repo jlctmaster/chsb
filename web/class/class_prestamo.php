@@ -135,7 +135,13 @@ class prestamo {
 	public function InsertarPrestamos($user,$ejemplar,$ubicacion,$cantidad){
 	    $sql="INSERT INTO biblioteca.tdetalle_prestamo(codigo_prestamo,codigo_ejemplar,codigo_ubicacion,cantidad,creado_por,fecha_creacion) VALUES ";
 	    for ($i=0; $i < count($ejemplar); $i++){
-	    	$sql.="('$this->codigo_prestamo','".$ejemplar[$i]."','".$ubicacion[$i]."','".$cantidad[$i]."','$user',NOW()),";
+	    	//	Extraemos el codigo del item y la ubicacion por cada registro
+	    	$item=explode('_',$ejemplar[$i]);
+	    	$codigo_item=$item[0];
+	    	$ubicaciones=explode('_',$ubicacion[$i]);
+	    	$codigo_ubicacion=$ubicaciones[0];
+	    	//	Fin
+	    	$sql.="('$this->codigo_prestamo','$codigo_item','$codigo_ubicacion','".$cantidad[$i]."','$user',NOW()),";
 	    }
 	    $sql=substr($sql,0,-1);
 	    $sql=$sql.";";

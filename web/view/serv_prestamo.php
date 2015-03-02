@@ -10,8 +10,11 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 	$pgsql=new Conexion();
 	$sql = "SELECT a.codigo_prestamo,TO_CHAR(a.fecha_salida,'DD/MM/YYYY') AS fecha_salida,
 		a.cedula_responsable||' '||r.primer_nombre||' '||r.primer_apellido AS responsable,
-		a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona
+		a.cedula_persona||' '||p.primer_nombre||' '||p.primer_apellido AS persona,
+		da.cantidad-COALESCE((SELECT SUM(de.cantidad) FROM biblioteca.tentrega e INNER JOIN biblioteca.tdetalle_entrega de ON e.codigo_entrega = de.codigo_entrega 
+		WHERE e.codigo_prestamo = a.codigo_prestamo AND da.codigo_ejemplar = de.codigo_ejemplar),0) AS cantidad
 		FROM biblioteca.tprestamo a 
+		INNER JOIN biblioteca.tdetalle_prestamo da ON a.codigo_prestamo = da.codigo_prestamo 
 		INNER JOIN general.tpersona r ON a.cedula_responsable = r.cedula_persona 
 		INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona";
 		$consulta = $pgsql->Ejecutar($sql);
@@ -27,6 +30,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							<th>Fecha Salida</th>
 							<th>Responsable</th>
 							<th>Solicitante</th>
+							<th>Libros por Entregar</th>
 							<?php
 							for($x=0;$x<count($a);$x++){
 								if($a[$x]['orden']=='2' || $a[$x]['orden']=='5')
@@ -44,6 +48,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal -> Paginación
 							echo '<td>'.$filas['fecha_salida'].'</td>';
 							echo '<td>'.$filas['responsable'].'</td>';
 							echo '<td>'.$filas['persona'].'</td>';
+							echo '<td>'.$filas['cantidad'].'</td>';
 							for($x=0;$x<count($a);$x++){
 						if($a[$x]['orden']=='2') //Actualizar, Modificar o Alterar el valor del Registro
 						echo '<td><a href="?prestamo&Opt=3&codigo_prestamo='.$filas['codigo_prestamo'].'" style="border:0px;"><i class="'.$a[$x]['icono'].'"></i></a></td>';
@@ -93,60 +98,34 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					</div>  
 				</div>
 				<div class="control-group">  
-				<label class="control-label" for="cedula_responsable">Responsable del Préstamo</label>  
-				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
-						<option value=0>Seleccione un Responsable</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-							FROM general.tpersona p 
-							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-							}
-						?>
-					</select>
-				</div>  
-			</div> 
+					<label class="control-label" for="cedula_responsable">Responsable del Préstamo</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Seleccione un Responsable" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" type="text" required />
+					</div>  
+				</div> 
 				<div class="control-group">  
-				<label class="control-label" for="cedula_persona">Solicitante</label>  
-				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
-						<option value=0>Seleccione un Solicitante</option>
-						<?php
+					<label class="control-label" for="cedula_persona">Solicitante</label>  
+					<div class="controls">  
+						<input class="input-xlarge" title="Seleccione un Solicitante" name="cedula_persona" id="cedula_persona" onKeyUp="this.value=this.value.toUpperCase()" type="text" required />
+					</div>  
+				</div>     
+				<div class="control-group">  
+					<label class="control-label" for="codigo_area">Área:</label>  
+					<div class="controls">  
+						<select class="bootstrap-select form-control" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
+							<option value=0>Seleccione un Área</option>
+							<?php
+							require_once('../class/class_bd.php');
 							$pgsql = new Conexion();
-							$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-							FROM general.tpersona p 
-							INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-							WHERE LOWER(descripcion) NOT LIKE '%bibliotecario%' AND LOWER(descripcion) NOT LIKE '%representante%'";
+							$sql = "SELECT * FROM general.tarea ORDER BY descripcion ASC";
 							$query = $pgsql->Ejecutar($sql);
 							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
+								echo "<option value=".$row['codigo_area'].">".$row['descripcion']."</option>";
 							}
-						?>
-					</select>
-				</div>  
-			</div>     
-			<div class="control-group">  
-				<label class="control-label" for="codigo_area">Área:</label>  
-				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Área" name='codigo_area' id='codigo_area' required >
-						<option value=0>Seleccione un Área</option>
-						<?php
-						require_once('../class/class_bd.php');
-						$pgsql = new Conexion();
-						$sql = "SELECT * FROM general.tarea ORDER BY descripcion ASC";
-						$query = $pgsql->Ejecutar($sql);
-						while($row=$pgsql->Respuesta($query)){
-							echo "<option value=".$row['codigo_area'].">".$row['descripcion']."</option>";
-						}
-						?>
-					</select>
-				</div>  
-			</div>
+							?>
+						</select>
+					</div>  
+				</div>
 				<div class="control-group">  
 					<label class="control-label" for="lugar_prestamo">Lugar del Préstamo:</label>  
 					<div class="controls">  
@@ -203,35 +182,11 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 		function agrega_campos(){
 			$("#tablaDetPrestamo").append("<tr id='"+contador+"'>"+
 			"<td>"+
-			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) ejemplars 
-			FROM biblioteca.tejemplar b 
-			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
+			"<input type='text' name='ejemplar[]' id='ejemplar_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"inv_libros.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Libro'>"+
 			"</td>"+
 			"<td>"+
-			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion 
-			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>".$comillasimple."+";
-			}
-			?>
+			"<input type='text' name='ubicacion[]' id='ubicacion_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"inv_ubicacion_libros_nodefectuosos.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione una Ubicación'>"+
+			"</td>"+
 			"<td>"+
 			"<input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+
 			"</td>"+
@@ -296,9 +251,13 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ 
 // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha_salida,'DD/MM/YYYY') as fecha_salida,TO_CHAR(fecha_entrada,'DD/MM/YYYY') as fecha_entrada 
-	FROM biblioteca.tprestamo 
-	WHERE codigo_prestamo=".$pgsql->comillas_inteligentes($_GET['codigo_prestamo']);
+	$sql = "SELECT p.*,TO_CHAR(p.fecha_salida,'DD/MM/YYYY') as fecha_salida,TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') as fecha_entrada,
+	p.cedula_responsable||'_'||r.primer_nombre||' '||r.primer_apellido AS responsable,
+	p.cedula_persona||'_'||s.primer_nombre||' '||s.primer_apellido AS solicitante
+	FROM biblioteca.tprestamo p 
+	INNER JOIN general.tpersona r ON p.cedula_responsable = r.cedula_persona 
+	INNER JOIN general.tpersona s ON p.cedula_persona = s.cedula_persona 
+	WHERE p.codigo_prestamo=".$pgsql->comillas_inteligentes($_GET['codigo_prestamo']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -315,46 +274,14 @@ else if($_GET['Opt']=="3"){
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="cedula_responsable">Responsable del Préstamo</label>  
-						<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione un responsable" name='cedula_responsable' id='cedula_responsable' required >
-							<option value=0>Seleccione un Responsable</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) LIKE '%bibliotecario%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($rows['cedula_persona']==$row['cedula_responsable'])
-										echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-									else
-										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								}
-							?>
-						</select>
+					<div class="controls">  
+						<input class="input-xlarge" title="Seleccione un Responsable" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" type="text" value="<?=$row['responsable']?>" required />
 					</div>  
-				</div>
+				</div> 
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Solicitante</label>  
-						<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione un Solicitante" name='cedula_persona' id='cedula_persona' required >
-							<option value=0>Seleccione un Solicitante</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%bibliotecario%' AND LOWER(descripcion) NOT LIKE '%representante%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($rows['cedula_persona']==$row['cedula_persona'])
-										echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-									else
-										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								}
-							?>
-						</select>
+					<div class="controls">  
+						<input class="input-xlarge" title="Seleccione un Solicitante" name="cedula_persona" id="cedula_persona" onKeyUp="this.value=this.value.toUpperCase()" type="text" value="<?=$row['solicitante']?>" required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -426,38 +353,10 @@ else if($_GET['Opt']=="3"){
 							while ($row = $pgsql->Respuesta($query)){
 								echo "<tr id='".$con."'>
 								        <td>
-										<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_".$con."' title='Seleccione un Ejemplar' >
-										<option value='0'>Seleccione un Ejemplar</option>";
-										$sqlx = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) AS ejemplars 
-										FROM biblioteca.tejemplar b 
-										INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-										INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-										$querys = $pgsql->Ejecutar($sqlx);
-										while ($rows = $pgsql->Respuesta($querys)){
-											if($rows['codigo_ejemplar']==$row['codigo_ejemplar']){
-												echo "<option value='".$rows['codigo_ejemplar']."' selected>".$rows['ejemplars']."</option>";
-											}else{
-												echo "<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>";
-											}
-										}
-										echo "</select>
+										<input type='text' name='ejemplar[]' id='ejemplar_".$con."' onKeyPress='return ACDataGrid(this.id,\"inv_libros.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Libro' value='".$row['ejemplar']."'>
 								        </td>
 								        <td>
-								       	<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_".$con."' title='Seleccione una Ubicación'>
-								        <option value='0'>Seleccione una Ubicación</option>";
-								        $sqlz="SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-										FROM inventario.tubicacion u 
-										INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
-										INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
-								        $queryz = $pgsql->Ejecutar($sqlz);
-								          while ($rows = $pgsql->Respuesta($queryz)){
-								            if($rows['codigo_ubicacion']==$row['codigo_ubicacion']){
-								              echo "<option value='".$rows['codigo_ubicacion']."' selected>".$rows['descripcion']."</option>";
-								            }else{
-								              echo "<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>";
-								            }
-								          }
-								        echo "</select>
+								       	<input type='text' name='ubicacion[]' id='ubicacion_".$con."' onKeyPress='return ACDataGrid(this.id,\"inv_ubicacion_libros_nodefectuosos.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione una Ubicación' value='".$row['ubicacion']."'>
 								        </td>
 								         <td>
 								        <input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_".$con."' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad' value='".$row['cantidad']."' >
@@ -506,36 +405,10 @@ else if($_GET['Opt']=="3"){
 		function agrega_campos(){
 			$("#tablaDetAdquisicion").append("<tr id='"+contador+"'>"+
 			"<td>"+
-			"<select class='bootstrap-select form-control' name='ejemplar[]' id='ejemplar_"+contador+"' title='Seleccione un ejemplar'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT b.codigo_ejemplar,INITCAP(b.codigo_cra||' '||l.titulo) ejemplars 
-			FROM biblioteca.tejemplar b 
-			INNER JOIN inventario.vw_inventario i ON b.codigo_ejemplar = i.codigo_item
-			INNER JOIN biblioteca.tlibro l on b.codigo_isbn_libro=l.codigo_isbn_libro";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ejemplar']."'>".$rows['ejemplars']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
+			"<input type='text' name='ejemplar[]' id='ejemplar_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"inv_libros.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Libro'>"+
 			"</td>"+
 			"<td>"+
-			"<select class='bootstrap-select form-control' name='ubicacion[]' id='ubicacion_"+contador+"' title='Seleccione una Ubicación'>"+
-			<?php
-			$pgsql=new Conexion();
-			$sql = "SELECT DISTINCT u.codigo_ubicacion,u.descripcion  
-			FROM inventario.tubicacion u 
-			INNER JOIN inventario.vw_inventario i ON u.codigo_ubicacion = i.codigo_ubicacion
-			INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente AND a.tipo_ambiente = '5'";
-			$query = $pgsql->Ejecutar($sql);
-			$comillasimple=chr(34);
-			while ($rows = $pgsql->Respuesta($query)){
-				echo $comillasimple."<option value='".$rows['codigo_ubicacion']."'>".$rows['descripcion']."</option>".$comillasimple."+";
-			}
-			?>
-			"</select>"+
+			"<input type='text' name='ubicacion[]' id='ubicacion_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"inv_ubicacion_libros_nodefectuosos.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione una Ubicación'>"+
 			"</td>"+
 			"<td>"+
 			"<input class='input-xlarge' type='text' name='cantidad[]' id='cantidad_"+contador+"' onKeyPress='return isNumberKey(event)' maxlength=3 title='Ingrese una cantidad'>"+

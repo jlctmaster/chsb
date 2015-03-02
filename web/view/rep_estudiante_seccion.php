@@ -6,7 +6,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Sección Desde:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione una Sección" name='seccion_desde' id='seccion_desde' >
+		                <select class="bootstrap-select form-control" title="Seleccione una Sección" name='seccion_desde' id='seccion_desde' >
 							<option value=0> Seleccione una Sección</option>
 							<?php
 								$pgsql = new Conexion();
@@ -24,7 +24,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Sección Hasta:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione una Sección" name='seccion_hasta' id='seccion_hasta' >
+		                <select class="bootstrap-select form-control" title="Seleccione una Sección" name='seccion_hasta' id='seccion_hasta' >
 							<option value=0>Seleccione una Sección</option>
 							<?php
 								$pgsql = new Conexion();

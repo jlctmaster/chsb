@@ -229,6 +229,8 @@ class clsFpdf extends FPDF {
   }
 }
 
+$estudiante=explode('_',trim($_POST['cedula_persona']));
+
 //generar el listado 
 setlocale(LC_ALL,"es_VE.UTF8");
 $lobjPdf=new clsFpdf();
@@ -242,7 +244,7 @@ a.ano AS periodo
 from general.tpersona p
 INNER JOIN educacion.tproceso_inscripcion pins ON p.cedula_persona = pins.cedula_persona 
 INNER JOIN educacion.tano_academico a ON pins.codigo_ano_academico = a.codigo_ano_academico 
-WHERE p.cedula_persona = '".$_POST['cedula_persona']."'";  
+WHERE p.cedula_persona = '$estudiante[0]'";  
 $i=-1;
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){

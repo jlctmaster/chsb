@@ -94,7 +94,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="codigo_editorial">Editorial</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' required >
 						<option value=0>Seleccione un Editorial</option>
 						<?php
 							$pgsql = new Conexion();
@@ -110,7 +110,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="codigo_autor">Autor</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' required >
 						<option value=0>Seleccione un Autor</option>
 						<?php
 							$pgsql = new Conexion();
@@ -126,7 +126,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="codigo_tema">Tema</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' required >
+					<select class="bootstrap-select form-control" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' required >
 						<option value=0>Seleccione un Tema</option>
 						<?php
 							$pgsql = new Conexion();
@@ -191,7 +191,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_editorial">Editorial</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' value="<?=$row['codigo_editorial']?>" required >
+					<select class="bootstrap-select form-control" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' value="<?=$row['codigo_editorial']?>" required >
 						<option value=0>Seleccione un Editorial</option>
 						<?php
 							$pgsql = new Conexion();
@@ -210,7 +210,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_autor">Autor</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' value="<?=$row['codigo_autor']?>" required >
+					<select class="bootstrap-select form-control" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' value="<?=$row['codigo_autor']?>" required >
 						<option value=0>Seleccione un Autor</option>
 						<?php
 							$pgsql = new Conexion();
@@ -229,7 +229,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_tema">Tema</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' value="<?=$row['codigo_tema']?>" required >
+					<select class="bootstrap-select form-control" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' value="<?=$row['codigo_tema']?>" required >
 						<option value=0>Seleccione un Tema</option>
 						<?php
 							$pgsql = new Conexion();

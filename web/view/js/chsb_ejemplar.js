@@ -19,6 +19,11 @@ function init(){
 			})
 	}
 
+	//Búsquedas de las parroquias por autocompletar.
+	$('#codigo_isbn_libro').autocomplete({
+		source:'../autocomplete/libro.php', 
+		minLength:1
+	});
 
 	$('#btnDesactivar').click(function(){
 		noty({

@@ -14,6 +14,18 @@ function init(){
 	$('#btnImprimirTodos').click(function(){
 		imprimirRegistros();
 	})
+
+	//Búsquedas de las parroquias por autocompletar.
+	$('#cedula_responsable').autocomplete({
+		source:'../autocomplete/bibliotecario.php', 
+		minLength:1
+	});
+
+	//Búsquedas de las parroquias por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/persona_academica.php', 
+		minLength:1
+	});
 	
 	function imprimirRegistros(){
 		alertDGC(document.getElementById('Imprimir'),'./menu_principal.php?prestamo');
@@ -128,21 +140,24 @@ function init(){
 		else if(ejemplar && ubicacion){
 			arregloI = new Array();
 			arregloU = new Array();
+			var E,U,Cant,CantDisponible;
 			for(i=0;i<ejemplar.length;i++){
-				arregloI.push($('#ejemplar_'+i).val());
-				arregloU.push($('#ubicacion_'+i).val());
-				var Cant=$('#cantidad_'+i).val();
-				var CantDisponible=obtenerCantidadDisponible($('#ejemplar_'+i).val(),$('#ubicacion_'+i).val());
+				E = $('#ejemplar_'+i).val().split('_');
+				U = $('#ejemplar_'+i).val().split('_');
+				arregloI.push(E[0]);
+				arregloU.push(U[0]);
+				Cant=$('#cantidad_'+i).val();
+				CantDisponible=obtenerCantidadDisponible(E[0],U[0]);
 				if(Cant<=0){
-					alert('¡La cantidad del ejemplar '+$('#ejemplar_'+i+' option:selected').text()+' debe ser mayor a 0!');
+					alert('¡La cantidad del ejemplar '+$('#ejemplar_'+i).val()+' debe ser mayor a 0!');
 					send = false;	
 				}
 				if(parseInt(Cant) > parseInt(CantDisponible)){
-					alert('¡La cantidad del ejemplar '+$('#ejemplar_'+i+' option:selected').text()+' en la Ubicación '+$('#ubicacion_'+i+' option:selected').text()+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
+					alert('¡La cantidad del ejemplar '+$('#ejemplar_'+i).val()+' en la Ubicación '+$('#ubicacion_'+i).val()+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
 					send = false;
 				}
 			}
-			if(contarRepetidos(arregloI)>0 && contarRepetidos(arregloU)>0){
+			if(combinacionRepetida(arregloI,arregloU)>0){
 				alert('¡La combinación Ejemplar + Ubicación no se puede repetir!')
 				send = false
 			}
@@ -199,10 +214,10 @@ function init(){
 		$.ajax({
 	        url: '../controllers/control_prestamo.php',
 	        type: 'POST',
-	        async: false,
 	        data: value,
 	        dataType: "json",
 	        success: function(resp){
+	        	console.log(resp);
 	        	if(resp[0].existencia!=undefined)
 	        		existencia = resp[0].existencia;
 	        	else
@@ -213,5 +228,25 @@ function init(){
 	        }
         });
         return existencia;
+	}
+
+	function combinacionRepetida(arregloA,arregloB){
+	    var arreglo1 = arregloA;
+	    var arreglo2 = arregloB;
+	    var con=0;
+	    for (var m=0; m<arreglo1.length; m++)
+	    {
+	        for (var n=0; n<arreglo1.length; n++)
+	        {
+	            if(n!=m)
+	            {
+	                if(arreglo1[m]==arreglo1[n] && arreglo2[m]==arreglo2[n])
+	                {
+	                	con++;
+	                }
+	            }
+	        }
+	    }
+	    return con;
 	}
 }

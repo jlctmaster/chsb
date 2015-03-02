@@ -10,7 +10,7 @@
 						<label class="control-label" for="cedula_usuario">Cédula Persona:</label>  
 						<div class="controls"> 
 							<input type="hidden" name="lOpt" id="lOpt" value="Registrar"/>
-							<input class="input-xlarge" title="ingrese la cédula ej: V123456789" onKeyPress="return isRif(event,this.value)" 
+							<input class="input-xlarge" title="ingrese la cédula ej: V123456789" onKeyUp="this.value=this.value.toUpperCase()" 
 							onKeyUp="this.value=this.value.toUpperCase()" name="cedula_persona" id="cedula_persona" type="text" size="70" 
 							placeholder="ingrese la cédula ej: V123456789" type="text" required />
 						</div>  
@@ -18,7 +18,7 @@
 					<div class="control-group">  
 						<label class="control-label" for="codigo_perfil">Perfil:</label>  
 						<div class="controls">  
-							<select class="selectpicker" data-live-search="true" title="Seleccione un Perfil" name='codigo_perfil' id='codigo_perfil' required >
+							<select class="bootstrap-select form-control" title="Seleccione un Perfil" name='codigo_perfil' id='codigo_perfil' required >
 								<?php 
 								include_once("../class/class_html.php");
 								$html=new Html();

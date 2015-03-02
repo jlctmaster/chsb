@@ -98,7 +98,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_modulo">Módulo:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Módulo" name='codigo_modulo' id='codigo_modulo' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Módulo" name='codigo_modulo' id='codigo_modulo' required >
 							<option value=0>Seleccione un Módulo</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -166,7 +166,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_modulo">Módulo:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un Módulo" name='codigo_modulo' id='codigo_modulo' required >
+						<select class="bootstrap-select form-control" title="Seleccione un Módulo" name='codigo_modulo' id='codigo_modulo' required >
 							<option value=0>Seleccione un Módulo</option>
 							<?php
 							require_once('../class/class_bd.php');

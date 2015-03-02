@@ -98,19 +98,30 @@
    public function Registrar($user){
     $sql="INSERT INTO seguridad.tperfil (nombre_perfil,codigo_configuracion,creado_por,fecha_creacion) VALUES 
     ('$this->nombre_perfil','$this->codigo_configuracion','$user',NOW());";
-    if($this->pgsql->Ejecutar($sql)!=null)
-	return true;
-	else
-	return false;
+    if($this->pgsql->Ejecutar($sql)!=null){
+      $sqlx="SELECT * FROM seguridad.tperfil WHERE nombre_perfil = '$this->nombre_perfil'";
+      $query=$this->pgsql->Ejecutar($sqlx);
+      if($this->pgsql->Total_Filas($query)!=0){
+        $tperfil=$this->pgsql->Respuesta($query);
+        $this->codigo_perfil($tperfil['codigo_perfil']);
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+	  else
+      return false;
    }
    
-     public function Activar($user){
-    $sql="UPDATE seguridad.tperfil SET estatus = '1',modificado_por='$user',fecha_modificacion=NOW() WHERE (codigo_perfil='$this->codigo_perfil');";
-    if($this->pgsql->Ejecutar($sql)!=null)
-	return true;
-	else
-	return false;
-   }
+    public function Activar($user){
+      $sql="UPDATE seguridad.tperfil SET estatus = '1',modificado_por='$user',fecha_modificacion=NOW() WHERE (codigo_perfil='$this->codigo_perfil');";
+      if($this->pgsql->Ejecutar($sql)!=null)
+        return true;
+      else
+        return false;
+    }
+
     public function Desactivar($user){
     $sqlx="SELECT * FROM seguridad.tperfil p WHERE p.codigo_perfil = '$this->codigo_perfil' AND 
     (EXISTS (SELECT 1 FROM seguridad.tdetalle_servicio_perfil_opcion dspo WHERE p.codigo_perfil = dspo.codigo_perfil) OR 
@@ -128,14 +139,14 @@
    }
    
     public function Actualizar($user){
-    $sql="UPDATE seguridad.tperfil SET nombre_perfil='$this->nombre_perfil',codigo_configuracion='$this->codigo_configuracion'
-    ,modificado_por='$user',fecha_modificacion=NOW() 
-    WHERE (codigo_perfil='$this->codigo_perfil');";
-    if($this->pgsql->Ejecutar($sql)!=null)
-	return true;
-	else
-	return false;
-   }
+      $sql="UPDATE seguridad.tperfil SET nombre_perfil='$this->nombre_perfil',codigo_configuracion='$this->codigo_configuracion'
+      ,modificado_por='$user',fecha_modificacion=NOW() 
+      WHERE (codigo_perfil='$this->codigo_perfil');";
+      if($this->pgsql->Ejecutar($sql)!=null)
+        return true;
+      else
+        return false;
+    }
    
    public function ELIMINAR_OPCION_SERVICIO_PERFIL(){
     $sql="DELETE FROM seguridad.tdetalle_servicio_perfil_opcion WHERE (codigo_perfil='$this->codigo_perfil');";

@@ -10,11 +10,15 @@ if(isset($_POST['lOpt']))
 if(isset($_POST['codigo_prestamo']))
   $codigo_prestamo=trim($_POST['codigo_prestamo']);
 
-if(isset($_POST['cedula_responsable']))
-  $cedula_responsable=trim($_POST['cedula_responsable']);
+if(isset($_POST['cedula_responsable'])){
+  $responsable=explode('_',trim($_POST['cedula_responsable']));
+  $cedula_responsable=$responsable[0];
+}
 
-if(isset($_POST['cedula_persona']))
-  $cedula_persona=trim($_POST['cedula_persona']);
+if(isset($_POST['cedula_persona'])){
+  $persona=explode('_',trim($_POST['cedula_persona']));
+  $cedula_persona=$persona[0];
+}
 
 if(isset($_POST['codigo_area']))
   $codigo_area=trim($_POST['codigo_area']);
@@ -56,8 +60,14 @@ if($lOpt=='Registrar'){
               $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
               $con=0;
               for($i=0;$i<count($_POST['ejemplar']);$i++){
-                $mov_inventario->codigo_item($_POST['ejemplar'][$i]);
-                $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+                //  Extraemos el codigo del Item y la Ubicacion por cada registro
+                $ejemplar=explode('_',$_POST['ejemplar'][$i]);
+                $codigo_item=$ejemplar[0];
+                $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+                $codigo_ubicacion=$ubicaciones[0];
+                //  Fin
+                $mov_inventario->codigo_item($codigo_item);
+                $mov_inventario->codigo_ubicacion($codigo_ubicacion);
                 $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
                 $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
                 $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
@@ -119,15 +129,22 @@ if($lOpt=='Modificar'){
           $mov_inventario->tipo_transaccion('BP'); // Siglas para identificar la tabla relacionada al movimiento Biblioteca Préstamo (BP)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->EliminarMovimientos();
             $con=0;
             for($i=0;$i<count($_POST['ejemplar']);$i++){
-              $mov_inventario->codigo_item($_POST['ejemplar'][$i]);
-              $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
+              //  Extraemos el codigo del Item y la Ubicacion por cada registro
+              $ejemplar=explode('_',$_POST['ejemplar'][$i]);
+              $codigo_item=$ejemplar[0];
+              $ubicaciones=explode('_',$_POST['ubicacion'][$i]);
+              $codigo_ubicacion=$ubicaciones[0];
+              //  Fin
+              $mov_inventario->codigo_item($codigo_item);
+              $mov_inventario->codigo_ubicacion($codigo_ubicacion);
               $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
+              $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+              $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
               $mov_inventario->sonlibros('Y');
-              $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
-              if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
+              if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                 $con++;
             }
             if($con==count($_POST['ejemplar']))

@@ -101,61 +101,19 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
-			              <option value=0>Seleccione un Responsable</option>
-			              <?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['cedula_persona'].">".$row['cedula_persona']." ".$row['nombre']."</option>";
-								}
-							?>			
-			             </select>
+						<input class="input-xlarge" title="Seleccione un responsable" onKeyUp="this.value=this.value.toUpperCase()" name="cedula_persona" id="cedula_persona" type="text" required />
 					</div>  
 				</div>  
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ubicacion">Ubicación Destino</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione una ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
-							<option value=0>Seleccione una Ubicación</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT u.* 
-								FROM inventario.tubicacion u 
-								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-								WHERE u.itemsdefectuoso = 'N' AND a.tipo_ambiente <> '5' 
-								ORDER BY u.codigo_ubicacion ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['codigo_ubicacion'].">".$row['descripcion']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione una ubicación" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_ubicacion" id="codigo_ubicacion" type="text" required /> 
 					</div>  
 				</div>
 				<div class="control-group">  
 					<label class="control-label" for="codigo_bien">Bien Nacional a Recuperar</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione un Item a Recuperar" name='codigo_bien' id='codigo_bien' required >
-							<option value=0>Seleccione un Bien a Recuperar</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT DISTINCT i.codigo_item,i.item 
-								FROM inventario.vw_inventario i 
-								INNER JOIN bienes_nacionales.tbien b ON i.codigo_item = b.codigo_bien 
-								INNER JOIN inventario.tubicacion u ON i.codigo_ubicacion = u.codigo_ubicacion 
-								WHERE i.sonlibros = 'N' AND b.esconfigurable='Y' AND u.itemsdefectuoso = 'N' 
-								ORDER BY i.codigo_item ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['codigo_item'].">".$row['item']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione un Item a Recuperar" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_bien" id="codigo_bien" type="text" required />
 					</div>  
 				</div>
 				<div class="control-group">  
@@ -220,9 +178,15 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha,'DD/MM/YYYY') as fecha 
-	FROM bienes_nacionales.trecuperacion 
-	WHERE esrecuperacion='N' AND codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_reconstruccion']);
+	$sql = "SELECT r.*,TO_CHAR(r.fecha,'DD/MM/YYYY') as fecha, 
+	r.cedula_persona||'_'||p.primer_nombre||' '||p.primer_apellido AS responsable,
+	r.codigo_ubicacion||'_'||u.descripcion AS ubicacion,
+	r.codigo_bien||'_'||b.nro_serial||' - '||b.nombre AS item 
+	FROM bienes_nacionales.trecuperacion r 
+	INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
+	INNER JOIN inventario.tubicacion u ON r.codigo_ubicacion = u.codigo_ubicacion 
+	INNER JOIN bienes_nacionales.tbien b ON r.codigo_bien = b.codigo_bien 
+	WHERE r.esrecuperacion='N' AND r.codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_reconstruccion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>
@@ -246,68 +210,19 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" name="cedula_persona" id="cedula_persona" title="Seleccione a la persona responsable de la reconstrucción" required /> 
-			              <option value=0>Seleccione un Responsable</option>
-			              <?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($row['cedula_persona']==$rows['cedula_persona'])
-										echo "<option value=".$rows['cedula_persona']." selected >".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-									else
-										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								}
-							?>			
-			             </select>
+						<input class="input-xlarge" title="Seleccione un responsable" onKeyUp="this.value=this.value.toUpperCase()" name="cedula_persona" id="cedula_persona" type="text" value="<?=$row['responsable']?>" required />
 					</div>  
 				</div>  
 				<div class="control-group">  
 					<label class="control-label" for="codigo_ubicacion">Ubicación Destino</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione una Ubicación" name='codigo_ubicacion' id='codigo_ubicacion' required >
-							<option value=0>Seleccione una Ubicación</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT u.* 
-								FROM inventario.tubicacion u 
-								INNER JOIN general.tambiente a ON u.codigo_ambiente = a.codigo_ambiente 
-								WHERE u.itemsdefectuoso = 'N' AND a.tipo_ambiente <> '5' 
-								ORDER BY u.codigo_ubicacion ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($row['codigo_ubicacion']==$rows['codigo_ubicacion'])
-										echo "<option value=".$rows['codigo_ubicacion']." selected>".$rows['descripcion']."</option>";
-									else
-										echo "<option value=".$rows['codigo_ubicacion']." >".$rows['descripcion']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione una ubicación" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_ubicacion" id="codigo_ubicacion" type="text" value="<?=$row['ubicacion']?>" required /> 
 					</div>  
 				</div>
 				<div class="control-group">  
-					<label class="control-label" for="codigo_bien">Bien Nacional a Reconstruir</label>  
+					<label class="control-label" for="codigo_bien">Bien Nacional a Recuperar</label>  
 					<div class="controls">  
-						<select class="bootstrap-select form-control" title="Seleccione un Item a Reconstruir" name='codigo_bien' id='codigo_bien' required >
-							<option value=0>Seleccione un Bien a Reconstruir</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT DISTINCT b.codigo_bien,b.nro_serial||' '||b.nombre AS item, i.codigo_ubicacion FROM bienes_nacionales.tbien b 
-								LEFT JOIN inventario.vw_inventario i ON b.codigo_bien = i.codigo_item 
-								WHERE i.codigo_ubicacion = ".$row['codigo_ubicacion']." OR i.codigo_ubicacion IS NULL 
-								ORDER BY b.codigo_bien ASC";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if((isset($rows['codigo_ubicacion']) && $row['codigo_ubicacion']==$rows['codigo_ubicacion'] && $row['codigo_bien'] == $rows['codigo_bien']) || ($row['codigo_bien'] == $rows['codigo_bien']))
-										echo "<option value=".$rows['codigo_bien']." selected>".$rows['item']."</option>";
-									else
-										echo "<option value=".$rows['codigo_bien']." >".$rows['item']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione un Item a Recuperar" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_bien" id="codigo_bien" type="text" value="<?=$row['item']?>" required />
 					</div>  
 				</div>
 				<div class="control-group">  

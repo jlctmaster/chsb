@@ -25,8 +25,10 @@ if(isset($_POST['codigo_clasificacion']))
 if(isset($_POST['numero_edicion']))
   $numero_edicion=trim($_POST['numero_edicion']);
 
-if(isset($_POST['codigo_isbn_libro']))
-  $codigo_isbn_libro=trim($_POST['codigo_isbn_libro']);
+if(isset($_POST['codigo_isbn_libro'])){
+  $libro=explode('_',trim($_POST['codigo_isbn_libro']));
+  $codigo_isbn_libro=$libro[0];
+}
 
 include_once("../class/class_ejemplar.php");
 $ejemplar=new ejemplar();

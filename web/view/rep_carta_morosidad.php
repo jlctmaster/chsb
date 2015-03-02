@@ -6,7 +6,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Seleccione una Persona:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione una persona" name='cedula_persona' id='cedula_persona' >
+		                <select class="bootstrap-select form-control" title="Seleccione una persona" name='cedula_persona' id='cedula_persona' >
 							<option value=0> Seleccione una Persona</option>
 							<?php
 								$pgsql = new Conexion();

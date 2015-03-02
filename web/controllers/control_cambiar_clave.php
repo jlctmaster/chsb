@@ -36,12 +36,12 @@ if(isset($_POST['cambiar_clave_con_logeo']) and $_POST['cambiar_clave_con_logeo'
 if(isset($_POST['lOpt']) and $_POST['lOpt']=='Registrar'){
   include("../class/class_usuario.php");
   $Usuario=new Usuario();
-  $Usuario->cedula_persona($_POST['cedula_persona']);
+  $cedula_persona=explode('_',trim($_POST['cedula_persona']));
+  $Usuario->cedula_persona($cedula_persona[0]);
   if($Usuario->Consultar_personal()){
-    $Usuario=new Usuario();
     $Usuario->codigo_perfil(trim($_POST['codigo_perfil']));
-    $Usuario->nombre_usuario($Usuario->Generar_NombreUsuario(trim($_POST['cedula_persona']),trim($_POST['codigo_perfil'])));
-    $Usuario->cedula_persona(trim($_POST['cedula_persona']));
+    $Usuario->nombre_usuario($Usuario->Generar_NombreUsuario($cedula_persona[0],trim($_POST['codigo_perfil'])));
+    $Usuario->cedula_persona($cedula_persona[0]);
     if(!$Usuario->Registrar($_SESSION['user_name'])){
       $_SESSION['datos']['mensaje']="¡Lo sentimos, el usuario no se ha podido registrar, intenta más tarde!";
       header("Location: ../view/menu_principal.php?nuevousuario");

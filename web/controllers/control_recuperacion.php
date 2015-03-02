@@ -130,13 +130,14 @@ if($lOpt=='Modificar'){
           $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
           $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
           if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+            $mov_inventario->EliminarMovimientos();
             $mov_inventario->codigo_item($codigo_bien);
             $mov_inventario->codigo_ubicacion($codigo_ubicacion);
             $mov_inventario->cantidad_movimiento($cantidad);
-            $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($cantidad));
-            $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+            $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+            $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($cantidad) == 0 ? $cantidad : $mov_inventario->ObtenerValorActual($cantidad));
             $mov_inventario->sonlibros('N');
-            if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name'])){
+            if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name'])){
               //  Modificar Entradas
               $mov_inventario->fecha_movimiento($fecha);
               $mov_inventario->tipo_movimiento('E');
@@ -144,15 +145,16 @@ if($lOpt=='Modificar'){
               $mov_inventario->tipo_transaccion('BR'); // Siglas para identificar la tabla relacionada al movimiento Bienes Nacionales Recuperación (BR)
               $mov_inventario->codigo_movimiento($mov_inventario->ObtenerCodigoMovimiento());
               if($mov_inventario->ModificarMovimiento($_SESSION['user_name'])){
+                $mov_inventario->EliminarMovimientos();
                 $con=0;
                 for($i=0;$i<count($_POST['items']);$i++){
                   $mov_inventario->codigo_item($_POST['items'][$i]);
                   $mov_inventario->codigo_ubicacion($_POST['ubicacion'][$i]);
                   $mov_inventario->cantidad_movimiento($_POST['cantidad'][$i]);
-                  $mov_inventario->valor_actual($mov_inventario->ObtenerValorActualModificado($_POST['cantidad'][$i]));
-                  $mov_inventario->codigo_detalle_movimiento($mov_inventario->ObtenerCodigoDetMovimiento());
+                  $mov_inventario->valor_anterior($mov_inventario->ObtenerValorAnterior());
+                  $mov_inventario->valor_actual($mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]) == 0 ? $_POST['cantidad'][$i] : $mov_inventario->ObtenerValorActual($_POST['cantidad'][$i]));
                   $mov_inventario->sonlibros('N');
-                  if($mov_inventario->ModificarDetalleMovimiento($_SESSION['user_name']))
+                  if($mov_inventario->RegistrarDetalleMovimiento($_SESSION['user_name']))
                     $con++;
                 }
                 if($con==count($_POST['items']))

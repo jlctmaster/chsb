@@ -84,7 +84,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="codigo_configuracion">Configuración del Sistema:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
+						<select class="bootstrap-select form-control" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
 							<option value=0>Seleccione una Configuración</option>
 							<?php
 							require_once('../class/class_bd.php');
@@ -143,7 +143,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="codigo_configuracion">Configuración del Sistema</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
+						<select class="bootstrap-select form-control" title="Seleccione una Configuración del Sistema" name='codigo_configuracion' id='codigo_configuracion' required >
 							<option value=0>Seleccione una Configuración</option>
 							<?php
 							require_once('../class/class_bd.php');

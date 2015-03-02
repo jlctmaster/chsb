@@ -13,6 +13,12 @@ function init(){
 
 	$('#btnGuardar').click(ValidarCampos);
 
+	//Búsquedas de las parroquias por autocompletar.
+	$('#codigo_parroquia').autocomplete({
+		source:'../autocomplete/parroquia.php', 
+		minLength:1
+	});
+
 	function ValidarCampos(){
 		var send = true;
 		if($('#rif_negocio').val()==""){

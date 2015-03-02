@@ -97,9 +97,14 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 						require_once('../class/class_bd.php');
 						$pgsql = new Conexion();
 						$sql = "SELECT a.codigo_prestamo,a.fecha_entrada||' - '||a.cedula_persona||' - '||INITCAP(p.primer_nombre||' '||p.primer_apellido) AS prestamo 
-						FROM biblioteca.tprestamo a
+						FROM biblioteca.tprestamo a 
+						INNER JOIN biblioteca.tdetalle_prestamo da ON a.codigo_prestamo = da.codigo_prestamo 
 						INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona
-						WHERE NOT EXISTS(SELECT 1 FROM biblioteca.tentrega e WHERE a.codigo_prestamo = e.codigo_prestamo)";
+						WHERE NOT EXISTS(SELECT 1 FROM biblioteca.tentrega e WHERE a.codigo_prestamo = e.codigo_prestamo) OR 
+						EXISTS(SELECT 1 FROM biblioteca.tentrega e 
+						INNER JOIN biblioteca.tdetalle_entrega de ON e.codigo_entrega = de.codigo_entrega 
+						WHERE e.codigo_prestamo = a.codigo_prestamo AND da.codigo_ejemplar = de.codigo_ejemplar 
+						HAVING SUM(de.cantidad) < da.cantidad)";
 						$query = $pgsql->Ejecutar($sql);
 						while($row=$pgsql->Respuesta($query)){
 							echo "<option value=".$row['codigo_prestamo'].">".$row['prestamo']."</option>";

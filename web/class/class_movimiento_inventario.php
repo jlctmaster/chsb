@@ -262,7 +262,8 @@ class movimiento_inventario {
     }
 
     public function BuscarCantidadDisponible($item,$ubicacion){
-        $sql="SELECT * FROM inventario.vw_inventario WHERE codigo_ubicacion = '$ubicacion' AND codigo_item = '$item'";
+        $sql="SELECT * FROM inventario.vw_inventario 
+        WHERE codigo_ubicacion = '$ubicacion' AND codigo_item = '$item'";
         $query = $this->pgsql->Ejecutar($sql);
         while($Obj=$this->pgsql->Respuesta_assoc($query)){
             $rows[]=array_map("html_entity_decode",$Obj);

@@ -19,7 +19,6 @@ if(isset($_SESSION['user_estado'])){
 		<link rel="StyleSheet" type="text/css" href="../librerias/bootstrap/css/bootstrap.css" media="screen" />
 		<link rel="StyleSheet" type="text/css" href="../librerias/bootstrap/css/bootstrap-combined.min.css" media="screen" />
 		<link rel="StyleSheet" type="text/css" href="../librerias/paginador/css/DT_bootstrap.css" media="screen" />
-		<link rel="stylesheet" type="text/css" href="../librerias/bootstrap/css/bootstrap-select.css">
 		<link rel="stylesheet" type="text/css" href="../librerias/JQueryTE/css/jquery-te-1.4.0.css">
 		<link rel="stylesheet" type="text/css" href="../librerias/noty/buttons.css"/>
 		<link rel="stylesheet" type="text/css" href="../librerias/alert/Alert.css" />
@@ -47,7 +46,6 @@ if(isset($_SESSION['user_estado'])){
     <script type="text/javascript" src="../librerias/alert/Alert.js"></script>   
 		<!-- Load Bootstrap Libreries -->
 		<script type="text/javascript" src="../librerias/bootstrap/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../librerias/bootstrap/js/bootstrap-select.js"></script>
 		<!-- Load Paginator DataTable Libreries -->
 		<script type="text/javascript" src="../librerias/paginador/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" src="../librerias/paginador/js/config_datatable_api.js"></script>

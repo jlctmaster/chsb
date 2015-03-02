@@ -3,7 +3,9 @@
 if(!isset($_GET['Opt'])){ // Ventana principal 
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM seguridad.tsistema";
+	$sql = "SELECT s.*,s.codigo_parroquia||'_'||p.descripcion AS parroquia  
+	FROM seguridad.tsistema s 
+	INNER JOIN general.tparroquia p ON s.codigo_parroquia = p.codigo_parroquia ";
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -45,21 +47,7 @@ if(!isset($_GET['Opt'])){ // Ventana principal
 	<div class="control-group">  
 		<label class="control-label" for="codigo_parroquia">Parroquia</label>  
 		<div class="controls">  
-			<select class="selectpicker" data-live-search="true" title="Seleccione una Parroquia" name='codigo_parroquia' id='codigo_parroquia' required >
-				<option value=0>Seleccione una Parroquia</option>
-				<?php
-					require_once('../class/class_bd.php');
-					$pgsql = new Conexion();
-					$sql = "SELECT * FROM general.tparroquia ORDER BY descripcion ASC";
-					$query = $pgsql->Ejecutar($sql);
-					while($rows=$pgsql->Respuesta($query)){
-						if($row['codigo_parroquia']==$rows['codigo_parroquia'])
-							echo "<option value=".$rows['codigo_parroquia']." selected >".$rows['descripcion']."</option>";
-						else
-							echo "<option value=".$rows['codigo_parroquia'].">".$rows['descripcion']."</option>";
-					}
-				?>
-			</select>
+			<input class="input-xlarge" title="Seleccione una Parroquia" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_parroquia" id="codigo_parroquia" type="text" value="<?=$row['parroquia']?>" required />
 		</div>  
 	</div>
 	<div class="control-group">  

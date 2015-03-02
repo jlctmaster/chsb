@@ -116,24 +116,26 @@ function init(){
 			arregloI = new Array();
 			arregloU = new Array();
 			arregloUH = new Array();
+			console.log(items.length);
 			for(i=0;i<items.length;i++){
-				arregloI.push($('#items_'+i).val());
-				arregloU.push($('#ubicacion_'+i).val());
-				arregloUH.push($('#ubicacion_hasta_'+i).val());
+				var I = $('#items_'+i).val().split('_');
+				var U = $('#ubicacion_'+i).val().split('_');
+				var UH = $('#ubicacion_hasta_'+i).val().split('_');
+				arregloI.push(I[0]);
+				arregloU.push(U[0]);
+				arregloUH.push(UH[0]);
 				var Cant=$('#cantidad_'+i).val();
-				var item = $('#items_'+i).val().split('_');
-				var ubicacion = $('#ubicacion_'+i).val().split('_');
-				var CantDisponible=obtenerCantidadDisponible(item[0],ubicacion[0]);
+				var CantDisponible=obtenerCantidadDisponible(I[0],U[0]);
 				if(Cant<=0){
-					alert('¡La cantidad del item '+item[0]+' debe ser mayor a 0!');
+					alert('¡La cantidad del item '+I[0]+' debe ser mayor a 0!');
 					send = false;	
 				}
 				if(parseInt(CantDisponible) < parseInt(Cant)){
-					alert('¡La cantidad del item '+item[0]+' en la Ubicación '+ubicacion[0]+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
+					alert('¡La cantidad del item '+I[0]+' en la Ubicación '+U[0]+' debe ser menor o igual a la disponible ('+CantDisponible+')!');
 					send = false;
 				}
 			}
-			if(contarRepetidos(arregloI)>0 && contarRepetidos(arregloU)>0 && contarRepetidos(arregloUH)>0){
+			if(combinacionRepetida(arregloI,arregloU,arregloUH)>0){
 				alert('¡La combinación Item + Ubicación Origen + Ubicación Destino no se puede repetir!')
 				send = false
 			}
@@ -200,5 +202,26 @@ function init(){
 	        }
         });
         return existencia;
+	}
+
+	function combinacionRepetida(arregloA,arregloB,arregloC){
+	    var arreglo1 = arregloA;
+	    var arreglo2 = arregloB;
+	    var arreglo3 = arregloC;
+	    var con=0;
+	    for (var m=0; m<arreglo1.length; m++)
+	    {
+	        for (var n=0; n<arreglo1.length; n++)
+	        {
+	            if(n!=m)
+	            {
+	                if(arreglo1[m]==arreglo1[n] && arreglo2[m]==arreglo2[n] && arreglo3[m]==arreglo3[n])
+	                {
+	                	con++;
+	                }
+	            }
+	        }
+	    }
+	    return con;
 	}
 }

@@ -37,8 +37,10 @@ if(isset($_POST['objetivo']))
 if(isset($_POST['historia']))
   $historia=trim($_POST['historia']);
 
-if(isset($_POST['codigo_parroquia']))
-  $codigo_parroquia=trim($_POST['codigo_parroquia']);
+if(isset($_POST['codigo_parroquia'])){
+  $parroquia=explode("_",trim($_POST['codigo_parroquia']));
+  $codigo_parroquia=$parroquia[0];
+}
 
 include_once("../class/class_sistema.php");
 $sistema=new sistema();

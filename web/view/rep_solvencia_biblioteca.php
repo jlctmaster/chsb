@@ -6,27 +6,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Seleccione un Estudiante:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione un estudiante" name='cedula_persona' id='cedula_persona' >
-							<option value=0> Seleccione un Estudiante</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE tp.descripcion LIKE '%ESTUDIANTE%' AND 
-								(NOT EXISTS(SELECT 1 FROM biblioteca.tprestamo pr WHERE p.cedula_persona = pr.cedula_persona) OR 
-								EXISTS(SELECT 1 FROM biblioteca.tprestamo pr INNER JOIN biblioteca.tdetalle_prestamo dp ON dp.codigo_prestamo = pr.codigo_prestamo 
-								WHERE pr.cedula_persona = p.cedula_persona AND EXISTS(SELECT 1 FROM biblioteca.tentrega e 
-								INNER JOIN biblioteca.tdetalle_entrega de ON e.codigo_entrega = de.codigo_entrega 
-								WHERE e.codigo_prestamo = pr.codigo_prestamo AND dp.codigo_ejemplar = de.codigo_ejemplar 
-								HAVING SUM(de.cantidad) = dp.cantidad)))
-								ORDER BY p.cedula_persona DESC";
-								$query = $pgsql->Ejecutar($sql);
-								while($row=$pgsql->Respuesta($query)){
-									echo "<option value=".$row['cedula_persona'].">".$row['nombre']."</option>";
-								}
-							?>
-						</select>
+	                	<input class="input-xlarge" title="Seleccione un estudiante" onKeyUp="this.value=this.value.toUpperCase()" name="cedula_persona" id="cedula_persona" type="text" required />
 					</div>
 				</div>
 				<div class="form-actions">
@@ -39,6 +19,12 @@
 <script type="text/javascript">
 $(document).ready(init);
 function init(){
+	//Búsquedas del estudiante por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/estudiante_solvente.php', 
+		minLength:1
+	});
+
 	$('#btnGuardar').click(function(){
 		var send=true;
 		if($('#cedula_persona').val()==""){

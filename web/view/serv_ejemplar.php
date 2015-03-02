@@ -90,7 +90,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			<div class="control-group">  
 				<label class="control-label" for="codigo_clasificacion">Clasificación</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' required />
+					<select class="bootstrap-select form-control" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' required />
 						<option value=0>Seleccione una Clasificación</option>
 						<?php
 							$pgsql = new Conexion();
@@ -111,18 +111,8 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 			</div>	
 			<div class="control-group">  
 				<label class="control-label" for="codigo_isbn_libro">Libro</label>  
-				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione un Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' required />
-						<option value=0>Seleccione el Libro</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.tlibro ORDER BY codigo_isbn_libro ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_isbn_libro'].">".$row['titulo']."</option>";
-							}
-						?>
-					</select>
+				<div class="controls"> 
+					<input class="input-xlarge" onKeyUp="this.value=this.value.toUpperCase()" title="Seleccione un Libro" name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" required /> 
 				</div>  
 			</div>
 			<div class="control-group">  
@@ -140,7 +130,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	require_once('../class/class_bd.php'); 
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM biblioteca.tejemplar WHERE codigo_ejemplar =".$pgsql->comillas_inteligentes($_GET['codigo_ejemplar']);
+	$sql = "SELECT e.*,e.codigo_isbn_libro||'_'||l.titulo AS libro 
+	FROM biblioteca.tejemplar e 
+	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+	WHERE e.codigo_ejemplar =".$pgsql->comillas_inteligentes($_GET['codigo_ejemplar']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -160,7 +153,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_clasificacion">Clasificación</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' value="<?=$row['codigo_clasificacion']?>" required >
+					<select class="bootstrap-select form-control" title="Seleccione una Clasificación" name='codigo_clasificacion' id='codigo_clasificacion' value="<?=$row['codigo_clasificacion']?>" required >
 						<option value=0>Seleccione una Clasificación</option>
 						<?php
 							$pgsql = new Conexion();
@@ -185,20 +178,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_isbn_libro">Libro</label>  
 				<div class="controls">  
-					<select class="selectpicker" data-live-search="true" title="Seleccione el Libro" name='codigo_isbn_libro' id='codigo_isbn_libro' value="<?=$row['codigo_isbn_libro']?>" required />
-						<option value=0>Seleccione el Libro</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.tlibro ORDER BY titulo ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_isbn_libro']==$row['codigo_isbn_libro'])
-									echo "<option value=".$rows['codigo_isbn_libro']." selected >".$rows['titulo']."</option>";
-								else
-									echo "<option value=".$rows['codigo_isbn_libro'].">".$rows['titulo']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge" onKeyUp="this.value=this.value.toUpperCase()" title="Seleccione un Libro" name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" value="<?=$row['libro']?>" required /> 
 				</div>  
 			</div>
 			<div class="control-group">  

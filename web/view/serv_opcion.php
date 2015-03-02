@@ -83,7 +83,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<div class="control-group">  
 					<label class="control-label" for="accion">Acción:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="accion" id="accion" title="Seleccione una acción" required >
+						<select class="bootstrap-select form-control" name="accion" id="accion" title="Seleccione una acción" required >
 							<option value="0">Sin acción</option>
 							<option value="1">Insertar,Incluir,Registrar,Guardar</option>
 							<option value="2">Modificar,Actualizar,Guardar</option>
@@ -179,7 +179,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="accion">Acción:</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" name="accion" id="accion" title="Seleccione una acción" required >
+						<select class="bootstrap-select form-control" name="accion" id="accion" title="Seleccione una acción" required >
 							<option <?php  if($row['accion']==0) echo "selected"; ?> value="0">Sin acción</option>
 							<option <?php  if($row['accion']==1) echo "selected"; ?> value="1">Insertar,Incluir,Registrar,Guardar</option>
 							<option <?php  if($row['accion']==2) echo "selected"; ?> value="2">Modificar,Actualizar,Guardar</option>

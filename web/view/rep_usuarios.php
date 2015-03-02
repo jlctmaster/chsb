@@ -6,7 +6,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Rol Desde:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione un Rol" name='perfil_desde' id='perfil_desde' >
+		                <select class="bootstrap-select form-control" title="Seleccione un Rol" name='perfil_desde' id='perfil_desde' >
 							<option value=0> Seleccione un Rol</option>
 							<?php
 								$pgsql = new Conexion();
@@ -24,7 +24,7 @@
 				<div class="control-group">  
 	                <label class="control-label">Rol Hasta:</label>
 	                <div class="controls">
-		                <select class="selectpicker" data-live-search="true" title="Seleccione un Rol" name='perfil_hasta' id='perfil_hasta' >
+		                <select class="bootstrap-select form-control" title="Seleccione un Rol" name='perfil_hasta' id='perfil_hasta' >
 							<option value=0> Seleccione un Rol</option>
 							<?php
 								$pgsql = new Conexion();

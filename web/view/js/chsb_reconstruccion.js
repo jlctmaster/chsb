@@ -2,17 +2,33 @@ $(document).ready(init);
 function init(){
 	//	variable global para determinar si ha ocurrido un error o no
 	var ocurrioerror=false;
-	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
-	$('#codigo_bien').change(function(){
-		var Datos = {"lOpt":"BuscarDisponibilidad","codigo_bien":$('#codigo_bien').val()};
-		obtenerCantidadDisponible(Datos);
-	})
+	//Búsquedas del representante por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/persona.php', 
+		minLength:1
+	});
+	//Búsquedas de la ubicacion por autocompletar.
+	$('#codigo_ubicacion').autocomplete({
+		source:'../autocomplete/ubicacion_nolibros_nodefectuosos.php', 
+		minLength:1
+	});
+	//Búsquedas de la ubicacion por autocompletar.
+	$('#codigo_bien').autocomplete({
+		source:'../autocomplete/item_final.php', 
+		minLength:1,
+		select: function (event, ui){
+			var item = ui.item.value.split('_');
+			var Datos = {"lOpt":"BuscarDisponibilidad","codigo_bien":item[0]};
+			obtenerCantidadDisponible(Datos);
+		}
+	});
 	//	Busca la cantidad disponible del item seleccionado en la ubicación seleccionada.
 	$('#cantidad').change(function(){
-		if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val()) && $('#codigo_bien').val()!="0"){
+		var item = ui.item.value.split('_');
+		if(parseInt($('#cantidad').val()) > parseInt($('#cantidad_max').val()) && item[0]!="0"){
 			alert("¡La cantidad a recuperar debe ser menor o igual a "+$('#cantidad_max').val()+"!");
-		}else if($('#codigo_bien').val()!="0"){
-			var Datos = {"lOpt":"BuscarDisponibilidadPorCant","codigo_bien":$('#codigo_bien').val(),"cantidad":$('#cantidad').val()};
+		}else if(item[0]!="0"){
+			var Datos = {"lOpt":"BuscarDisponibilidadPorCant","codigo_bien":item[0],"cantidad":$('#cantidad').val()};
 			obtenerCantidadDisponible(Datos);
 		}
 	})

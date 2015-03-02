@@ -1,6 +1,12 @@
 $(document).ready(init);
 function init(){
 
+	//Búsquedas de las personas por autocompletar.
+	$('#cedula_persona').autocomplete({
+		source:'../autocomplete/usuario.php', 
+		minLength:1
+	});
+
 	$('#btnGuardar').click(ValidarCampos);
 
 	function ValidarCampos(){

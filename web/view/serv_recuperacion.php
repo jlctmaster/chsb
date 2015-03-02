@@ -180,9 +180,13 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha,'DD/MM/YYYY') as fecha 
-	FROM bienes_nacionales.trecuperacion 
-	WHERE esrecuperacion='Y' AND codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_recuperacion']);
+	$sql = "SELECT r.*,TO_CHAR(r.fecha,'DD/MM/YYYY') as fecha,
+	r.cedula_persona||'_'||p.primer_nombre||' '||p.primer_apellido AS responsable,
+	r.codigo_ubicacion||'_'||u.descripcion AS ubicacion 
+	FROM bienes_nacionales.trecuperacion r 
+	INNER JOIN general.tpersona p ON r.cedula_persona = p.cedula_persona 
+	INNER JOIN inventario.tubicacion u ON r.codigo_ubicacion = u.codigo_ubicacion 
+	WHERE r.esrecuperacion='Y' AND r.codigo_recuperacion=".$pgsql->comillas_inteligentes($_GET['codigo_recuperacion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 	?>

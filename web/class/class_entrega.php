@@ -193,7 +193,9 @@ class entrega {
    	public function buscarDatosPrestamo($prestamo){
    		$sql="SELECT p.cedula_responsable,p.cedula_persona,p.cedula_persona||' '||per.primer_nombre||' '||per.primer_apellido AS estudiante,
    		TO_CHAR(p.fecha_salida,'DD/MM/YYYY') AS fecha_salida,TO_CHAR(p.fecha_entrada,'DD/MM/YYYY') AS fecha_entrada,dp.codigo_ejemplar,
-   		e.codigo_cra||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,dp.cantidad
+   		e.codigo_cra||' '||l.titulo AS name_ejemplar,dp.codigo_ubicacion,
+   		dp.cantidad-COALESCE((SELECT SUM(de.cantidad) FROM biblioteca.tentrega e INNER JOIN biblioteca.tdetalle_entrega de ON e.codigo_entrega = de.codigo_entrega 
+		WHERE e.codigo_prestamo = p.codigo_prestamo AND dp.codigo_ejemplar = de.codigo_ejemplar),0) AS cantidad
    		FROM biblioteca.tprestamo p 
    		INNER JOIN biblioteca.tdetalle_prestamo dp ON dp.codigo_prestamo = p.codigo_prestamo 
    		INNER JOIN general.tpersona per ON p.cedula_persona = per.cedula_persona 
