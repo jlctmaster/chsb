@@ -18,6 +18,22 @@ function init(){
 				document.getElementById('Anular').innerHTML="";
 			})
 	}
+
+		//Búsquedas del editorial por autocompletar.
+	$('#codigo_editorial').autocomplete({
+		source:'../autocomplete/editorial.php', 
+		minLength:1
+	});
+			//Búsquedas del autor por autocompletar.
+	$('#codigo_autor').autocomplete({
+		source:'../autocomplete/autor.php', 
+		minLength:1
+	});
+			//Búsquedas del editorial por autocompletar.
+	$('#codigo_tema').autocomplete({
+		source:'../autocomplete/tema.php', 
+		minLength:1
+	});
 	$('#btnDesactivar').click(function(){
 		noty({
 	        text: stringUnicode("¿Está seguro que quiere desactivar este registro?"),

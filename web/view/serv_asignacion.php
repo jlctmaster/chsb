@@ -207,8 +207,10 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT *,TO_CHAR(fecha_asignacion,'DD/MM/YYYY') as fecha_asignacion 
-	FROM bienes_nacionales.tasignacion 
+	$sql = "SELECT *,TO_CHAR(fecha_asignacion,'DD/MM/YYYY') as fecha_asignacion,
+	p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable 
+	FROM bienes_nacionales.tasignacion a
+	INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona  
 	WHERE codigo_asignacion=".$pgsql->comillas_inteligentes($_GET['codigo_asignacion']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
@@ -233,23 +235,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="control-group">  
 					<label class="control-label" for="cedula_persona">Responsable de la Asignación</label>  
 					<div class="controls">  
-						<select class="selectpicker" data-live-search="true" title="Seleccione un responsable" name='cedula_persona' id='cedula_persona' required >
-							<option value=0>Seleccione un Responsable</option>
-							<?php
-								$pgsql = new Conexion();
-								$sql = "SELECT p.cedula_persona,INITCAP(p.primer_nombre||' '||p.primer_apellido) nombre 
-								FROM general.tpersona p 
-								INNER JOIN general.ttipo_persona tp ON p.codigo_tipopersona = tp.codigo_tipopersona 
-								WHERE LOWER(descripcion) NOT LIKE '%representante%' AND LOWER(descripcion) NOT LIKE '%estudiante%'";
-								$query = $pgsql->Ejecutar($sql);
-								while($rows=$pgsql->Respuesta($query)){
-									if($rows['cedula_persona']==$row['cedula_persona'])
-										echo "<option value=".$rows['cedula_persona']." selected>".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-									else
-										echo "<option value=".$rows['cedula_persona'].">".$rows['cedula_persona']." ".$rows['nombre']."</option>";
-								}
-							?>
-						</select>
+						<input class="input-xlarge" title="Seleccione un responsable" onKeyUp="this.value=this.value.toUpperCase()" name="cedula_persona" id="cedula_persona" type="text" value="<?=$row['responsable']?>"  required />
 					</div>  
 				</div>
 				<div class="control-group">  

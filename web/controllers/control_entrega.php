@@ -83,7 +83,6 @@ if($lOpt=='Registrar'){
     header("Location: ../view/menu_principal.php?entrega&Opt=2");
   }else{
     $entrega->Transaccion('cancelado');
-    echo $entrega->error()." => b:".$mov_inventario->error(); die();
     $_SESSION['datos']['mensaje']="¡Ocurrió un error al registrar la Entrega!";
     header("Location: ../view/menu_principal.php?entrega&Opt=2");
   }

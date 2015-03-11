@@ -1464,26 +1464,22 @@ class proceso_inscripcion {
 					$ok=false;
 			    }
 			}else{
-				if($representante->estatus()==1)
-					$ok=false;
-				else{
-					if($representante->Activar($user)){
-						$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
-						modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
-					    if($this->pgsql->Ejecutar($sql)!=null)
-							if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user)){
-								$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
-								$ok=true;
-							}
-							else{
-						    	$this->error(pg_last_error());
-								$ok=false;
-						    }
+				if($representante->Actualizar($user,$this->cedula_representante())){
+					$sql="UPDATE educacion.tproceso_inscripcion SET cedula_representante='$this->cedula_representante',codigo_parentesco='$this->codigo_parentesco',
+					modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_proceso_inscripcion='$this->codigo_proceso_inscripcion' AND cedula_persona='$this->cedula_persona'";
+				    if($this->pgsql->Ejecutar($sql)!=null)
+						if($this->GenerarCargaFamiliar($this->cedula_persona,$this->cedula_representante,$this->codigo_parentesco,'Y',$user)){
+							$this->codigo_proceso_inscripcion($this->ObtenerCodigo($this->cedula_persona));
+							$ok=true;
+						}
 						else{
 					    	$this->error(pg_last_error());
 							$ok=false;
 					    }
-					}
+					else{
+				    	$this->error(pg_last_error());
+						$ok=false;
+				    }
 				}
 			}
 			if($ok==true){

@@ -516,7 +516,7 @@ function init(){
 				if($.trim($('#estatus').text())=="Activo"){
 					send = true;
 				}else{
-					alert("¡El registro no se puede modificar ya que esta desactivado!");
+					alert("¡El registro no se puede modificar ya que está desactivado!");
 					send = false;
 				}
 			}

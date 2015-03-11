@@ -143,7 +143,7 @@ function init(){
 			var E,U,Cant,CantDisponible;
 			for(i=0;i<ejemplar.length;i++){
 				E = $('#ejemplar_'+i).val().split('_');
-				U = $('#ejemplar_'+i).val().split('_');
+				U = $('#ubicacion_'+i).val().split('_');
 				arregloI.push(E[0]);
 				arregloU.push(U[0]);
 				Cant=$('#cantidad_'+i).val();
@@ -216,8 +216,8 @@ function init(){
 	        type: 'POST',
 	        data: value,
 	        dataType: "json",
+	        async: false,
 	        success: function(resp){
-	        	console.log(resp);
 	        	if(resp[0].existencia!=undefined)
 	        		existencia = resp[0].existencia;
 	        	else

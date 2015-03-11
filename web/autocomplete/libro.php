@@ -1,7 +1,7 @@
 <?php
 require_once('../class/class_bd.php');
 $conexion = new Conexion();
-$sql = "SELECT codigo_isbn_libro||' - '||titulo AS nombre_item 
+$sql = "SELECT codigo_isbn_libro||'_'||titulo AS nombre_item 
 		FROM  biblioteca.tlibro 
 		WHERE estatus = '1' AND codigo_isbn_libro||' - '||titulo LIKE '%".$_REQUEST['term']."%'";
 $query = $conexion->Ejecutar($sql);

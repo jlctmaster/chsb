@@ -272,7 +272,7 @@ $lobjPdf->SetWidths(array(50,60,60,20));
 $pgsql=new Conexion();
 $sql="SELECT a.codigo_asignacion_libro,TO_CHAR(a.fecha_asignacion,'DD/MM/YYYY') AS fecha_asignacion,
 p.cedula_persona||' - '||p.primer_nombre||' '||p.primer_apellido AS responsable,p.telefono_movil,
-u.codigo_ubicacion||' '||u.descripcion AS ubicacion,da.codigo_ubicacion_hasta||' '||uh.descripcion AS ubicacion_hasta,
+u.descripcion AS ubicacion,uh.descripcion AS ubicacion_hasta,
 e.codigo_cra||' - '||e.numero_edicion||' - '||l.titulo AS item, da.cantidad
 FROM biblioteca.tasignacion_libro a 
 INNER JOIN general.tpersona p ON a.cedula_persona = p.cedula_persona 

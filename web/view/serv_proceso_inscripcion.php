@@ -1291,7 +1291,7 @@
 							            </div>
 							            <div class="span6">
 							            	<label class="control-label">Docente Responsable</label>
-							            	<input class="span12" type="text" name="cedula_responsable" id="cedula_responsable" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$rows['responsable']?>" /> 
+							            	<input class="span12" type="text" name="cedula_docente" id="cedula_docente" onKeyUp="this.value=this.value.toUpperCase()" value="<?=$rows['profesor']?>" /> 
 							            </div>
 							        </div>
 							    </div>

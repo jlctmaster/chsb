@@ -14,7 +14,7 @@ class clsFpdf extends FPDF {
     $this->Cell(0,6,'REPORTE DE LOS ESTUDIANTE POR SECCIÓN',0,1,"C");
     $this->Ln(8);
     $this->SetFillColor(0,0,140); 
-    $avnzar=50;
+    $avnzar=40;
     $altura=7;
     $anchura=10;
     $color_fondo=false;
@@ -35,7 +35,8 @@ class clsFpdf extends FPDF {
     $this->SetFont('Arial','B',10);
     $this->Cell($avnzar);
     $this->Cell($anchura*2,$altura,'SECCIÓN',1,0,'C',$color_fondo);
-    $this->Cell($anchura*8+4,$altura,'ESTUDIANTE',1,0,'C',$color_fondo);
+    $this->Cell($anchura*2+5,$altura,'CÉDULA',1,0,'C',$color_fondo);
+    $this->Cell($anchura*8,$altura,'ESTUDIANTE',1,0,'C',$color_fondo);
     $this->Cell($anchura*2,$altura,'EDAD',1,0,'C',$color_fondo);
     $this->Cell($anchura*2,$altura,'TALLA',1,0,'C',$color_fondo); 
     $this->Cell($anchura*2,$altura,'PESO',1,0,'C',$color_fondo); 
@@ -172,23 +173,24 @@ setlocale(LC_ALL,"es_VE.UTF8");
 $lobjPdf=new clsFpdf();
 $lobjPdf->AddPage("L");
 $lobjPdf->AliasNbPages();
-$avnzar=50;
+$avnzar=40;
 $altura=7;
 $anchura=10;
 $color_fondo=false;
-$lobjPdf->SetWidths(array(20,84,20,20,20,20));
+$lobjPdf->SetWidths(array(20,25,80,20,20,20,20));
 $pgsql=new Conexion();
-$sql="SELECT p.seccion,s.nombre_seccion,p.peso, p.talla, p.indice, date_part('year',age( est.fecha_nacimiento )) AS edad,
-      p.cedula_persona||' '||est.primer_nombre||' '||est.segundo_nombre||' '||est.primer_apellido||' '||est.segundo_apellido AS estudiante
+$sql="SELECT p.seccion,s.nombre_seccion,p.peso, p.talla, p.indice, date_part('year',age( est.fecha_nacimiento )) AS edad,est.cedula_persona AS cedula,
+      est.primer_nombre||' '||est.segundo_nombre||' '||est.primer_apellido||' '||est.segundo_apellido AS estudiante
       FROM educacion.tproceso_inscripcion p
       INNER JOIN general.tpersona est ON p.cedula_persona = est.cedula_persona
-      INNER JOIN educacion.tseccion s ON s.seccion = p.seccion
-      WHERE p.seccion BETWEEN ".$pgsql->comillas_inteligentes($_POST['seccion_desde'])." AND ".$pgsql->comillas_inteligentes($_POST['seccion_hasta'])."";
+      INNER JOIN educacion.tseccion s ON s.seccion = p.seccion 
+      WHERE p.seccion BETWEEN ".$pgsql->comillas_inteligentes($_POST['seccion_desde'])." AND ".$pgsql->comillas_inteligentes($_POST['seccion_hasta'])." ORDER BY s.seccion";
 $data=$pgsql->Ejecutar($sql);
 if($pgsql->Total_Filas($data)!=0){
   $lobjPdf->SetFont('Arial','',9);
  while($estudiante=$pgsql->Respuesta($data)){
     $lobjPdf->Row(array($estudiante['nombre_seccion'],
+    $estudiante['cedula'],
     $estudiante['estudiante'],
     $estudiante['edad'],
     $estudiante['talla'],

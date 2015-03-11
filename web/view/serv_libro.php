@@ -91,52 +91,22 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 					<input class="input-xlarge" title="Ingrese el titulo del Libro" onKeyUp="this.value=this.value.toUpperCase()" name="titulo" id="titulo" type="text" required />
 				</div>
 			</div>
-			<div class="control-group">  
+			<div class="control-group">   
 				<label class="control-label" for="codigo_editorial">Editorial</label>  
-				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' required >
-						<option value=0>Seleccione un Editorial</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.teditorial ORDER BY nombre ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_editorial'].">".$row['nombre']."</option>";
-							}
-						?>
-					</select>
+				<div class="controls">    
+					<input class="input-xlarge"title="Seleccione un Editorial" onKeyUp="this.value=this.value.toUpperCase()" name='codigo_editorial' id='codigo_editorial' type="text" required >
 				</div>  
 			</div>
 			<div class="control-group">  
 				<label class="control-label" for="codigo_autor">Autor</label>  
 				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' required >
-						<option value=0>Seleccione un Autor</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.tautor ORDER BY nombre ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_autor'].">".$row['nombre']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge"title="Seleccione un Autor" onKeyUp="this.value=this.value.toUpperCase()" name='codigo_autor' id='codigo_autor' type="text" required >
 				</div>  
 			</div>
 			<div class="control-group">  
 				<label class="control-label" for="codigo_tema">Tema</label>  
 				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' required >
-						<option value=0>Seleccione un Tema</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.ttema ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($row=$pgsql->Respuesta($query)){
-								echo "<option value=".$row['codigo_tema'].">".$row['descripcion']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge"title="Seleccione un Tema" onKeyUp="this.value=this.value.toUpperCase()" name='codigo_tema' id='codigo_tema' type="text" required >
 				</div>  
 			</div>   
 			<div class="control-group">  
@@ -165,8 +135,15 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 } // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
-	$sql = "SELECT * FROM biblioteca.tlibro 
-	WHERE codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);	
+	$sql = "SELECT *,
+	e.codigo_editorial||' '||e.nombre AS editorial,
+	a.codigo_autor||' '||a.nombre AS autor,	
+	t.codigo_tema||' '||t.descripcion AS tema
+	FROM biblioteca.tlibro l
+	INNER JOIN biblioteca.teditorial e ON l.codigo_editorial=e.codigo_editorial
+	INNER JOIN biblioteca.tautor a ON l.codigo_autor=a.codigo_autor
+	INNER JOIN biblioteca.ttema t ON l.codigo_tema=t.codigo_tema
+	WHERE l.codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);	
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -191,58 +168,19 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 			<div class="control-group">  
 				<label class="control-label" for="codigo_editorial">Editorial</label>  
 				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Editorial" name='codigo_editorial' id='codigo_editorial' value="<?=$row['codigo_editorial']?>" required >
-						<option value=0>Seleccione un Editorial</option>
-						<?php
-							$pgsql = new Conexion();
-									$sql = "SELECT * FROM biblioteca.teditorial ORDER BY nombre ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_editorial']==$row['codigo_editorial'])
-									echo "<option value=".$rows['codigo_editorial']." selected >".$rows['nombre']."</option>";
-								else
-									echo "<option value=".$rows['codigo_editorial'].">".$rows['nombre']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge" title="Seleccione un Editorial" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_editorial" id="codigo_editorial" type="text" value="<?=$row['editorial']?>"  required />
 				</div>  
 			</div>
 			<div class="control-group">  
 				<label class="control-label" for="codigo_autor">Autor</label>  
 				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Autor" name='codigo_autor' id='codigo_autor' value="<?=$row['codigo_autor']?>" required >
-						<option value=0>Seleccione un Autor</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.tautor ORDER BY nombre ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_autor']==$row['codigo_autor'])
-									echo "<option value=".$rows['codigo_autor']." selected >".$rows['nombre']."</option>";
-								else
-									echo "<option value=".$rows['codigo_autor'].">".$rows['nombre']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge" title="Seleccione un Autor" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_autor" id="codigo_autor" type="text" value="<?=$row['autor']?>"  required />
 				</div>  
 			</div> 
 			<div class="control-group">  
 				<label class="control-label" for="codigo_tema">Tema</label>  
 				<div class="controls">  
-					<select class="bootstrap-select form-control" title="Seleccione un Tema" name='codigo_tema' id='codigo_tema' value="<?=$row['codigo_tema']?>" required >
-						<option value=0>Seleccione un Tema</option>
-						<?php
-							$pgsql = new Conexion();
-							$sql = "SELECT * FROM biblioteca.ttema ORDER BY descripcion ASC";
-							$query = $pgsql->Ejecutar($sql);
-							while($rows=$pgsql->Respuesta($query)){
-								if($rows['codigo_tema']==$row['codigo_tema'])
-									echo "<option value=".$rows['codigo_tema']." selected >".$rows['descripcion']."</option>";
-								else
-									echo "<option value=".$rows['codigo_tema'].">".$rows['descripcion']."</option>";
-							}
-						?>
-					</select>
+					<input class="input-xlarge" title="Seleccione un Tema" onKeyUp="this.value=this.value.toUpperCase()" name="codigo_tema" id="codigo_tema" type="text" value="<?=$row['tema']?>"  required />
 				</div>  
 			</div>     
 			<div class="control-group">  
@@ -289,13 +227,15 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
-	$sql = "SELECT l.codigo_isbn_libro, l.titulo, l.codigo_autor, a.nombre AS autor, l.codigo_editorial, e.nombre, l.codigo_tema, t.descripcion, l.numero_paginas, 
-			TO_CHAR (l.fecha_edicion, 'DD/MM/YYYY') AS fecha
-			FROM biblioteca.tlibro AS l
-			INNER JOIN biblioteca.tautor AS a ON l.codigo_autor = a.codigo_autor
-			INNER JOIN biblioteca.teditorial AS e ON l.codigo_editorial = e.codigo_editorial
-			INNER JOIN biblioteca.ttema AS t ON l.codigo_tema = t.codigo_tema
-			WHERE codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);
+	$sql = "SELECT *,
+	e.codigo_editorial||'- '||e.nombre AS editorial,
+	a.codigo_autor||'- '||a.nombre AS autor,	
+	t.codigo_tema||'- '||t.descripcion AS tema
+	FROM biblioteca.tlibro l
+	INNER JOIN biblioteca.teditorial e ON l.codigo_editorial=e.codigo_editorial
+	INNER JOIN biblioteca.tautor a ON l.codigo_autor=a.codigo_autor
+	INNER JOIN biblioteca.ttema t ON l.codigo_tema=t.codigo_tema
+	WHERE l.codigo_isbn_libro =".$pgsql->comillas_inteligentes($_GET['codigo_isbn_libro']);
 	$query = $pgsql->Ejecutar($sql);
 	$row=$pgsql->Respuesta($query);
 ?>
@@ -326,7 +266,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>Editorial:</label>
 					</td>
 					<td>
-						<label><?=$row['nombre']?></label>
+						<label><?=$row['editorial']?></label>
 					</td>
 				</tr>
 				<tr>
@@ -342,7 +282,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>Tema:</label>
 					</td>
 					<td>
-						<label><?=$row['descripcion']?></label>
+						<label><?=$row['tema']?></label>
 					</td>
 				</tr>
 				<tr>
@@ -358,7 +298,7 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						<label>Fecha de Edición:</label>
 					</td>
 					<td>
-						<label><?=$row['fecha']?></label>
+						<label><?=$row['fecha_edicion']?></label>
 					</td>
 				</tr>
 

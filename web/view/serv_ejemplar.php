@@ -214,7 +214,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 } // Fin Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
-	$sql = "SELECT *, c.descripcion as clasificacion,L.codigo_isbn_libro||' -'||l.titulo as libro
+	$sql = "SELECT *, c.descripcion as clasificacion,l.codigo_isbn_libro||' -'||l.titulo as libro
 	FROM biblioteca.tejemplar e
 	INNER JOIN biblioteca.tclasificacion c ON e.codigo_clasificacion = c.codigo_clasificacion
 	INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro  

@@ -254,7 +254,7 @@ CREATE TABLE general.tpersona
 	telefono_local varchar(10),
 	telefono_movil varchar(10),
   	profesion varchar(60),
-  	grado_instruccion varchar(80),
+  	grado_instruccion varchar(30),
   	maxhoras numeric not null default 0,
 	codigo_tipopersona numeric not null,
 	estatus char(1) not null default '1',
