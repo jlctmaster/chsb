@@ -88,13 +88,7 @@ else if($_GET['Opt']=="2"){
 					<div class="controls">  
 						<input class="input-xlarge" title="Ingrese el nombre de la materia" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_materia" id="nombre_materia" type="text" required />
 					</div>  
-				</div>  
-				<div class="control-group">  
-					<label class="control-label" for="unidad_credito">Unidad de Crédito:</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la unidad de crédito" onKeyUp="this.value=this.value.toUpperCase()" name="unidad_credito" id="unidad_credito" type="text" required />
-					</div>  
-				</div>    
+				</div>   
 				<div class="control-group">  
 					<label class="control-label" for="tipo_materia">Tipo materia:</label>  
 					<div class="controls">  
@@ -142,13 +136,7 @@ else if($_GET['Opt']=="3"){
 					<div class="controls">   
 						<input class="input-xlarge" title="Ingrese el nombre de la materia del materia" onKeyUp="this.value=this.value.toUpperCase()" name="nombre_materia" id="nombre_materia" type="text" value="<?=$row['nombre_materia']?>" required />
 					</div>  
-				</div>   
-				<div class="control-group">  
-					<label class="control-label" for="unidad_credito">Unidad de Crédito:</label>  
-					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la unidad de crédito" onKeyUp="this.value=this.value.toUpperCase()" name="unidad_credito" id="unidad_credito" type="text" value="<?=$row['unidad_credito']?>" required />
-					</div>  
-				</div>   
+				</div>
 				<div class="control-group">  
 					<label class="control-label" for="tipo_materia">Tipo Materia:</label>  
 					<div class="controls">  
@@ -221,14 +209,6 @@ else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 						</td>
 						<td>
 							<label><?=$row['nombre_materia']?></label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label>Unidad Crédito:</label>
-						</td>
-						<td>
-							<label><?=$row['unidad_credito']?></label>
 						</td>
 					</tr>
 					<tr>

@@ -136,9 +136,9 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 	$pgsql=new Conexion();
 	$sql = "SELECT *,
-	e.codigo_editorial||' '||e.nombre AS editorial,
-	a.codigo_autor||' '||a.nombre AS autor,	
-	t.codigo_tema||' '||t.descripcion AS tema
+	e.codigo_editorial||'_'||e.nombre AS editorial,
+	a.codigo_autor||'_'||a.nombre AS autor,	
+	t.codigo_tema||'_'||t.descripcion AS tema
 	FROM biblioteca.tlibro l
 	INNER JOIN biblioteca.teditorial e ON l.codigo_editorial=e.codigo_editorial
 	INNER JOIN biblioteca.tautor a ON l.codigo_autor=a.codigo_autor
@@ -228,9 +228,9 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 else if($_GET['Opt']=="4"){ // Ventana de Impresiones
 	$pgsql=new Conexion();
 	$sql = "SELECT *,
-	e.codigo_editorial||'- '||e.nombre AS editorial,
-	a.codigo_autor||'- '||a.nombre AS autor,	
-	t.codigo_tema||'- '||t.descripcion AS tema
+	e.codigo_editorial||'_'||e.nombre AS editorial,
+	a.codigo_autor||'_'||a.nombre AS autor,	
+	t.codigo_tema||'_'||t.descripcion AS tema
 	FROM biblioteca.tlibro l
 	INNER JOIN biblioteca.teditorial e ON l.codigo_editorial=e.codigo_editorial
 	INNER JOIN biblioteca.tautor a ON l.codigo_autor=a.codigo_autor

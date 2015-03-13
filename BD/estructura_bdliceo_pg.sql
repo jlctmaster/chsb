@@ -598,7 +598,6 @@ EXECUTE PROCEDURE auditoria_general();
 CREATE TABLE educacion.tmateria (
 	codigo_materia char(7) not null,
 	nombre_materia varchar(200) not null,
-	unidad_credito numeric not null,
 	tipo_materia char(1) not null default '0',
 	estatus char(1) not null default '1',
 	creado_por char(10) not null,

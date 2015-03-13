@@ -1,9 +1,9 @@
 <?php
 require_once('../class/class_bd.php');
 $conexion = new Conexion();
-$sql = "SELECT codigo_autor||' - '||nombre AS autor 
+$sql = "SELECT codigo_autor||'_'||nombre AS autor 
 		FROM  biblioteca.tautor 
-		WHERE estatus = '1' AND codigo_autor||' - '||nombre LIKE '%".$_REQUEST['term']."%'";
+		WHERE estatus = '1' AND codigo_autor||'_'||nombre LIKE '%".$_REQUEST['term']."%'";
 $query = $conexion->Ejecutar($sql);
 while($Obj=$conexion->Respuesta($query)){
 	$rows[]=array(

@@ -3,7 +3,6 @@ require_once("class_bd.php");
 class materia {
 	private $codigo_materia; 
 	private $nombre_materia;
-	private $unidad_credito;
 	private $tipo_materia;
 	private $estatus; 
 	private $pgsql; 
@@ -11,7 +10,6 @@ class materia {
 	public function __construct(){
 		$this->codigo_materia=null;
 		$this->nombre_materia=null;
-		$this->unidad_credito=null;
 		$this->tipo_materia=null;
 		$this->pgsql=new Conexion();
 	}
@@ -42,17 +40,7 @@ class materia {
 	 	}
     }
 
-        public function unidad_credito(){
-    	$Num_Parametro=func_num_args();
-		if($Num_Parametro==0) return $this->unidad_credito;
-     
-		if($Num_Parametro>0){
-	   		$this->unidad_credito=func_get_arg(0);
-	 	}
-    }
-
-        
-        public function tipo_materia(){
+    public function tipo_materia(){
     	$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->tipo_materia;
      
@@ -61,7 +49,6 @@ class materia {
 	 	}
     }
 
-  
     public function estatus(){
 		$Num_Parametro=func_num_args();
 		if($Num_Parametro==0) return $this->estatus;
@@ -72,8 +59,8 @@ class materia {
     }
    
    	public function Registrar($user){
-	    $sql="INSERT INTO educacion.tmateria (codigo_materia,nombre_materia,unidad_credito,tipo_materia,creado_por) VALUES 
-	    ('$this->codigo_materia','$this->nombre_materia','$this->unidad_credito','$this->tipo_materia','$user');";
+	    $sql="INSERT INTO educacion.tmateria (codigo_materia,nombre_materia,tipo_materia,creado_por) VALUES 
+	    ('$this->codigo_materia','$this->nombre_materia','$this->tipo_materia','$user');";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;
 		else
@@ -104,7 +91,7 @@ class materia {
 
     public function Actualizar($user,$oldmateria){
 	    $sql="UPDATE educacion.tmateria SET codigo_materia='$this->codigo_materia',nombre_materia='$this->nombre_materia',
-	    unidad_credito='$this->unidad_credito',tipo_materia='$this->tipo_materia',
+	    tipo_materia='$this->tipo_materia',
 	    modificado_por='$user',fecha_modificacion=NOW() WHERE codigo_materia='$oldmateria'";
 	    if($this->pgsql->Ejecutar($sql)!=null)
 			return true;

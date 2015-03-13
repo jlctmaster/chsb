@@ -14,7 +14,7 @@ class clsFpdf extends FPDF {
 	$this->Cell(0,6,'LISTADO DE LAS MATERIAS',0,1,"C");
 	$this->Ln(8);
 	$this->SetFillColor(0,0,140); 
-	$avnzar=65;
+	$avnzar=70;
 	$altura=7;
 	$anchura=10;
 	$color_fondo=false;
@@ -23,7 +23,6 @@ class clsFpdf extends FPDF {
 	$this->Cell($avnzar);
 	$this->Cell($anchura*2,$altura,'CÓDIGO',1,0,'C',$color_fondo); 
 	$this->Cell($anchura*5,$altura,'MATERIA',1,0,'C',$color_fondo);
-	$this->Cell($anchura*2+6,$altura,'U. CRÉDITO',1,0,'C',$color_fondo);
 	$this->Cell($anchura*3,$altura,'TIPO MATERIA',1,0,'C',$color_fondo);
 	$this->Cell($anchura*2+6,$altura,'ESTATUS',1,1,'C',$color_fondo); 
 	$this->Cell($avnzar); 
@@ -178,7 +177,7 @@ function NbLines($w,$txt)
 
 	$lobjPdf->SetFont('Arial','',12);
 	//Table with 20 rows and 5 columns
-   $lobjPdf->SetWidths(array(20,50,26,30,26));
+   $lobjPdf->SetWidths(array(20,50,30,26));
    $pgsql=new Conexion();
 	 $sql="SELECT *, 
 (CASE estatus WHEN '1' THEN 'ACTIVO' ELSE 'DESACTIVADO' END) AS estatus,
@@ -189,7 +188,7 @@ FROM educacion.tmateria ";
   $data=$pgsql->Ejecutar($sql);
     if($pgsql->Total_Filas($data)!=0){
          $lobjPdf->SetFillColor(0,0,140); 
-         $avnzar=65;
+         $avnzar=70;
          $altura=7;
          $anchura=10;
          $color_fondo=false;
@@ -203,7 +202,6 @@ FROM educacion.tmateria ";
 		$lobjPdf->Row(array(
 		ucwords($tperfil['codigo_materia']),
 		ucwords($tperfil['nombre_materia']),
-		ucwords($tperfil['unidad_credito']),
 		ucwords($tperfil['tipo_materia']),
 		ucwords($tperfil['estatus'])));
 		$lobjPdf->Cell($avnzar);         

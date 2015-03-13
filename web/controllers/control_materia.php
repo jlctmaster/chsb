@@ -19,9 +19,6 @@ if(isset($_POST['codigo_materia']))
 if(isset($_POST['nombre_materia']))
   $nombre_materia=trim($_POST['nombre_materia']);
 
-if(isset($_POST['unidad_credito']))
-  $unidad_credito=trim($_POST['unidad_credito']);
-
 if(isset($_POST['tipo_materia']))
   $tipo_materia=trim($_POST['tipo_materia']);
 
@@ -30,7 +27,6 @@ $materia=new materia();
 if($lOpt=='Registrar'){
   $materia->codigo_materia($codigo_materia);
   $materia->nombre_materia($nombre_materia);
-  $materia->unidad_credito($unidad_credito);
   $materia->tipo_materia($tipo_materia);
   if(!$materia->Comprobar($comprobar)){
     if($materia->Registrar($_SESSION['user_name']))
@@ -57,7 +53,6 @@ if($lOpt=='Registrar'){
 if($lOpt=='Modificar'){
   $materia->codigo_materia($codigo_materia);
   $materia->nombre_materia($nombre_materia); 
-  $materia->unidad_credito($unidad_credito);
   $materia->tipo_materia($tipo_materia);
   if($oldmateria==$codigo_materia)
     $comprobar=false;

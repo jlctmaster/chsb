@@ -25,9 +25,9 @@
 						 ->setCategory("Reporte excel");*/
 
 	$tituloReporte = "Listado de las Materias";
-	$titulosColumnas = array('Código', 'Materia', 'Und. Crédito', 'Tipo Materia', 'Estatus');
+	$titulosColumnas = array('Código', 'Materia', 'Tipo Materia', 'Estatus');
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:E1')->mergeCells('A2:E2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:D1')->mergeCells('A2:D2');
 					
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
@@ -35,8 +35,7 @@
 				->setCellValue('A3', $titulosColumnas[0])
 				->setCellValue('B3', $titulosColumnas[1])
 				->setCellValue('C3', $titulosColumnas[2])
-				->setCellValue('D3', $titulosColumnas[3])
-				->setCellValue('E3', $titulosColumnas[4]);
+				->setCellValue('D3', $titulosColumnas[3]);
 	
 	//Se agregan los datos
 	$i = 4;
@@ -44,9 +43,8 @@
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A'.$i, $row['codigo_materia'])
 		->setCellValue('B'.$i, $row['nombre_materia'])
-		->setCellValue('C'.$i, $row['unidad_credito'])
-		->setCellValue('D'.$i, $row['tipo_materia'])
-		->setCellValue('E'.$i, $row['estatus']);
+		->setCellValue('C'.$i, $row['tipo_materia'])
+		->setCellValue('D'.$i, $row['estatus']);
 		$i++;
 	}
 	
@@ -138,14 +136,14 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:E1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:E".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:D".($i-1));
 	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
 
 			
-	for($i = 'A'; $i <= 'E'; $i++){
+	for($i = 'A'; $i <= 'D'; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
 	}
 	
