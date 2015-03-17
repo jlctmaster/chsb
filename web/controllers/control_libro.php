@@ -19,14 +19,20 @@ if(isset($_POST['codigo_isbn_libro']))
 if(isset($_POST['titulo']))
   $titulo=trim($_POST['titulo']);
 
-if(isset($_POST['codigo_editorial']))
-  $codigo_editorial=trim($_POST['codigo_editorial']);
+if(isset($_POST['codigo_editorial'])){
+  $editorial=explode('_',trim($_POST['codigo_editorial']));
+  $codigo_editorial=$editorial[0];
+}
 
-if(isset($_POST['codigo_autor']))
-  $codigo_autor=trim($_POST['codigo_autor']);
+if(isset($_POST['codigo_autor'])){
+  $autor=explode('_',trim($_POST['codigo_autor']));
+  $codigo_autor=$autor[0];
+}
 
-if(isset($_POST['codigo_tema']))
-  $codigo_tema=trim($_POST['codigo_tema']);
+if(isset($_POST['codigo_tema'])){
+  $tema=explode('_',trim($_POST['codigo_tema']));
+  $codigo_tema=$tema[0];
+}
 
 if(isset($_POST['numero_paginas']))
   $numero_paginas=trim($_POST['numero_paginas']);

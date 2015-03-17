@@ -82,7 +82,7 @@ else if($_GET['Opt']=="2"){ // Ventana de Registro
 				<label class="control-label" for="codigo_isbn_libro">ISBN DEL LIBRO</label> 
 				<div class="controls">  
 					<input type="hidden" id="lOpt" name="lOpt" value="Registrar">
-					<input class="input-xlarge" title="Ingrese el Código del Libro"  onKeyPress="return isNumberKey(event)" name="codigo_isbn_libro" maxlenght=13 id="codigo_isbn_libro" type="text" required/> 
+					<input class="input-xlarge" title="Ingrese el Código del Libro"  onKeyPress="return isNumberKey(event)" maxlength=13 name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" required/> 
 				</div>  
 			</div> 
 			<div class="control-group">  
@@ -156,7 +156,7 @@ else if($_GET['Opt']=="3"){ // Ventana de Modificaciones
 				<div class="controls">
 					<input type="hidden" id="lOpt" name="lOpt" value="Modificar">  
 						<input type="hidden" id="oldcl" name="oldcl" value="<?=$row['codigo_isbn_libro']?>"> 
-					<input class="input-xlarge"  title="el Código del Libro es generado por el sistema" onKeyPress="return isNumberKey(event)"  maxlenght=13 name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" value="<?=$row['codigo_isbn_libro']?>" /> 
+					<input class="input-xlarge"  title="el Código del Libro es generado por el sistema" onKeyPress="return isNumberKey(event)" maxlength=13 name="codigo_isbn_libro" id="codigo_isbn_libro" type="text" value="<?=$row['codigo_isbn_libro']?>" /> 
 				</div>  
 			</div>
 			<div class="control-group">  
