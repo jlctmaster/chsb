@@ -313,12 +313,13 @@ class estudiante {
     }
 
     public function Inscribir($user){
-    	$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),'$this->fecha_nacimiento'))||'.'||EXTRACT(Month FROM age(NOW(),'$this->fecha_nacimiento')) AS numeric) edad";
+    	$sqlx="SELECT EXTRACT(Year FROM age(NOW(),'$this->fecha_nacimiento')) AS year, EXTRACT(Month FROM age(NOW(),'$this->fecha_nacimiento')) AS month";
 		$query=$this->pgsql->Ejecutar($sqlx);
 		if($this->pgsql->Total_Filas($query)!=0){
 			$testudiante=$this->pgsql->Respuesta($query);
+			$edad=$testudiante['year'].'.'.($testudiante['month']<10 ? '0'.$testudiante['month'] : $testudiante['month']);
 			$tabulador=new tabulador();
-			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+			$this->indice($tabulador->ObtenerIndice($edad,$this->peso,$this->talla));
 		}else{
 	    	$this->error(pg_last_error());
 			return false;
@@ -344,15 +345,16 @@ class estudiante {
     }
 
     public function ActualizarInscripcion($user){
-    	$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad   
+    	$sqlx="SELECT EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento)) AS year, EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS month 
 		FROM educacion.tproceso_inscripcion i 
 		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
 		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
 		$query=$this->pgsql->Ejecutar($sqlx);
 		if($this->pgsql->Total_Filas($query)!=0){
 			$testudiante=$this->pgsql->Respuesta($query);
+			$edad=$testudiante['year'].'.'.($testudiante['month']<10 ? '0'.$testudiante['month'] : $testudiante['month']);
 			$tabulador=new tabulador();
-			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+			$this->indice($tabulador->ObtenerIndice($edad,$this->peso,$this->talla));
 		}else{
 	    	$this->error(pg_last_error());
 			return false;

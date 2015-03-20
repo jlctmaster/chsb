@@ -148,27 +148,32 @@ class clsFpdf extends FPDF {
   $sql="SELECT TO_CHAR(ps.fecha_inscripcion,'DD/MM/YYYY') AS fecha_inscripcion, aa.ano AS ano_academico, 
   CASE WHEN rp.segundo_nombre IS NOT NULL AND rp.segundo_apellido  IS NOT NULL THEN rp.primer_nombre||' '||rp.segundo_nombre||' '||rp.primer_apellido||' '||rp.segundo_apellido 
   WHEN rp.segundo_nombre IS NULL AND rp.segundo_apellido  IS NOT NULL THEN rp.primer_nombre||' '||rp.primer_apellido||' '||rp.segundo_apellido 
-  WHEN rp.segundo_nombre IS NOT NULL AND rp.segundo_apellido  IS NULL THEN rp.primer_nombre||' '||rp.segundo_nombre||' '||rp.primer_apellido END AS responsable,
+  WHEN rp.segundo_nombre IS NOT NULL AND rp.segundo_apellido  IS NULL THEN rp.primer_nombre||' '||rp.segundo_nombre||' '||rp.primer_apellido 
+  ELSE rp.primer_nombre||' '||rp.primer_apellido END AS responsable,
   CASE WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NOT NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido||' '||per.segundo_apellido 
   WHEN per.segundo_nombre IS NULL AND per.segundo_apellido  IS NOT NULL THEN per.primer_nombre||' '||per.primer_apellido||' '||per.segundo_apellido 
-  WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido END AS estudiante,
+  WHEN per.segundo_nombre IS NOT NULL AND per.segundo_apellido  IS NULL THEN per.primer_nombre||' '||per.segundo_nombre||' '||per.primer_apellido 
+  ELSE per.primer_nombre||' '||per.primer_apellido END AS estudiante,
   per.primer_nombre,per.segundo_nombre,per.primer_apellido,per.segundo_apellido,TRIM(SUBSTR(ps.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_persona,SUBSTR(ps.cedula_persona,1,1) AS nacionalidad,per.sexo,
   TO_CHAR(per.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento,extract(year from age(per.fecha_nacimiento)) AS edad,extract(month from age(per.fecha_nacimiento)) AS meses,pa.descripcion AS lugar_nacimiento,e.descripcion AS entidad_federal,
   per.direccion,ps.anio_a_cursar,ps.coordinacion_pedagogica,per.telefono_local,ps.estado_salud,ps.alergico,ps.impedimento_deporte,ps.especifique_deporte,ps.materia_pendiente,ps.cual_materia,ps.practica_deporte,ps.cual_deporte, 
   ps.tiene_beca,ps.organismo,ps.tiene_hermanos,ps.cuantos_varones,ps.cuantas_hembras,ps.estudian_aca,ps.que_anio,ps.peso,ps.talla,ps.indice,ps.tiene_talento,ps.cual_talento,
   CASE WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
   WHEN pad.segundo_nombre IS NULL AND pad.segundo_apellido  IS NOT NULL THEN pad.primer_nombre||' '||pad.primer_apellido||' '||pad.segundo_apellido 
-  WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido END AS padre,
+  WHEN pad.segundo_nombre IS NOT NULL AND pad.segundo_apellido  IS NULL THEN pad.primer_nombre||' '||pad.segundo_nombre||' '||pad.primer_apellido 
+  ELSE pad.primer_nombre||' '||pad.primer_apellido END AS padre,
   TO_CHAR(pad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_padre,TRIM(SUBSTR(pad.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_padre,SUBSTR(pad.cedula_persona,1,1) AS nacionalidad_padre,
   pad.profesion AS profesion_padre,pad.grado_instruccion AS grado_instruccion_padre,pad.direccion AS direccion_padre,pad.telefono_local AS telefono_local_padre,
   CASE WHEN mad.segundo_nombre IS NOT NULL AND mad.segundo_apellido  IS NOT NULL THEN mad.primer_nombre||' '||mad.segundo_nombre||' '||mad.primer_apellido||' '||mad.segundo_apellido 
   WHEN mad.segundo_nombre IS NULL AND mad.segundo_apellido  IS NOT NULL THEN mad.primer_nombre||' '||mad.primer_apellido||' '||mad.segundo_apellido 
-  WHEN mad.segundo_nombre IS NOT NULL AND mad.segundo_apellido  IS NULL THEN mad.primer_nombre||' '||mad.segundo_nombre||' '||mad.primer_apellido END AS madre,
+  WHEN mad.segundo_nombre IS NOT NULL AND mad.segundo_apellido  IS NULL THEN mad.primer_nombre||' '||mad.segundo_nombre||' '||mad.primer_apellido 
+  ELSE mad.primer_nombre||' '||mad.primer_apellido END AS madre,
   TO_CHAR(mad.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_madre,TRIM(SUBSTR(mad.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_madre,SUBSTR(mad.cedula_persona,1,1) AS nacionalidad_madre,
   mad.profesion AS profesion_madre,mad.grado_instruccion AS grado_instruccion_madre,mad.direccion AS direccion_madre,mad.telefono_local AS telefono_local_madre,
   CASE WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NOT NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido||' '||rep.segundo_apellido 
   WHEN rep.segundo_nombre IS NULL AND rep.segundo_apellido  IS NOT NULL THEN rep.primer_nombre||' '||rep.primer_apellido||' '||rep.segundo_apellido 
-  WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido END AS representante,
+  WHEN rep.segundo_nombre IS NOT NULL AND rep.segundo_apellido  IS NULL THEN rep.primer_nombre||' '||rep.segundo_nombre||' '||rep.primer_apellido 
+  ELSE rep.primer_nombre||' '||rep.primer_apellido END AS representante,
   TO_CHAR(rep.fecha_nacimiento,'DD/MM/YYYY') AS fecha_nacimiento_representante,TRIM(SUBSTR(rep.cedula_persona,2,LENGTH(rep.cedula_persona))) AS cedula_representante,SUBSTR(rep.cedula_persona,1,1) AS nacionalidad_representante,
   rep.profesion AS profesion_representante,rep.grado_instruccion AS grado_instruccion_representante,rep.direccion AS direccion_representante,rep.telefono_local AS telefono_local_representante,
   paren.descripcion AS parentesco,ps.integracion_educativa,ps.integracion_plomeria,ps.integracion_electricidad,ps.integracion_albanileria,ps.integracion_peluqueria,ps.integracion_ambientacion,ps.integracion_manualidades,

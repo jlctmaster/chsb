@@ -152,7 +152,6 @@ class Html
 	           	echo "</td>"; 
 	           	$query3=$this->c->Ejecutar("SELECT * FROM seguridad.topcion where estatus = '1' ORDER BY orden ASC");
 	           	echo "<td><table class='options'><tr>"; 
-	           	
 	                   while($Datos3=$this->c->Respuesta($query3)){  //opciones
 	                   	echo "<td>";          	
 	                   	$perfil->codigo_opcion($Datos3['codigo_opcion']);             	       	

@@ -1451,6 +1451,47 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
     }
 
     /**
+     * Added By Jorge Colmenarez 2015-03-18 
+     * Extract From http://phpexcel.codeplex.com/discussions/418596
+     * Set shared cell style to a range of cells for coordinates
+     *
+     * Please note that this will overwrite existing cell styles for cells in range!
+     *
+     * @deprecated
+     * @param PHPExcel_Style $pSharedCellStyle Cell style to share
+     * @param numeric $pColumn1 for number column started
+     * @param numeric $pRow1 for number row started
+     * @param numeric $pColumn2 for number column ended
+     * @param numeric $pRow2 for number row ended
+     * @throws PHPExcel_Exception
+     * @return PHPExcel_Worksheet
+     */
+    public function setSharedStyleByColumnAndRow(PHPExcel_Style $pSharedCellStyle = null, $pColumn1 = 0, $pRow1 = 0, $pColumn2 = 0, $pRow2 = 0)
+    {
+        // Translate column into index
+        $rangeStart[0] = $pColumn1;
+        $rangeEnd[0] = $pColumn2;
+
+        $rangeStart[1] = $pRow1;
+        $rangeEnd[1] = $pRow2;
+
+        // Make sure we can loop upwards on rows and columns
+        if ($rangeStart[0] > $rangeEnd[0] && $rangeStart[1] > $rangeEnd[1]) {
+            $tmp = $rangeStart;
+            $rangeStart = $rangeEnd;
+            $rangeEnd = $tmp;
+        }
+
+        // Loop trough cells and apply styles
+        for ($col = $rangeStart[0]; $col <= $rangeEnd[0]; ++$col) {
+            for ($row = $rangeStart[1]; $row <= $rangeEnd[1]; ++$row) {
+                $this->getCell(PHPExcel_Cell::stringFromColumnIndex($col) . $row);
+                $this->_styles[ PHPExcel_Cell::stringFromColumnIndex($col) . $row ] = $pSharedCellStyle;
+            }
+        }
+    }
+
+    /**
      * Duplicate cell style to a range of cells
      *
      * Please note that this will overwrite existing cell styles for cells in range!

@@ -345,8 +345,13 @@ else if($_GET['Opt']=="3"){
 						</tr>
 						<?php
 							$pgsql=new Conexion();
-							$sql = "SELECT codigo_ejemplar, codigo_ubicacion,cantidad
-							FROM biblioteca.tdetalle_prestamo  WHERE codigo_prestamo = '".$row['codigo_prestamo']."' 
+							$sql = "SELECT dp.codigo_ejemplar||'_'||e.codigo_cra||' - '||e.numero_edicion||' '||l.titulo AS ejemplar, 
+							dp.codigo_ubicacion||'_'||u.descripcion AS ubicacion,dp.cantidad
+							FROM biblioteca.tdetalle_prestamo dp 
+							INNER JOIN biblioteca.tejemplar e ON dp.codigo_ejemplar = e.codigo_ejemplar 
+							INNER JOIN biblioteca.tlibro l ON e.codigo_isbn_libro = l.codigo_isbn_libro 
+							INNER JOIN inventario.tubicacion u ON dp.codigo_ubicacion = u.codigo_ubicacion 
+							WHERE dp.codigo_prestamo = '".$row['codigo_prestamo']."' 
 							ORDER BY codigo_detalle_prestamo ASC";
 							$query = $pgsql->Ejecutar($sql);
 							$con=0;
@@ -403,7 +408,7 @@ else if($_GET['Opt']=="3"){
 		var cantidad = document.getElementsByName('cantidad[]');
 		var contador=ejemplar.length;
 		function agrega_campos(){
-			$("#tablaDetAdquisicion").append("<tr id='"+contador+"'>"+
+			$("#tablaDetPrestamo").append("<tr id='"+contador+"'>"+
 			"<td>"+
 			"<input type='text' name='ejemplar[]' id='ejemplar_"+contador+"' onKeyPress='return ACDataGrid(this.id,\"inv_libros.php\")' onKeyUp='this.value=this.value.toUpperCase()' title='Seleccione un Libro'>"+
 			"</td>"+

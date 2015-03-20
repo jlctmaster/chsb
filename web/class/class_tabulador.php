@@ -15,91 +15,91 @@ class tabulador{
  			case ($edad <=6):
  				$acum=1;
  				break;
- 			case ($edad >= 6.1 && $edad <= 6.5 ):
+ 			case ($edad >= 6.01 && $edad <= 6.05 ):
  				$acum=2;
  				break;
- 			case ($edad >= 6.6 && $edad <= 6.10 ):
+ 			case ($edad >= 6.06 && $edad <= 6.10 ):
  				$acum=3;
  				break;
- 			case ($edad >= 6.11 && $edad <= 7.2 ):
+ 			case ($edad >= 6.11 && $edad <= 7.02 ):
  				$acum=4;
  				break;
- 			case ($edad >= 7.3 && $edad <= 7.7 ):
+ 			case ($edad >= 7.03 && $edad <= 7.07 ):
  				$acum=5;
  				break;
- 			case ($edad >= 7.8 && $edad <= 8 ):
+ 			case ($edad >= 7.08 && $edad <= 8 ):
  				$acum=6;
  				break;
- 			case ($edad >= 8.1 && $edad <= 8.5 ):
+ 			case ($edad >= 8.01 && $edad <= 8.05 ):
  				$acum=7;
  				break; 				
- 			case ($edad >= 8.6 && $edad <= 8.10 ):
+ 			case ($edad >= 8.06 && $edad <= 8.10 ):
  				$acum=8;
  				break;
- 			case ($edad >= 8.11 && $edad <= 9.2 ):
+ 			case ($edad >= 8.11 && $edad <= 9.02 ):
  				$acum=9;
  				break;
- 			case ($edad >= 9.3 && $edad <= 9.7 ):
+ 			case ($edad >= 9.03 && $edad <= 9.07 ):
  				$acum=10;
  				break;
- 			case ($edad >= 9.8 && $edad <= 10 ):
+ 			case ($edad >= 9.08 && $edad <= 10 ):
  				$acum=11;
  				break;
- 			case ($edad >= 10.1 && $edad <= 10.5 ):
+ 			case ($edad >= 10.01 && $edad <= 10.05 ):
  				$acum=12;
  				break;
- 			case ($edad >= 10.6 && $edad <= 10.10 ):
+ 			case ($edad >= 10.06 && $edad <= 10.10 ):
  				$acum=13;
  				break;
- 			case ($edad >= 10.11 && $edad <= 11.2 ):
+ 			case ($edad >= 10.11 && $edad <= 11.02 ):
  				$acum=14;
  				break;
- 			case ($edad >= 11.3 && $edad <= 11.7 ):
+ 			case ($edad >= 11.03 && $edad <= 11.07 ):
  				$acum=15;
  				break;
- 			case ($edad >= 11.8 && $edad <= 12 ):
+ 			case ($edad >= 11.08 && $edad <= 12 ):
  				$acum=16;
  				break;
- 			case ($edad >= 12.1 && $edad <= 12.5 ):
+ 			case ($edad >= 12.01 && $edad <= 12.05 ):
  				$acum=17;
  				break;
- 			case ($edad >= 12.6 && $edad <= 12.10 ):
+ 			case ($edad >= 12.06 && $edad <= 12.10 ):
  				$acum=18;
  				break;
- 			case ($edad >= 12.11 && $edad <= 13.2 ):
+ 			case ($edad >= 12.11 && $edad <= 13.02 ):
  				$acum=19;
  				break;
- 			case ($edad >= 13.3 && $edad <= 13.7 ):
+ 			case ($edad >= 13.03 && $edad <= 13.07 ):
  				$acum=20;
  				break;
- 			case ($edad >= 13.8 && $edad <= 14 ):
+ 			case ($edad >= 13.08 && $edad <= 14 ):
  				$acum=21;
  				break;
- 			case ($edad >= 14.1 && $edad <= 14.5 ):
+ 			case ($edad >= 14.01 && $edad <= 14.05 ):
  				$acum=22;
  				break;
- 			case ($edad >= 14.6 && $edad <= 14.10 ):
+ 			case ($edad >= 14.06 && $edad <= 14.10 ):
  				$acum=23;
  				break;
- 			case ($edad >= 14.11 && $edad <= 15.2 ):
+ 			case ($edad >= 14.11 && $edad <= 15.02 ):
  				$acum=24;
  				break;
- 			case ($edad >= 15.3 && $edad <= 15.7 ):
+ 			case ($edad >= 15.03 && $edad <= 15.07 ):
  				$acum=25;
  				break;
- 			case ($edad >= 15.8 && $edad <= 16 ):
+ 			case ($edad >= 15.08 && $edad <= 16 ):
  				$acum=26;
  				break;
- 			case ($edad >= 16.1 && $edad <= 16.5 ):
+ 			case ($edad >= 16.01 && $edad <= 16.05 ):
  				$acum=27;
  				break;
- 			case ($edad >= 16.6 && $edad <= 16.10 ):
+ 			case ($edad >= 16.06 && $edad <= 16.10 ):
  				$acum=28;
  				break;
- 			case ($edad >= 16.11 && $edad <= 17.2 ):
+ 			case ($edad >= 16.11 && $edad <= 17.02 ):
  				$acum=29;
  				break;
- 			case ($edad >= 17.3 ):
+ 			case ($edad >= 17.03 ):
  				$acum=30;
  				break;
  			default:

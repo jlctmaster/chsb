@@ -170,7 +170,7 @@ function init(){
     });
     //Agregar Objeto Calendario al input fecha_entrada.
     $('#fecha_entrada').datepicker({
-        maxDate: '+7d',
+        maxDate: '+1y',
         showOn: 'both',
         numberOfMonths: 1,
         buttonImage: '../images/calendario.png',

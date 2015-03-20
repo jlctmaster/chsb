@@ -440,7 +440,7 @@ else if($_GET['Opt']=="3"){
 				<div class="control-group">  
 					<label class="control-label" for="fecha_nacimiento">Fecha de Nacimiento</label>  
 					<div class="controls">  
-						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento_estudiante" type="text" value="<?=$row['fecha_nacimiento']?>"  required />
+						<input class="input-xlarge" title="Ingrese la fecha de nacimiento del estudiante" name="fecha_nacimiento" id="fecha_nacimiento_estudiante" type="text" value="<?=$row['fecha_nacimiento']?>" readonly required />
 					</div>  
 				</div>  
 				<div class="control-group">  

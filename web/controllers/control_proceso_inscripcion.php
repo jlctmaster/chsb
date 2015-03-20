@@ -747,18 +747,12 @@ if($lOpt=='Modificar_Paso6'){
 
 if($lOpt=="Asignar_Seccion"){
   $con=0;
-  if(isset($_POST['codigos']) && isset($_POST['cedulas'])){
-    $proceso_inscripcion->Transaccion('iniciando');
+  if(isset($_POST['codigos'])){
     for($i=0;$i<count($_POST['codigos']);$i++){
-      echo "a".$i;
-      if($proceso_inscripcion->Asignar_Seccion($_SESSION['user_name'],$_POST['codigos'][$i],$_POST['cedulas'][$i]))
+      if($proceso_inscripcion->Asignar_Seccion($_SESSION['user_name'],$_POST['codigos'][$i]))
         $con++;
     }
     $rest=count($_POST['codigos'])-$con;
-    if($con!=0)
-      $proceso_inscripcion->Transaccion('finalizado');
-    else
-      $proceso_inscripcion->Transaccion('cancelado');
   }
   $_SESSION['datos']['mensaje']="Cantidad de Estudiantes Seleccionados: ".count($_POST['codigos']).", Cantidad Asignados: ".$con.", Cantidad Restantes: ".$rest;
   header("Location: ../view/menu_principal.php?asignar_seccion");

@@ -1238,16 +1238,16 @@ class proceso_inscripcion {
    	}
 
    	public function Registrar_Paso2($user){
-   		$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad,
-		i.peso,i.talla  
+   		$sqlx="SELECT EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento)) AS year, EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS month 
 		FROM educacion.tproceso_inscripcion i 
 		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
 		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
 		$query=$this->pgsql->Ejecutar($sqlx);
 		if($this->pgsql->Total_Filas($query)!=0){
 			$testudiante=$this->pgsql->Respuesta($query);
+			$edad=$testudiante['year'].'.'.($testudiante['month']<10 ? '0'.$testudiante['month'] : $testudiante['month']);
 			$tabulador=new tabulador();
-			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$testudiante['peso'],$testudiante['talla']));
+			$this->indice($tabulador->ObtenerIndice($edad,$this->peso,$this->talla));
 		}else{
 	    	$this->error(pg_last_error());
 			return false;
@@ -1616,15 +1616,16 @@ class proceso_inscripcion {
    	}
 
    	public function Actualizar_Paso2($user){
-   		$sqlx="SELECT CAST(EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento))||'.'||EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS numeric) edad   
+   		$sqlx="SELECT EXTRACT(Year FROM age(NOW(),p.fecha_nacimiento)) AS year, EXTRACT(Month FROM age(NOW(),p.fecha_nacimiento)) AS month 
 		FROM educacion.tproceso_inscripcion i 
 		INNER JOIN general.tpersona p ON i.cedula_persona = p.cedula_persona 
 		WHERE i.codigo_proceso_inscripcion = $this->codigo_proceso_inscripcion";
 		$query=$this->pgsql->Ejecutar($sqlx);
 		if($this->pgsql->Total_Filas($query)!=0){
 			$testudiante=$this->pgsql->Respuesta($query);
+			$edad=$testudiante['year'].'.'.($testudiante['month']<10 ? '0'.$testudiante['month'] : $testudiante['month']);
 			$tabulador=new tabulador();
-			$this->indice($tabulador->ObtenerIndice($testudiante['edad'],$this->peso,$this->talla));
+			$this->indice($tabulador->ObtenerIndice($edad,$this->peso,$this->talla));
 		}else{
 	    	$this->error(pg_last_error());
 			return false;
@@ -1871,15 +1872,16 @@ class proceso_inscripcion {
 	    }
    	}
 
-   	public function Asignar_Seccion($user,$pins,$ci){
+   	public function Asignar_Seccion($user,$pins){
    		$sql="UPDATE educacion.tproceso_inscripcion SET seccion=(SELECT s.seccion FROM educacion.tseccion s 
    		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi 
    		WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.codigo_proceso_inscripcion='$pins') 
    		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),
 		observacion='ASIGNADO POR $user SEGÚN TABULADOR',procesado='Y',modificado_por='$user',fecha_modificacion=NOW() 
-		WHERE codigo_proceso_inscripcion='$pins' AND cedula_persona='$ci'";
+		WHERE codigo_proceso_inscripcion='$pins'";
 	    if($this->pgsql->Ejecutar($sql)!=null){
-	    	$sqlx="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ('$ci',(SELECT s.seccion FROM educacion.tseccion s 
+	    	$sqlx="INSERT INTO educacion.tinscrito_seccion (cedula_persona,seccion,creado_por,fecha_creacion) VALUES ((SELECT cedula_persona FROM educacion.tproceso_inscripcion 
+	    	WHERE codigo_proceso_inscripcion = '$pins'),(SELECT s.seccion FROM educacion.tseccion s 
 	   		LEFT JOIN educacion.tinscrito_seccion isec ON s.seccion = isec.seccion WHERE 
 	   		EXISTS (SELECT * FROM educacion.tproceso_inscripcion pi WHERE pi.indice BETWEEN s.indice_min AND s.indice_max AND pi.codigo_proceso_inscripcion='$pins') 
 	   		GROUP BY s.seccion,s.nombre_seccion ORDER BY s.seccion,MAX(s.capacidad_max)-COUNT(isec.seccion) ASC LIMIT 1),'$user',NOW())";

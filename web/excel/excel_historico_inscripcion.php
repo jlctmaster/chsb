@@ -75,34 +75,39 @@
 
 	$titulosColumnas = explode(',',$_POST['etiquetas'][0]);
 	$valoresColumnas = explode(',',$_POST['campos'][0]); 
+
+	//	Get Letter Based Index
+	$starletter = PHPExcel_Cell::stringFromColumnIndex(0);
+	$endletter = PHPExcel_Cell::stringFromColumnIndex(count($titulosColumnas)-1);
 	
-	$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')->mergeCells('A2:H2');
+	$objPHPExcel->setActiveSheetIndex(0)->mergeCells($starletter.'1:'.$endletter.'1')
+										->mergeCells($starletter.'2:'.$endletter.'2');
 					
 	// Se agregan los titulos del reporte
 	$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('A1', $tituloReporte);
 
-	/*$row = 3; // 3-based index
-	while($titulosColumnas = count($titulosColumnas)) {
-		$col = 0;
-		foreach($titulosColumnas as $key=>$value) {
-			$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row, $value);
-			$col++;
-		}
-		$row++;
-	}*/
-	
-	//Se agregan los datos de los alumnos
-	$i = 5;
-	while ($rows = $pgsql->Respuesta($query)){
-		$col = 0;
-		foreach($rows[$valoresColumnas] as $key=>$value) {
-			$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $i, $value);
-			$col++;
-		}
-		$i++;
+	$col = 0;
+	foreach($titulosColumnas as $key=>$value) {
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, 3, $value);
+		$col++;
 	}
 	
+	//Se seleccionan las columnas a mostrar
+	$i = 4;
+	$j = 0;
+	while ($rows = $pgsql->Respuesta($query)){
+		for($x = 0;$x<count($valoresColumnas);$x++)
+			$filas[$valoresColumnas[$x]] = $rows[$valoresColumnas[$x]];	
+		foreach($filas as $key=>$value) {
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($j, $i, $value);
+			$j++;
+		}
+		$i++;
+		$j=0;
+	}
+
+	$estiloTituloReporte = new PHPExcel_Style();
 	$estiloTituloReporte = array(
     	'font' => array(
         	'name'      => 'Verdana',
@@ -132,6 +137,7 @@
 		)
     );
 
+	$estiloTituloColumnas = new PHPExcel_Style();
 	$estiloTituloColumnas = array(
         'font' => array(
             'name'      => 'Arial',
@@ -191,14 +197,14 @@
     	)
 	);
 	 
-	$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($estiloTituloReporte);
-	$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($estiloTituloColumnas);		
-	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A5:J".($i-1));
+	$objPHPExcel->getActiveSheet()->getStyle($starletter.'1:'.$endletter.'1')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle($starletter.'2:'.$endletter.'2')->applyFromArray($estiloTituloReporte);
+	$objPHPExcel->getActiveSheet()->getStyle($starletter.'3:'.$endletter.'3')->applyFromArray($estiloTituloColumnas);		
+	$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion,$starletter.'4:'.$endletter.($i-1));
 
 	$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			
-	for($i = 'A'; $i <= 'J'; $i++){
+	for($i = $starletter; $i < $endletter; $i++){
 		$objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
 	}
 	
@@ -208,8 +214,8 @@
 	// Se activa la hoja para que sea la que se muestre cuando el archivo se abre
 	$objPHPExcel->setActiveSheetIndex(0);
 	// Inmovilizar paneles 
-	//$objPHPExcel->getActiveSheet(0)->freezePane('A4');
-	$objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(0,4);
+	$objPHPExcel->getActiveSheet(0)->freezePane($starletter.'4');
+	//$objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(0,4);
 
 	// Se manda el archivo al navegador web, con el nombre que se indica (Excel2007)
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
